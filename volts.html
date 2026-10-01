@@ -3,10 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="VOLTS — Cybernetic Performance Laptops. High-spec workstations, gaming laptops, and ultraportables with custom RAM and NVMe configurations in Pakistan.">
+<meta property="og:title" content="VOLTS — Cybernetic Performance Laptops">
+<meta property="og:description" content="Custom configurable laptops with RTX graphics, multi-core CPUs, and nationwide delivery.">
+<meta property="og:type" content="website">
 <title>VOLTS — Cybernetic Performance Laptops</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/theme.css">
 <style>
   *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -292,13 +297,13 @@
   .section-title {
     font-family: 'Syne', sans-serif;
     font-size: clamp(2rem, 5vw, 3.2rem);
-    font-weight: 800; letter-spacing: -0.04em;
+    font-weight: 700; letter-spacing: -0.04em;
     line-height: 1;
   }
 
   .products-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr));
     gap: 1.5rem;
   }
 
@@ -830,6 +835,7 @@
 
 </style>
 <script src="laptops-data.js"></script>
+<script src="store-config.js"></script>
 </head>
 <body>
 
@@ -843,7 +849,7 @@
 
 <!-- NAV -->
 <nav>
-  <a href="#" class="logo">
+  <a href="index.html" class="logo">
     VOLTS
     <span class="logo-tag">PRO</span>
   </a>
@@ -1118,7 +1124,7 @@
 
       if (vSearchQuery) {
         const q = vSearchQuery.toLowerCase();
-        const haystack = (lap.name + ' ' + lap.brandName + ' ' + lap.cpu + ' ' + lap.gpu).toLowerCase();
+        const haystack = (lap.name + ' ' + (lap.legacyName || '') + ' ' + lap.brandName + ' ' + lap.cpu + ' ' + lap.gpu + ' ' + lap.ram + 'gb ' + lap.storage + 'gb').toLowerCase();
         if (!haystack.includes(q)) return false;
       }
 
@@ -1477,6 +1483,14 @@
     clearTimeout(toastTimer);
     toastTimer = setTimeout(() => toast.classList.remove('show'), 3000);
   }
+
+  // ESC key closes modal & cart drawer
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      closeVoltsModal();
+      closeCart();
+    }
+  });
 
   renderVoltsProducts();
   updateCartUI();

@@ -3,33 +3,41 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Consult Me — LaptopHUB</title>
+<meta name="description" content="AI Laptop Consultation Wizard — Answer 6 quick questions to get personalized laptop recommendations matched against 69 verified laptops in stock.">
+<meta property="og:title" content="Consult Me — Laptop Recommendation Wizard | LaptopHUB">
+<meta property="og:description" content="Personalized laptop recommendation wizard for Pakistani buyers.">
+<title>Consult Me — LaptopHUB Recommendation Wizard</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,700;0,800;1,700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/theme.css">
 <style>
   *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
   :root {
+    --font-display: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    --font-body: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     --bg: #07080d;
     --s1: #0c0e15;
     --s2: #12141e;
     --s3: #181b28;
     --text: #dde0ed;
     --heading: #ffffff;
-    --muted: #6b7088;
-    --subtle: #8e93ad;
+    --muted: #8e93ad;
+    --subtle: #6b7088;
     --blue: #4c7cff;
     --blue-hover: #3a6bf5;
     --blue-dim: rgba(76,124,255,0.12);
     --blue-glow: rgba(76,124,255,0.25);
-    --border: rgba(255,255,255,0.065);
-    --border2: rgba(255,255,255,0.12);
+    --border: rgba(255,255,255,0.08);
+    --border2: rgba(255,255,255,0.14);
     --green: #10b981;
+    --green-dim: rgba(16,185,129,0.12);
     --gold: #f59e0b;
+    --gold-dim: rgba(245,158,11,0.12);
     --card-bg: #0c0e15;
     --card-shadow: 0 15px 35px rgba(0,0,0,0.5);
-    --nav-bg: rgba(7,8,13,0.9);
+    --nav-bg: rgba(7,8,13,0.92);
   }
 
   [data-theme="light"] {
@@ -40,7 +48,7 @@
     --text: #334155;
     --heading: #0f172a;
     --muted: #64748b;
-    --subtle: #475569;
+    --subtle: #94a3b8;
     --blue: #2563eb;
     --blue-hover: #1d4ed8;
     --blue-dim: rgba(37,99,235,0.08);
@@ -48,20 +56,24 @@
     --border: rgba(0,0,0,0.08);
     --border2: rgba(0,0,0,0.14);
     --green: #059669;
+    --green-dim: rgba(5,150,105,0.1);
     --gold: #d97706;
+    --gold-dim: rgba(217,119,6,0.1);
     --card-bg: #ffffff;
     --card-shadow: 0 8px 25px rgba(0,0,0,0.07);
-    --nav-bg: rgba(255,255,255,0.92);
+    --nav-bg: rgba(255,255,255,0.94);
   }
 
   html { scroll-behavior: smooth; }
 
   body {
-    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-family: var(--font-body);
     background: var(--bg);
     color: var(--text);
     min-height: 100vh;
     transition: background 0.3s, color 0.3s;
+    font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
+    -webkit-font-smoothing: antialiased;
   }
 
   /* NAV */
@@ -70,17 +82,18 @@
     background: var(--nav-bg);
     backdrop-filter: blur(20px);
     border-bottom: 1px solid var(--border);
-    padding: 1rem 2.5rem;
+    padding: 0.9rem 2rem;
     display: flex; align-items: center; justify-content: space-between;
     z-index: 100;
     transition: background 0.3s, border-color 0.3s;
   }
   .nav-logo {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.4rem; font-weight: 800;
+    font-family: var(--font-display);
+    font-size: 1.35rem; font-weight: 800;
     color: var(--heading);
     text-decoration: none;
-    letter-spacing: -0.02em;
+    letter-spacing: -0.03em;
+    display: flex; align-items: center; gap: 4px;
   }
   .nav-logo span { color: var(--blue); }
   .nav-actions { display: flex; gap: 10px; align-items: center; }
@@ -88,55 +101,70 @@
     background: var(--s2);
     border: 1px solid var(--border2);
     color: var(--heading);
-    padding: 0.45rem 1rem;
+    padding: 0.45rem 0.95rem;
     border-radius: 8px;
     font-family: inherit; font-size: 0.82rem; font-weight: 600;
     cursor: pointer; text-decoration: none;
-    transition: all 0.2s;
+    display: inline-flex; align-items: center; gap: 6px;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
   }
-  .btn-nav:hover { border-color: var(--blue); }
+  .btn-nav:hover { border-color: var(--blue); transform: translateY(-1px); }
+  .btn-nav:active { transform: scale(0.98); }
   .theme-btn {
     background: var(--s2); border: 1px solid var(--border2);
     color: var(--heading); padding: 0.45rem 0.85rem;
     border-radius: 20px; font-family: inherit; font-size: 0.78rem; font-weight: 600;
-    cursor: pointer; display: flex; align-items: center; gap: 5px;
-    transition: all 0.2s;
+    cursor: pointer; display: flex; align-items: center; gap: 6px;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
   }
-  .theme-btn:hover { border-color: var(--blue); }
+  .theme-btn:hover { border-color: var(--blue); transform: translateY(-1px); }
+  .theme-btn:active { transform: scale(0.98); }
 
   /* HERO */
   .hero {
     text-align: center;
-    padding: 4rem 2rem 3rem;
+    padding: 3.5rem 1.5rem 2.5rem;
     background: linear-gradient(180deg, var(--s1) 0%, var(--bg) 100%);
     border-bottom: 1px solid var(--border);
   }
   .hero-pre {
-    font-size: 0.72rem; font-weight: 700; letter-spacing: 0.16em;
-    text-transform: uppercase; color: var(--blue); margin-bottom: 1rem;
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 0.75rem; font-weight: 700; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--blue); margin-bottom: 0.75rem;
+    background: var(--blue-dim); padding: 4px 12px; border-radius: 999px;
   }
   .hero-title {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(2.2rem, 5vw, 3.8rem);
-    font-weight: 800; letter-spacing: -0.03em; line-height: 1.05;
-    color: var(--heading); margin-bottom: 1rem;
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 4.5vw, 3.2rem);
+    font-weight: 800; letter-spacing: -0.03em; line-height: 1.1;
+    color: var(--heading); margin-bottom: 0.75rem;
   }
   .hero-sub {
-    font-size: 1.05rem; color: var(--muted); max-width: 500px; margin: 0 auto;
-    line-height: 1.65;
+    font-size: 1rem; color: var(--muted); max-width: 540px; margin: 0 auto;
+    line-height: 1.6; font-weight: 400;
   }
 
   /* WIZARD WRAPPER */
   .wizard-wrap {
-    max-width: 860px; margin: 3rem auto 4rem;
-    padding: 0 1.5rem;
+    max-width: 880px; margin: 2.5rem auto 4rem;
+    padding: 0 1.25rem;
   }
 
   /* PROGRESS BAR */
+  .progress-header {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 0.6rem;
+  }
+  .progress-step-info {
+    font-size: 0.78rem; font-weight: 600; color: var(--blue);
+  }
+  .progress-hint {
+    font-size: 0.72rem; color: var(--muted);
+  }
   .progress-bar-outer {
     background: var(--s2);
-    border-radius: 999px; height: 6px;
-    margin-bottom: 0.6rem;
+    border-radius: 999px; height: 7px;
+    margin-bottom: 0.75rem;
     overflow: hidden;
     border: 1px solid var(--border);
     transition: background 0.3s;
@@ -145,207 +173,518 @@
     height: 100%;
     background: linear-gradient(90deg, var(--blue), #7ca7ff);
     border-radius: 999px;
-    transition: width 0.45s ease;
+    transition: width 0.35s cubic-bezier(0.16, 1, 0.3, 1), background 0.35s ease;
   }
   .progress-labels {
     display: flex; justify-content: space-between;
-    font-size: 0.74rem; color: var(--muted); margin-bottom: 2rem;
+    font-size: 0.75rem; color: var(--muted); margin-bottom: 2rem;
+    gap: 4px;
   }
-  .step-label { font-weight: 600; }
-  .step-label.active { color: var(--blue); }
+  .step-label {
+    font-weight: 500;
+    cursor: pointer;
+    padding: 4px 8px;
+    border-radius: 6px;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    user-select: none;
+    display: inline-flex; align-items: center; gap: 4px;
+  }
+  .step-label:hover {
+    color: var(--heading);
+    background: var(--s2);
+  }
+  .step-label.active {
+    color: var(--blue);
+    font-weight: 700;
+    background: var(--blue-dim);
+  }
+  .step-label.completed {
+    color: var(--green);
+    font-weight: 600;
+  }
 
   /* WIZARD CARD */
   .wizard-card {
     background: var(--card-bg);
-    border: 1.5px solid var(--border2);
+    border: 1px solid var(--border2);
     border-radius: 20px;
-    padding: 2.5rem;
+    padding: 2.25rem;
     box-shadow: var(--card-shadow);
     transition: background 0.3s, border-color 0.3s;
-    min-height: 400px;
+    min-height: 420px;
     display: flex; flex-direction: column;
   }
 
   .step-panel { display: none; flex-direction: column; flex: 1; }
-  .step-panel.active { display: flex; }
+  .step-panel.active { display: flex; animation: panelFadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1); }
+
+  @keyframes panelFadeIn {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
 
   .step-title {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.75rem; font-weight: 800;
-    color: var(--heading); margin-bottom: 0.5rem;
-    letter-spacing: -0.02em;
-    transition: color 0.3s;
+    font-family: var(--font-display);
+    font-size: 1.65rem; font-weight: 700;
+    color: var(--heading); margin-bottom: 0.4rem;
+    letter-spacing: -0.025em; line-height: 1.25;
   }
   .step-subtitle {
     font-size: 0.9rem; color: var(--muted);
-    margin-bottom: 2rem; line-height: 1.55;
-    transition: color 0.3s;
+    margin-bottom: 1.75rem; line-height: 1.5; font-weight: 400;
   }
 
   /* OPTION TILES */
   .option-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(175px, 1fr));
     gap: 1rem;
     flex: 1;
   }
   .option-tile {
     background: var(--s2);
-    border: 2px solid var(--border);
+    border: 1.5px solid var(--border);
     border-radius: 12px;
-    padding: 1.2rem;
+    padding: 1.15rem;
     cursor: pointer;
-    transition: all 0.2s;
-    display: flex; flex-direction: column; gap: 0.5rem;
+    transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1),
+                border-color 0.2s ease,
+                background 0.2s ease,
+                box-shadow 0.2s ease;
+    display: flex; flex-direction: column; gap: 0.55rem;
     text-align: left;
     user-select: none;
   }
   .option-tile:hover {
     border-color: var(--blue);
     background: var(--blue-dim);
+    transform: translateY(-2px);
+  }
+  .option-tile:active {
+    transform: scale(0.98);
   }
   .option-tile.selected {
     border-color: var(--blue);
     background: var(--blue-dim);
-    box-shadow: 0 0 0 4px var(--blue-glow);
+    box-shadow: 0 0 0 3px var(--blue-glow);
+    transform: translateY(-1px);
   }
-  .tile-icon { font-size: 1.6rem; }
-  .tile-label { font-size: 0.9rem; font-weight: 700; color: var(--heading); transition: color 0.3s; }
-  .tile-desc { font-size: 0.75rem; color: var(--muted); line-height: 1.4; transition: color 0.3s; }
+  .tile-icon-wrap {
+    width: 38px; height: 38px;
+    border-radius: 9px;
+    background: var(--s1);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--blue);
+    border: 1px solid var(--border);
+    transition: all 0.2s;
+  }
+  .option-tile.selected .tile-icon-wrap {
+    background: var(--blue);
+    color: #fff;
+    border-color: var(--blue);
+  }
+  .tile-label { font-size: 0.92rem; font-weight: 600; color: var(--heading); }
+  .tile-desc { font-size: 0.76rem; color: var(--muted); line-height: 1.45; font-weight: 400; }
 
   /* SLIDER */
-  .slider-wrap { padding: 1rem 0; flex: 1; }
+  .slider-wrap { padding: 0.5rem 0; flex: 1; }
   .slider-value {
-    font-family: 'Playfair Display', serif;
-    font-size: 2.8rem; font-weight: 800;
-    color: var(--blue); margin-bottom: 0.5rem;
+    font-family: var(--font-display);
+    font-size: 2.6rem; font-weight: 800;
+    color: var(--blue); margin-bottom: 0.35rem;
     letter-spacing: -0.04em;
+    font-variant-numeric: tabular-nums;
   }
-  .slider-label { font-size: 0.85rem; color: var(--muted); margin-bottom: 1.5rem; }
+  .slider-label { font-size: 0.85rem; color: var(--muted); margin-bottom: 1.5rem; font-weight: 500; }
   input[type="range"] {
-    width: 100%; -webkit-appearance: none;
-    height: 6px; border-radius: 999px;
+    width: 100%; -webkit-appearance: none; appearance: none;
+    height: 7px; border-radius: 999px;
     background: linear-gradient(90deg, var(--blue) var(--pct, 40%), var(--s3) var(--pct, 40%));
     outline: none; cursor: pointer; margin-bottom: 0.75rem;
     transition: background 0.1s;
   }
   input[type="range"]::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    width: 20px; height: 20px; border-radius: 50%;
+    -webkit-appearance: none; appearance: none;
+    width: 22px; height: 22px; border-radius: 50%;
     background: var(--blue); border: 3px solid var(--card-bg);
-    box-shadow: 0 2px 8px rgba(76,124,255,0.5);
+    box-shadow: 0 2px 10px rgba(76,124,255,0.45);
     cursor: pointer;
+    transition: transform 0.15s ease;
+  }
+  input[type="range"]::-webkit-slider-thumb:hover {
+    transform: scale(1.15);
   }
   .range-ticks {
     display: flex; justify-content: space-between;
-    font-size: 0.72rem; color: var(--muted); font-weight: 600;
+    font-size: 0.75rem; color: var(--muted); font-weight: 600;
+    font-variant-numeric: tabular-nums;
   }
 
   /* BOTTOM NAV */
   .wizard-nav {
     display: flex; justify-content: space-between; align-items: center;
-    margin-top: 2rem; padding-top: 1.5rem;
+    margin-top: 2rem; padding-top: 1.25rem;
     border-top: 1px solid var(--border);
-    transition: border-color 0.3s;
+    gap: 12px;
   }
-  .btn-prev, .btn-next {
-    padding: 0.7rem 1.6rem;
-    border-radius: 8px;
-    font-family: inherit; font-size: 0.88rem; font-weight: 700;
+  .btn-prev, .btn-next, .btn-restart, .btn-edit-answers {
+    padding: 0.65rem 1.4rem;
+    border-radius: 9px;
+    font-family: inherit; font-size: 0.88rem; font-weight: 600;
     cursor: pointer; border: none;
-    transition: all 0.2s;
+    display: inline-flex; align-items: center; justify-content: center; gap: 7px;
+    transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1),
+                background 0.2s ease,
+                border-color 0.2s ease,
+                box-shadow 0.2s ease;
   }
   .btn-prev {
     background: var(--s2); color: var(--heading);
     border: 1px solid var(--border2);
   }
-  .btn-prev:hover { border-color: var(--blue); }
+  .btn-prev:hover:not(:disabled) { border-color: var(--blue); transform: translateY(-1px); }
+  .btn-prev:active:not(:disabled) { transform: scale(0.98); }
   .btn-prev:disabled { opacity: 0.35; cursor: not-allowed; }
   .btn-next {
     background: var(--blue); color: #fff;
-    box-shadow: 0 4px 16px rgba(76,124,255,0.3);
+    box-shadow: 0 4px 14px rgba(76,124,255,0.3);
   }
-  .btn-next:hover { background: var(--blue-hover); transform: translateY(-2px); }
+  .btn-next:hover { background: var(--blue-hover); transform: translateY(-1px); box-shadow: 0 6px 20px rgba(76,124,255,0.4); }
+  .btn-next:active { transform: scale(0.98); }
 
   .step-counter {
     font-size: 0.78rem; color: var(--muted); font-weight: 600;
+    font-variant-numeric: tabular-nums;
   }
 
-  /* RESULTS */
-  #step-result .step-title { margin-bottom: 1.2rem; }
-  .results-summary {
+  /* RESULTS STYLES (PART C) */
+  #step-result .step-title { margin-bottom: 0.35rem; }
+  
+  .results-summary-box {
     background: var(--blue-dim);
     border: 1px solid var(--blue-glow);
-    border-radius: 12px;
-    padding: 1.2rem 1.5rem;
-    font-size: 0.85rem; color: var(--text);
+    border-radius: 14px;
+    padding: 1.25rem;
     margin-bottom: 2rem;
-    line-height: 1.7;
-    transition: background 0.3s, border-color 0.3s, color 0.3s;
   }
-  .results-summary strong { color: var(--heading); }
+  .results-summary-head {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 0.85rem; flex-wrap: wrap; gap: 8px;
+  }
+  .results-summary-title {
+    display: flex; align-items: center; gap: 7px;
+    font-size: 0.82rem; font-weight: 600; color: var(--muted);
+  }
+  .btn-edit-answers {
+    background: var(--s2);
+    border: 1px solid var(--border2);
+    color: var(--heading);
+    padding: 0.35rem 0.75rem;
+    font-size: 0.76rem;
+    border-radius: 7px;
+  }
+  .btn-edit-answers:hover { border-color: var(--blue); color: var(--blue); transform: translateY(-1px); }
+  .btn-edit-answers:active { transform: scale(0.98); }
 
+  .pref-chips-grid {
+    display: flex; flex-wrap: wrap; gap: 8px;
+  }
+  .pref-chip {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 0.42rem 0.85rem;
+    background: var(--card-bg);
+    border: 1px solid var(--border2);
+    border-radius: 999px;
+    font-size: 0.78rem; font-weight: 500;
+    color: var(--heading);
+    cursor: pointer;
+    white-space: nowrap;
+    user-select: none;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .pref-chip:hover {
+    border-color: var(--blue);
+    background: var(--s2);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+  }
+  .pref-chip:active { transform: scale(0.98); }
+  .pref-chip-val {
+    font-weight: 700; color: var(--blue);
+    font-variant-numeric: tabular-nums;
+  }
+  .pref-chip-pen {
+    color: var(--muted);
+    display: flex; align-items: center;
+    opacity: 0.65;
+    transition: opacity 0.2s;
+  }
+  .pref-chip:hover .pref-chip-pen { opacity: 1; color: var(--blue); }
+
+  /* RESULTS GRID & CARDS */
   .results-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-    gap: 1.2rem;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1.25rem;
     margin-bottom: 2rem;
   }
   .result-card {
     background: var(--s2);
     border: 1.5px solid var(--border2);
     border-radius: 14px;
-    padding: 1.4rem;
-    display: flex; flex-direction: column; gap: 0.6rem;
-    transition: all 0.2s;
+    padding: 1.25rem;
+    display: flex; flex-direction: column;
+    justify-content: space-between;
+    gap: 0.75rem;
+    transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+                border-color 0.25s ease,
+                box-shadow 0.25s ease;
   }
-  .result-card:hover { border-color: var(--blue); transform: translateY(-3px); }
+  .result-card:hover {
+    border-color: var(--blue);
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+  }
+  .rc-badge-row {
+    display: flex; align-items: center; justify-content: space-between;
+  }
   .rc-match {
-    font-size: 0.7rem; font-weight: 700; letter-spacing: 0.08em;
-    text-transform: uppercase; color: var(--green);
-    background: rgba(16,185,129,0.12); padding: 2px 8px; border-radius: 4px;
+    display: inline-flex; align-items: center; gap: 5px;
+    font-size: 0.72rem; font-weight: 700; letter-spacing: 0.04em;
+    text-transform: uppercase;
+    padding: 3px 9px; border-radius: 999px;
     width: fit-content;
   }
-  .rc-match.partial { color: var(--gold); background: rgba(245,158,11,0.12); }
-  .rc-name {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.1rem; font-weight: 800; color: var(--heading);
-    transition: color 0.3s;
+  .rc-match.best {
+    color: #10b981;
+    background: rgba(16,185,129,0.14);
+    border: 1px solid rgba(16,185,129,0.3);
   }
-  .rc-specs { font-size: 0.78rem; color: var(--muted); line-height: 1.6; transition: color 0.3s; }
-  .rc-price { font-size: 1.3rem; font-weight: 800; color: var(--blue); letter-spacing: -0.02em; }
-  .rc-wa {
-    display: flex; align-items: center; gap: 6px;
-    background: rgba(37,211,102,0.12);
-    color: #1ebe5d;
-    border: 1px solid rgba(37,211,102,0.3);
-    padding: 0.5rem 0.9rem;
-    border-radius: 7px;
-    font-size: 0.8rem; font-weight: 700;
-    text-decoration: none;
-    transition: all 0.2s;
-    width: fit-content; margin-top: 0.25rem;
+  .rc-match.great {
+    color: #06b6d4;
+    background: rgba(6,182,212,0.14);
+    border: 1px solid rgba(6,182,212,0.3);
   }
-  .rc-wa:hover { background: rgba(37,211,102,0.22); transform: translateY(-2px); }
+  .rc-match.good {
+    color: #3b82f6;
+    background: rgba(59,130,246,0.14);
+    border: 1px solid rgba(59,130,246,0.3);
+  }
+  .rc-match.alternative {
+    color: #f59e0b;
+    background: rgba(245,158,11,0.14);
+    border: 1px solid rgba(245,158,11,0.3);
+  }
+  .rc-diff-tag {
+    display: inline-flex; align-items: center; gap: 4px;
+    font-size: 0.72rem; font-weight: 700; color: #f59e0b;
+    background: rgba(245,158,11,0.12);
+    border: 1px solid rgba(245,158,11,0.28);
+    padding: 3px 8px; border-radius: 6px;
+    margin-top: 5px;
+  }
+  .rc-price-upgraded {
+    font-size: 0.72rem; color: #10b981; font-weight: 600; line-height: 1.3; margin-top: 2px;
+  }
+  .rc-img-wrap {
+    width: 100%; aspect-ratio: 4 / 3;
+    /* --img-tint injected per-card from lap.tintColor */
+    background: var(--img-tint, var(--s1)); border-radius: 10px;
+    padding: 10px;
+    display: flex; align-items: center; justify-content: center;
+    overflow: hidden;
+    transition: background 0.3s;
+  }
+  .rc-img-wrap img {
+    width: 100%; height: 100%; object-fit: contain;
+    transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .rc-img-wrap img.blend-cutout {
+    filter: drop-shadow(0 6px 14px rgba(0,0,0,0.18));
+  }
+  .rc-img-wrap img.blend-original {
+    filter: drop-shadow(0 8px 18px rgba(0,0,0,0.28));
+  }
+  .result-card:hover .rc-img-wrap img { transform: scale(1.04); }
 
-  .no-results {
-    text-align: center; padding: 3rem 1rem;
+  .rc-brand {
+    font-size: 0.72rem; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.06em;
     color: var(--muted);
   }
-  .no-results-icon { font-size: 3rem; margin-bottom: 1rem; }
+  .rc-name {
+    font-family: var(--font-display);
+    font-size: 1.05rem; font-weight: 700; color: var(--heading);
+    line-height: 1.3;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .rc-specs {
+    font-size: 0.78rem; color: var(--muted); line-height: 1.5;
+    font-variant-numeric: tabular-nums;
+  }
+  .rc-reason {
+    font-size: 0.76rem; line-height: 1.45;
+    color: var(--text); background: var(--blue-dim);
+    border-left: 3px solid var(--blue);
+    padding: 6px 9px; border-radius: 4px;
+    font-weight: 400;
+  }
+  .rc-footer {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 8px; margin-top: auto; padding-top: 0.5rem;
+    border-top: 1px solid var(--border);
+  }
+  .rc-price {
+    font-size: 1.15rem; font-weight: 800; color: var(--heading);
+    font-variant-numeric: tabular-nums;
+  }
+  .rc-wa {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: rgba(37,211,102,0.14);
+    color: #1ebe5d;
+    border: 1px solid rgba(37,211,102,0.32);
+    padding: 0.45rem 0.85rem;
+    border-radius: 8px;
+    font-size: 0.78rem; font-weight: 700;
+    text-decoration: none;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .rc-wa:hover {
+    background: rgba(37,211,102,0.22);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(37,211,102,0.2);
+  }
+  .rc-wa:active { transform: scale(0.98); }
+
+  /* AI Recommendation Card & Shimmer Skeleton */
+  .ai-recom-container {
+    margin-bottom: 2rem;
+  }
+  .ai-skeleton-box {
+    background: var(--s2);
+    border: 1.5px solid var(--border2);
+    border-radius: 14px;
+    padding: 1.5rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .ai-skeleton-box::after {
+    content: '';
+    position: absolute; top: 0; right: 0; bottom: 0; left: 0;
+    transform: translateX(-100%);
+    background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.06) 50%, rgba(255,255,255,0) 100%);
+    animation: skeletonShimmer 1.8s infinite;
+  }
+  [data-theme="light"] .ai-skeleton-box::after {
+    background: linear-gradient(90deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.04) 50%, rgba(0,0,0,0) 100%);
+  }
+  @keyframes skeletonShimmer {
+    100% { transform: translateX(100%); }
+  }
+  .skeleton-head {
+    display: flex; align-items: center; gap: 8px; margin-bottom: 1rem;
+  }
+  .skeleton-line {
+    height: 12px; background: var(--s3); border-radius: 6px; margin-bottom: 8px;
+  }
+  .skeleton-line.w75 { width: 75%; }
+  .skeleton-line.w90 { width: 90%; }
+  .skeleton-line.w60 { width: 60%; }
+
+  .ai-recom-card {
+    background: linear-gradient(135deg, rgba(76,124,255,0.09) 0%, rgba(16,185,129,0.06) 100%);
+    border: 1.5px solid rgba(76,124,255,0.3);
+    border-radius: 16px;
+    padding: 1.4rem 1.6rem;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    position: relative;
+    animation: panelFadeIn 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .ai-recom-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: rgba(16,185,129,0.14);
+    color: #10b981;
+    border: 1px solid rgba(16,185,129,0.3);
+    padding: 3px 10px; border-radius: 999px;
+    font-size: 0.72rem; font-weight: 700; letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .ai-recom-title {
+    font-family: var(--font-display);
+    font-size: 1.15rem; font-weight: 800; color: var(--heading);
+    margin: 0.6rem 0 0.4rem;
+    display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+  }
+  .ai-recom-reason {
+    font-size: 0.88rem; color: var(--text); line-height: 1.6;
+    margin-bottom: 0.6rem;
+  }
+  .ai-recom-tradeoffs {
+    font-size: 0.82rem; color: var(--muted); line-height: 1.5;
+    background: var(--s2); border-left: 3px solid var(--blue);
+    padding: 8px 12px; border-radius: 6px;
+  }
+
+  /* Empty / Nothing Found State */
+  .nothing-found-card {
+    background: var(--s2);
+    border: 1.5px solid rgba(239,68,68,0.3);
+    border-radius: 16px;
+    padding: 2.25rem 1.5rem;
+    text-align: center;
+    margin-bottom: 2rem;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+  }
+  .nothing-found-icon {
+    width: 56px; height: 56px; margin: 0 auto 1rem;
+    border-radius: 50%;
+    background: rgba(239,68,68,0.12);
+    color: #ef4444;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .nothing-found-title {
+    font-family: var(--font-display);
+    font-size: 1.4rem; font-weight: 800; color: var(--heading);
+    margin-bottom: 0.5rem;
+  }
+  .nothing-found-desc {
+    font-size: 0.92rem; color: var(--muted); max-width: 580px; margin: 0 auto 1.5rem;
+    line-height: 1.5;
+  }
+  .limiting-pref-callout {
+    background: rgba(245,158,11,0.1);
+    border: 1px solid rgba(245,158,11,0.28);
+    border-radius: 10px;
+    padding: 0.9rem 1.25rem;
+    max-width: 620px;
+    margin: 0 auto 1.75rem;
+    text-align: left;
+    display: flex; align-items: flex-start; gap: 10px;
+  }
+  .limiting-pref-callout svg { flex-shrink: 0; color: #f59e0b; margin-top: 2px; }
+  .limiting-pref-text {
+    font-size: 0.86rem; color: var(--heading); line-height: 1.5;
+  }
+  .nothing-found-actions {
+    display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;
+  }
+  .section-alt-title {
+    font-family: var(--font-display);
+    font-size: 1.15rem; font-weight: 700; color: var(--heading);
+    margin-bottom: 1rem;
+    display: flex; align-items: center; gap: 8px;
+  }
 
   .btn-restart {
     background: var(--s2); color: var(--heading);
-    border: 1.5px solid var(--border2);
-    padding: 0.7rem 1.5rem; border-radius: 8px;
-    font-family: inherit; font-size: 0.88rem; font-weight: 700;
-    cursor: pointer; transition: all 0.2s;
+    border: 1px solid var(--border2);
   }
-  .btn-restart:hover { border-color: var(--blue); }
+  .btn-restart:hover { border-color: var(--blue); color: var(--blue); transform: translateY(-1px); }
+  .btn-restart:active { transform: scale(0.98); }
 
   .wa-fab {
     position: fixed; bottom: 2rem; right: 2rem;
-    width: 54px; height: 54px;
+    width: 52px; height: 52px;
     background: #25d366; border-radius: 50%;
     display: flex; align-items: center; justify-content: center;
     box-shadow: 0 8px 30px rgba(37,211,102,0.4);
@@ -359,23 +698,40 @@
     50% { box-shadow: 0 8px 50px rgba(37,211,102,0.65); }
   }
 
-  @media (max-width: 600px) {
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+
+  @media (max-width: 640px) {
     .wizard-card { padding: 1.5rem; }
-    nav { padding: 1rem; }
-    .hero-title { font-size: 2rem; }
+    nav { padding: 0.75rem 1rem; }
+    .hero-title { font-size: 1.85rem; }
     .option-grid { grid-template-columns: 1fr 1fr; }
+    .progress-labels { display: none; }
   }
 </style>
 <script src="laptops-data.js"></script>
+<script src="store-config.js"></script>
+<script src="consult-matcher.js"></script>
 </head>
 <body>
 
 <nav>
   <a class="nav-logo" href="laptophub.html">Laptop<span>HUB</span></a>
   <div class="nav-actions">
-    <a class="btn-nav" href="custom-laptop.html" style="color:var(--blue);font-weight:700">🛠️ Create Laptop</a>
-    <button class="theme-btn" onclick="toggleTheme()">
-      <span id="themeIcon">☀️</span>
+    <a class="btn-nav" href="custom-laptop.html" style="color:var(--blue);font-weight:700">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+      Create Laptop
+    </a>
+    <button class="theme-btn" onclick="toggleTheme()" aria-label="Toggle theme">
+      <span id="themeIcon">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+      </span>
       <span id="themeLabel">Light</span>
     </button>
     <a class="btn-nav" href="laptophub.html">← Back to Store</a>
@@ -383,61 +739,80 @@
 </nav>
 
 <div class="hero">
-  <p class="hero-pre">🔍 Personalised Laptop Finder</p>
+  <div class="hero-pre">
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+    Personalised Laptop Finder
+  </div>
   <h1 class="hero-title">Consult Me</h1>
-  <p class="hero-sub">Tell us what you need and we'll match you with the perfect laptop from our inventory.</p>
+  <p class="hero-sub">Answer a few questions to find the ideal laptop match from our 69 verified models in stock.</p>
 </div>
 
 <div class="wizard-wrap">
   <!-- PROGRESS -->
-  <div class="progress-bar-outer">
+  <div class="progress-header">
+    <div class="progress-step-info" id="progressStepInfo">Step 1 of 6: Use Case</div>
+    <div class="progress-hint">Click completed steps to jump back</div>
+  </div>
+  <div class="progress-bar-outer" role="progressbar" aria-valuenow="16" aria-valuemin="0" aria-valuemax="100">
     <div class="progress-bar-inner" id="progressBar" style="width:16.66%"></div>
   </div>
   <div class="progress-labels">
-    <span class="step-label active" id="lbl-1">Use Case</span>
-    <span class="step-label" id="lbl-2">Processor</span>
-    <span class="step-label" id="lbl-3">RAM</span>
-    <span class="step-label" id="lbl-4">Storage</span>
-    <span class="step-label" id="lbl-5">GPU</span>
-    <span class="step-label" id="lbl-6">Budget</span>
+    <span class="step-label active" id="lbl-1" onclick="jumpToStep(1)">Use Case</span>
+    <span class="step-label" id="lbl-2" onclick="jumpToStep(2)">Processor</span>
+    <span class="step-label" id="lbl-3" onclick="jumpToStep(3)">RAM</span>
+    <span class="step-label" id="lbl-4" onclick="jumpToStep(4)">Storage</span>
+    <span class="step-label" id="lbl-5" onclick="jumpToStep(5)">GPU</span>
+    <span class="step-label" id="lbl-6" onclick="jumpToStep(6)">Budget</span>
   </div>
 
   <div class="wizard-card">
 
     <!-- STEP 1 — USE CASE -->
     <div class="step-panel active" id="step-1">
-      <div class="step-title">What will you use it for?</div>
-      <div class="step-subtitle">Pick the primary use case — you can change this later.</div>
+      <h2 class="step-title">What will you use it for?</h2>
+      <div class="step-subtitle">Pick your primary workflow. You can easily modify this later.</div>
       <div class="option-grid">
         <div class="option-tile" onclick="select(this,'usecase','office')" data-val="office">
-          <div class="tile-icon">💼</div>
-          <div class="tile-label">Business / Office</div>
-          <div class="tile-desc">Emails, documents, video calls, meetings</div>
+          <div class="tile-icon-wrap">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="7" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+          </div>
+          <div class="tile-label">Business & Office</div>
+          <div class="tile-desc">Emails, documents, video calls, corporate multitasking</div>
         </div>
         <div class="option-tile" onclick="select(this,'usecase','student')" data-val="student">
-          <div class="tile-icon">🎓</div>
-          <div class="tile-label">Student</div>
-          <div class="tile-desc">Assignments, research, lightweight tasks</div>
+          <div class="tile-icon-wrap">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+          </div>
+          <div class="tile-label">Student & Study</div>
+          <div class="tile-desc">Assignments, research, portability, all-day battery</div>
         </div>
         <div class="option-tile" onclick="select(this,'usecase','gaming')" data-val="gaming">
-          <div class="tile-icon">🎮</div>
+          <div class="tile-icon-wrap">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="6" x2="10" y1="12" y2="12"/><line x1="8" x2="8" y1="10" y2="14"/><line x1="15" x2="15.01" y1="13" y2="13"/><line x1="18" x2="18.01" y1="11" y2="11"/><rect width="20" height="12" x="2" y="6" rx="6"/></svg>
+          </div>
           <div class="tile-label">Gaming</div>
-          <div class="tile-desc">High-FPS gaming, dedicated GPU required</div>
+          <div class="tile-desc">High-FPS gaming, dedicated NVIDIA/AMD graphics</div>
         </div>
         <div class="option-tile" onclick="select(this,'usecase','creator')" data-val="creator">
-          <div class="tile-icon">🎨</div>
-          <div class="tile-label">Creative / Design</div>
-          <div class="tile-desc">Video editing, Photoshop, illustration</div>
+          <div class="tile-icon-wrap">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="13.5" cy="6.5" r=".5" fill="currentColor"/><circle cx="17.5" cy="10.5" r=".5" fill="currentColor"/><circle cx="8.5" cy="7.5" r=".5" fill="currentColor"/><circle cx="6.5" cy="12.5" r=".5" fill="currentColor"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.563-2.512 5.563-5.563C22 6.5 17.5 2 12 2z"/></svg>
+          </div>
+          <div class="tile-label">Creative & Design</div>
+          <div class="tile-desc">Premiere Pro, Photoshop, 3D modeling, color-accurate screen</div>
         </div>
         <div class="option-tile" onclick="select(this,'usecase','programming')" data-val="programming">
-          <div class="tile-icon">💻</div>
-          <div class="tile-label">Programming / Dev</div>
-          <div class="tile-desc">Coding, IDEs, VMs, containers, builds</div>
+          <div class="tile-icon-wrap">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+          </div>
+          <div class="tile-label">Programming & Dev</div>
+          <div class="tile-desc">Coding IDEs, Docker, VMs, compilers, fast CPU & RAM</div>
         </div>
         <div class="option-tile" onclick="select(this,'usecase','any')" data-val="any">
-          <div class="tile-icon">⚡</div>
-          <div class="tile-label">General / Anything</div>
-          <div class="tile-desc">All-rounder for everyday tasks</div>
+          <div class="tile-icon-wrap">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          </div>
+          <div class="tile-label">General All-Rounder</div>
+          <div class="tile-desc">Versatile everyday laptop for browsing, media & work</div>
         </div>
       </div>
       <div class="wizard-nav">
@@ -449,183 +824,276 @@
 
     <!-- STEP 2 — PROCESSOR -->
     <div class="step-panel" id="step-2">
-      <div class="step-title">Preferred Processor</div>
-      <div class="step-subtitle">Choose your CPU brand or family.</div>
+      <h2 class="step-title">Preferred Processor</h2>
+      <div class="step-subtitle">Choose your desired CPU architecture or ecosystem.</div>
       <div class="option-grid">
         <div class="option-tile" onclick="select(this,'cpu','intel_i5')" data-val="intel_i5">
-          <div class="tile-icon">🔵</div>
+          <div class="tile-icon-wrap" style="color:#3b82f6">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="16" height="16" x="4" y="4" rx="2"/><rect width="6" height="6" x="9" y="9" rx="1"/><path d="M9 1v3M15 1v3M9 20v3M15 20v3M20 9h3M20 15h3M1 9h3M1 15h3"/></svg>
+          </div>
           <div class="tile-label">Intel Core i5</div>
-          <div class="tile-desc">12th/13th Gen — great all-round performance</div>
+          <div class="tile-desc">10th to 13th Gen — solid mainstream speed & value</div>
         </div>
         <div class="option-tile" onclick="select(this,'cpu','intel_i7')" data-val="intel_i7">
-          <div class="tile-icon">🔵</div>
+          <div class="tile-icon-wrap" style="color:#3b82f6">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="16" height="16" x="4" y="4" rx="2"/><path d="M9 9h6l-4 6"/><path d="M9 1v3M15 1v3M9 20v3M15 20v3M20 9h3M20 15h3M1 9h3M1 15h3"/></svg>
+          </div>
           <div class="tile-label">Intel Core i7</div>
-          <div class="tile-desc">High performance, excellent multitasking</div>
+          <div class="tile-desc">High performance cores, ideal for demanding multitasking</div>
         </div>
         <div class="option-tile" onclick="select(this,'cpu','intel_ultra')" data-val="intel_ultra">
-          <div class="tile-icon">🔵</div>
+          <div class="tile-icon-wrap" style="color:#06b6d4">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+          </div>
           <div class="tile-label">Intel Core Ultra</div>
-          <div class="tile-desc">Latest AI-enhanced, ultra-thin laptops</div>
+          <div class="tile-desc">Latest AI-boosted NPU, ultra-efficient ultrabooks</div>
         </div>
         <div class="option-tile" onclick="select(this,'cpu','amd')" data-val="amd">
-          <div class="tile-icon">🔴</div>
+          <div class="tile-icon-wrap" style="color:#ef4444">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="16" height="16" x="4" y="4" rx="2"/><path d="m10 14 4-4M10 10l4 4"/><path d="M9 1v3M15 1v3M9 20v3M15 20v3M20 9h3M20 15h3M1 9h3M1 15h3"/></svg>
+          </div>
           <div class="tile-label">AMD Ryzen</div>
-          <div class="tile-desc">Ryzen 5/7/9 — strong value & efficiency</div>
+          <div class="tile-desc">Ryzen 5 / 7 / 9 — supreme multi-core and battery endurance</div>
         </div>
         <div class="option-tile" onclick="select(this,'cpu','apple')" data-val="apple">
-          <div class="tile-icon">🍎</div>
-          <div class="tile-label">Apple M2</div>
-          <div class="tile-desc">Incredible power efficiency, macOS only</div>
+          <div class="tile-icon-wrap" style="color:#a855f7">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3"/></svg>
+          </div>
+          <div class="tile-label">Apple Silicon</div>
+          <div class="tile-desc">M1 / M2 / M3 chips, silent acoustics and macOS</div>
         </div>
         <div class="option-tile" onclick="select(this,'cpu','any')" data-val="any">
-          <div class="tile-icon">🎯</div>
+          <div class="tile-icon-wrap">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg>
+          </div>
           <div class="tile-label">No Preference</div>
-          <div class="tile-desc">Show me everything</div>
+          <div class="tile-desc">Show best matches across all brands</div>
         </div>
       </div>
       <div class="wizard-nav">
         <button class="btn-prev" onclick="goPrev(2)">← Back</button>
-        <span class="step-counter">Step 2 of 6</span>
+        <span class="step-counter" id="ctr-2">Step 2 of 6</span>
         <button class="btn-next" onclick="goNext(2)">Next →</button>
       </div>
     </div>
 
     <!-- STEP 3 — RAM -->
     <div class="step-panel" id="step-3">
-      <div class="step-title">How Much RAM?</div>
-      <div class="step-subtitle">More RAM = smoother multitasking and future-proofing.</div>
+      <h2 class="step-title">How Much RAM?</h2>
+      <div class="step-subtitle">More RAM prevents browser slowdowns and future-proofs your investment.</div>
       <div class="slider-wrap">
         <div class="slider-value" id="ramVal">16 GB</div>
-        <div class="slider-label">Minimum RAM needed</div>
+        <div class="slider-label">Minimum RAM needed for your workload</div>
         <input type="range" id="ramSlider" min="0" max="3" value="1" step="1"
-          oninput="updateRamSlider(this.value)">
+          oninput="updateRamSlider(this.value)" aria-label="RAM selector slider">
         <div class="range-ticks">
           <span>8 GB</span><span>16 GB</span><span>32 GB</span><span>64 GB</span>
         </div>
         <br><br>
-        <div style="font-size:0.84rem;color:var(--muted);line-height:1.8">
-          <strong style="color:var(--heading)">8 GB</strong> — Student / basic office use<br>
-          <strong style="color:var(--heading)">16 GB</strong> — Most professionals and developers<br>
-          <strong style="color:var(--heading)">32 GB</strong> — Heavy multitasking, VMs, creative work<br>
-          <strong style="color:var(--heading)">64 GB</strong> — Workstation-level performance
+        <div style="font-size:0.84rem;color:var(--muted);line-height:1.8;background:var(--s2);padding:1rem;border-radius:10px;border:1px solid var(--border)">
+          <strong style="color:var(--heading)">8 GB</strong> — Student / basic documents & web browsing<br>
+          <strong style="color:var(--heading)">16 GB (Recommended)</strong> — Smooth multitasking, 30+ browser tabs & coding<br>
+          <strong style="color:var(--heading)">32 GB</strong> — Heavy software builds, virtualization, 4K video editing<br>
+          <strong style="color:var(--heading)">64 GB</strong> — Workstation-level engineering & simulation
         </div>
       </div>
       <div class="wizard-nav">
         <button class="btn-prev" onclick="goPrev(3)">← Back</button>
-        <span class="step-counter">Step 3 of 6</span>
+        <span class="step-counter" id="ctr-3">Step 3 of 6</span>
         <button class="btn-next" onclick="goNext(3)">Next →</button>
       </div>
     </div>
 
     <!-- STEP 4 — STORAGE -->
     <div class="step-panel" id="step-4">
-      <div class="step-title">Storage Capacity</div>
-      <div class="step-subtitle">How much local storage do you need?</div>
+      <h2 class="step-title">Storage Capacity</h2>
+      <div class="step-subtitle">All our models feature ultra-fast NVMe Solid State Drives.</div>
       <div class="option-grid">
         <div class="option-tile" onclick="select(this,'storage','256')" data-val="256">
-          <div class="tile-icon">💾</div>
+          <div class="tile-icon-wrap">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" x2="2" y1="12" y2="12"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/><line x1="6" x2="6.01" y1="16" y2="16"/><line x1="10" x2="10.01" y1="16" y2="16"/></svg>
+          </div>
           <div class="tile-label">256 GB SSD</div>
-          <div class="tile-desc">Lightweight, fast boot, cloud-reliant</div>
+          <div class="tile-desc">Fast boot, cloud-reliant everyday usage</div>
         </div>
         <div class="option-tile" onclick="select(this,'storage','512')" data-val="512">
-          <div class="tile-icon">💾</div>
+          <div class="tile-icon-wrap">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" x2="2" y1="12" y2="12"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/><line x1="6" x2="6.01" y1="16" y2="16"/><line x1="10" x2="10.01" y1="16" y2="16"/></svg>
+          </div>
           <div class="tile-label">512 GB SSD</div>
-          <div class="tile-desc">Comfortable for most users — our top pick</div>
+          <div class="tile-desc">The sweet spot — plenty of space for apps & files</div>
         </div>
         <div class="option-tile" onclick="select(this,'storage','1000')" data-val="1000">
-          <div class="tile-icon">🗄️</div>
+          <div class="tile-icon-wrap">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/><path d="M3 12c0 1.66 4 3 9 3s9-1.34 9-3"/></svg>
+          </div>
           <div class="tile-label">1 TB SSD</div>
-          <div class="tile-desc">Large projects, games, media storage</div>
+          <div class="tile-desc">High capacity for game installs & media projects</div>
         </div>
         <div class="option-tile" onclick="select(this,'storage','2000')" data-val="2000">
-          <div class="tile-icon">🗄️</div>
+          <div class="tile-icon-wrap">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/><path d="M3 12c0 1.66 4 3 9 3s9-1.34 9-3"/></svg>
+          </div>
           <div class="tile-label">2 TB SSD</div>
-          <div class="tile-desc">Professional-grade local storage</div>
+          <div class="tile-desc">Massive local capacity for professionals</div>
         </div>
       </div>
       <div class="wizard-nav">
         <button class="btn-prev" onclick="goPrev(4)">← Back</button>
-        <span class="step-counter">Step 4 of 6</span>
+        <span class="step-counter" id="ctr-4">Step 4 of 6</span>
         <button class="btn-next" onclick="goNext(4)">Next →</button>
       </div>
     </div>
 
     <!-- STEP 5 — GPU -->
     <div class="step-panel" id="step-5">
-      <div class="step-title">Graphics / GPU</div>
-      <div class="step-subtitle">Do you need a dedicated GPU for gaming or creative work?</div>
+      <h2 class="step-title">Graphics / GPU</h2>
+      <div class="step-subtitle">Do you need discrete 3D graphics acceleration?</div>
       <div class="option-grid">
         <div class="option-tile" onclick="select(this,'gpu','integrated')" data-val="integrated">
-          <div class="tile-icon">🖥️</div>
+          <div class="tile-icon-wrap">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="3" rx="2"/><line x1="8" x2="16" y1="21" y2="21"/><line x1="12" x2="12" y1="17" y2="21"/></svg>
+          </div>
           <div class="tile-label">Integrated Only</div>
-          <div class="tile-desc">Intel Iris Xe / AMD Radeon — great for office & dev</div>
+          <div class="tile-desc">Intel Iris Xe / AMD Radeon — cool, quiet, long battery</div>
         </div>
         <div class="option-tile" onclick="select(this,'gpu','any_discrete')" data-val="any_discrete">
-          <div class="tile-icon">🎮</div>
+          <div class="tile-icon-wrap" style="color:#10b981">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M7 7h.01M17 7h.01M7 17h.01M17 17h.01M12 12h.01"/></svg>
+          </div>
           <div class="tile-label">Any Dedicated GPU</div>
-          <div class="tile-desc">RTX / GTX / Radeon discrete graphics</div>
+          <div class="tile-desc">NVIDIA RTX/GTX or AMD Radeon discrete chip</div>
         </div>
         <div class="option-tile" onclick="select(this,'gpu','rtx')" data-val="rtx">
-          <div class="tile-icon">🚀</div>
+          <div class="tile-icon-wrap" style="color:#10b981">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+          </div>
           <div class="tile-label">NVIDIA RTX</div>
-          <div class="tile-desc">Ray tracing, DLSS, professional rendering</div>
+          <div class="tile-desc">Ray tracing, DLSS 3, CUDA tensor cores for AI/3D</div>
         </div>
         <div class="option-tile" onclick="select(this,'gpu','apple_gpu')" data-val="apple_gpu">
-          <div class="tile-icon">🍎</div>
-          <div class="tile-label">Apple GPU (M-Series)</div>
-          <div class="tile-desc">Unified memory, incredible efficiency on macOS</div>
+          <div class="tile-icon-wrap" style="color:#a855f7">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9 10h6v4H9z"/></svg>
+          </div>
+          <div class="tile-label">Apple Metal GPU</div>
+          <div class="tile-desc">Unified memory architecture on Apple M-Series</div>
         </div>
         <div class="option-tile" onclick="select(this,'gpu','no_pref')" data-val="no_pref">
-          <div class="tile-icon">✅</div>
+          <div class="tile-icon-wrap">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          </div>
           <div class="tile-label">No Preference</div>
-          <div class="tile-desc">Any GPU is fine for my needs</div>
+          <div class="tile-desc">Any graphics solution that fits my price</div>
         </div>
       </div>
       <div class="wizard-nav">
         <button class="btn-prev" onclick="goPrev(5)">← Back</button>
-        <span class="step-counter">Step 5 of 6</span>
+        <span class="step-counter" id="ctr-5">Step 5 of 6</span>
         <button class="btn-next" onclick="goNext(5)">Next →</button>
       </div>
     </div>
 
     <!-- STEP 6 — BUDGET -->
     <div class="step-panel" id="step-6">
-      <div class="step-title">Your Budget</div>
-      <div class="step-subtitle">Slide to set your maximum budget in PKR.</div>
+      <h2 class="step-title">Your Budget</h2>
+      <div class="step-subtitle">Slide to set your maximum target budget in Pakistani Rupees.</div>
       <div class="slider-wrap">
         <div class="slider-value" id="budgetVal">PKR 130,000</div>
-        <div class="slider-label">Maximum budget</div>
+        <div class="slider-label">Maximum budget limit</div>
         <input type="range" id="budgetSlider" min="35000" max="800000" value="130000" step="5000"
-          oninput="updateBudgetSlider(this.value)">
+          oninput="updateBudgetSlider(this.value)" aria-label="Budget slider">
         <div class="range-ticks">
           <span>35K</span><span>100K</span><span>250K</span><span>500K</span><span>800K</span>
         </div>
         <br><br>
-        <div style="font-size:0.84rem;color:var(--muted);line-height:1.8">
-          <strong style="color:var(--heading)">Under 100K</strong> — Entry-level business/student<br>
-          <strong style="color:var(--heading)">100K – 180K</strong> — Mid-range professionals<br>
-          <strong style="color:var(--heading)">180K – 300K</strong> — Premium business ultrabooks<br>
-          <strong style="color:var(--heading)">300K+</strong> — MacBook, Spectre, Surface flagship tier
+        <div style="font-size:0.84rem;color:var(--muted);line-height:1.8;background:var(--s2);padding:1rem;border-radius:10px;border:1px solid var(--border)">
+          <strong style="color:var(--heading)">Under 100K</strong> — Value business laptops & student ultrabooks<br>
+          <strong style="color:var(--heading)">100K – 180K</strong> — Mid-range enterprise machines (Latitude, ThinkPad, EliteBook)<br>
+          <strong style="color:var(--heading)">180K – 300K</strong> — Premium ultrabooks (XPS, ThinkPad X1 Carbon, Envy)<br>
+          <strong style="color:var(--heading)">300K+</strong> — Flagship MacBooks, ROG Zephyrus & HP ZBook workstations
         </div>
       </div>
       <div class="wizard-nav">
         <button class="btn-prev" onclick="goPrev(6)">← Back</button>
-        <span class="step-counter">Step 6 of 6</span>
-        <button class="btn-next" onclick="showResults()" style="background:#10b981;box-shadow:0 4px 16px rgba(16,185,129,0.35);">✨ Find My Laptop</button>
+        <span class="step-counter" id="ctr-6">Step 6 of 6</span>
+        <button class="btn-next" onclick="showResults()" style="background:#10b981;box-shadow:0 4px 14px rgba(16,185,129,0.35);">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3z"/></svg>
+          Find My Laptop
+        </button>
       </div>
     </div>
 
     <!-- STEP RESULT -->
     <div class="step-panel" id="step-result">
-      <div class="step-title">🎯 Your Matches</div>
-      <div class="results-summary" id="resultsSummary"></div>
+      <h2 class="step-title">Your Personalized Matches</h2>
+      <div class="step-subtitle">Evaluated against our 69 active laptop models in stock.</div>
+      
+      <!-- Summary Box with Clickable Tags (Part C.2) -->
+      <div class="results-summary-box">
+        <div class="results-summary-head">
+          <div class="results-summary-title">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+            Matching preferences (click any chip to edit):
+          </div>
+          <button class="btn-edit-answers" onclick="editAnswers()">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
+            Edit All Answers
+          </button>
+        </div>
+        <div class="pref-chips-grid" id="prefChipsGrid"></div>
+      </div>
+
+      <!-- AI Recommendation Container (Part 3) -->
+      <div class="ai-recom-container" id="aiRecomContainer" style="display:none">
+        <!-- Skeleton Shimmer -->
+        <div class="ai-skeleton-box" id="aiLoadingSkeleton" style="display:none">
+          <div class="skeleton-head">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--blue)"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3z"/></svg>
+            <span style="font-size:0.84rem;font-weight:700;color:var(--heading)">AI Consultant is analyzing hardware value & tradeoffs...</span>
+          </div>
+          <div class="skeleton-line w75"></div>
+          <div class="skeleton-line w90"></div>
+          <div class="skeleton-line w60"></div>
+        </div>
+
+        <!-- Rendered AI Recommendation Card -->
+        <div class="ai-recom-card" id="aiRecomCard" style="display:none">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.4rem;flex-wrap:wrap;gap:8px">
+            <span class="ai-recom-badge">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3z"/></svg>
+              AI Consultant's Top Pick
+            </span>
+            <span style="font-size:0.72rem;color:var(--muted);font-weight:600">Gemini Hardware Engine</span>
+          </div>
+          <div class="ai-recom-title" id="aiRecomTitle"></div>
+          <p class="ai-recom-reason" id="aiRecomReason"></p>
+          <div class="ai-recom-tradeoffs" id="aiRecomTradeoffs"></div>
+        </div>
+      </div>
+
+      <!-- Nothing Found State Container (Part 2) -->
+      <div id="nothingFoundContainer" style="display:none"></div>
+
+      <!-- Results Grid (Part C.3) -->
       <div class="results-grid" id="resultsGrid"></div>
-      <div style="display:flex;gap:1rem;flex-wrap:wrap;align-items:center">
-        <button class="btn-restart" onclick="restart()">🔄 Start Over</button>
-        <a href="https://wa.me/923261398594?text=Hi%21%20I%20used%20the%20Consult%20Me%20tool%20and%20need%20help%20choosing%20a%20laptop." target="_blank" style="display:inline-flex;align-items:center;gap:7px;background:rgba(37,211,102,0.12);color:#1ebe5d;border:1.5px solid rgba(37,211,102,0.3);padding:0.65rem 1.2rem;border-radius:8px;font-family:inherit;font-size:0.85rem;font-weight:700;text-decoration:none;transition:all 0.2s">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-          Ask us on WhatsApp
-        </a>
+
+      <!-- Result Navigation Actions (Part C.1) -->
+      <div class="wizard-nav" style="margin-top:1.5rem">
+        <button class="btn-prev" onclick="goPrev(7)">← Back to Budget</button>
+        <div style="display:flex;gap:0.75rem;flex-wrap:wrap;align-items:center">
+          <button class="btn-restart" onclick="editAnswers()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
+            Edit Answers
+          </button>
+          <button class="btn-restart" onclick="restart()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+            Start Over
+          </button>
+          <a href="https://wa.me/923261398594?text=Hi%21%20I%20used%20the%20Consult%20Me%20tool%20on%20LaptopHUB%20and%20need%20expert%20guidance." target="_blank" class="rc-wa" style="padding:0.65rem 1.1rem;font-size:0.85rem">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            Ask us on WhatsApp
+          </a>
+        </div>
       </div>
     </div>
 
@@ -633,7 +1101,7 @@
 </div><!-- /wizard-wrap -->
 
 <!-- WhatsApp FAB -->
-<a class="wa-fab" href="https://wa.me/923261398594?text=Hi%2C%20I%20need%20help%20choosing%20a%20laptop!" target="_blank" title="Chat on WhatsApp">
+<a class="wa-fab" href="https://wa.me/923261398594?text=Hi%2C%20I%20need%20help%20choosing%20a%20laptop!" target="_blank" title="Chat on WhatsApp" aria-label="Chat on WhatsApp">
   <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
 </a>
 
@@ -647,8 +1115,15 @@
   function applyTheme(t) {
     document.documentElement.setAttribute('data-theme', t);
     localStorage.setItem('laptophub_theme', t);
-    document.getElementById('themeIcon').textContent = t === 'light' ? '🌙' : '☀️';
-    document.getElementById('themeLabel').textContent = t === 'light' ? 'Dark' : 'Light';
+    const icon = document.getElementById('themeIcon');
+    const label = document.getElementById('themeLabel');
+    if (t === 'light') {
+      icon.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>';
+      label.textContent = 'Dark';
+    } else {
+      icon.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>';
+      label.textContent = 'Light';
+    }
   }
   function toggleTheme() {
     const cur = document.documentElement.getAttribute('data-theme') || 'dark';
@@ -656,8 +1131,15 @@
   }
   initTheme();
 
-  // ── STATE ──────────────────────────────────────────────────────────────────
-  const answers = { usecase: null, cpu: null, ram: 16, storage: 512, gpu: null, budget: 130000 };
+  // ── STATE & PERSISTENCE (PART C.1) ──────────────────────────────────────────
+  const answers = {
+    usecase: 'office',
+    cpu: 'intel_i7',
+    ram: 16,
+    storage: 512,
+    gpu: 'integrated',
+    budget: 130000
+  };
 
   // ── OPTION TILES ───────────────────────────────────────────────────────────
   function select(el, key, val) {
@@ -676,167 +1158,463 @@
   function updateBudgetSlider(val) {
     answers.budget = +val;
     document.getElementById('budgetVal').textContent = 'PKR ' + Number(val).toLocaleString('en-PK');
-    const pct = (val - 50000) / (500000 - 50000);
+    const pct = (val - 35000) / (800000 - 35000);
     updateSliderBg(document.getElementById('budgetSlider'), pct);
   }
   function updateSliderBg(el, pct) {
-    el.style.setProperty('--pct', (pct * 100).toFixed(1) + '%');
+    el.style.setProperty('--pct', (Math.max(0, Math.min(1, pct)) * 100).toFixed(1) + '%');
   }
-  // Init sliders
-  updateRamSlider(1);
-  updateBudgetSlider(130000);
 
-  // ── NAVIGATION ─────────────────────────────────────────────────────────────
+  // ── NAVIGATION & JUMPING (PART C.1) ─────────────────────────────────────────
   let currentStep = 1;
   const TOTAL = 6;
   const PCTS = ['16.66%','33.33%','50%','66.66%','83.33%','100%'];
-  const STEP_KEYS = [null,'usecase','cpu','ram','storage','gpu','budget'];
+  const STEP_NAMES = [
+    'Use Case',
+    'Preferred Processor',
+    'Memory (RAM)',
+    'Storage Capacity',
+    'Graphics / GPU',
+    'Budget Target'
+  ];
+  const STEP_KEYS = [null, 'usecase', 'cpu', 'ram', 'storage', 'gpu', 'budget'];
 
   function showStep(n) {
     document.querySelectorAll('.step-panel').forEach(p => p.classList.remove('active'));
-    document.getElementById('step-' + n).classList.add('active');
-    document.getElementById('progressBar').style.width = PCTS[n - 1];
-    for (let i = 1; i <= TOTAL; i++) {
-      const lbl = document.getElementById('lbl-' + i);
-      if (lbl) lbl.classList.toggle('active', i === n);
+    const target = document.getElementById('step-' + n);
+    if (target) target.classList.add('active');
+
+    const pBar = document.getElementById('progressBar');
+    const info = document.getElementById('progressStepInfo');
+
+    if (n >= 1 && n <= TOTAL) {
+      pBar.style.width = PCTS[n - 1];
+      pBar.style.background = 'linear-gradient(90deg, var(--blue), #7ca7ff)';
+      info.textContent = `Step ${n} of ${TOTAL}: ${STEP_NAMES[n - 1]}`;
+
+      for (let i = 1; i <= TOTAL; i++) {
+        const lbl = document.getElementById('lbl-' + i);
+        if (lbl) {
+          lbl.classList.toggle('active', i === n);
+          lbl.classList.toggle('completed', i < n);
+        }
+      }
+      syncStepUI(n);
     }
     currentStep = n;
+  }
+
+  function syncStepUI(n) {
+    if (n === 1 && answers.usecase) {
+      document.querySelectorAll('#step-1 .option-tile').forEach(t => {
+        t.classList.toggle('selected', t.dataset.val === answers.usecase);
+      });
+    } else if (n === 2 && answers.cpu) {
+      document.querySelectorAll('#step-2 .option-tile').forEach(t => {
+        t.classList.toggle('selected', t.dataset.val === answers.cpu);
+      });
+    } else if (n === 3) {
+      const idx = RAM_VALS.indexOf(answers.ram);
+      if (idx !== -1) {
+        document.getElementById('ramSlider').value = idx;
+        updateRamSlider(idx);
+      }
+    } else if (n === 4 && answers.storage) {
+      document.querySelectorAll('#step-4 .option-tile').forEach(t => {
+        t.classList.toggle('selected', t.dataset.val === String(answers.storage));
+      });
+    } else if (n === 5 && answers.gpu) {
+      document.querySelectorAll('#step-5 .option-tile').forEach(t => {
+        t.classList.toggle('selected', t.dataset.val === answers.gpu);
+      });
+    } else if (n === 6) {
+      document.getElementById('budgetSlider').value = answers.budget;
+      updateBudgetSlider(answers.budget);
+    }
+  }
+
+  function jumpToStep(n) {
+    if (n < 1 || n > TOTAL) return;
+    showStep(n);
   }
 
   function goNext(from) {
     const key = STEP_KEYS[from];
     if (key && key !== 'ram' && key !== 'budget' && !answers[key]) {
-      flash(from); return;
+      flash(from);
+      return;
     }
-    if (from < TOTAL) showStep(from + 1);
+    if (from < TOTAL) {
+      showStep(from + 1);
+    }
   }
 
   function goPrev(from) {
-    if (from > 1) showStep(from - 1);
+    if (from === 7) {
+      // Returning from Results page back to Step 6 (Budget)
+      showStep(6);
+    } else if (from > 1) {
+      showStep(from - 1);
+    }
+  }
+
+  function editAnswers() {
+    // Returns to Step 1 without erasing any previously selected answers
+    showStep(1);
   }
 
   function flash(step) {
     const card = document.getElementById('step-' + step);
+    if (!card) return;
     card.style.outline = '2px solid var(--blue)';
     setTimeout(() => card.style.outline = '', 600);
   }
 
-    // ── LAPTOP DATABASE (Connected to all 69 models from laptops-data.js) ────────
+  // ── LAPTOP DATABASE & PURE MATCHING INTEGRATION ────────────────────────────
   let inventory = [];
   if (typeof LAPTOPS_INVENTORY !== 'undefined') {
-    inventory = LAPTOPS_INVENTORY.map(lap => ({
-      name: lap.name,
-      brand: lap.brand,
-      cpu: lap.cpu,
-      cpuTags: [lap.cpuTag, 'any', lap.brand],
-      ram: lap.ram,
-      storage: lap.storage,
-      gpu: lap.gpuType,
-      gpuTags: [lap.gpuType, (lap.gpuType === 'rtx' || lap.gpuType === 'discrete') ? 'any_discrete' : 'integrated', 'no_pref'],
-      price: lap.price,
-      useCaseTags: [...lap.useCases, 'any'],
-      img: lap.img,
-      highlight: `${lap.category} · ${lap.display} · ${lap.gpu}`
-    }));
-  } else {
-    // Fallback if standalone
-    inventory = [
-      { name: 'Dell Latitude 7430', cpu: 'Intel Core i7-1265U', cpuTags: ['intel_i7','any'], ram: 16, storage: 512, gpu: 'integrated', gpuTags: ['integrated','no_pref'], price: 154000, useCaseTags: ['office','programming','any'], img: 'images/dell-latitude-7430.png', highlight: 'Enterprise Ultrabook · 14" FHD IPS' }
-    ];
+    inventory = LAPTOPS_INVENTORY;
   }
-// ── RESULTS ENGINE ─────────────────────────────────────────────────────────
-  function showResults() {
-    document.querySelectorAll('.step-panel').forEach(p => p.classList.remove('active'));
-    document.getElementById('step-result').classList.add('active');
-    document.getElementById('progressBar').style.width = '100%';
 
-    const { usecase, cpu, ram, storage, gpu, budget } = answers;
-    const grid = document.getElementById('resultsGrid');
-    grid.innerHTML = '';
+  // ── CARD RENDERER ──────────────────────────────────────────────────────────
+  function renderLaptopCard(lap, isAlternative = false) {
+    const isBest = lap.matchTier === 'best';
+    const isGreat = lap.matchTier === 'great';
+    const badgeClass = isBest ? 'best' : (isGreat ? 'great' : (isAlternative ? 'alternative' : 'good'));
+    const badgeLabel = isAlternative ? 'Closest Alternative' : (lap.matchBadge || (isBest ? 'Best Match' : 'Good Match'));
 
-    // Score each laptop
-    const scored = inventory.map(lap => {
-      let score = 0;
-      let exact = true;
+    const priceDisplay = (lap.upgradeDetails && lap.upgradeDetails.totalUpgradeCost > 0)
+      ? `PKR ${Number(lap.effectivePrice).toLocaleString('en-PK')}`
+      : `PKR ${Number(lap.price).toLocaleString('en-PK')}`;
 
-      // Budget
-      if (lap.price <= budget) score += 3; else { exact = false; }
+    const upgradeNote = (lap.upgradeDetails && lap.upgradeDetails.totalUpgradeCost > 0)
+      ? `<div class="rc-price-upgraded">Includes ${lap.upgradeDetails.ramUpgradeNeeded ? lap.upgradeDetails.finalRam + 'GB RAM' : ''}${lap.upgradeDetails.ramUpgradeNeeded && lap.upgradeDetails.storageUpgradeNeeded ? ' & ' : ''}${lap.upgradeDetails.storageUpgradeNeeded ? (lap.upgradeDetails.finalStorage >= 1000 ? (lap.upgradeDetails.finalStorage/1000)+'TB SSD' : lap.upgradeDetails.finalStorage+'GB SSD') : ''} upgrade (Base: PKR ${Number(lap.price).toLocaleString('en-PK')})</div>`
+      : '';
 
-      // Use case
-      if (!usecase || usecase === 'any' || lap.useCaseTags.includes(usecase)) score += 2;
-      else exact = false;
+    const waMsg = isAlternative
+      ? encodeURIComponent(`Hi LaptopHUB! I used your Consult Me finder. I saw the closest alternative match: ${lap.name} (${priceDisplay}). Could you share more details or customized options?`)
+      : encodeURIComponent(`Hi LaptopHUB! I used your Consult Me finder and matched with the ${lap.name} (${priceDisplay}). Is this model currently available for delivery?`);
 
-      // CPU
-      if (!cpu || cpu === 'any' || lap.cpuTags.includes(cpu)) score += 2;
-      else exact = false;
+    // ── IMAGE BLENDING ──────────────────────────────────────────────────────────
+    const rcIsWhite   = lap.bgTone === 'white';
+    const rcImgSrc    = (rcIsWhite && lap.processedImg) ? lap.processedImg : lap.img;
+    const rcBlendClass = rcIsWhite ? 'blend-cutout' : 'blend-original';
+    const rcRawTint   = lap.tintColor || '';
+    const rcTint      = rcRawTint
+      ? (rcIsWhite
+          ? rcRawTint
+          : lap.bgTone === 'colorful'
+            ? rcRawTint.replace(/,[\s]*[\d.]+\)$/, ', 0.10)')
+            : rcRawTint.replace(/,[\s]*[\d.]+\)$/, ', 0.05)'))
+      : '';
+    const rcWrapStyle = rcTint ? `;--img-tint:${rcTint}` : '';
+    // ────────────────────────────────────────────────────────────────────────────
 
-      // RAM (16GB is baseline for all inventory; flag if user wants ≤16)
-      if (ram <= lap.ram) score += 1;
-      else exact = false;
+    return `
+      <div class="result-card" data-laptop-id="${lap.id}">
+        <div>
+          <div class="rc-badge-row">
+            <span class="rc-match ${badgeClass}">
+              ${isBest ? `
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+              ` : (isGreat ? `
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              ` : (isAlternative ? `
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+              ` : `
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+              `))}
+              ${badgeLabel}
+            </span>
+            <span style="font-size:0.72rem;color:var(--muted);font-weight:600">${lap.condition || 'Like New (10/10)'}</span>
+          </div>
 
-      // Storage
-      if (storage <= lap.storage) score += 1;
-      else exact = false;
+          ${isAlternative && lap.diffLabel ? `
+            <div class="rc-diff-tag">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+              ${lap.diffLabel}
+            </div>
+          ` : ''}
 
-      // GPU
-      if (!gpu || gpu === 'no_pref' || lap.gpuTags.includes(gpu)) score += 1;
-      else exact = false;
+          <div class="rc-img-wrap" style="margin:0.6rem 0${rcWrapStyle}">
+            <img src="${rcImgSrc}" alt="${lap.name}" loading="lazy" class="${rcBlendClass}"
+                 onerror="this.src='${lap.img}'; this.className='blend-original'">
+          </div>
 
-      return { ...lap, score, exact };
-    });
+          <div class="rc-brand">${lap.brand}</div>
+          <div class="rc-name" title="${lap.name}">${lap.name}</div>
+          <div class="rc-specs" style="margin-top:4px">
+            ${lap.cpu} • ${lap.ramGb || lap.ram} GB RAM • ${lap.storageGb >= 1000 ? (lap.storageGb/1000)+'TB' : lap.storageGb+'GB'} NVMe SSD
+          </div>
+          <div style="font-size:0.75rem;color:var(--muted);margin-top:2px">
+            ${lap.display} · ${lap.gpu}
+          </div>
+        </div>
 
-    scored.sort((a, b) => b.score - a.score);
+        <div style="display:flex;flex-direction:column;gap:0.75rem">
+          <div class="rc-reason">
+            <strong style="color:var(--heading)">Why it matches:</strong> ${lap.whyItMatches}
+          </div>
 
-    // Summary
-    const usecaseLabel = { office:'Business/Office', student:'Student', gaming:'Gaming', creator:'Creative/Design', programming:'Programming/Dev', any:'General' };
-    const cpuLabel = { intel_i5:'Intel i5', intel_i7:'Intel i7', intel_ultra:'Intel Ultra', amd:'AMD Ryzen', apple:'Apple M-Series', any:'Any CPU' };
-    const gpuLabel = { integrated:'Integrated GPU', any_discrete:'Dedicated GPU', rtx:'NVIDIA RTX', apple_gpu:'Apple GPU', no_pref:'Any GPU' };
+          <div class="rc-footer">
+            <div>
+              <div style="font-size:0.68rem;color:var(--muted);text-transform:uppercase;font-weight:600">Price</div>
+              <div class="rc-price">${priceDisplay}</div>
+              ${upgradeNote}
+            </div>
+            <a class="rc-wa" href="https://wa.me/923261398594?text=${waMsg}" target="_blank" rel="noopener">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+              Order
+            </a>
+          </div>
+        </div>
+      </div>
+    `;
+  }
 
-    document.getElementById('resultsSummary').innerHTML =
-      `🎯 Searching for: <strong>${usecaseLabel[usecase]||'General'}</strong> · 
-       <strong>${cpuLabel[cpu]||'Any CPU'}</strong> · 
-       <strong>≥${ram} GB RAM</strong> · 
-       <strong>≥${storage} GB Storage</strong> · 
-       <strong>${gpuLabel[gpu]||'Any GPU'}</strong> · 
-       Budget: <strong>PKR ${Number(budget).toLocaleString('en-PK')}</strong>`;
+  // ── ASYNC AI RECOMMENDATION LAYER (PART 3) ─────────────────────────────────
+  let currentAiController = null;
 
-    const top = scored.filter(l => l.score >= 4);
-    const show = top.length ? top : scored.slice(0, 3);
+  async function requestAIRecommendation(userPrefs, matchedLaptops) {
+    const container = document.getElementById('aiRecomContainer');
+    const skeleton = document.getElementById('aiLoadingSkeleton');
+    const card = document.getElementById('aiRecomCard');
 
-    if (show.length === 0) {
-      grid.innerHTML = `<div class="no-results"><div class="no-results-icon">😔</div><p>No exact matches — try raising your budget or relaxing your specs.</p></div>`;
+    if (!matchedLaptops || matchedLaptops.length === 0) {
+      if (container) container.style.display = 'none';
       return;
     }
 
-    show.forEach(lap => {
-      const waMsg = encodeURIComponent(`Hi! I used the Consult Me tool on LaptopHUB and I'm interested in the ${lap.name}. My budget is PKR ${Number(budget).toLocaleString()}. Please assist!`);
-      grid.innerHTML += `
-        <div class="result-card">
-          <span class="rc-match ${lap.exact ? '' : 'partial'}">${lap.exact ? '✓ Best Match' : 'Good Match'}</span>
-          <img src="${lap.img}" alt="${lap.name}" style="width:100%;height:140px;object-fit:contain;background:var(--s2);border-radius:10px;padding:10px;margin:0.25rem 0">
-          <div class="rc-name">${lap.name}</div>
-          <div class="rc-specs">
-            ${lap.cpu}<br>
-            ${lap.ram} GB RAM · ${lap.storage >= 1000 ? (lap.storage/1000)+'TB' : lap.storage+'GB'} SSD<br>
-            ${lap.highlight}
+    container.style.display = 'block';
+    skeleton.style.display = 'block';
+    card.style.display = 'none';
+
+    if (currentAiController) {
+      currentAiController.abort();
+    }
+    currentAiController = new AbortController();
+    const timeoutId = setTimeout(() => {
+      if (currentAiController) currentAiController.abort();
+    }, 8000);
+
+    try {
+      const payload = {
+        preferences: userPrefs,
+        matchedLaptops: matchedLaptops.slice(0, 8).map(l => ({
+          id: l.id,
+          name: l.name,
+          brand: l.brand,
+          cpu: l.cpu,
+          ramGb: l.ramGb || l.ram,
+          storageGb: l.storageGb || l.storage,
+          gpu: l.gpu,
+          price: l.priceFormatted || `Rs ${Number(l.price).toLocaleString('en-PK')}`,
+          condition: l.condition
+        }))
+      };
+
+      const response = await fetch('/api/consult/ai-recommend', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+        signal: currentAiController.signal
+      });
+
+      clearTimeout(timeoutId);
+
+      if (!response.ok) {
+        skeleton.style.display = 'none';
+        container.style.display = 'none';
+        return;
+      }
+
+      const data = await response.json();
+      if (data.success && data.recommendation) {
+        const recId = Number(data.recommendation.recommendedLaptopId);
+        const recommendedLap = matchedLaptops.find(l => l.id === recId);
+
+        // Security / Accuracy Rule: Validate ID strictly exists in matched list
+        if (recommendedLap) {
+          document.getElementById('aiRecomTitle').innerHTML = `
+            <span>${recommendedLap.name}</span>
+            <span style="font-size:0.8rem;color:#10b981;background:rgba(16,185,129,0.12);padding:2px 8px;border-radius:6px;border:1px solid rgba(16,185,129,0.25)">
+              PKR ${Number(recommendedLap.effectivePrice || recommendedLap.price).toLocaleString('en-PK')}
+            </span>
+          `;
+          document.getElementById('aiRecomReason').textContent = data.recommendation.reason || recommendedLap.whyItMatches;
+          document.getElementById('aiRecomTradeoffs').innerHTML = `
+            <strong style="color:var(--heading)">Hardware Tradeoffs:</strong> ${data.recommendation.tradeoffs || 'Optimal balance of processor generation, thermals, and upgradability.'}
+          `;
+          skeleton.style.display = 'none';
+          card.style.display = 'block';
+          return;
+        }
+      }
+
+      // Graceful Fallback
+      skeleton.style.display = 'none';
+      container.style.display = 'none';
+    } catch (err) {
+      clearTimeout(timeoutId);
+      skeleton.style.display = 'none';
+      container.style.display = 'none';
+    }
+  }
+
+  // ── NOTHING FOUND STATE RENDERER (PART 2) ──────────────────────────────────
+  function renderNothingFoundState(container, result, userAnswers) {
+    const limitingMsg = (result && result.limitingPreference && result.limitingPreference.message)
+      ? result.limitingPreference.message
+      : 'Try expanding your budget limit or choosing No Preference for CPU and GPU.';
+
+    const waCustomQuery = encodeURIComponent(
+      `Hi LaptopHUB! I used your Consult Me finder for a ${userAnswers.usecase || 'General'} laptop (CPU: ${userAnswers.cpu || 'Any'}, RAM: ${userAnswers.ram}GB, Storage: ${userAnswers.storage}GB, Budget: PKR ${Number(userAnswers.budget).toLocaleString('en-PK')}). No exact match is currently listed in stock. Can you source or customize a model for me?`
+    );
+
+    let html = `
+      <div class="nothing-found-card">
+        <div class="nothing-found-icon">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/><line x1="8" x2="14" y1="11" y2="11"/></svg>
+        </div>
+        <h3 class="nothing-found-title">No laptop in our store matches these exact specs.</h3>
+        <p class="nothing-found-desc">
+          We evaluated all 69 verified laptops in stock against 100% of your chosen requirements.
+        </p>
+
+        <div class="limiting-pref-callout">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></svg>
+          <div class="limiting-pref-text">
+            <strong>Key Insight:</strong> ${limitingMsg}
           </div>
-          <div class="rc-price">PKR ${Number(lap.price).toLocaleString('en-PK')}</div>
-          <a class="rc-wa" href="https://wa.me/923261398594?text=${waMsg}" target="_blank">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-            Enquire on WhatsApp
+        </div>
+
+        <div class="nothing-found-actions">
+          <button class="btn-prev" onclick="editAnswers()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
+            Edit Answers
+          </button>
+          <button class="btn-restart" onclick="restart()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+            Start Over
+          </button>
+          <a class="rc-wa" href="https://wa.me/923261398594?text=${waCustomQuery}" target="_blank" rel="noopener" style="padding:0.65rem 1.2rem;font-size:0.86rem">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            Ask us on WhatsApp
           </a>
-        </div>`;
-    });
+        </div>
+      </div>
+    `;
+
+    if (result.closestAlternatives && result.closestAlternatives.length > 0) {
+      html += `
+        <div style="margin-top:2rem">
+          <h3 class="section-alt-title">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="color:#f59e0b"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            Closest Alternatives in Stock (Failing only 1 spec):
+          </h3>
+          <div class="results-grid">
+            ${result.closestAlternatives.map(alt => renderLaptopCard(alt, true)).join('')}
+          </div>
+        </div>
+      `;
+    }
+
+    container.innerHTML = html;
+    container.style.display = 'block';
+  }
+
+  // ── RESULTS ENGINE (PARTS 1, 2, 3) ──────────────────────────────────────────
+  function showResults() {
+    document.querySelectorAll('.step-panel').forEach(p => p.classList.remove('active'));
+    document.getElementById('step-result').classList.add('active');
+
+    // Progress bar on results: Completed state
+    const pBar = document.getElementById('progressBar');
+    pBar.style.width = '100%';
+    pBar.style.background = 'linear-gradient(90deg, #10b981, #3b82f6)';
+    document.getElementById('progressStepInfo').textContent = 'Completed · 69 Models Evaluated';
+
+    for (let i = 1; i <= TOTAL; i++) {
+      const lbl = document.getElementById('lbl-' + i);
+      if (lbl) {
+        lbl.classList.remove('active');
+        lbl.classList.add('completed');
+      }
+    }
+    currentStep = 7;
+
+    const { usecase, cpu, ram, storage, gpu, budget } = answers;
+    const grid = document.getElementById('resultsGrid');
+    const chipsGrid = document.getElementById('prefChipsGrid');
+    const nothingContainer = document.getElementById('nothingFoundContainer');
+    const aiContainer = document.getElementById('aiRecomContainer');
+
+    grid.innerHTML = '';
+    chipsGrid.innerHTML = '';
+    nothingContainer.innerHTML = '';
+    nothingContainer.style.display = 'none';
+
+    // Render Clickable Preference Chips (Part C.2)
+    const usecaseLabel = { office:'Business/Office', student:'Student', gaming:'Gaming', creator:'Creative/Design', programming:'Programming/Dev', any:'General' };
+    const cpuLabel = { intel_i5:'Intel Core i5', intel_i7:'Intel Core i7', intel_ultra:'Intel Core Ultra', amd:'AMD Ryzen', apple:'Apple Silicon', any:'Any CPU' };
+    const gpuLabel = { integrated:'Integrated Only', any_discrete:'Dedicated GPU', rtx:'NVIDIA RTX', apple_gpu:'Apple Metal', no_pref:'Any GPU' };
+
+    const chips = [
+      { label: 'Use Case', val: usecaseLabel[usecase] || 'General', step: 1 },
+      { label: 'Processor', val: cpuLabel[cpu] || 'Any CPU', step: 2 },
+      { label: 'RAM', val: `≥${ram} GB`, step: 3 },
+      { label: 'Storage', val: `≥${storage >= 1000 ? (storage/1000)+' TB' : storage+' GB'}`, step: 4 },
+      { label: 'GPU', val: gpuLabel[gpu] || 'Any GPU', step: 5 },
+      { label: 'Budget', val: `Max PKR ${Number(budget).toLocaleString('en-PK')}`, step: 6 }
+    ];
+
+    chipsGrid.innerHTML = chips.map(c => `
+      <div class="pref-chip" onclick="jumpToStep(${c.step})" title="Click to change ${c.label}">
+        <span>${c.label}:</span>
+        <span class="pref-chip-val">${c.val}</span>
+        <span class="pref-chip-pen">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
+        </span>
+      </div>
+    `).join('');
+
+    // Execute pure matching engine
+    const dataset = (typeof LAPTOPS_INVENTORY !== 'undefined') ? LAPTOPS_INVENTORY : inventory;
+    const matchResult = (typeof ConsultMatcher !== 'undefined')
+      ? ConsultMatcher.findMatches(answers, dataset)
+      : { exactMatches: [], closestAlternatives: [], limitingPreference: null };
+
+    if (matchResult.exactMatches && matchResult.exactMatches.length > 0) {
+      grid.style.display = 'grid';
+      grid.innerHTML = matchResult.exactMatches.map(lap => renderLaptopCard(lap, false)).join('');
+
+      // Trigger AI Recommendation layer (Part 3) asynchronously without blocking cards
+      requestAIRecommendation(answers, matchResult.exactMatches);
+    } else {
+      grid.style.display = 'none';
+      if (aiContainer) aiContainer.style.display = 'none';
+      renderNothingFoundState(nothingContainer, matchResult, answers);
+    }
   }
 
   function restart() {
-    answers.usecase = null; answers.cpu = null; answers.ram = 16;
-    answers.storage = 512; answers.gpu = null; answers.budget = 130000;
-    document.querySelectorAll('.option-tile').forEach(t => t.classList.remove('selected'));
+    answers.usecase = 'office';
+    answers.cpu = 'intel_i7';
+    answers.ram = 16;
+    answers.storage = 512;
+    answers.gpu = 'integrated';
+    answers.budget = 130000;
+
+    syncStepUI(1);
     updateRamSlider(1);
     updateBudgetSlider(130000);
     showStep(1);
   }
+
+  // Initialize UI on page load
+  syncStepUI(1);
+  updateRamSlider(1);
+  updateBudgetSlider(130000);
 </script>
 </body>
 </html>

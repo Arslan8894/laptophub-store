@@ -13,6 +13,7 @@ import os
 import json
 import re
 import argparse
+import time
 import urllib.request
 import urllib.parse
 from http.server import HTTPServer, SimpleHTTPRequestHandler
@@ -95,6 +96,125 @@ def fetch_photo_for_laptop(query, dest_filename):
     except Exception as e:
         print(f"Error fetching photo: {e}")
     return None, 0
+
+# ---------------------------------------------------------------------------
+# AI CONSULTATION RECOMMENDATION HELPER (GEMINI INTEGRATION)
+# ---------------------------------------------------------------------------
+RATE_LIMIT_CACHE = {}
+
+def get_ai_recommendation(prefs, matched_laptops):
+    valid_ids = {lap['id'] for lap in matched_laptops if 'id' in lap}
+    if not valid_ids:
+        return {'success': False, 'fallback': True, 'error': 'No valid laptop IDs'}
+
+    api_key = os.environ.get('GEMINI_API_KEY') or os.environ.get('GOOGLE_API_KEY')
+    
+    # Check optional local .env file
+    env_path = os.path.join(BASE_DIR, '.env')
+    if not api_key and os.path.exists(env_path):
+        try:
+            with open(env_path, 'r', encoding='utf-8') as f:
+                for line in f:
+                    line = line.strip()
+                    if line.startswith('GEMINI_API_KEY=') or line.startswith('GOOGLE_API_KEY='):
+                        api_key = line.split('=', 1)[1].strip().strip('"').strip("'")
+                        break
+        except Exception:
+            pass
+
+    if not api_key:
+        return {
+            'success': False,
+            'fallback': True,
+            'message': 'AI service offline: GEMINI_API_KEY is not configured in backend environment.'
+        }
+
+    # Format structured candidate list (strict minimization)
+    candidate_summary = []
+    for lap in matched_laptops[:8]:
+        candidate_summary.append({
+            'id': lap['id'],
+            'name': lap.get('name'),
+            'brand': lap.get('brand'),
+            'cpu': lap.get('cpu'),
+            'ramGb': lap.get('ramGb', lap.get('ram')),
+            'storageGb': lap.get('storageGb', lap.get('storage')),
+            'gpu': lap.get('gpu'),
+            'price': lap.get('priceFormatted', f"Rs {lap.get('price', 0):,}"),
+            'condition': lap.get('condition')
+        })
+
+    budget_val = prefs.get('budget', 130000)
+    budget_formatted = f"Rs {int(budget_val):,}" if isinstance(budget_val, (int, float)) else str(budget_val)
+
+    prompt_text = (
+        f"You are LaptopHUB's senior laptop hardware consultant in Pakistan.\n"
+        f"User Preferences:\n"
+        f"- Target Use Case: {prefs.get('usecase', 'General')}\n"
+        f"- Preferred CPU: {prefs.get('cpu', 'Any')}\n"
+        f"- Minimum RAM: {prefs.get('ram', 16)} GB\n"
+        f"- Minimum SSD: {prefs.get('storage', 512)} GB\n"
+        f"- GPU Requirement: {prefs.get('gpu', 'Any')}\n"
+        f"- Maximum Budget: PKR {budget_formatted}\n\n"
+        f"Matched Laptops in Stock (Select ONLY from this list):\n"
+        f"{json.dumps(candidate_summary, indent=2)}\n\n"
+        f"Instructions:\n"
+        f"1. Select the single best laptop ID from the provided list that maximizes value for the user.\n"
+        f"2. Explain why in 2-3 friendly, authoritative sentences.\n"
+        f"3. Highlight tradeoffs comparing it to the other matches in 1-2 friendly sentences.\n"
+        f"4. You MUST respond with JSON matching this schema: "
+        f'{{"recommendedLaptopId": <int>, "reason": "<string>", "tradeoffs": "<string>"}}\n'
+        f"5. NEVER recommend any laptop ID that is not in the list. Do not invent any specs."
+    )
+
+    url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={api_key}"
+    req_body = {
+        "contents": [{"parts": [{"text": prompt_text}]}],
+        "generationConfig": {
+            "temperature": 0.2,
+            "responseMimeType": "application/json"
+        }
+    }
+
+    try:
+        data_bytes = json.dumps(req_body).encode('utf-8')
+        req = urllib.request.Request(
+            url,
+            data=data_bytes,
+            headers={'Content-Type': 'application/json'},
+            method='POST'
+        )
+        with urllib.request.urlopen(req, timeout=7) as resp:
+            resp_data = json.loads(resp.read().decode('utf-8'))
+            
+        candidates = resp_data.get('candidates', [])
+        if candidates and 'content' in candidates[0]:
+            parts = candidates[0]['content'].get('parts', [])
+            if parts and 'text' in parts[0]:
+                ai_json = json.loads(parts[0]['text'])
+                rec_id = int(ai_json.get('recommendedLaptopId'))
+                if rec_id in valid_ids:
+                    return {
+                        'success': True,
+                        'recommendation': {
+                            'recommendedLaptopId': rec_id,
+                            'reason': ai_json.get('reason', '').strip(),
+                            'tradeoffs': ai_json.get('tradeoffs', '').strip()
+                        }
+                    }
+    except Exception as e:
+        return {
+            'success': False,
+            'fallback': True,
+            'error': str(e),
+            'message': 'AI call failed or timed out. Falling back to deterministic matching.'
+        }
+
+    return {
+        'success': False,
+        'fallback': True,
+        'message': 'AI recommendation could not be validated against candidate list.'
+    }
 
 # ---------------------------------------------------------------------------
 # INVENTORY REST API REQUEST HANDLER
@@ -229,6 +349,46 @@ class InventoryAPIHandler(SimpleHTTPRequestHandler):
                 self.end_headers()
                 self.wfile.write(json.dumps({'success': True, 'count': len(items)}).encode('utf-8'))
                 return
+
+        elif self.path == '/api/consult/ai-recommend':
+            client_ip = self.client_address[0]
+            now = time.time()
+            requests = RATE_LIMIT_CACHE.get(client_ip, [])
+            requests = [t for t in requests if now - t < 60]
+            if len(requests) >= 12:
+                self.send_response(429)
+                self.send_header('Content-Type', 'application/json')
+                self.end_headers()
+                self.wfile.write(json.dumps({
+                    'success': False,
+                    'fallback': True,
+                    'error': 'Rate limit exceeded (max 12 req/min). Please try again shortly.'
+                }).encode('utf-8'))
+                return
+
+            requests.append(now)
+            RATE_LIMIT_CACHE[client_ip] = requests
+
+            prefs = payload.get('preferences', {})
+            matched_laptops = payload.get('matchedLaptops', [])
+
+            if not matched_laptops:
+                self.send_response(200)
+                self.send_header('Content-Type', 'application/json')
+                self.end_headers()
+                self.wfile.write(json.dumps({
+                    'success': False,
+                    'fallback': True,
+                    'message': 'No matched laptops provided.'
+                }).encode('utf-8'))
+                return
+
+            result = get_ai_recommendation(prefs, matched_laptops)
+            self.send_response(200)
+            self.send_header('Content-Type', 'application/json')
+            self.end_headers()
+            self.wfile.write(json.dumps(result).encode('utf-8'))
+            return
 
         self.send_response(404)
         self.end_headers()

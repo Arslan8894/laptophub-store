@@ -1,0 +1,488 @@
+/**
+ * theme.css — Unified Design System & Typography Tokens
+ * Shared across LaptopHUB, VOLTS, Custom Builder, and Consult AI
+ */
+
+:root {
+  /* =========================================================================
+     TYPOGRAPHY SCALE & FONT WEIGHTS (Modern & Consistent)
+     ========================================================================= */
+  --font-main: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-display: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  --font-body: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  --font-serif: 'Plus Jakarta Sans', Georgia, serif;
+  --font-mono: 'JetBrains Mono', monospace;
+
+  /* Standard Weight Hierarchy */
+  --fw-regular: 400;     /* Body copy, descriptions, details, forms */
+  --fw-medium: 500;      /* Secondary labels, tags, subheadings, pill items */
+  --fw-semibold: 600;    /* Interactive buttons, card titles, key prices */
+  --fw-bold: 700;        /* Main section titles, hero headings (Max weight) */
+  --fw-extrabold: 800;   /* Key badges / numbers */
+
+  /* Type Scale */
+  --fs-xs: 0.72rem;      /* 11.5px: Badges, spec pills, metadata */
+  --fs-sm: 0.82rem;      /* 13px: Secondary text, descriptions, table cells */
+  --fs-base: 0.92rem;    /* 14.7px: Body copy, inputs, action buttons */
+  --fs-md: 1.05rem;      /* 16.8px: Card titles, drawer headers */
+  --fs-lg: 1.35rem;      /* 21.6px: Sub-headers, modal titles */
+  --fs-xl: 1.75rem;      /* 28px: Section headings */
+  --fs-2xl: clamp(2.2rem, 5vw, 3.2rem); /* Hero headings */
+
+  /* =========================================================================
+     DARK THEME (Default)
+     ========================================================================= */
+  --bg: #090a0f;
+  --s1: #11141e;
+  --s2: #171b28;
+  --s3: #1e2334;
+  --card-bg: #121522;
+  --card-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+  
+  --text: #e6e9f5;
+  --heading: #ffffff;
+  --muted: #8c94ab;
+  --subtle: #a0a8c2;
+
+  /* Brand Accents */
+  --blue: #4c7cff;
+  --blue-hover: #3a6bf5;
+  --blue-dim: rgba(76, 124, 255, 0.12);
+  --blue-glow: rgba(76, 124, 255, 0.28);
+
+  --volts-accent: #e8ff00;
+  --volts-glow: rgba(232, 255, 0, 0.35);
+  --volts-accent2: #00ffcc;
+
+  --green: #10b981;
+  --green-dim: rgba(16, 185, 129, 0.12);
+  --gold: #f59e0b;
+  --danger: #ef4444;
+
+  --border: rgba(255, 255, 255, 0.08);
+  --border2: rgba(255, 255, 255, 0.15);
+  --badge-bg: rgba(18, 21, 34, 0.85);
+  --badge-text: #e6e9f5;
+  --badge-border: rgba(255, 255, 255, 0.15);
+  --input-bg: #121522;
+  --photo-bg: #0c0e16;
+  --nav-bg: rgba(9, 10, 15, 0.88);
+
+  /* Layout & Sizing */
+  --max-width: 1400px;
+  --grid-max-width: 1240px;
+  --card-padding: 1.25rem;
+  --card-gap: 1.35rem; /* 22px */
+  --card-radius: 14px;
+  --card-aspect: 4 / 3;
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --radius-full: 9999px;
+  --transition-fast: 0.15s ease;
+  --transition-normal: 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  --transition-spring: 0.35s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+}
+
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum";
+}
+
+/* =========================================================================
+   LIGHT THEME OVERRIDES
+   ========================================================================= */
+[data-theme="light"] {
+  --bg: #f8fafc;
+  --s1: #ffffff;
+  --s2: #f1f5f9;
+  --s3: #e2e8f0;
+  --card-bg: #ffffff;
+  --card-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+
+  --text: #334155;
+  --heading: #0f172a;
+  --muted: #64748b;
+  --subtle: #475569;
+
+  --blue: #2563eb;
+  --blue-hover: #1d4ed8;
+  --blue-dim: rgba(37, 99, 235, 0.08);
+  --blue-glow: rgba(37, 99, 235, 0.18);
+
+  --green: #059669;
+  --green-dim: rgba(5, 150, 105, 0.08);
+
+  --border: rgba(0, 0, 0, 0.08);
+  --border2: rgba(0, 0, 0, 0.14);
+  --badge-bg: rgba(239, 246, 255, 0.92);
+  --badge-text: #1e40af;
+  --badge-border: rgba(37, 99, 235, 0.22);
+  --input-bg: #ffffff;
+  --photo-bg: #f8fafc;
+  --nav-bg: rgba(255, 255, 255, 0.92);
+}
+
+/* =========================================================================
+   MOBILE NAVIGATION DRAWER COMPONENT
+   ========================================================================= */
+.mobile-nav-toggle {
+  display: none;
+  background: var(--s2);
+  border: 1px solid var(--border);
+  color: var(--heading);
+  width: 38px;
+  height: 38px;
+  border-radius: var(--radius-sm);
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 1.15rem;
+  transition: all var(--transition-fast);
+}
+.mobile-nav-toggle:hover {
+  border-color: var(--blue);
+  color: var(--blue);
+}
+
+.mobile-drawer-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 10008;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+.mobile-drawer-overlay.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.mobile-nav-drawer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: min(300px, 85vw);
+  background: var(--s1);
+  border-right: 1px solid var(--border2);
+  z-index: 10009;
+  transform: translateX(-100%);
+  visibility: hidden;
+  pointer-events: none;
+  transition: transform var(--transition-normal), visibility var(--transition-normal);
+  display: flex;
+  flex-direction: column;
+  box-shadow: 10px 0 40px rgba(0, 0, 0, 0.7);
+}
+.mobile-nav-drawer.open {
+  transform: translateX(0);
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.mobile-nav-header {
+  padding: 1.2rem 1.4rem;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.mobile-nav-title {
+  font-size: var(--fs-md);
+  font-weight: var(--fw-bold);
+  color: var(--heading);
+}
+.mobile-nav-close {
+  background: none;
+  border: 1px solid var(--border);
+  color: var(--muted);
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+.mobile-nav-links {
+  list-style: none;
+  padding: 1rem 1.2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.mobile-nav-links a {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius-sm);
+  color: var(--text);
+  text-decoration: none;
+  font-weight: var(--fw-medium);
+  font-size: var(--fs-base);
+  transition: all var(--transition-fast);
+}
+.mobile-nav-links a:hover,
+.mobile-nav-links a.active {
+  background: var(--s2);
+  color: var(--blue);
+}
+
+/* =========================================================================
+   TYPOGRAPHY & TABULAR NUMBERS UTILITIES
+   ========================================================================= */
+.tabular-nums,
+.pcard-price,
+.lmodal-price-val,
+.lmodal-footer-amount,
+.rc-price,
+.cart-price,
+.spec-pill,
+.pill-diff {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum";
+}
+
+/* =========================================================================
+   REUSABLE PRODUCT GRID & MINIMAL CARD COMPONENT
+   ========================================================================= */
+.pgrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  max-width: var(--grid-max-width, 1240px);
+  margin: 0 auto;
+  gap: var(--card-gap, 1.35rem);
+}
+@media (min-width: 1200px) {
+  .pgrid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+@media (min-width: 680px) and (max-width: 1199px) {
+  .pgrid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 679px) {
+  .pgrid { grid-template-columns: 1fr; }
+}
+
+.pcard {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: var(--card-radius, 14px);
+  padding: var(--card-padding, 1.25rem);
+  box-shadow: var(--card-shadow);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  cursor: pointer;
+  position: relative;
+  outline: none;
+  transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.22s cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 0.2s ease;
+  will-change: transform;
+}
+.pcard:hover {
+  transform: translateY(-4px);
+  border-color: var(--blue);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.35), 0 0 18px var(--blue-glow);
+}
+.pcard:focus-visible {
+  border-color: var(--blue);
+  box-shadow: 0 0 0 3px var(--blue-glow);
+}
+.pcard:active {
+  transform: translateY(-1px) scale(0.995);
+}
+
+.pcard-photo-wrap {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  background: var(--photo-bg, #0c0e16);
+  border-radius: var(--radius-md, 10px);
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.75rem;
+  overflow: hidden;
+  margin-bottom: 0.9rem;
+}
+.pcard-photo {
+  max-width: 92%;
+  max-height: 92%;
+  object-fit: contain;
+  transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+  filter: drop-shadow(0 10px 20px rgba(0,0,0,0.3));
+}
+.pcard:hover .pcard-photo {
+  transform: scale(1.04);
+}
+
+.pcard-cond-badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background: var(--badge-bg);
+  color: var(--badge-text);
+  border: 1px solid var(--badge-border);
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.2;
+  padding: 4px 10px;
+  border-radius: var(--radius-full, 9999px);
+  white-space: nowrap;
+  letter-spacing: 0.02em;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 2;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease;
+}
+
+.pcard-brand {
+  font-size: 0.68rem;
+  font-weight: var(--fw-semibold);
+  color: var(--blue);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 0.25rem;
+}
+
+.pcard-title {
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  font-weight: var(--fw-semibold);
+  color: var(--heading);
+  line-height: 1.3;
+  margin-bottom: 0.4rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.pcard-specs-line {
+  font-size: 0.78rem;
+  color: var(--muted);
+  line-height: 1.4;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-bottom: 1.1rem;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.spec-dot {
+  color: var(--border2);
+  font-size: 0.7rem;
+}
+
+.pcard-footer {
+  margin-top: auto;
+  padding-top: 0.85rem;
+  border-top: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+.pcard-price-col {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.pcard-price-label {
+  font-size: 0.68rem;
+  font-weight: var(--fw-medium);
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  line-height: 1;
+  margin-bottom: 3px;
+}
+.pcard-price {
+  font-size: 1.28rem;
+  font-weight: var(--fw-bold);
+  color: var(--heading);
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.2;
+}
+.pcard-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+.btn-card-view {
+  background: var(--blue);
+  color: #ffffff;
+  border: none;
+  border-radius: var(--radius-sm);
+  padding: 0.55rem 0.95rem;
+  font-family: inherit;
+  font-size: 0.82rem;
+  font-weight: var(--fw-semibold);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: transform 0.18s ease-out, background 0.18s ease;
+  outline: none;
+}
+.btn-card-view:hover {
+  background: var(--blue-hover);
+  transform: translateY(-1px);
+}
+.btn-card-view:active {
+  transform: scale(0.98);
+}
+.btn-card-view:focus-visible {
+  box-shadow: 0 0 0 2px #fff, 0 0 0 4px var(--blue);
+}
+
+.btn-card-wa {
+  background: rgba(37, 211, 102, 0.14);
+  color: #25d366;
+  border: 1px solid rgba(37, 211, 102, 0.35);
+  border-radius: var(--radius-sm);
+  width: 36px;
+  height: 36px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform 0.18s ease-out, background 0.18s ease, border-color 0.18s ease;
+  outline: none;
+  flex-shrink: 0;
+}
+.btn-card-wa:hover {
+  background: #25d366;
+  color: #ffffff;
+  border-color: #25d366;
+  transform: translateY(-1px);
+}
+.btn-card-wa:active {
+  transform: scale(0.95);
+}
+.btn-card-wa:focus-visible {
+  box-shadow: 0 0 0 2px #fff, 0 0 0 4px #25d366;
+}
+
+/* =========================================================================
+   POLISHED MICRO-INTERACTIONS & MOTION
+   ========================================================================= */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+

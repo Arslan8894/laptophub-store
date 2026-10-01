@@ -1,0 +1,695 @@
+{
+  "summary": [
+    {
+      "id": 1,
+      "name": "Lenovo ThinkPad T14 Gen 1",
+      "tone": "white",
+      "bgColor": "rgb(255, 255, 255)",
+      "tintColor": "rgba(76, 124, 255, 0.04)",
+      "technique": "Transparent WebP Cutout (kept 35.5% area)",
+      "origImg": "images/laptop-1-lenovo-thinkpad-t14-1.jpg",
+      "processedImg": "images/processed/laptop-1-cutout.webp"
+    },
+    {
+      "id": 2,
+      "name": "Microsoft Surface Pro 7",
+      "tone": "colorful",
+      "bgColor": "rgb(183, 158, 138)",
+      "tintColor": "rgba(183, 158, 138, 0.15)",
+      "technique": "Feather Mask (CSS radial fade) + Dominant Tint ((183, 158, 138))",
+      "origImg": "images/laptop-2-microsoft-surface-pro-7-2.jpg",
+      "processedImg": "images/laptop-2-microsoft-surface-pro-7-2.jpg"
+    },
+    {
+      "id": 3,
+      "name": "HP EliteBook 840 G9",
+      "tone": "colorful",
+      "bgColor": "rgb(20, 82, 127)",
+      "tintColor": "rgba(20, 82, 127, 0.15)",
+      "technique": "Feather Mask (CSS radial fade) + Dominant Tint ((20, 82, 127))",
+      "origImg": "images/laptop-3-hp-elitebook-840-g9-3.jpg",
+      "processedImg": "images/laptop-3-hp-elitebook-840-g9-3.jpg"
+    },
+    {
+      "id": 4,
+      "name": "Lenovo ThinkPad X1 Yoga Gen 7",
+      "tone": "white",
+      "bgColor": "rgb(255, 255, 255)",
+      "tintColor": "rgba(76, 124, 255, 0.04)",
+      "technique": "Transparent WebP Cutout (kept 34.3% area)",
+      "origImg": "images/laptop-4-lenovo-thinkpad-x1-yoga-gen-7-4.jpg",
+      "processedImg": "images/processed/laptop-4-cutout.webp"
+    },
+    {
+      "id": 5,
+      "name": "Lenovo ThinkPad X13 Gen 1",
+      "tone": "white",
+      "bgColor": "rgb(255, 255, 255)",
+      "tintColor": "rgba(76, 124, 255, 0.04)",
+      "technique": "Transparent WebP Cutout (kept 38.6% area)",
+      "origImg": "images/laptop-5-lenovo-thinkpad-x13-gen-1-5.jpg",
+      "processedImg": "images/processed/laptop-5-cutout.webp"
+    },
+    {
+      "id": 6,
+      "name": "Lenovo ThinkPad T14 Gen 1",
+      "tone": "white",
+      "bgColor": "rgb(253, 253, 253)",
+      "tintColor": "rgba(76, 124, 255, 0.04)",
+      "technique": "Transparent WebP Cutout (kept 56.4% area)",
+      "origImg": "images/laptop-6-lenovo-thinkpad-t14-gen-1-6.jpg",
+      "processedImg": "images/processed/laptop-6-cutout.webp"
+    },
+    {
+      "id": 7,
+      "name": "Lenovo ThinkPad 13 Gen 1",
+      "tone": "white",
+      "bgColor": "rgb(255, 255, 255)",
+      "tintColor": "rgba(76, 124, 255, 0.04)",
+      "technique": "Transparent WebP Cutout (kept 63.3% area)",
+      "origImg": "images/laptop-7-lenovo-thinkpad-13-gen-1-7.jpg",
+      "processedImg": "images/processed/laptop-7-cutout.webp"
+    },
+    {
+      "id": 8,
+      "name": "Dell XPS 15 9550",
+      "tone": "white",
+      "bgColor": "rgb(255, 255, 255)",
+      "tintColor": "rgba(76, 124, 255, 0.04)",
+      "technique": "Transparent WebP Cutout (kept 19.1% area)",
+      "origImg": "images/laptop-8-dell-xps-15-9550-8.jpg",
+      "processedImg": "images/processed/laptop-8-cutout.webp"
+    },
+    {
+      "id": 9,
+      "name": "Dell Latitude 5310",
+      "tone": "colorful",
+      "bgColor": "rgb(172, 177, 183)",
+      "tintColor": "rgba(172, 177, 183, 0.15)",
+      "technique": "Feather Mask (CSS radial fade) + Dominant Tint ((172, 177, 183))",
+      "origImg": "images/laptop-9-dell-latitude-5310-9.jpg",
+      "processedImg": "images/laptop-9-dell-latitude-5310-9.jpg"
+    },
+    {
+      "id": 10,
+      "name": "HP EliteBook x360 1030 G8",
+      "tone": "white",
+      "bgColor": "rgb(255, 255, 255)",
+      "tintColor": "rgba(76, 124, 255, 0.04)",
+      "technique": "Transparent WebP Cutout (kept 34.3% area)",
+      "origImg": "images/laptop-10-hp-elitebook-x360-1030-g8-10.jpg",
+      "processedImg": "images/processed/laptop-10-cutout.webp"
+    },
+    {
+      "id": 11,
+      "name": "Dell Latitude 5320",
+      "tone": "white",
+      "bgColor": "rgb(255, 255, 255)",
+      "tintColor": "rgba(76, 124, 255, 0.04)",
+      "technique": "Transparent WebP Cutout (kept 25.2% area)",
+      "origImg": "images/laptop-11-dell-latitude-5320-11.jpg",
+      "processedImg": "images/processed/laptop-11-cutout.webp"
+    },
+    {
+      "id": 12,
+      "name": "HP EliteBook x360 1030 G2",
+      "tone": "white",
+      "bgColor": "rgb(255, 255, 255)",
+      "tintColor": "rgba(76, 124, 255, 0.04)",
+      "technique": "Transparent WebP Cutout (kept 30.5% area)",
+      "origImg": "images/laptop-12-hp-elitebook-x360-1030-g2-12.jpg",
+      "processedImg": "images/processed/laptop-12-cutout.webp"
+    },
+    {
+      "id": 13,
+      "name": "Dell Latitude 5430",
+      "tone": "white",
+      "bgColor": "rgb(253, 253, 253)",
+      "tintColor": "rgba(76, 124, 255, 0.04)",
+      "technique": "Transparent WebP Cutout (kept 59.1% area)",
+      "origImg": "images/laptop-13-dell-latitude-5430-13.jpg",
+      "processedImg": "images/processed/laptop-13-cutout.webp"
+    },
+    {
+      "id": 14,
+      "name": "Dell Latitude 7420",
+      "tone": "white",
+      "bgColor": "rgb(255, 255, 255)",
+      "tintColor": "rgba(76, 124, 255, 0.04)",
+      "technique": "Transparent WebP Cutout (kept 36.2% area)",
+      "origImg": "images/laptop-14-dell-latitude-7420-carbon-14.jpg",
+      "processedImg": "images/processed/laptop-14-cutout.webp"
+    },
+    {
+      "id": 15,
+      "name": "HP ProBook 640 G1",
+      "tone": "white",
+      "bgColor": "rgb(242, 242, 242)",
+      "tintColor": "rgba(76, 124, 255, 0.04)",
+      "technique": "Transparent WebP Cutout (kept 56.7% area)",
+      "origImg": "images/laptop-15-hp-probook-640-g1-15.jpg",
+      "processedImg": "images/processed/laptop-15-cutout.webp"
+    },
+    {
+      "id": 16,
+      "name": "HP ProBook 630 G9",
+      "tone": "white",
+      "bgColor": "rgb(254, 254, 254)",
+      "tintColor": "rgba(76, 124, 255, 0.04)",
+      "technique": "Transparent WebP Cutout (kept 55.8% area)",
+      "origImg": "images/laptop-16-hp-probook-630-g9-16.jpg",
+      "processedImg": "images/processed/laptop-16-cutout.webp"
+    },
+    {
+      "id": 17,
+      "name": "Lenovo ThinkPad T480s",
+      "tone": "white",
+      "bgColor": "rgb(249, 247, 247)",
+      "tintColor": "rgba(76, 124, 255, 0.04)",
+      "technique": "Transparent WebP Cutout (kept 51.1% area)",
+      "origImg": "images/laptop-17-lenovo-thinkpad-t480s-17.jpg",
+      "processedImg": "images/processed/laptop-17-cutout.webp"
+    },
+    {
+      "id": 18,
+      "name": "HP EliteBook Folio 9480m",
+      "tone": "white",
+      "bgColor": "rgb(249, 249, 249)",
+      "tintColor": "rgba(76, 124, 255, 0.04)",
+      "technique": "Transparent WebP Cutout (kept 53.9% area)",
+      "origImg": "images/laptop-18-hp-elitebook-folio-9480m-18.jpg",
+      "processedImg": "images/processed/laptop-18-cutout.webp"
+    },
+    {
+      "id": 19,
+      "name": "HP ProBook 640 G2",
+      "tone": "white",
+      "bgColor": "rgb(255, 255, 255)",
+      "tintColor": "rgba(76, 124, 255, 0.04)",
+      "technique": "Transparent WebP Cutout (kept 47.6% area)",
+      "origImg": "images/laptop-19-hp-probook-640-g2-19.jpg",
+      "processedImg": "images/processed/laptop-19-cutout.webp"
+    },
+    {
+      "id": 20,
+      "name": "Microsoft Surface Laptop 3",
+      "tone": "white",
+      "bgColor": "rgb(254, 254, 254)",
+      "tintColor": "rgba(76, 124, 255, 0.04)",
+      "technique": "Transparent WebP Cutout (kept 46.0% area)",
+      "origImg": "images/laptop-20-microsoft-surface-laptop-3-20.jpg",
+      "processedImg": "images/processed/laptop-20-cutout.webp"
+    },
+    {
+      "id": 21,
+      "name": "Lenovo ThinkPad X1 Extreme Gen 2",
+      "tone": "white",
+      "bgColor": "rgb(253, 253, 253)",
+      "tintColor": "rgba(76, 124, 255, 0.04)",
+      "technique": "Transparent WebP Cutout (kept 33.6% area)",
+      "origImg": "images/laptop-21-lenovo-thinkpad-x1-extreme-gen-2-21.jpg",
+      "processedImg": "images/processed/laptop-21-cutout.webp"
+    },
+    {
+      "id": 22,
+      "name": "Dell Latitude 7320 2-in-1",
+      "tone": "white",
+      "bgColor": "rgb(255, 255, 255)",
+      "tintColor": "rgba(76, 124, 255, 0.04)",
+      "technique": "Transparent WebP Cutout (kept 30.4% area)",
+      "origImg": "images/laptop-22-dell-latitude-7320-2-in-1-22.jpg",
+      "processedImg": "images/processed/laptop-22-cutout.webp"
+    },
+    {
+      "id": 23,
+      "name": "HP EliteBook 840 G8",
+      "tone": "white",
+      "bgColor": "rgb(255, 255, 255)",
+      "tintColor": "rgba(76, 124, 255, 0.04)",
+      "technique": "Transparent WebP Cutout (kept 39.2% area)",
+      "origImg": "images/laptop-23-hp-elitebook-840-g8-23.jpg",
+      "processedImg": "images/processed/laptop-23-cutout.webp"
+    },
+    {
+      "id": 24,
+      "name": "HP EliteBook 840 G7",
+      "tone": "white",
+      "bgColor": "rgb(255, 255, 255)",
+      "tintColor": "rgba(76, 124, 255, 0.04)",
+      "technique": "Transparent WebP Cutout (kept 39.1% area)",
+      "origImg": "images/laptop-24-hp-elitebook-840-g7-24.jpg",
+      "processedImg": "images/processed/laptop-24-cutout.webp"
+    },
+    {
+      "id": 25,
+      "name": "Dell Precision 5560",
+      "tone": "white",
+      "bgColor": "rgb(254, 254, 254)",
+      "tintColor": "rgba(76, 124, 255, 0.04)",
+      "technique": "Transparent WebP Cutout (kept 35.6% area)",
+      "origImg": "images/laptop-25-dell-precision-5560-workstation-25.jpg",
+      "processedImg": "images/processed/laptop-25-cutout.webp"
+    },
+    {
+      "id": 26,
+      "name": "Dell XPS 15 9575 2-in-1",
+      "tone": "white",
+      "bgColor": "rgb(255, 255, 255)",
+      "tintColor": "rgba(76, 124, 255, 0.04)",
+      "technique": "Transparent WebP Cutout (kept 37.1% area)",
+      "origImg": "images/laptop-26-dell-xps-15-9575-2-in-1-26.jpg",
+      "processedImg": "images/processed/laptop-26-cutout.webp"
+    },
+    {
+      "id": 27,
+      "name": "HP EliteBook x360 1030 G4",
+      "tone": "white",
+      "bgColor": "rgb(255, 255, 255)",
+      "tintColor": "rgba(76, 124, 255, 0.04)",
+      "technique": "Transparent WebP Cutout (kept 53.4% area)",
+      "origImg": "images/laptop-27-hp-elitebook-x360-1030-g4-27.jpg",
+      "processedImg": "images/processed/laptop-27-cutout.webp"
+    },
+    {
+      "id": 28,
+      "name": "Lenovo ThinkPad X13 Gen 4",
+      "tone": "white",
+      "bgColor": "rgb(255, 255, 255)",
+      "tintColor": "rgba(76, 124, 255, 0.04)",
+      "technique": "Transparent WebP Cutout (kept 46.7% area)",
+      "origImg": "images/laptop-28-lenovo-thinkpad-x13-gen-4-28.jpg",
+      "processedImg": "images/processed/laptop-28-cutout.webp"
+    },
+    {
+      "id": 29,
+      "name": "Dell Vostro 5490",
+      "tone": "white",
+      "bgColor": "rgb(255, 255, 255)",
+      "tintColor": "rgba(76, 124, 255, 0.04)",
+      "technique": "Transparent WebP Cutout (kept 48.1% area)",
+      "origImg": "images/laptop-29-dell-vostro-5490-29.jpg",
+      "processedImg": "images/processed/laptop-29-cutout.webp"
+    },
+    {
+      "id": 30,
+      "name": "Dell Latitude 7490",
+      "tone": "white",
+      "bgColor": "rgb(255, 255, 255)",
+      "tintColor": "rgba(76, 124, 255, 0.04)",
+      "technique": "Transparent WebP Cutout (kept 52.9% area)",
+      "origImg": "images/laptop-30-dell-latitude-7490-30.jpg",
+      "processedImg": "images/processed/laptop-30-cutout.webp"
+    },
+    {
+      "id": 31,
+      "name": "Dell Latitude 3310 2-in-1",
+      "tone": "white",
+      "bgColor": "rgb(255, 255, 255)",
+      "tintColor": "rgba(76, 124, 255, 0.04)",
+      "technique": "Transparent WebP Cutout (kept 29.7% area)",
+      "origImg": "images/laptop-31-dell-latitude-3310-2-in-1-31.jpg",
+      "processedImg": "images/processed/laptop-31-cutout.webp"
+    },
+    {
+      "id": 32,
+      "name": "Dell Latitude E7270",
+      "tone": "white",
+      "bgColor": "rgb(255, 255, 255)",
+      "tintColor": "rgba(76, 124, 255, 0.04)",
+      "technique": "Transparent WebP Cutout (kept 50.1% area)",
+      "origImg": "images/laptop-32-dell-latitude-e7270-32.jpg",
+      "processedImg": "images/processed/laptop-32-cutout.webp"
+    },
+    {
+      "id": 33,
+      "name": "Dell Latitude 5320",
+      "tone": "white",
+      "bgColor": "rgb(255, 255, 255)",
+      "tintColor": "rgba(76, 124, 255, 0.04)",
+      "technique": "Transparent WebP Cutout (kept 25.2% area)",
+      "origImg": "images/laptop-33-dell-latitude-5320-33.jpg",
+      "processedImg": "images/processed/laptop-33-cutout.webp"
+    },
+    {
+      "id": 34,
+      "name": "Lenovo ThinkPad E14 Gen 1",
+      "tone": "white",
+      "bgColor": "rgb(255, 255, 255)",
+      "tintColor": "rgba(76, 124, 255, 0.04)",
+      "technique": "Transparent WebP Cutout (kept 60.0% area)",
+      "origImg": "images/laptop-34-lenovo-thinkpad-e14-gen-1-34.jpg",
+      "processedImg": "images/processed/laptop-34-cutout.webp"
+    },
+    {
+      "id": 35,
+      "name": "HP EliteBook x360 1030 G3",
+      "tone": "white",
+      "bgColor": "rgb(255, 255, 255)",
+      "tintColor": "rgba(76, 124, 255, 0.04)",
+      "technique": "Transparent WebP Cutout (kept 54.3% area)",
+      "origImg": "images/laptop-35-hp-elitebook-x360-1030-g3-35.jpg",
+      "processedImg": "images/processed/laptop-35-cutout.webp"
+    },
+    {
+      "id": 36,
+      "name": "Dell Alienware m15 R7",
+      "tone": "white",
+      "bgColor": "rgb(255, 255, 255)",
+      "tintColor": "rgba(76, 124, 255, 0.04)",
+      "technique": "Transparent WebP Cutout (kept 41.6% area)",
+      "origImg": "images/laptop-36-dell-alienware-m15-r7-36.jpg",
+      "processedImg": "images/processed/laptop-36-cutout.webp"
+    },
+    {
+      "id": 37,
+      "name": "HP 15-da Series",
+      "tone": "white",
+      "bgColor": "rgb(255, 255, 255)",
+      "tintColor": "rgba(76, 124, 255, 0.04)",
+      "technique": "Transparent WebP Cutout (kept 30.8% area)",
+      "origImg": "images/laptop-37-hp-hp-15-da-series-37.jpg",
+      "processedImg": "images/processed/laptop-37-cutout.webp"
+    },
+    {
+      "id": 38,
+      "name": "HP Pavilion 15",
+      "tone": "colorful",
+      "bgColor": "rgb(92, 92, 92)",
+      "tintColor": "rgba(92, 92, 92, 0.15)",
+      "technique": "Feather Mask (CSS radial fade) + Dominant Tint ((92, 92, 92))",
+      "origImg": "images/laptop-38-hp-pavilion-15-38.jpg",
+      "processedImg": "images/laptop-38-hp-pavilion-15-38.jpg"
+    },
+    {
+      "id": 39,
+      "name": "Lenovo Yoga 6 13",
+      "tone": "white",
+      "bgColor": "rgb(255, 255, 255)",
+      "tintColor": "rgba(76, 124, 255, 0.04)",
+      "technique": "Transparent WebP Cutout (kept 37.9% area)",
+      "origImg": "images/laptop-39-lenovo-yoga-6-13-3-39.jpg",
+      "processedImg": "images/processed/laptop-39-cutout.webp"
+    },
+    {
+      "id": 40,
+      "name": "HP ProBook 640 G7",
+      "tone": "white",
+      "bgColor": "rgb(255, 255, 255)",
+      "tintColor": "rgba(76, 124, 255, 0.04)",
+      "technique": "Transparent WebP Cutout (kept 35.8% area)",
+      "origImg": "images/laptop-40-hp-probook-640-g7-40.jpg",
+      "processedImg": "images/processed/laptop-40-cutout.webp"
+    },
+    {
+      "id": 41,
+      "name": "Lenovo Yoga 7i Gen 7",
+      "tone": "white",
+      "bgColor": "rgb(255, 255, 255)",
+      "tintColor": "rgba(76, 124, 255, 0.04)",
+      "technique": "Transparent WebP Cutout (kept 20.4% area)",
+      "origImg": "images/laptop-41-lenovo-yoga-7i-gen-7-41.jpg",
+      "processedImg": "images/processed/laptop-41-cutout.webp"
+    },
+    {
+      "id": 42,
+      "name": "HP EliteBook 1040 G5",
+      "tone": "white",
+      "bgColor": "rgb(255, 255, 255)",
+      "tintColor": "rgba(76, 124, 255, 0.04)",
+      "technique": "Transparent WebP Cutout (kept 37.8% area)",
+      "origImg": "images/laptop-42-hp-elitebook-1040-g5-42.jpg",
+      "processedImg": "images/processed/laptop-42-cutout.webp"
+    },
+    {
+      "id": 43,
+      "name": "Dell Latitude 5310",
+      "tone": "white",
+      "bgColor": "rgb(254, 254, 254)",
+      "tintColor": "rgba(76, 124, 255, 0.04)",
+      "technique": "Transparent WebP Cutout (kept 29.0% area)",
+      "origImg": "images/laptop-43-dell-latitude-5310-vpro-43.jpg",
+      "processedImg": "images/processed/laptop-43-cutout.webp"
+    },
+    {
+      "id": 44,
+      "name": "HP ProBook 430 G8",
+      "tone": "white",
+      "bgColor": "rgb(255, 255, 255)",
+      "tintColor": "rgba(76, 124, 255, 0.04)",
+      "technique": "Transparent WebP Cutout (kept 23.6% area)",
+      "origImg": "images/laptop-44-hp-probook-430-g8-44.jpg",
+      "processedImg": "images/processed/laptop-44-cutout.webp"
+    },
+    {
+      "id": 45,
+      "name": "Dell Latitude 7320",
+      "tone": "white",
+      "bgColor": "rgb(255, 255, 255)",
+      "tintColor": "rgba(76, 124, 255, 0.04)",
+      "technique": "Transparent WebP Cutout (kept 30.4% area)",
+      "origImg": "images/laptop-45-dell-latitude-7320-45.jpg",
+      "processedImg": "images/processed/laptop-45-cutout.webp"
+    },
+    {
+      "id": 46,
+      "name": "HP EliteBook 845 G7",
+      "tone": "colorful",
+      "bgColor": "rgb(177, 173, 165)",
+      "tintColor": "rgba(177, 173, 165, 0.15)",
+      "technique": "Feather Mask (CSS radial fade) + Dominant Tint ((177, 173, 165))",
+      "origImg": "images/laptop-46-hp-elitebook-845-g7-46.jpg",
+      "processedImg": "images/laptop-46-hp-elitebook-845-g7-46.jpg"
+    },
+    {
+      "id": 47,
+      "name": "Apple MacBook Pro 14\" (2021)",
+      "tone": "white",
+      "bgColor": "rgb(255, 255, 255)",
+      "tintColor": "rgba(76, 124, 255, 0.04)",
+      "technique": "Transparent WebP Cutout (kept 41.9% area)",
+      "origImg": "images/laptop-47-apple-macbook-pro-14-2021-47.jpg",
+      "processedImg": "images/processed/laptop-47-cutout.webp"
+    },
+    {
+      "id": 48,
+      "name": "HP EliteBook Folio 1020 G1",
+      "tone": "white",
+      "bgColor": "rgb(255, 255, 255)",
+      "tintColor": "rgba(76, 124, 255, 0.04)",
+      "technique": "Transparent WebP Cutout (kept 36.1% area)",
+      "origImg": "images/laptop-48-hp-elitebook-folio-1040-48.jpg",
+      "processedImg": "images/processed/laptop-48-cutout.webp"
+    },
+    {
+      "id": 49,
+      "name": "HP EliteBook 630 G10",
+      "tone": "white",
+      "bgColor": "rgb(254, 254, 254)",
+      "tintColor": "rgba(76, 124, 255, 0.04)",
+      "technique": "Transparent WebP Cutout (kept 55.4% area)",
+      "origImg": "images/laptop-49-hp-elitebook-630-g10-49.jpg",
+      "processedImg": "images/processed/laptop-49-cutout.webp"
+    },
+    {
+      "id": 50,
+      "name": "Apple MacBook Pro 14\" (M4 Max)",
+      "tone": "white",
+      "bgColor": "rgb(255, 255, 255)",
+      "tintColor": "rgba(76, 124, 255, 0.04)",
+      "technique": "Transparent WebP Cutout (kept 55.4% area)",
+      "origImg": "images/laptop-50-apple-macbook-pro-14-m4-max-50.jpg",
+      "processedImg": "images/processed/laptop-50-cutout.webp"
+    },
+    {
+      "id": 51,
+      "name": "HP Envy x360 13",
+      "tone": "white",
+      "bgColor": "rgb(255, 255, 255)",
+      "tintColor": "rgba(76, 124, 255, 0.04)",
+      "technique": "Transparent WebP Cutout (kept 30.7% area)",
+      "origImg": "images/laptop-51-hp-envy-x360-13-51.jpg",
+      "processedImg": "images/processed/laptop-51-cutout.webp"
+    },
+    {
+      "id": 52,
+      "name": "HP Spectre x360 13",
+      "tone": "white",
+      "bgColor": "rgb(255, 255, 255)",
+      "tintColor": "rgba(76, 124, 255, 0.04)",
+      "technique": "Transparent WebP Cutout (kept 33.6% area)",
+      "origImg": "images/laptop-52-hp-spectre-x360-13-gem-cut-52.jpg",
+      "processedImg": "images/processed/laptop-52-cutout.webp"
+    },
+    {
+      "id": 53,
+      "name": "Microsoft Surface Laptop Go",
+      "tone": "white",
+      "bgColor": "rgb(254, 254, 254)",
+      "tintColor": "rgba(76, 124, 255, 0.04)",
+      "technique": "Transparent WebP Cutout (kept 32.4% area)",
+      "origImg": "images/laptop-53-microsoft-surface-laptop-go-1943-53.jpg",
+      "processedImg": "images/processed/laptop-53-cutout.webp"
+    },
+    {
+      "id": 54,
+      "name": "Lenovo Yoga Slim 7 14",
+      "tone": "white",
+      "bgColor": "rgb(247, 247, 247)",
+      "tintColor": "rgba(76, 124, 255, 0.04)",
+      "technique": "Transparent WebP Cutout (kept 79.2% area)",
+      "origImg": "images/laptop-54-lenovo-yoga-slim-7-14-54.jpg",
+      "processedImg": "images/processed/laptop-54-cutout.webp"
+    },
+    {
+      "id": 55,
+      "name": "HP Spectre x360 14 (2024)",
+      "tone": "dark",
+      "bgColor": "rgb(0, 0, 0)",
+      "tintColor": "rgba(45, 45, 60, 0.06)",
+      "technique": "Feather Mask + Desaturated Low Tint ((0, 0, 0))",
+      "origImg": "images/laptop-55-hp-spectre-x360-14-ai-pc-55.jpg",
+      "processedImg": "images/laptop-55-hp-spectre-x360-14-ai-pc-55.jpg"
+    },
+    {
+      "id": 56,
+      "name": "Dell XPS 13 9310",
+      "tone": "white",
+      "bgColor": "rgb(255, 255, 255)",
+      "tintColor": "rgba(76, 124, 255, 0.04)",
+      "technique": "Transparent WebP Cutout (kept 37.3% area)",
+      "origImg": "images/laptop-56-dell-xps-13-9310-56.jpg",
+      "processedImg": "images/processed/laptop-56-cutout.webp"
+    },
+    {
+      "id": 57,
+      "name": "Lenovo ThinkPad L13 Gen 2",
+      "tone": "white",
+      "bgColor": "rgb(255, 255, 255)",
+      "tintColor": "rgba(76, 124, 255, 0.04)",
+      "technique": "Transparent WebP Cutout (kept 56.4% area)",
+      "origImg": "images/laptop-57-lenovo-thinkpad-l13-gen-2-57.jpg",
+      "processedImg": "images/processed/laptop-57-cutout.webp"
+    },
+    {
+      "id": 58,
+      "name": "Microsoft Surface Laptop 3 13.5\"",
+      "tone": "white",
+      "bgColor": "rgb(253, 253, 253)",
+      "tintColor": "rgba(76, 124, 255, 0.04)",
+      "technique": "Transparent WebP Cutout (kept 46.6% area)",
+      "origImg": "images/laptop-58-microsoft-surface-laptop-3-1872-58.jpg",
+      "processedImg": "images/processed/laptop-58-cutout.webp"
+    },
+    {
+      "id": 59,
+      "name": "HP EliteBook 845 G7",
+      "tone": "colorful",
+      "bgColor": "rgb(177, 173, 165)",
+      "tintColor": "rgba(177, 173, 165, 0.15)",
+      "technique": "Feather Mask (CSS radial fade) + Dominant Tint ((177, 173, 165))",
+      "origImg": "images/laptop-59-hp-elitebook-845-g7-59.jpg",
+      "processedImg": "images/laptop-59-hp-elitebook-845-g7-59.jpg"
+    },
+    {
+      "id": 60,
+      "name": "HP ProBook 640 G10",
+      "tone": "white",
+      "bgColor": "rgb(254, 254, 254)",
+      "tintColor": "rgba(76, 124, 255, 0.04)",
+      "technique": "Transparent WebP Cutout (kept 32.2% area)",
+      "origImg": "images/laptop-60-hp-probook-640-g10-60.jpg",
+      "processedImg": "images/processed/laptop-60-cutout.webp"
+    },
+    {
+      "id": 61,
+      "name": "Dell Latitude 5320",
+      "tone": "white",
+      "bgColor": "rgb(255, 255, 255)",
+      "tintColor": "rgba(76, 124, 255, 0.04)",
+      "technique": "Transparent WebP Cutout (kept 25.2% area)",
+      "origImg": "images/laptop-61-dell-latitude-5320-61.jpg",
+      "processedImg": "images/processed/laptop-61-cutout.webp"
+    },
+    {
+      "id": 62,
+      "name": "Microsoft Surface Laptop 4 13.5\"",
+      "tone": "white",
+      "bgColor": "rgb(255, 255, 255)",
+      "tintColor": "rgba(76, 124, 255, 0.04)",
+      "technique": "Transparent WebP Cutout (kept 59.7% area)",
+      "origImg": "images/laptop-62-microsoft-surface-laptop-4-1950-62.jpg",
+      "processedImg": "images/processed/laptop-62-cutout.webp"
+    },
+    {
+      "id": 63,
+      "name": "Microsoft Surface Laptop 4 15\"",
+      "tone": "white",
+      "bgColor": "rgb(251, 251, 251)",
+      "tintColor": "rgba(76, 124, 255, 0.04)",
+      "technique": "Transparent WebP Cutout (kept 60.7% area)",
+      "origImg": "images/laptop-63-microsoft-surface-laptop-4-1979-63.jpg",
+      "processedImg": "images/processed/laptop-63-cutout.webp"
+    },
+    {
+      "id": 64,
+      "name": "Dell XPS 15 9500",
+      "tone": "white",
+      "bgColor": "rgb(255, 255, 255)",
+      "tintColor": "rgba(76, 124, 255, 0.04)",
+      "technique": "Transparent WebP Cutout (kept 30.9% area)",
+      "origImg": "images/laptop-64-dell-xps-15-9500-64.jpg",
+      "processedImg": "images/processed/laptop-64-cutout.webp"
+    },
+    {
+      "id": 65,
+      "name": "Lenovo ThinkPad T490s",
+      "tone": "white",
+      "bgColor": "rgb(255, 255, 255)",
+      "tintColor": "rgba(76, 124, 255, 0.04)",
+      "technique": "Transparent WebP Cutout (kept 50.6% area)",
+      "origImg": "images/laptop-65-lenovo-thinkpad-t490s-65.jpg",
+      "processedImg": "images/processed/laptop-65-cutout.webp"
+    },
+    {
+      "id": 66,
+      "name": "Apple MacBook Air 13\" (M2)",
+      "tone": "white",
+      "bgColor": "rgb(246, 246, 246)",
+      "tintColor": "rgba(76, 124, 255, 0.04)",
+      "technique": "Transparent WebP Cutout (kept 32.5% area)",
+      "origImg": "images/laptop-66-apple-macbook-air-m2-66.jpg",
+      "processedImg": "images/processed/laptop-66-cutout.webp"
+    },
+    {
+      "id": 67,
+      "name": "Dell Latitude 7430",
+      "tone": "white",
+      "bgColor": "rgb(253, 253, 253)",
+      "tintColor": "rgba(76, 124, 255, 0.04)",
+      "technique": "Transparent WebP Cutout (kept 45.3% area)",
+      "origImg": "images/laptop-67-dell-latitude-7430-67.jpg",
+      "processedImg": "images/processed/laptop-67-cutout.webp"
+    },
+    {
+      "id": 68,
+      "name": "HP EliteBook 630 G11",
+      "tone": "white",
+      "bgColor": "rgb(255, 255, 255)",
+      "tintColor": "rgba(76, 124, 255, 0.04)",
+      "technique": "Transparent WebP Cutout (kept 54.4% area)",
+      "origImg": "images/laptop-68-hp-elitebook-630-g11-68.jpg",
+      "processedImg": "images/processed/laptop-68-cutout.webp"
+    },
+    {
+      "id": 69,
+      "name": "Dell XPS 13 Plus 9320",
+      "tone": "white",
+      "bgColor": "rgb(254, 253, 253)",
+      "tintColor": "rgba(76, 124, 255, 0.04)",
+      "technique": "Transparent WebP Cutout (kept 48.0% area)",
+      "origImg": "images/laptop-69-dell-xps-13-plus-9320-69.jpg",
+      "processedImg": "images/processed/laptop-69-cutout.webp"
+    }
+  ],
+  "flagged": []
+}

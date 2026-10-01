@@ -3,63 +3,89 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Pakistan's premier laptop store offering certified business & creator laptops from Dell, HP, Apple, and Lenovo with Cash on Delivery and warranty.">
+<meta property="og:title" content="LaptopHUB — Pakistan's Premium Laptop Store">
+<meta property="og:description" content="Certified enterprise laptops with verified specs, nationwide delivery, and custom RAM & SSD configurations.">
+<meta property="og:type" content="website">
 <title>LaptopHUB — Pakistan's Premium Laptop Store</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,700;0,800;1,700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/theme.css">
 <style>
   *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
-  /* CUSTOM CURSOR */
-  body { cursor: none; }
-  a, button, [role="button"], input, select, textarea, label, .filter-btn, .card, .cart-item, .faq-item { cursor: none; }
+  /* CUSTOM CURSOR (Desktop fine pointers only) */
+  @media (hover: hover) and (pointer: fine) {
+    body.custom-cursor-active { cursor: none; }
+    body.custom-cursor-active a,
+    body.custom-cursor-active button,
+    body.custom-cursor-active [role="button"],
+    body.custom-cursor-active input,
+    body.custom-cursor-active select,
+    body.custom-cursor-active textarea,
+    body.custom-cursor-active label,
+    body.custom-cursor-active .filter-btn,
+    body.custom-cursor-active .pcard,
+    body.custom-cursor-active .cart-item,
+    body.custom-cursor-active .faq-item {
+      cursor: none;
+    }
 
-  #cursor-dot {
-    position: fixed;
-    top: 0; left: 0;
-    width: 8px; height: 8px;
-    background: var(--blue);
-    border-radius: 50%;
-    pointer-events: none;
-    z-index: 99999;
-    transform: translate(-50%, -50%);
-    transition: transform 0.1s ease, background 0.2s ease, width 0.2s ease, height 0.2s ease;
-    mix-blend-mode: normal;
+    #cursor-dot {
+      position: fixed;
+      top: 0; left: 0;
+      width: 8px; height: 8px;
+      background: var(--blue);
+      border-radius: 50%;
+      pointer-events: none !important;
+      z-index: 99999;
+      transform: translate(-50%, -50%);
+      opacity: 0;
+      transition: width 0.15s ease, height 0.15s ease, background 0.15s ease, opacity 0.2s ease;
+      mix-blend-mode: normal;
+      will-change: transform, left, top;
+    }
+
+    #cursor-ring {
+      position: fixed;
+      top: 0; left: 0;
+      width: 34px; height: 34px;
+      border: 1.5px solid var(--blue);
+      border-radius: 50%;
+      pointer-events: none !important;
+      z-index: 99998;
+      transform: translate(-50%, -50%);
+      opacity: 0;
+      transition: width 0.2s ease, height 0.2s ease, border-color 0.2s ease, opacity 0.2s ease;
+      will-change: transform, left, top;
+    }
+
+    #cursor-dot.hovering {
+      width: 12px; height: 12px;
+      background: #ffffff;
+      box-shadow: 0 0 12px var(--blue), 0 0 24px var(--blue-glow);
+    }
+
+    #cursor-ring.hovering {
+      width: 48px; height: 48px;
+      border-color: var(--blue);
+      opacity: 0.45;
+    }
+
+    #cursor-dot.clicking {
+      width: 6px; height: 6px;
+      background: var(--blue);
+    }
+
+    #cursor-ring.clicking {
+      width: 26px; height: 26px;
+      opacity: 0.9;
+    }
   }
 
-  #cursor-ring {
-    position: fixed;
-    top: 0; left: 0;
-    width: 36px; height: 36px;
-    border: 1.5px solid var(--blue);
-    border-radius: 50%;
-    pointer-events: none;
-    z-index: 99998;
-    transform: translate(-50%, -50%);
-    transition: width 0.25s ease, height 0.25s ease, border-color 0.25s ease, opacity 0.25s ease;
-    opacity: 0.6;
-  }
-
-  #cursor-dot.hovering {
-    width: 12px; height: 12px;
-    background: #fff;
-    box-shadow: 0 0 12px var(--blue), 0 0 24px var(--blue-glow);
-  }
-
-  #cursor-ring.hovering {
-    width: 52px; height: 52px;
-    border-color: var(--blue);
-    opacity: 0.35;
-  }
-
-  #cursor-dot.clicking {
-    width: 6px; height: 6px;
-    background: var(--blue);
-  }
-
-  #cursor-ring.clicking {
-    width: 28px; height: 28px;
-    opacity: 0.9;
+  @media (hover: none) or (pointer: coarse) {
+    #cursor-dot, #cursor-ring { display: none !important; }
   }
 
   /* THEME DEFINITIONS */
@@ -79,6 +105,9 @@
     --blue-glow: rgba(76,124,255,0.25);
     --border: rgba(255,255,255,0.065);
     --border2: rgba(255,255,255,0.12);
+    --badge-bg: rgba(18, 21, 34, 0.88);
+    --badge-text: #dde0ed;
+    --badge-border: rgba(255, 255, 255, 0.12);
     --green: #10b981;
     --gold: #f59e0b;
     --card-bg: #0c0e15;
@@ -110,6 +139,9 @@
     --blue-glow: rgba(37,99,235,0.18);
     --border: rgba(0,0,0,0.08);
     --border2: rgba(0,0,0,0.14);
+    --badge-bg: rgba(239, 246, 255, 0.92);
+    --badge-text: #1e40af;
+    --badge-border: rgba(37, 99, 235, 0.22);
     --green: #059669;
     --gold: #d97706;
     --card-bg: #ffffff;
@@ -133,35 +165,6 @@
     color: var(--text);
     overflow-x: hidden;
     transition: background-color 0.3s ease, color 0.3s ease;
-  }
-
-  /* CUSTOM CURSOR (Desktop only) */
-  @media (hover: hover) and (pointer: fine) {
-    body { cursor: none; }
-    #cur {
-      width: 8px; height: 8px;
-      background: var(--blue);
-      border-radius: 50%;
-      position: fixed;
-      pointer-events: none;
-      z-index: 9999;
-      transform: translate(-50%, -50%);
-      transition: width 0.2s, height 0.2s, transform 0.2s, background 0.2s;
-    }
-    #cur2 {
-      width: 34px; height: 34px;
-      border: 1px solid var(--cur-border);
-      border-radius: 50%;
-      position: fixed;
-      pointer-events: none;
-      z-index: 9998;
-      transform: translate(-50%, -50%);
-      transition: left 0.08s, top 0.08s, border-color 0.3s;
-    }
-  }
-
-  @media (hover: none) or (pointer: coarse) {
-    #cur, #cur2 { display: none !important; }
   }
 
   /* TOP DEMO SWITCHER BAR */
@@ -208,7 +211,7 @@
     background: var(--blue);
     border-radius: 8px;
     display: flex; align-items: center; justify-content: center;
-    font-size: 0.75rem; font-weight: 800; color: #fff;
+    font-size: 0.75rem; font-weight: 700; color: #fff;
     box-shadow: 0 4px 15px rgba(76,124,255,0.3);
   }
   .logo-text {
@@ -329,9 +332,9 @@
   @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
 
   h1.hero-h {
-    font-family: 'Playfair Display', serif;
+    font-family: var(--font-display);
     font-size: clamp(2.8rem, 8vw, 5.8rem);
-    font-weight: 800; line-height: 1.02;
+    font-weight: 700; line-height: 1.02;
     letter-spacing: -0.03em;
     margin-bottom: 1.5rem;
     color: var(--heading);
@@ -484,8 +487,8 @@
     margin-bottom: 0.25rem;
   }
   .support-title {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.25rem; font-weight: 800;
+    font-family: var(--font-display);
+    font-size: 1.25rem; font-weight: 700;
     color: var(--heading);
     transition: color 0.3s;
   }
@@ -572,9 +575,9 @@
     text-transform: uppercase; color: var(--blue); margin-bottom: 0.75rem;
   }
   .sec-title {
-    font-family: 'Playfair Display', serif;
+    font-family: var(--font-display);
     font-size: clamp(2.2rem, 4.5vw, 3.2rem);
-    font-weight: 800; letter-spacing: -0.03em; line-height: 1.05;
+    font-weight: 700; letter-spacing: -0.03em; line-height: 1.05;
     color: var(--heading);
     transition: color 0.3s;
   }
@@ -586,183 +589,263 @@
   /* PRODUCT GRID & CARDS */
   .pgrid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-    gap: 1.8rem;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    max-width: var(--grid-max-width, 1240px);
+    margin: 0 auto;
+    gap: var(--card-gap, 1.35rem);
   }
+  @media (min-width: 1200px) {
+    .pgrid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  }
+  @media (min-width: 680px) and (max-width: 1199px) {
+    .pgrid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+  @media (max-width: 679px) {
+    .pgrid { grid-template-columns: 1fr; }
+  }
+
   .pcard {
     background: var(--card-bg);
     border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 1.8rem;
-    position: relative;
-    overflow: hidden;
+    border-radius: var(--card-radius, 14px);
+    padding: var(--card-padding, 1.25rem);
     box-shadow: var(--card-shadow);
-    transition: transform 0.35s cubic-bezier(0.18, 0.89, 0.32, 1.28), border-color 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
     display: flex;
     flex-direction: column;
+    height: 100%;
     cursor: pointer;
+    position: relative;
+    outline: none;
+    transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1),
+                box-shadow 0.22s cubic-bezier(0.16, 1, 0.3, 1),
+                border-color 0.2s ease;
+    will-change: transform;
   }
   .pcard:hover {
-    transform: translateY(-6px);
+    transform: translateY(-4px);
     border-color: var(--blue);
-    box-shadow: 0 20px 45px rgba(0,0,0,0.18), 0 0 20px var(--blue-glow);
+    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.35), 0 0 18px var(--blue-glow);
   }
-  .pcard-quick-hint {
-    position: absolute;
-    bottom: 8px;
-    background: rgba(12, 14, 21, 0.9);
-    backdrop-filter: blur(8px);
-    border: 1px solid var(--border2);
-    border-radius: 6px;
-    padding: 4px 10px;
-    font-size: 0.72rem;
-    font-weight: 700;
-    color: var(--blue);
-    opacity: 0;
-    transform: translateY(6px);
-    transition: all 0.25s ease;
-    pointer-events: none;
+  .pcard:focus-visible {
+    border-color: var(--blue);
+    box-shadow: 0 0 0 3px var(--blue-glow);
   }
-  .pcard:hover .pcard-quick-hint {
-    opacity: 1;
-    transform: translateY(0);
+  .pcard:active {
+    transform: translateY(-1px) scale(0.995);
   }
 
-  .pcard-top {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1.2rem;
-  }
-  .pcard-badge {
-    padding: 0.25rem 0.65rem;
-    font-size: 0.68rem;
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    border-radius: 4px;
-  }
-  .b-corp { background: rgba(76,124,255,0.12); color: var(--blue); border: 1px solid rgba(76,124,255,0.25); }
-  .b-val { background: rgba(16,185,129,0.12); color: var(--green); border: 1px solid rgba(16,185,129,0.25); }
-  .b-gen { background: rgba(245,158,11,0.12); color: var(--gold); border: 1px solid rgba(245,158,11,0.25); }
-  .b-apple { background: var(--s2); color: var(--heading); border: 1px solid var(--border2); }
-
-  .brand-chip {
-    font-size: 0.72rem;
-    font-weight: 700;
-    color: var(--muted);
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-  }
-
-  /* PHOTO CONTAINER */
+  /* PHOTO CONTAINER (4:3 ASPECT RATIO) */
   .pcard-photo-wrap {
     width: 100%;
-    height: 220px;
-    background: var(--photo-bg);
-    border-radius: 8px;
+    aspect-ratio: 4 / 3;
+    /* --img-tint is set inline per-card from lap.tintColor */
+    background: var(--img-tint, var(--photo-bg, #0c0e16));
+    border-radius: var(--radius-md, 10px);
+    position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-bottom: 1.5rem;
+    padding: 0.75rem;
     overflow: hidden;
-    position: relative;
-    padding: 12px;
+    margin-bottom: 0.9rem;
     transition: background 0.3s;
   }
   .pcard-photo {
-    max-width: 90%;
-    max-height: 90%;
+    max-width: 92%;
+    max-height: 92%;
     object-fit: contain;
-    transition: transform 0.4s ease;
-    filter: drop-shadow(0 15px 25px rgba(0,0,0,0.25));
+    transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  /* Cutout images (white BG removed): soft shadow only */
+  .pcard-photo.blend-cutout {
+    filter: drop-shadow(0 8px 18px rgba(0,0,0,0.22));
+  }
+  /* Colorful/dark BG originals: deeper shadow */
+  .pcard-photo.blend-original {
+    filter: drop-shadow(0 10px 22px rgba(0,0,0,0.32));
   }
   .pcard:hover .pcard-photo {
-    transform: scale(1.06) rotate(-1deg);
+    transform: scale(1.04);
+  }
+
+  .pcard-cond-badge {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background: var(--badge-bg);
+    color: var(--badge-text);
+    border: 1px solid var(--badge-border);
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 1.2;
+    padding: 4px 10px;
+    border-radius: 9999px;
+    white-space: nowrap;
+    letter-spacing: 0.02em;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    z-index: 2;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+    transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease;
+  }
+
+  .pcard-brand {
+    font-size: 0.68rem;
+    font-weight: var(--fw-semibold);
+    color: var(--blue);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 0.25rem;
   }
 
   .pcard-title {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.35rem;
-    font-weight: 800;
-    letter-spacing: -0.02em;
-    margin-bottom: 0.5rem;
+    font-family: var(--font-display);
+    font-size: 1.05rem;
+    font-weight: var(--fw-semibold);
     color: var(--heading);
-    transition: color 0.3s;
-  }
-  .pcard-specs {
-    font-size: 0.82rem;
-    color: var(--muted);
-    line-height: 1.7;
-    margin-bottom: 1.5rem;
-    flex-grow: 1;
-    transition: color 0.3s;
+    line-height: 1.35;
+    margin-bottom: 0.5rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    min-height: 2.8em;
+    transition: color 0.2s;
   }
 
-  .spec-tags {
+  .pcard-chips {
     display: flex;
     flex-wrap: wrap;
+    align-items: center;
     gap: 6px;
-    margin-bottom: 1.5rem;
+    margin-bottom: 1.1rem;
+    min-height: 28px;
   }
-  .spec-pill {
-    background: var(--pill-bg);
-    border: 1px solid var(--border);
-    padding: 3px 8px;
-    border-radius: 4px;
+
+  .pcard-chip {
     font-size: 0.72rem;
-    color: var(--subtle);
-    font-weight: 500;
-    transition: background 0.3s, color 0.3s, border-color 0.3s;
+    font-weight: var(--fw-medium);
+    padding: 3px 8px;
+    background: var(--s2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--text);
+    white-space: nowrap;
+    display: inline-flex;
+    align-items: center;
+    line-height: 1.3;
+  }
+
+  .pcard-chip.gpu-chip {
+    background: rgba(168, 85, 247, 0.12);
+    color: #c084fc;
+    border-color: rgba(168, 85, 247, 0.3);
+    font-weight: var(--fw-semibold);
+  }
+  [data-theme="light"] .pcard-chip.gpu-chip {
+    background: rgba(147, 51, 234, 0.1);
+    color: #7e22ce;
+    border-color: rgba(147, 51, 234, 0.3);
   }
 
   .pcard-footer {
+    margin-top: auto;
+    padding-top: 0.85rem;
+    border-top: 1px solid var(--border);
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding-top: 1.2rem;
-    border-top: 1px solid var(--border);
+    gap: 10px;
     transition: border-color 0.3s;
   }
-  .price-col {
+  .pcard-price-col {
     display: flex;
     flex-direction: column;
+    min-width: 0;
   }
-  .price-label {
+  .pcard-price-label {
     font-size: 0.68rem;
+    font-weight: var(--fw-medium);
     color: var(--muted);
     text-transform: uppercase;
-    font-weight: 600;
+    letter-spacing: 0.04em;
+    line-height: 1;
+    margin-bottom: 3px;
   }
   .pcard-price {
-    font-size: 1.45rem;
-    font-weight: 800;
-    font-family: 'Playfair Display', serif;
-    letter-spacing: -0.03em;
+    font-size: 1.28rem;
+    font-weight: var(--fw-bold);
+    font-family: var(--font-main);
     color: var(--heading);
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+    line-height: 1.2;
     transition: color 0.3s;
   }
 
-  .btn-card-add {
-    background: var(--blue);
-    color: #fff;
-    border: none;
-    padding: 0.65rem 1.2rem;
-    border-radius: 6px;
-    font-family: inherit;
-    font-size: 0.82rem;
-    font-weight: 700;
-    cursor: pointer;
+  .pcard-actions {
     display: flex;
     align-items: center;
     gap: 6px;
-    box-shadow: 0 4px 15px rgba(76,124,255,0.25);
-    transition: all 0.2s;
+    flex-shrink: 0;
   }
-  .btn-card-add:hover {
+  .btn-card-view {
+    background: var(--blue);
+    color: #ffffff;
+    border: none;
+    border-radius: var(--radius-sm);
+    padding: 0.55rem 0.95rem;
+    font-family: inherit;
+    font-size: 0.82rem;
+    font-weight: var(--fw-semibold);
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    box-shadow: 0 4px 14px rgba(76, 124, 255, 0.25);
+    transition: transform 0.18s ease-out, background 0.18s ease;
+    outline: none;
+  }
+  .btn-card-view:hover {
     background: var(--blue-hover);
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(76,124,255,0.35);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 18px rgba(76, 124, 255, 0.35);
+  }
+  .btn-card-view:active {
+    transform: scale(0.98);
+  }
+  .btn-card-view:focus-visible {
+    box-shadow: 0 0 0 2px #fff, 0 0 0 4px var(--blue);
+  }
+
+  .btn-card-wa {
+    background: rgba(37, 211, 102, 0.14);
+    color: #25d366;
+    border: 1px solid rgba(37, 211, 102, 0.35);
+    border-radius: var(--radius-sm);
+    width: 36px;
+    height: 36px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    cursor: pointer;
+    transition: transform 0.18s ease-out, background 0.18s ease, border-color 0.18s ease;
+    outline: none;
+    flex-shrink: 0;
+  }
+  .btn-card-wa:hover {
+    background: #25d366;
+    color: #ffffff;
+    border-color: #25d366;
+    transform: translateY(-1px);
+  }
+  .btn-card-wa:active {
+    transform: scale(0.95);
+  }
+  .btn-card-wa:focus-visible {
+    box-shadow: 0 0 0 2px #fff, 0 0 0 4px #25d366;
   }
 
   /* STATS */
@@ -780,9 +863,9 @@
   }
   .stat-cell:last-child { border-right: none; }
   .stat-num {
-    font-family: 'Playfair Display', serif;
-    font-size: 2.8rem; font-weight: 800;
-    letter-spacing: -0.04em; color: var(--blue);
+    font-family: var(--font-main);
+    font-size: 2.8rem; font-weight: 700;
+    letter-spacing: -0.03em; color: var(--blue);
     line-height: 1; margin-bottom: 0.4rem;
   }
   .stat-label {
@@ -872,8 +955,8 @@
     box-shadow: 0 15px 40px rgba(37,99,235,0.2);
   }
   .cta-left h2 {
-    font-family: 'Playfair Display', serif;
-    font-size: 2.2rem; font-weight: 800; letter-spacing: -0.03em;
+    font-family: var(--font-display);
+    font-size: 2.2rem; font-weight: 700; letter-spacing: -0.03em;
     color: #fff; margin-bottom: 0.5rem;
   }
   .cta-left p { color: rgba(255,255,255,0.85); font-size: 0.92rem; }
@@ -944,21 +1027,51 @@
 
   /* TOAST */
   #toast {
-    position: fixed; bottom: 2rem; right: 2rem;
-    background: var(--s2); border: 1px solid var(--blue);
-    color: var(--heading); padding: 0.9rem 1.4rem;
-    border-radius: 7px; font-size: 0.86rem; font-weight: 600;
-    box-shadow: 0 10px 40px rgba(0,0,0,0.25);
-    display: flex; align-items: center; gap: 0.75rem;
-    z-index: 10000; transform: translateY(140%);
-    transition: transform 0.3s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+    position: fixed;
+    bottom: calc(2rem + 68px);
+    right: 2rem;
+    background: var(--s2);
+    border: 1px solid var(--blue);
+    color: var(--heading);
+    padding: 0.85rem 1.35rem;
+    border-radius: 8px;
+    font-size: 0.86rem;
+    font-weight: 600;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.35), 0 0 16px var(--blue-glow);
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    z-index: 10000;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transform: translateY(20px) scale(0.96);
+    transition: opacity 0.25s ease, transform 0.25s cubic-bezier(0.18, 0.89, 0.32, 1.28), visibility 0.25s;
   }
-  #toast.show { transform: translateY(0); }
+  #toast.show {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transform: translateY(0) scale(1);
+  }
   #toast .toast-icon { color: var(--blue); font-size: 1.1rem; }
 
-  /* REVEAL */
-  .rev { opacity: 0; transform: translateY(24px); transition: opacity 0.6s ease, transform 0.6s ease; }
-  .rev.in { opacity: 1; transform: none; }
+  /* REVEAL (Progressive Scroll Reveal - natural layout flow) */
+  .rev {
+    opacity: 1;
+    transform: none;
+    transition: opacity 0.5s ease, transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .js-reveal .rev {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    .js-reveal .rev.in {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
 
   /* RESPONSIVE */
   @media (max-width: 1024px) {
@@ -966,18 +1079,30 @@
     .footer-top { grid-template-columns: 1fr 1fr; }
   }
   @media (max-width: 768px) {
-    nav { padding: 1rem 1.5rem; }
+    nav { padding: 1rem 1.2rem; }
     .nav-links { display: none; }
-    .sec, .catalog-toolbar { padding: 3rem 1.5rem; }
+    .mobile-nav-toggle { display: inline-flex; }
+    .sec, .catalog-toolbar { padding: 2.5rem 1.2rem; }
     .search-box { width: 100%; }
-    .filter-tabs { width: 100%; overflow-x: auto; }
+    .filter-tabs { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
     .stats-row { grid-template-columns: 1fr; }
     .tgrid { grid-template-columns: 1fr; }
-    .cta-band { flex-direction: column; text-align: center; padding: 3rem 1.5rem; margin: 2rem 1rem; }
+    .cta-band { flex-direction: column; text-align: center; padding: 2.5rem 1.2rem; margin: 2rem 0.75rem; }
     .cta-form { width: 100%; flex-direction: column; }
     .cta-input { width: 100%; }
     .footer-top { grid-template-columns: 1fr; }
     .footer-bottom { flex-direction: column; gap: 1rem; text-align: center; }
+    .wa-fab { bottom: 1.5rem; right: 1.2rem; width: 52px; height: 52px; }
+    #toast { bottom: calc(1.5rem + 58px); right: 1.2rem; max-width: calc(100vw - 2.4rem); }
+  }
+  @media (max-width: 480px) {
+    nav { padding: 0.85rem 1rem; }
+    .sec, .catalog-toolbar { padding: 2rem 1rem; }
+    .pgrid { grid-template-columns: 1fr; gap: 1.2rem; }
+    .pcard { padding: 1.2rem; }
+    .hero { padding: 3rem 1rem 2rem; }
+    .hero-h { font-size: clamp(2.1rem, 9vw, 2.8rem); }
+    .cta-band { margin: 2rem 0; padding: 2rem 1rem; border-radius: 0; }
   }
 
   /* CART DRAWER & OVERLAY */
@@ -1001,10 +1126,14 @@
     z-index: 10001;
     display: flex; flex-direction: column;
     transform: translateX(100%);
-    transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    visibility: hidden;
+    pointer-events: none;
+    transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.35s;
   }
   #cartDrawer.open {
     transform: translateX(0);
+    visibility: visible;
+    pointer-events: auto;
   }
   .drawer-head {
     padding: 1.3rem 1.6rem;
@@ -1013,9 +1142,9 @@
     background: var(--s2);
   }
   .drawer-title {
-    font-size: 1.15rem; font-weight: 800; color: var(--heading);
+    font-size: 1.15rem; font-weight: 700; color: var(--heading);
     display: flex; align-items: center; gap: 8px;
-    font-family: 'Playfair Display', serif;
+    font-family: var(--font-display);
   }
   .drawer-close {
     background: none; border: 1px solid var(--border2);
@@ -1053,7 +1182,7 @@
     white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
   }
   .cart-item-specs { font-size: 0.72rem; color: var(--muted); margin: 2px 0 5px; }
-  .cart-item-price { font-size: 0.88rem; font-weight: 800; color: var(--blue); }
+  .cart-item-price { font-size: 0.88rem; font-weight: 700; color: var(--blue); }
   
   .cart-item-qty {
     display: flex; align-items: center; gap: 6px;
@@ -1062,7 +1191,7 @@
   }
   .qty-btn {
     background: none; border: none; color: var(--heading);
-    font-size: 0.9rem; font-weight: 800; cursor: pointer;
+    font-size: 0.9rem; font-weight: 600; cursor: pointer;
     padding: 0 4px; line-height: 1;
   }
   .qty-num { font-size: 0.8rem; font-weight: 700; min-width: 14px; text-align: center; }
@@ -1082,7 +1211,7 @@
     margin-bottom: 0.6rem;
   }
   .subtotal-label { font-size: 0.85rem; color: var(--muted); font-weight: 600; }
-  .subtotal-val { font-size: 1.4rem; font-weight: 800; color: var(--heading); font-family: 'Playfair Display', serif; }
+  .subtotal-val { font-size: 1.4rem; font-weight: 700; color: var(--heading); font-family: var(--font-main); font-variant-numeric: tabular-nums; }
   .shipping-badge {
     background: rgba(16,185,129,0.12); color: var(--green);
     border: 1px solid rgba(16,185,129,0.25); border-radius: 6px;
@@ -1111,7 +1240,7 @@
   }
   .drawer-btn-checkout:hover { background: var(--blue-hover); transform: translateY(-1px); }
 
-  /* LAPTOP QUICK-VIEW & CUSTOM SPEC MODAL */
+  /* LAPTOP QUICK-VIEW & CUSTOM SPEC MODAL (NON-OVERLAPPING STICKY FOOTER) */
   #laptopModal {
     position: fixed; inset: 0;
     background: rgba(0, 0, 0, 0.82);
@@ -1120,9 +1249,9 @@
     z-index: 10005;
     display: none;
     align-items: center; justify-content: center;
-    padding: 1.5rem;
+    padding: 1.25rem;
     opacity: 0;
-    transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: opacity 0.22s ease-out;
   }
   #laptopModal.open {
     display: flex;
@@ -1131,25 +1260,29 @@
   .laptop-modal-card {
     background: var(--s1);
     border: 1.5px solid var(--border2);
-    border-radius: 20px;
-    width: min(880px, 100%);
-    max-height: 92vh;
-    overflow-y: auto;
+    border-radius: 18px;
+    width: min(880px, 94vw);
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
     position: relative;
     box-shadow: 0 30px 80px rgba(0, 0, 0, 0.85);
-    transform: scale(0.92) translateY(24px);
-    transition: transform 0.35s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+    transform: scale(0.96);
+    opacity: 0;
+    transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.22s ease-out;
   }
   #laptopModal.open .laptop-modal-card {
-    transform: scale(1) translateY(0);
+    transform: scale(1);
+    opacity: 1;
   }
   .laptop-modal-close {
-    position: absolute; top: 1.2rem; right: 1.4rem;
-    width: 36px; height: 36px; border-radius: 50%;
+    position: absolute; top: 1rem; right: 1.1rem;
+    width: 34px; height: 34px; border-radius: 50%;
     background: var(--s2); border: 1px solid var(--border2);
     color: var(--muted); font-size: 1.1rem;
     display: flex; align-items: center; justify-content: center;
-    cursor: pointer; z-index: 10;
+    cursor: pointer; z-index: 20;
     transition: all 0.2s;
   }
   .laptop-modal-close:hover {
@@ -1158,161 +1291,373 @@
     transform: rotate(90deg);
   }
 
+  /* INDEPENDENT SCROLL BODY */
+  .lmodal-scroll-body {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+  }
+
   .lmodal-grid {
     display: grid;
-    grid-template-columns: 360px 1fr;
+    grid-template-columns: 350px 1fr;
     gap: 0;
   }
-  @media (max-width: 840px) {
+  @media (max-width: 820px) {
     .lmodal-grid { grid-template-columns: 1fr; }
   }
 
   .lmodal-visual {
     background: var(--s2);
     border-right: 1px solid var(--border);
-    padding: 2rem 1.8rem;
-    display: flex; flex-direction: column; justify-content: space-between;
+    padding: 1.8rem 1.6rem;
+    display: flex; flex-direction: column;
   }
-  .lmodal-img-wrap {
-    width: 100%; height: 260px;
-    display: flex; align-items: center; justify-content: center;
-    position: relative;
-    background: radial-gradient(circle at center, rgba(76, 124, 255, 0.08) 0%, transparent 70%);
-  }
-  .lmodal-img {
-    max-width: 92%; max-height: 240px;
-    object-fit: contain;
-    transition: transform 0.4s ease;
-    filter: drop-shadow(0 15px 25px rgba(0,0,0,0.4));
-  }
-  .lmodal-img:hover {
-    transform: scale(1.05);
-  }
-  .lmodal-badge {
-    position: absolute; top: 0; left: 0;
-    background: var(--blue-dim); color: var(--blue);
-    border: 1px solid var(--blue);
-    padding: 3px 10px; border-radius: 100px;
-    font-size: 0.72rem; font-weight: 700; text-transform: uppercase;
+  @media (max-width: 820px) {
+    .lmodal-visual {
+      border-right: none;
+      border-bottom: 1px solid var(--border);
+      padding: 1.4rem 1.2rem;
+    }
   }
 
+  .lmodal-img-wrap {
+    width: 100%; height: 230px;
+    display: flex; align-items: center; justify-content: center;
+    position: relative;
+    /* --img-tint set inline from lap.tintColor when modal opens */
+    background: var(--img-tint, radial-gradient(circle at center, rgba(76, 124, 255, 0.08) 0%, transparent 70%));
+    border-radius: 10px;
+    overflow: hidden;
+    transition: background 0.3s;
+  }
+  .lmodal-img {
+    max-width: 90%; max-height: 210px;
+    object-fit: contain;
+    transition: transform 0.3s ease;
+  }
+  .lmodal-img.blend-cutout {
+    filter: drop-shadow(0 8px 20px rgba(0,0,0,0.22));
+  }
+  .lmodal-img.blend-original {
+    filter: drop-shadow(0 12px 26px rgba(0,0,0,0.38));
+  }
+  .lmodal-img:hover {
+    transform: scale(1.04);
+  }
+  .lmodal-badge {
+    position: absolute; top: 10px; left: 10px;
+    background: var(--badge-bg);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    color: var(--blue);
+    border: 1px solid var(--blue);
+    padding: 4px 10px; border-radius: 9999px;
+    font-size: 0.72rem; font-weight: 600; text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  /* SPEC CARDS (FULL MULTI-LINE SUPPORT - NO CUTOFFS) */
   .lmodal-highlights {
     display: grid; grid-template-columns: 1fr 1fr;
-    gap: 8px; margin-top: 1.5rem;
+    gap: 8px; margin-top: 1.2rem;
   }
   .lmodal-hl-item {
     background: var(--s1); border: 1px solid var(--border);
     border-radius: 8px; padding: 0.65rem 0.8rem;
-    display: flex; flex-direction: column; gap: 2px;
+    display: flex; flex-direction: column; gap: 3px;
   }
-  .hl-label { font-size: 0.68rem; color: var(--muted); text-transform: uppercase; font-weight: 700; }
-  .hl-val { font-size: 0.78rem; font-weight: 700; color: var(--heading); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .hl-label {
+    font-size: 0.68rem; color: var(--muted);
+    text-transform: uppercase; font-weight: 600;
+    letter-spacing: 0.04em;
+  }
+  .hl-val {
+    font-size: 0.78rem; font-weight: 500; color: var(--heading);
+    white-space: normal; word-break: break-word; line-height: 1.35;
+  }
 
   .lmodal-content {
-    padding: 2rem;
+    padding: 1.8rem 2rem;
     display: flex; flex-direction: column; gap: 1.1rem;
   }
+  @media (max-width: 600px) {
+    .lmodal-content { padding: 1.25rem 1rem; }
+  }
+
   .lmodal-brand-tag {
-    font-size: 0.72rem; font-weight: 800; color: var(--blue);
-    text-transform: uppercase; letter-spacing: 0.1em;
+    font-size: 0.7rem; font-weight: 600; color: var(--blue);
+    text-transform: uppercase; letter-spacing: 0.08em;
   }
   .lmodal-title {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.55rem; font-weight: 800; color: var(--heading);
-    line-height: 1.2;
+    font-family: var(--font-display);
+    font-size: 1.45rem; font-weight: 700; color: var(--heading);
+    line-height: 1.25;
   }
   .lmodal-cat {
     font-size: 0.82rem; color: var(--muted); margin-top: -0.5rem;
   }
 
-  .lmodal-price-box {
-    background: var(--s2); border: 1px solid var(--border2);
-    border-radius: 12px; padding: 0.9rem 1.2rem;
-  }
-  .lmodal-price-label { font-size: 0.7rem; color: var(--muted); text-transform: uppercase; font-weight: 700; }
-  .lmodal-price-val { font-size: 1.7rem; font-weight: 800; color: var(--blue); font-family: 'Playfair Display', serif; }
-  .lmodal-price-note { font-size: 0.74rem; color: var(--green); margin-top: 2px; }
-
   .spec-picker-section {
-    display: flex; flex-direction: column; gap: 6px;
+    display: flex; flex-direction: column; gap: 8px;
   }
   .spec-picker-header {
-    display: flex; justify-content: space-between; align-items: baseline;
+    display: flex; justify-content: space-between; align-items: center;
   }
   .spec-picker-title {
-    font-size: 0.8rem; font-weight: 700; color: var(--heading);
+    font-size: 0.82rem; font-weight: 600; color: var(--heading);
+    display: inline-flex; align-items: center; gap: 7px;
   }
   .spec-selected-label {
-    font-size: 0.78rem; font-weight: 700; color: var(--blue); font-family: 'JetBrains Mono', monospace;
+    font-size: 0.76rem; font-weight: 600; color: var(--blue);
+    font-variant-numeric: tabular-nums;
   }
 
   .spec-pills-row {
-    display: grid; grid-template-columns: repeat(auto-fit, minmax(85px, 1fr));
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(78px, 1fr));
     gap: 8px;
   }
   .spec-pill-btn {
     background: var(--s2); border: 1.5px solid var(--border2);
-    border-radius: 8px; padding: 0.55rem 0.65rem;
-    cursor: pointer; display: flex; flex-direction: column; align-items: center;
-    transition: all 0.2s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+    border-radius: 8px; padding: 0.6rem 0.5rem;
+    cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 3px;
+    outline: none;
+    transition: transform 0.16s ease-out, border-color 0.16s ease, background 0.16s ease, box-shadow 0.16s ease;
+    user-select: none;
   }
   .spec-pill-btn:hover {
-    border-color: var(--blue); transform: translateY(-2px);
+    border-color: var(--blue); background: var(--s3); transform: translateY(-2px);
+  }
+  .spec-pill-btn:active {
+    transform: scale(0.96);
+  }
+  .spec-pill-btn:focus-visible {
+    outline: 2px solid var(--blue);
+    outline-offset: 2px;
   }
   .spec-pill-btn.active {
     background: var(--blue-dim); border-color: var(--blue);
-    box-shadow: 0 0 14px var(--blue-glow);
+    box-shadow: 0 0 0 1px var(--blue), 0 0 12px var(--blue-glow);
+    transform: scale(1.02);
   }
   .pill-name {
-    font-size: 0.84rem; font-weight: 700; color: var(--heading);
+    font-size: 0.85rem; font-weight: 600; color: var(--heading);
   }
   .pill-diff {
-    font-size: 0.68rem; font-weight: 600; color: var(--muted);
-    font-family: 'JetBrains Mono', monospace; margin-top: 2px;
+    font-size: 0.68rem; font-weight: 500; color: var(--muted);
+    font-variant-numeric: tabular-nums;
   }
-  .spec-pill-btn.active .pill-diff { color: var(--blue); font-weight: 700; }
+  .pill-diff.base-spec-pill {
+    background: rgba(255, 255, 255, 0.07);
+    color: var(--subtle);
+    padding: 1px 6px;
+    border-radius: 4px;
+    font-size: 0.65rem;
+  }
+  .spec-pill-btn.active .pill-diff {
+    color: var(--blue);
+    font-weight: 600;
+  }
+  .spec-pill-btn.active .pill-diff.base-spec-pill {
+    background: var(--blue);
+    color: #ffffff;
+  }
 
   .modal-comment-box {
     background: var(--s2); border: 1px solid var(--border2);
     border-radius: 8px; padding: 0.65rem 0.85rem;
     color: var(--heading); font-family: inherit; font-size: 0.82rem;
-    outline: none; resize: vertical; min-height: 60px;
+    outline: none; resize: vertical; min-height: 54px;
     transition: border-color 0.2s;
   }
   .modal-comment-box:focus { border-color: var(--blue); }
 
-  .lmodal-actions {
-    display: flex; flex-direction: column; gap: 8px; margin-top: 0.4rem;
+  /* FULL SPECIFICATIONS 7-CATEGORY SECTION */
+  .lmodal-specs-section {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 0.6rem;
+    padding-top: 1.1rem;
+    border-top: 1px solid var(--border);
   }
+  .lmodal-specs-title {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--heading);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    letter-spacing: -0.01em;
+  }
+  .lmodal-specs-title svg {
+    color: var(--blue);
+  }
+  .lmodal-specs-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+  @media (max-width: 768px) {
+    .lmodal-specs-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+  .spec-cat-block {
+    background: var(--s2);
+    border: 1px solid var(--border);
+    border-radius: 9px;
+    padding: 10px 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+  }
+  .spec-cat-header {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 0.74rem;
+    font-weight: 700;
+    color: var(--blue);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding-bottom: 5px;
+    border-bottom: 1px solid var(--border2);
+  }
+  .spec-cat-header svg {
+    flex-shrink: 0;
+  }
+  .spec-rows-list {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+  .spec-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    font-size: 0.75rem;
+    line-height: 1.35;
+    gap: 10px;
+  }
+  .spec-key {
+    color: var(--muted);
+    font-weight: 500;
+    flex-shrink: 0;
+  }
+  .spec-val {
+    color: var(--heading);
+    font-weight: 600;
+    text-align: right;
+    word-break: break-word;
+  }
+  .spec-val.unverified-val {
+    color: var(--subtle);
+    font-style: italic;
+    font-weight: normal;
+  }
+  .spec-val.highlight-spec {
+    color: var(--blue);
+    font-weight: 700;
+  }
+
+  /* DEDICATED STICKY ACTION FOOTER (NEVER OVERLAPS CONTENT) */
+  .lmodal-sticky-footer {
+    background: var(--s2);
+    border-top: 1px solid var(--border2);
+    padding: 0.9rem 1.6rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    flex-shrink: 0;
+    z-index: 10;
+  }
+  @media (max-width: 680px) {
+    .lmodal-sticky-footer {
+      flex-direction: column;
+      align-items: stretch;
+      padding: 0.85rem 1rem;
+      gap: 10px;
+    }
+  }
+
+  .lmodal-footer-price {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+  }
+  .lmodal-footer-label {
+    font-size: 0.68rem; color: var(--muted);
+    text-transform: uppercase; font-weight: 600;
+    letter-spacing: 0.04em;
+  }
+  .lmodal-footer-amount {
+    font-size: 1.45rem; font-weight: 700; color: var(--blue);
+    font-family: var(--font-main);
+    font-variant-numeric: tabular-nums;
+    line-height: 1.2;
+  }
+
+  .lmodal-footer-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  @media (max-width: 680px) {
+    .lmodal-footer-actions {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 8px;
+    }
+  }
+
   .btn-lmodal-add {
     background: var(--blue); color: #fff;
-    border: none; border-radius: 8px; padding: 0.85rem;
-    font-family: inherit; font-weight: 800; font-size: 0.92rem;
-    cursor: pointer; box-shadow: 0 4px 18px rgba(76, 124, 255, 0.35);
-    transition: transform 0.2s, background 0.2s;
+    border: none; border-radius: 8px; padding: 0.75rem 1.2rem;
+    font-family: inherit; font-weight: 600; font-size: 0.88rem;
+    cursor: pointer; display: inline-flex; align-items: center; justify-content: center;
+    gap: 7px; box-shadow: 0 4px 16px rgba(76, 124, 255, 0.3);
+    transition: transform 0.18s ease-out, background 0.18s ease;
+    outline: none;
   }
   .btn-lmodal-add:hover { background: var(--blue-hover); transform: translateY(-1px); }
+  .btn-lmodal-add:active { transform: scale(0.98); }
 
-  .lmodal-btn-row {
-    display: grid; grid-template-columns: 1fr 1fr; gap: 8px;
-  }
   .btn-lmodal-wa {
     background: #25d366; color: #fff; border: none;
-    border-radius: 8px; padding: 0.75rem;
-    font-family: inherit; font-weight: 700; font-size: 0.82rem;
-    cursor: pointer; display: flex; align-items: center; justify-content: center;
+    border-radius: 8px; padding: 0.75rem 1rem;
+    font-family: inherit; font-weight: 600; font-size: 0.82rem;
+    cursor: pointer; display: inline-flex; align-items: center; justify-content: center;
     gap: 6px; box-shadow: 0 4px 14px rgba(37, 211, 102, 0.3);
-    transition: transform 0.2s;
+    transition: transform 0.18s ease-out;
+    outline: none;
   }
   .btn-lmodal-wa:hover { transform: translateY(-1px); }
+  .btn-lmodal-wa:active { transform: scale(0.98); }
 
   .btn-lmodal-cod {
-    background: var(--s2); border: 1px solid var(--border2);
-    color: var(--heading); border-radius: 8px; padding: 0.75rem;
-    font-family: inherit; font-weight: 700; font-size: 0.82rem;
-    cursor: pointer; transition: all 0.2s;
+    background: var(--s1); border: 1px solid var(--border2);
+    color: var(--heading); border-radius: 8px; padding: 0.75rem 1rem;
+    font-family: inherit; font-weight: 600; font-size: 0.82rem;
+    cursor: pointer; display: inline-flex; align-items: center; justify-content: center;
+    gap: 6px; transition: all 0.18s ease-out;
+    outline: none;
   }
   .btn-lmodal-cod:hover { border-color: var(--blue); color: var(--blue); }
+  .btn-lmodal-cod:active { transform: scale(0.98); }
+
+  /* SUPPRESS CUSTOM CURSOR ARTIFACTS OVER MODAL */
+  #laptopModal, #laptopModal * { cursor: auto !important; }
+  #laptopModal button, #laptopModal a { cursor: pointer !important; }
+  body.modal-open #cursor-dot,
+  body.modal-open #cursor-ring {
+    opacity: 0 !important;
+    pointer-events: none !important;
+  }
 
   /* CHECKOUT MODAL */
   #checkoutModal {
@@ -1434,7 +1779,7 @@
     padding: 0.6rem 0.8rem; border-bottom: 1px solid var(--border);
     margin-bottom: 4px;
   }
-  .user-dropdown-name { font-size: 0.84rem; font-weight: 800; color: var(--heading); }
+  .user-dropdown-name { font-size: 0.84rem; font-weight: 600; color: var(--heading); }
   .user-dropdown-email { font-size: 0.72rem; color: var(--muted); }
   .user-dropdown-item {
     background: none; border: none; color: var(--text);
@@ -1479,11 +1824,9 @@
 
 </style>
 <script src="laptops-data.js"></script>
+<script src="store-config.js"></script>
 </head>
 <body>
-
-<div id="cur"></div>
-<div id="cur2"></div>
 
 <div class="demo-bar">
   <span>🇵🇰 LaptopHUB Official Store — Available in Light & Dark Mode</span>
@@ -1492,26 +1835,43 @@
 
 <!-- NAV -->
 <nav>
-  <a href="#" class="logo-mark">
+  <a href="index.html" class="logo-mark">
     <div class="logo-icon">LH</div>
     <span class="logo-text">Laptop<span>HUB</span></span>
   </a>
   <ul class="nav-links">
     <li><a href="#inventory">All Laptops</a></li>
-    <li><a href="custom-laptop.html" style="color:var(--blue);font-weight:700">🛠️ Create Your Laptop</a></li>
-    <li><a href="consult.html">🔍 Consult Me</a></li>
+    <li>
+      <a href="custom-laptop.html" style="color:var(--blue);font-weight:700;display:inline-flex;align-items:center;gap:6px">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+        Create Your Laptop
+      </a>
+    </li>
+    <li>
+      <a href="consult.html" style="display:inline-flex;align-items:center;gap:6px">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+        Consult Me
+      </a>
+    </li>
     <li><a href="#reviews">Reviews</a></li>
     <li><a href="volts.html">VOLTS Version</a></li>
-    <li><a href="inventory.html">📦 Admin</a></li>
+    <li>
+      <a href="inventory.html" style="display:inline-flex;align-items:center;gap:6px">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m7.5 4.27 9 5.15"/><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/></svg>
+        Admin
+      </a>
+    </li>
   </ul>
   <div class="nav-right">
+    <button class="mobile-nav-toggle" id="mobileNavBtn" onclick="toggleMobileNav()" aria-label="Open mobile navigation menu">☰</button>
     <!-- THEME TOGGLE BUTTON -->
     <button class="theme-toggle-btn" id="themeBtn" onclick="toggleTheme()" aria-label="Toggle theme">
       <span class="theme-icon" id="themeIcon">☀️</span>
       <span id="themeLabel">Light</span>
     </button>
     <button class="nav-cart" onclick="openCart()">
-      🛒 Cart <span class="cart-badge-count" id="cartCount">0</span>
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg>
+      Cart <span class="cart-badge-count" id="cartCount">0</span>
     </button>
     <div id="userAccountSection" style="position:relative">
       <button class="nav-btn" id="btnSignIn" onclick="openLoginModal()">Sign In</button>
@@ -1520,13 +1880,40 @@
           <div class="user-dropdown-name" id="dropdownUserName">User</div>
           <div class="user-dropdown-email" id="dropdownUserPhone">+92 326 1398594</div>
         </div>
-        <button class="user-dropdown-item" onclick="openCart(); toggleUserDropdown(false)">🛍️ View My Cart</button>
-        <a href="custom-laptop.html" class="user-dropdown-item">🛠️ Custom Laptop Requests</a>
-        <button class="user-dropdown-item danger" onclick="signOutUser()">🚪 Sign Out</button>
+        <button class="user-dropdown-item" onclick="openCart(); toggleUserDropdown(false)">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+          View My Cart
+        </button>
+        <a href="custom-laptop.html" class="user-dropdown-item">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+          Custom Laptop Requests
+        </a>
+        <button class="user-dropdown-item danger" onclick="signOutUser()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" x2="9" y1="12" y2="12"/></svg>
+          Sign Out
+        </button>
       </div>
     </div>
   </div>
 </nav>
+
+<!-- MOBILE NAV DRAWER -->
+<div class="mobile-drawer-overlay" id="mobileNavOverlay" onclick="toggleMobileNav(false)"></div>
+<div class="mobile-nav-drawer" id="mobileNavDrawer" role="dialog" aria-modal="true" aria-label="Mobile Navigation">
+  <div class="mobile-nav-header">
+    <div class="mobile-nav-title">Laptop<span style="color:var(--blue)">HUB</span></div>
+    <button class="mobile-nav-close" onclick="toggleMobileNav(false)" aria-label="Close menu">✕</button>
+  </div>
+  <ul class="mobile-nav-links">
+    <li><a href="#inventory" onclick="toggleMobileNav(false)">All Laptops</a></li>
+    <li><a href="custom-laptop.html" onclick="toggleMobileNav(false)" style="color:var(--blue)">Create Your Laptop</a></li>
+    <li><a href="consult.html" onclick="toggleMobileNav(false)">Consult Me</a></li>
+    <li><a href="#reviews" onclick="toggleMobileNav(false)">Customer Reviews</a></li>
+    <li><a href="volts.html" onclick="toggleMobileNav(false)">VOLTS Boutique</a></li>
+    <li><a href="inventory.html" onclick="toggleMobileNav(false)">Admin Inventory</a></li>
+    <li><a href="https://wa.me/923261398594" target="_blank" rel="noopener" onclick="toggleMobileNav(false)" style="color:#25d366">WhatsApp Support</a></li>
+  </ul>
+</div>
 
 <!-- HERO -->
 <section class="hero">
@@ -1574,7 +1961,9 @@
     <button class="filter-btn" onclick="filterBrand('gaming', this)">Gaming / RTX (4)</button>
   </div>
   <div class="search-box">
-    <span class="search-icon">🔍</span>
+    <span class="search-icon">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+    </span>
     <input type="text" class="search-input" id="laptopSearch" placeholder="Search 69 models: T14, XPS, Alienware, i7..." oninput="handleSearch()">
   </div>
 </div>
@@ -1602,15 +1991,15 @@
 </div>
 
 <!-- DYNAMIC LAPTOP PRODUCTS GRID -->
-<section class="sec" style="padding-top:0">
+<section class="sec" style="padding-top:0; padding-bottom:3.5rem;">
   <div class="pgrid" id="productGrid">
     <!-- Rendered dynamically by JavaScript with all 69 models -->
   </div>
 </section>
 
-<!-- STATS -->
-<div class="stats-row rev">
-  <div class="stat-cell"><div class="stat-num">7</div><div class="stat-label">Verified Models Ready</div></div>
+<!-- STATS & GUARANTEE -->
+<div class="stats-row rev" id="guarantee">
+  <div class="stat-cell"><div class="stat-num">69</div><div class="stat-label">Verified Models Ready</div></div>
   <div class="stat-cell"><div class="stat-num">24h</div><div class="stat-label">Fast Express Dispatch</div></div>
   <div class="stat-cell"><div class="stat-num">3yr</div><div class="stat-label">Official Warranty</div></div>
   <div class="stat-cell"><div class="stat-num">12K+</div><div class="stat-label">Verified Pakistani Buyers</div></div>
@@ -1709,7 +2098,10 @@
       </div>
       <h3 class="support-title">Consult Me</h3>
       <p class="support-desc">Not sure which laptop fits you? Tell us your use case, budget, and specs — we'll find the perfect match.</p>
-      <a href="consult.html" target="_blank" class="support-btn consult-btn">🔍 Build My Laptop</a>
+      <a href="consult.html" target="_blank" class="support-btn consult-btn" style="display:inline-flex;align-items:center;gap:6px">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+        Build My Laptop
+      </a>
     </div>
     <!-- Phone Card -->
     <div class="support-card">
@@ -1718,7 +2110,10 @@
       </div>
       <h3 class="support-title">Call / SMS</h3>
       <p class="support-desc">Prefer a direct call? Reach our team any time during business hours for order status, warranty claims, and returns.</p>
-      <a href="tel:+923261398594" class="support-btn" style="background:rgba(245,158,11,0.12);color:var(--gold);border:1.5px solid rgba(245,158,11,0.35);">📞 Call Now</a>
+      <a href="tel:+923261398594" class="support-btn" style="background:rgba(245,158,11,0.12);color:var(--gold);border:1.5px solid rgba(245,158,11,0.35);display:inline-flex;align-items:center;justify-content:center;gap:6px;">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.4 2 2 0 0 1 3.6 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.8a16 16 0 0 0 6.29 6.29l.98-.98a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+        <span>Call Now</span>
+      </a>
       <div class="support-number">+92 326 1398594 · Mon–Sat (10am–8pm)</div>
     </div>
   </div>
@@ -1757,28 +2152,28 @@
       <div class="footer-col">
         <h4>Brands</h4>
         <ul>
-          <li><a href="#" onclick="filterBrand('apple')">Apple</a></li>
-          <li><a href="#" onclick="filterBrand('dell')">Dell</a></li>
-          <li><a href="#" onclick="filterBrand('hp')">HP</a></li>
-          <li><a href="#" onclick="filterBrand('microsoft')">Microsoft</a></li>
+          <li><a href="#inventory" onclick="filterBrand('apple')">Apple</a></li>
+          <li><a href="#inventory" onclick="filterBrand('dell')">Dell</a></li>
+          <li><a href="#inventory" onclick="filterBrand('hp')">HP</a></li>
+          <li><a href="#inventory" onclick="filterBrand('microsoft')">Microsoft</a></li>
         </ul>
       </div>
       <div class="footer-col">
         <h4>Support</h4>
         <ul>
-          <li><a href="#">WhatsApp Live Support</a></li>
-          <li><a href="#">Order Tracking</a></li>
-          <li><a href="#">Warranty Claim</a></li>
-          <li><a href="#">Contact Us</a></li>
+          <li><a href="https://wa.me/923261398594" target="_blank" rel="noopener">WhatsApp Live Support</a></li>
+          <li><a href="https://wa.me/923261398594?text=Hi%20LaptopHUB!%20I%20would%20like%20to%20track%20my%20order." target="_blank" rel="noopener">Order Tracking</a></li>
+          <li><a href="https://wa.me/923261398594?text=Hi%20LaptopHUB!%20I%20have%20a%20warranty%20inquiry." target="_blank" rel="noopener">Warranty Claim</a></li>
+          <li><a href="https://wa.me/923261398594" target="_blank" rel="noopener">Contact Us</a></li>
         </ul>
       </div>
     </div>
     <div class="footer-bottom">
       <span>© 2025 LaptopHUB Pakistan. All rights reserved.</span>
       <div class="footer-bottom-links">
-        <a href="#">Privacy Policy</a>
-        <a href="#">Terms & Conditions</a>
-        <a href="#">Shipping Policy</a>
+        <a href="#guarantee">Privacy & Guarantee</a>
+        <a href="#faq">Terms & FAQ</a>
+        <a href="#guarantee">Shipping Policy</a>
       </div>
     </div>
   </div>
@@ -1789,7 +2184,10 @@
 <aside id="cartDrawer" aria-label="Shopping Cart">
   <div class="drawer-head">
     <div class="drawer-title">
-      <span>🛍️ Your Cart</span>
+      <span style="display:inline-flex;align-items:center;gap:7px">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg>
+        Your Cart
+      </span>
       <span class="cart-badge-count" id="drawerCartBadge">0</span>
     </div>
     <button class="drawer-close" onclick="closeCart()" aria-label="Close cart">✕</button>
@@ -1801,7 +2199,8 @@
 
   <div class="drawer-footer">
     <div class="shipping-badge">
-      <span>🚚</span> FREE Express Dispatch across Pakistan · Cash on Delivery
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2"/><path d="M15 18H9"/><path d="M19 18h2a1 1 0 0 0 1-1v-5l-3-4h-5v10"/><circle cx="7" cy="18" r="2"/><circle cx="17" cy="18" r="2"/></svg>
+      FREE Express Dispatch across Pakistan · Cash on Delivery
     </div>
     <div class="subtotal-row">
       <span class="subtotal-label">Subtotal:</span>
@@ -1812,7 +2211,8 @@
       Order / Confirm on WhatsApp
     </button>
     <button class="drawer-btn-checkout" onclick="openCheckoutModal()">
-      <span>📦</span> Cash on Delivery Checkout
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m7.5 4.27 9 5.15"/><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/></svg>
+      Cash on Delivery Checkout
     </button>
   </div>
 </aside>
@@ -1822,120 +2222,144 @@
   <div class="laptop-modal-card" id="laptopModalCard">
     <button class="laptop-modal-close" onclick="closeLaptopModal()" aria-label="Close modal">✕</button>
     
-    <div class="lmodal-grid">
-      <!-- Left: Image Gallery & Badges -->
-      <div class="lmodal-visual">
-        <div class="lmodal-img-wrap">
-          <img id="lmodalImg" src="" alt="Laptop Image" class="lmodal-img">
-          <span class="lmodal-badge" id="lmodalBadge">Verified</span>
-        </div>
-        <div class="lmodal-highlights">
-          <div class="lmodal-hl-item">
-            <span class="hl-label">Processor</span>
-            <span class="hl-val" id="lmodalCpu">-</span>
+    <!-- SCROLLABLE BODY -->
+    <div class="lmodal-scroll-body">
+      <div class="lmodal-grid">
+        <!-- Left: Image Gallery & Badges -->
+        <div class="lmodal-visual">
+          <div class="lmodal-img-wrap" id="lmodalImgWrap">
+            <img id="lmodalImg" src="" alt="Laptop Image" class="lmodal-img blend-original">
+            <span class="lmodal-badge" id="lmodalBadge">Verified</span>
           </div>
-          <div class="lmodal-hl-item">
-            <span class="hl-label">Display</span>
-            <span class="hl-val" id="lmodalDisplay">-</span>
-          </div>
-          <div class="lmodal-hl-item">
-            <span class="hl-label">Graphics</span>
-            <span class="hl-val" id="lmodalGpu">-</span>
-          </div>
-          <div class="lmodal-hl-item">
-            <span class="hl-label">Condition</span>
-            <span class="hl-val" id="lmodalCondition">-</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Right: Customizer & Action Controls -->
-      <div class="lmodal-content">
-        <div class="lmodal-brand-tag" id="lmodalBrand">DELL</div>
-        <h2 class="lmodal-title" id="lmodalTitle">Dell Latitude 7430</h2>
-        <p class="lmodal-cat" id="lmodalCat">Corporate Ultrabook · Grade A+ Like New</p>
-
-        <!-- Dynamic Live Price -->
-        <div class="lmodal-price-box">
-          <div class="lmodal-price-label">Configured Cash Price</div>
-          <div class="lmodal-price-val" id="lmodalPrice">Rs 154,000</div>
-          <div class="lmodal-price-note">Free Express Delivery Across Pakistan · 7-Day Guarantee</div>
-        </div>
-
-        <!-- RAM SELECTOR (8GB, 16GB, 32GB) -->
-        <div class="spec-picker-section">
-          <div class="spec-picker-header">
-            <span class="spec-picker-title">🧠 Select RAM (Memory)</span>
-            <span class="spec-selected-label" id="lblSelectedRam">16 GB</span>
-          </div>
-          <div class="spec-pills-row" id="ramPillsContainer">
-            <button type="button" class="spec-pill-btn" data-ram="8" onclick="selectModalRam(8, this)">
-              <span class="pill-name">8 GB</span>
-              <span class="pill-diff" id="ramDiff8">-Rs 6,000</span>
-            </button>
-            <button type="button" class="spec-pill-btn active" data-ram="16" onclick="selectModalRam(16, this)">
-              <span class="pill-name">16 GB</span>
-              <span class="pill-diff" id="ramDiff16">Base</span>
-            </button>
-            <button type="button" class="spec-pill-btn" data-ram="32" onclick="selectModalRam(32, this)">
-              <span class="pill-name">32 GB</span>
-              <span class="pill-diff" id="ramDiff32">+Rs 14,000</span>
-            </button>
+          <div class="lmodal-highlights">
+            <div class="lmodal-hl-item">
+              <span class="hl-label">Processor</span>
+              <span class="hl-val" id="lmodalCpu">-</span>
+            </div>
+            <div class="lmodal-hl-item">
+              <span class="hl-label">Display</span>
+              <span class="hl-val" id="lmodalDisplay">-</span>
+            </div>
+            <div class="lmodal-hl-item">
+              <span class="hl-label">Graphics</span>
+              <span class="hl-val" id="lmodalGpu">-</span>
+            </div>
+            <div class="lmodal-hl-item">
+              <span class="hl-label">Condition</span>
+              <span class="hl-val" id="lmodalCondition">-</span>
+            </div>
           </div>
         </div>
 
-        <!-- STORAGE SELECTOR (128GB, 256GB, 512GB, 1TB) -->
-        <div class="spec-picker-section">
-          <div class="spec-picker-header">
-            <span class="spec-picker-title">💾 Select Storage (NVMe SSD)</span>
-            <span class="spec-selected-label" id="lblSelectedStorage">512 GB NVMe</span>
+        <!-- Right: Customizer Details -->
+        <div class="lmodal-content">
+          <div class="lmodal-brand-tag" id="lmodalBrand">DELL</div>
+          <h2 class="lmodal-title" id="lmodalTitle">Dell Latitude 7430</h2>
+          <p class="lmodal-cat" id="lmodalCat">Corporate Ultrabook · Grade A+ Like New</p>
+
+          <!-- RAM SELECTOR -->
+          <div class="spec-picker-section">
+            <div class="spec-picker-header">
+              <span class="spec-picker-title">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><path d="M9 1v3M15 1v3M9 20v3M15 20v3M20 9h3M20 14h3M1 9h3M1 14h3"/></svg>
+                Select RAM (Memory)
+              </span>
+              <span class="spec-selected-label" id="lblSelectedRam">16 GB</span>
+            </div>
+            <div class="spec-pills-row" id="ramPillsContainer">
+              <button type="button" class="spec-pill-btn" data-ram="8" onclick="selectModalRam(8, this)">
+                <span class="pill-name">8 GB</span>
+                <span class="pill-diff" id="ramDiff8">-Rs 6,000</span>
+              </button>
+              <button type="button" class="spec-pill-btn" data-ram="16" onclick="selectModalRam(16, this)">
+                <span class="pill-name">16 GB</span>
+                <span class="pill-diff" id="ramDiff16">Base</span>
+              </button>
+              <button type="button" class="spec-pill-btn" data-ram="32" onclick="selectModalRam(32, this)">
+                <span class="pill-name">32 GB</span>
+                <span class="pill-diff" id="ramDiff32">+Rs 14,000</span>
+              </button>
+            </div>
           </div>
-          <div class="spec-pills-row" id="storagePillsContainer">
-            <button type="button" class="spec-pill-btn" data-storage="128" onclick="selectModalStorage(128, this)">
-              <span class="pill-name">128 GB</span>
-              <span class="pill-diff" id="storDiff128">-Rs 4,000</span>
-            </button>
-            <button type="button" class="spec-pill-btn" data-storage="256" onclick="selectModalStorage(256, this)">
-              <span class="pill-name">256 GB</span>
-              <span class="pill-diff" id="storDiff256">-Rs 2,000</span>
-            </button>
-            <button type="button" class="spec-pill-btn active" data-storage="512" onclick="selectModalStorage(512, this)">
-              <span class="pill-name">512 GB</span>
-              <span class="pill-diff" id="storDiff512">Base</span>
-            </button>
-            <button type="button" class="spec-pill-btn" data-storage="1000" onclick="selectModalStorage(1000, this)">
-              <span class="pill-name">1 TB NVMe</span>
-              <span class="pill-diff" id="storDiff1000">+Rs 12,000</span>
-            </button>
+
+          <!-- STORAGE SELECTOR -->
+          <div class="spec-picker-section">
+            <div class="spec-picker-header">
+              <span class="spec-picker-title">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="12" x2="2" y2="12"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/><line x1="6" y1="16" x2="6.01" y2="16"/><line x1="10" y1="16" x2="10.01" y2="16"/></svg>
+                Select Storage (NVMe SSD)
+              </span>
+              <span class="spec-selected-label" id="lblSelectedStorage">512 GB NVMe</span>
+            </div>
+            <div class="spec-pills-row" id="storagePillsContainer">
+              <button type="button" class="spec-pill-btn" data-storage="128" onclick="selectModalStorage(128, this)">
+                <span class="pill-name">128 GB</span>
+                <span class="pill-diff" id="storDiff128">-Rs 4,000</span>
+              </button>
+              <button type="button" class="spec-pill-btn" data-storage="256" onclick="selectModalStorage(256, this)">
+                <span class="pill-name">256 GB</span>
+                <span class="pill-diff" id="storDiff256">-Rs 2,000</span>
+              </button>
+              <button type="button" class="spec-pill-btn" data-storage="512" onclick="selectModalStorage(512, this)">
+                <span class="pill-name">512 GB</span>
+                <span class="pill-diff" id="storDiff512">Base</span>
+              </button>
+              <button type="button" class="spec-pill-btn" data-storage="1000" onclick="selectModalStorage(1000, this)">
+                <span class="pill-name">1 TB NVMe</span>
+                <span class="pill-diff" id="storDiff1000">+Rs 12,000</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- CLIENT COMMENTS / DESIRED REQUEST SECTION -->
+          <div class="spec-picker-section">
+            <div class="spec-picker-header">
+              <span class="spec-picker-title">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                Desired Specs / Custom Requests
+              </span>
+              <span style="font-size:0.72rem;color:var(--muted)">Optional</span>
+            </div>
+            <textarea class="modal-comment-box" id="lmodalComment" rows="2" placeholder="Tell us your desired additions (e.g. install Windows 11 Pro, apply fresh Arctic thermal paste, need Type-C hub, deliver on weekend)..."></textarea>
+          </div>
+
+          <!-- FULL 7-CATEGORY SPECIFICATIONS SECTION -->
+          <div class="lmodal-specs-section">
+            <h4 class="lmodal-specs-title">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+              Full Specifications
+            </h4>
+            <div class="lmodal-specs-grid" id="lmodalSpecsGrid">
+              <!-- Dynamically populated with 7 categories -->
+            </div>
           </div>
         </div>
-
-        <!-- CLIENT COMMENTS / DESIRED REQUEST SECTION -->
-        <div class="spec-picker-section">
-          <div class="spec-picker-header">
-            <span class="spec-picker-title">💬 Desired Specs / Custom Requests</span>
-            <span style="font-size:0.72rem;color:var(--muted)">Optional</span>
-          </div>
-          <textarea class="modal-comment-box" id="lmodalComment" rows="2" placeholder="Tell us your desired additions (e.g. install Windows 11 Pro, apply fresh Arctic thermal paste, need Type-C hub, deliver on weekend)..."></textarea>
-        </div>
-
-        <!-- ACTION BUTTONS -->
-        <div class="lmodal-actions">
-          <button type="button" class="btn-lmodal-add" onclick="addModalItemToCart()">
-            🛒 Add to Cart with Selected Specs
-          </button>
-          <div class="lmodal-btn-row">
-            <button type="button" class="btn-lmodal-wa" onclick="orderModalViaWhatsApp()">
-              💬 Order on WhatsApp
-            </button>
-            <button type="button" class="btn-lmodal-cod" onclick="checkoutModalCOD()">
-              📦 Cash on Delivery Checkout
-            </button>
-          </div>
-        </div>
-
       </div>
     </div>
+
+    <!-- DEDICATED STICKY ACTION FOOTER (NEVER OVERLAPS CONTENT) -->
+    <div class="lmodal-sticky-footer">
+      <div class="lmodal-footer-price">
+        <span class="lmodal-footer-label">Configured Cash Price</span>
+        <span class="lmodal-footer-amount" id="lmodalPrice">Rs 154,000</span>
+        <span style="font-size:0.72rem;color:var(--green);margin-top:2px;">Free Delivery · 7-Day Guarantee</span>
+      </div>
+      <div class="lmodal-footer-actions">
+        <button type="button" class="btn-lmodal-add" onclick="addModalItemToCart()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg>
+          Add to Cart
+        </button>
+        <button type="button" class="btn-lmodal-wa" onclick="orderModalViaWhatsApp()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          Order on WhatsApp
+        </button>
+        <button type="button" class="btn-lmodal-cod" onclick="checkoutModalCOD()">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+          Cash on Delivery
+        </button>
+      </div>
+    </div>
+
   </div>
 </div>
 
@@ -1943,7 +2367,10 @@
 <div id="checkoutModal">
   <div class="checkout-card">
     <div class="checkout-header">
-      <h3 style="font-size:1.1rem;font-weight:800;color:var(--heading)">📦 Cash on Delivery Order</h3>
+      <h3 style="font-size:1.1rem;font-weight:700;color:var(--heading);display:flex;align-items:center;gap:8px">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m7.5 4.27 9 5.15"/><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/></svg>
+        Cash on Delivery Order
+      </h3>
       <button class="drawer-close" onclick="closeCheckoutModal()">✕</button>
     </div>
     <form class="checkout-form" onsubmit="handlePlaceOrder(event)">
@@ -1988,7 +2415,7 @@
 <div id="orderConfirmModal">
   <div class="confirm-card">
     <div class="confirm-icon">✓</div>
-    <h2 style="font-family:'Playfair Display',serif;font-size:1.8rem;font-weight:800;color:var(--heading);margin-bottom:0.5rem">Order Confirmed!</h2>
+    <h2 style="font-family:var(--font-display);font-size:1.8rem;font-weight:700;color:var(--heading);margin-bottom:0.5rem">Order Confirmed!</h2>
     <p style="color:var(--muted);font-size:0.88rem;margin-bottom:1.5rem">Thank you for ordering with LaptopHUB. Our team is packing your laptop with warranty documentation and diagnostic report.</p>
     <div style="background:var(--s2);padding:1rem;border-radius:10px;margin-bottom:1.5rem;text-align:left;font-size:0.85rem">
       <div style="margin-bottom:6px"><strong>Order ID:</strong> <span id="confirmOrderId" style="color:var(--blue)">#LH-9842</span></div>
@@ -2004,7 +2431,10 @@
 <div id="loginModal">
   <div class="auth-card">
     <div class="auth-header">
-      <h3 style="font-size:1.1rem;font-weight:800;color:var(--heading)">🔐 Customer Account Portal</h3>
+      <h3 style="font-size:1.1rem;font-weight:700;color:var(--heading);display:flex;align-items:center;gap:8px;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        <span>Customer Account Portal</span>
+      </h3>
       <button class="drawer-close" onclick="closeLoginModal()">✕</button>
     </div>
     <div class="auth-tabs">
@@ -2033,8 +2463,9 @@
       <button type="submit" class="drawer-btn-checkout" id="btnAuthSubmit" style="margin-top:6px">
         Sign In to LaptopHUB
       </button>
-      <button type="button" class="pill-filter" onclick="quickGuestLogin()" style="width:100%;padding:0.6rem;text-align:center;background:var(--s2);color:var(--heading);border-color:var(--border2);border-radius:8px">
-        ⚡ 1-Click Demo Login (Arslan)
+      <button type="button" class="pill-filter" onclick="quickGuestLogin()" style="width:100%;padding:0.6rem;text-align:center;background:var(--s2);color:var(--heading);border-color:var(--border2);border-radius:8px;display:flex;align-items:center;justify-content:center;gap:6px;">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" style="color:var(--blue);"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+        <span>1-Click Demo Login (Arslan)</span>
       </button>
     </form>
   </div>
@@ -2042,7 +2473,10 @@
 
 <!-- FLOATING WHATSAPP BUTTON -->
 <a class="wa-fab" href="https://wa.me/923261398594?text=Hi%2C%20I'm%20interested%20in%20a%20laptop%20from%20LaptopHUB!" target="_blank" title="Chat on WhatsApp">
-  <span class="wa-fab-tooltip">💬 Chat with us</span>
+  <span class="wa-fab-tooltip" style="display:inline-flex;align-items:center;gap:5px">
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+    Chat with us
+  </span>
   <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
 </a>
 
@@ -2101,6 +2535,39 @@
     }
   });
 
+  function formatCardCpu(lap) {
+    if (!lap.cpu) return '';
+    const c = lap.cpu.toLowerCase();
+    if (c.includes('apple m')) {
+      return lap.cpu.split('(')[0].replace(/chip/i, '').trim();
+    }
+    let family = '';
+    if (c.includes('core ultra 9')) family = 'Core Ultra 9';
+    else if (c.includes('core ultra 7')) family = 'Core Ultra 7';
+    else if (c.includes('core ultra 5')) family = 'Core Ultra 5';
+    else if (c.includes('core i9')) family = 'Core i9';
+    else if (c.includes('core i7')) family = 'Core i7';
+    else if (c.includes('core i5')) family = 'Core i5';
+    else if (c.includes('core i3')) family = 'Core i3';
+    else if (c.includes('ryzen 9')) family = 'Ryzen 9';
+    else if (c.includes('ryzen 7')) family = 'Ryzen 7';
+    else if (c.includes('ryzen 5')) family = 'Ryzen 5';
+    else if (c.includes('ryzen 3')) family = 'Ryzen 3';
+    else family = lap.cpu.split(' ')[0] + ' ' + (lap.cpu.split(' ')[1] || '');
+
+    if (lap.gen && lap.gen !== '-' && !family.includes('Ultra') && !family.includes('Apple')) {
+      return `${family} · ${lap.gen} Gen`;
+    }
+    return family;
+  }
+
+  function handleCardKey(e, id) {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      openLaptopModal(id);
+    }
+  }
+
   // Render Products Grid
   function renderProducts() {
     const grid = document.getElementById('productGrid');
@@ -2121,11 +2588,31 @@
       if (currentPill === 'touch' && !lap.display.toLowerCase().includes('touch')) return false;
       if (currentPill === 'core-i7' && !(lap.cpu.toLowerCase().includes('i7') || lap.cpu.toLowerCase().includes('i9') || lap.cpu.toLowerCase().includes('ryzen 7'))) return false;
 
-      // Search query
+      // Search query (multi-token search matching clean name, legacy name, brand, processor, RAM, and SSD)
       if (searchQuery) {
-        const q = searchQuery.toLowerCase();
-        const haystack = (lap.name + ' ' + lap.brandName + ' ' + lap.cpu + ' ' + lap.display + ' ' + lap.gpu + ' ' + lap.category).toLowerCase();
-        if (!haystack.includes(q)) return false;
+        const q = searchQuery.toLowerCase().trim();
+        const tokens = q.split(/\s+/).filter(Boolean);
+        const shortCpu = lap.shortSpecs ? `${lap.shortSpecs.cpuFamily} ${lap.shortSpecs.generation}` : '';
+        const haystack = [
+          lap.name,
+          lap.legacyName || '',
+          lap.brandName || lap.brand,
+          lap.cpu || '',
+          shortCpu,
+          lap.fullSpecs?.performance?.processor || '',
+          lap.display || '',
+          lap.gpu || '',
+          lap.category || '',
+          lap.series || '',
+          `${lap.ram}gb`,
+          `${lap.ram} gb`,
+          `${lap.storage}gb`,
+          `${lap.storage} gb`,
+          lap.storage >= 1000 ? '1tb 1 tb' : ''
+        ].join(' ').toLowerCase();
+
+        const matchesAll = tokens.every(tok => haystack.includes(tok));
+        if (!matchesAll) return false;
       }
 
       return true;
@@ -2146,7 +2633,9 @@
     if (filtered.length === 0) {
       grid.innerHTML = `
         <div style="grid-column:1/-1;text-align:center;padding:4rem 1rem;background:var(--s1);border:1px solid var(--border);border-radius:12px">
-          <div style="font-size:3rem;margin-bottom:0.5rem">🔍</div>
+          <div style="display:flex;justify-content:center;margin-bottom:0.75rem;color:var(--muted)">
+            <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/><line x1="8" x2="14" y1="11" y2="11"/></svg>
+          </div>
           <h3 style="font-size:1.3rem;font-weight:700;color:var(--heading);margin-bottom:0.5rem">No matching laptops found</h3>
           <p style="color:var(--muted);font-size:0.9rem">Try clearing search filters or selecting "All Laptops".</p>
         </div>`;
@@ -2155,33 +2644,64 @@
 
     grid.innerHTML = filtered.map(lap => {
       const waMsg = encodeURIComponent(`Hi LaptopHUB! I am interested in purchasing the ${lap.name} (${lap.priceFormatted}). Please confirm availability!`);
+      const condBadge = lap.condition ? lap.condition.split('·')[0].trim() : 'Like New (10/10)';
+      
+      const cpuChip = (lap.shortSpecs && lap.shortSpecs.cpuFamily && lap.shortSpecs.generation)
+        ? `${lap.shortSpecs.cpuFamily} · ${lap.shortSpecs.generation}`
+        : formatCardCpu(lap);
+      const ramGb = (lap.shortSpecs && lap.shortSpecs.ramGb) ? lap.shortSpecs.ramGb : lap.ram;
+      const storGb = (lap.shortSpecs && lap.shortSpecs.storageGb) ? lap.shortSpecs.storageGb : lap.storage;
+      const storChip = (storGb >= 1000 ? (storGb/1000) + ' TB' : storGb + ' GB') + ' SSD';
+      const isDedGpu = lap.isDedicatedGpu || (lap.shortSpecs && lap.shortSpecs.isDedicatedGpu);
+
+      // ── IMAGE BLENDING ────────────────────────────────────────────────────────
+      // White-bg laptops: use transparent WebP cutout; others: original photo.
+      // tintColor (pre-computed by process_image_blending.py) is injected as
+      // --img-tint so the photo-wrap background picks it up without extra class names.
+      const isWhite = lap.bgTone === 'white';
+      const imgSrc = (isWhite && lap.processedImg) ? lap.processedImg : lap.img;
+      const blendClass = isWhite ? 'blend-cutout' : 'blend-original';
+      // Cap tint opacity: white → use as-is (already faint); colorful → limit to 0.12;
+      // dark → very subtle 0.05. tintColor is rgba(...) from the data.
+      const rawTint = lap.tintColor || '';
+      const wrapTint = rawTint
+        ? (lap.bgTone === 'white'
+            ? rawTint                            // already ~0.04 opacity from script
+            : lap.bgTone === 'colorful'
+              ? rawTint.replace(/,[\s]*[\d.]+\)$/, ', 0.10)')  // cap colorful at 0.10
+              : rawTint.replace(/,[\s]*[\d.]+\)$/, ', 0.05)')) // dark: very subtle
+        : '';
+      const wrapStyle = wrapTint ? ` style="--img-tint:${wrapTint}"` : '';
+      // ─────────────────────────────────────────────────────────────────────────
+
       return `
-        <div class="pcard" data-brand="${lap.brand}" onclick="openLaptopModal(${lap.id}, event)">
-          <div class="pcard-top">
-            <span class="pcard-badge ${lap.badgeType || 'b-corp'}">${lap.badge}</span>
-            <span class="brand-chip">${lap.brandName}</span>
+        <div class="pcard" data-brand="${lap.brand}" onclick="openLaptopModal(${lap.id}, event)" tabindex="0" onkeydown="handleCardKey(event, ${lap.id})" role="button" aria-label="View details for ${escapeHtml(lap.name)}">
+          <div class="pcard-photo-wrap"${wrapStyle}>
+            <span class="pcard-cond-badge">${escapeHtml(condBadge)}</span>
+            <img src="${imgSrc}" alt="${escapeHtml(lap.name)}" class="pcard-photo ${blendClass}" loading="lazy"
+                 onerror="this.src='${lap.img}'; this.classList.remove('blend-cutout'); this.classList.add('blend-original')">
           </div>
-          <div class="pcard-photo-wrap">
-            <img src="${lap.img}" alt="${lap.name}" class="pcard-photo" loading="lazy">
-            <div class="pcard-quick-hint"><span>⚙️ Customize RAM & Storage</span></div>
-          </div>
-          <h3 class="pcard-title">${lap.name}</h3>
-          <p class="pcard-specs">${lap.category} · ${lap.condition}</p>
-          <div class="spec-tags">
-            <span class="spec-pill">${lap.cpu}</span>
-            <span class="spec-pill">${lap.ram}GB RAM</span>
-            <span class="spec-pill">${lap.storage >= 1000 ? (lap.storage/1000)+'TB' : lap.storage+'GB'} NVMe</span>
-            <span class="spec-pill">${lap.display}</span>
-            <span class="spec-pill">${lap.gpu}</span>
+          <div class="pcard-brand">${escapeHtml(lap.brandName || lap.brand)}</div>
+          <h3 class="pcard-title" title="${escapeHtml(lap.name)}">${escapeHtml(lap.name)}</h3>
+          <div class="pcard-chips">
+            <span class="pcard-chip cpu-chip">${escapeHtml(cpuChip)}</span>
+            <span class="pcard-chip ram-chip">${ramGb} GB RAM</span>
+            <span class="pcard-chip stor-chip">${escapeHtml(storChip)}</span>
+            ${isDedGpu ? `<span class="pcard-chip gpu-chip">Dedicated GPU</span>` : ''}
           </div>
           <div class="pcard-footer">
-            <div class="price-col">
-              <span class="price-label">Cash Price</span>
+            <div class="pcard-price-col">
+              <span class="pcard-price-label">Cash Price</span>
               <span class="pcard-price">${lap.priceFormatted}</span>
             </div>
-            <div class="card-action-row">
-              <a href="https://wa.me/923261398594?text=${waMsg}" target="_blank" class="btn-wa-card" title="Chat on WhatsApp" onclick="event.stopPropagation()">💬</a>
-              <button class="btn-card-add" onclick="openLaptopModal(${lap.id}, event)">⚙️ Customize</button>
+            <div class="pcard-actions">
+              <button type="button" class="btn-card-view" onclick="openLaptopModal(${lap.id}, event)" aria-label="View details for ${escapeHtml(lap.name)}">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                <span>Details</span>
+              </button>
+              <a href="https://wa.me/923261398594?text=${waMsg}" target="_blank" rel="noopener" class="btn-card-wa" title="Order on WhatsApp" onclick="event.stopPropagation()" aria-label="Order on WhatsApp">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+              </a>
             </div>
           </div>
         </div>`;
@@ -2207,9 +2727,13 @@
     renderProducts();
   }
 
+  let searchDebounceTimer;
   function handleSearch() {
-    searchQuery = document.getElementById('laptopSearch').value.trim();
-    renderProducts();
+    clearTimeout(searchDebounceTimer);
+    searchDebounceTimer = setTimeout(() => {
+      searchQuery = document.getElementById('laptopSearch').value.trim();
+      renderProducts();
+    }, 200);
   }
 
   function handleSort(val) {
@@ -2250,7 +2774,9 @@
     if (cart.length === 0) {
       itemsContainer.innerHTML = `
         <div class="drawer-empty">
-          <div class="drawer-empty-icon">🛒</div>
+          <div class="drawer-empty-icon">
+            <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg>
+          </div>
           <p>Your cart is empty.</p>
           <span style="font-size:0.8rem;color:var(--muted)">Select any of our 69 premium laptops to begin!</span>
         </div>`;
@@ -2277,7 +2803,9 @@
             <span class="qty-num">${item.qty}</span>
             <button class="qty-btn" onclick="changeQty(${item.id}, 1)">+</button>
           </div>
-          <button class="cart-item-del" onclick="removeFromCart(${item.id})" title="Remove">🗑️</button>
+          <button class="cart-item-del" onclick="removeFromCart(${item.id})" title="Remove item" aria-label="Remove item">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>
+          </button>
         </div>`;
     }).join('');
 
@@ -2365,8 +2893,29 @@
     else if (lap.storage <= 512) modalSelectedStorage = 512;
     else modalSelectedStorage = 1000;
 
-    // Populate modal fields
-    document.getElementById('lmodalImg').src = lap.img;
+    // Populate modal fields — apply image blending
+    const modalIsWhite = lap.bgTone === 'white';
+    const modalImgSrc  = (modalIsWhite && lap.processedImg) ? lap.processedImg : lap.img;
+    const modalImgEl   = document.getElementById('lmodalImg');
+    const modalWrapEl  = document.getElementById('lmodalImgWrap');
+    modalImgEl.src = modalImgSrc;
+    modalImgEl.className = 'lmodal-img ' + (modalIsWhite ? 'blend-cutout' : 'blend-original');
+    modalImgEl.onerror = function() {
+      this.src = lap.img;
+      this.classList.remove('blend-cutout');
+      this.classList.add('blend-original');
+    };
+    if (modalWrapEl) {
+      const rawTint = lap.tintColor || '';
+      const modalTint = rawTint
+        ? (modalIsWhite
+            ? rawTint
+            : lap.bgTone === 'colorful'
+              ? rawTint.replace(/,[\s]*[\d.]+\)$/, ', 0.10)')
+              : rawTint.replace(/,[\s]*[\d.]+\)$/, ', 0.05)'))
+        : '';
+      modalWrapEl.style.setProperty('--img-tint', modalTint || '');
+    }
     document.getElementById('lmodalBadge').textContent = lap.badge || 'Verified';
     document.getElementById('lmodalBrand').textContent = lap.brandName || lap.brand.toUpperCase();
     document.getElementById('lmodalTitle').textContent = lap.name;
@@ -2381,12 +2930,14 @@
 
     const modal = document.getElementById('laptopModal');
     modal.classList.add('open');
+    document.body.classList.add('modal-open');
     document.body.style.overflow = 'hidden';
   }
 
   function closeLaptopModal() {
     const modal = document.getElementById('laptopModal');
     if (modal) modal.classList.remove('open');
+    document.body.classList.remove('modal-open');
     document.body.style.overflow = '';
   }
 
@@ -2422,6 +2973,125 @@
     return targetVal - baseVal;
   }
 
+  function renderModalFullSpecs(lap, selectedRam, selectedStorage) {
+    const container = document.getElementById('lmodalSpecsGrid');
+    if (!container || !lap) return;
+
+    const full = lap.fullSpecs || {};
+    const perf = full.performance || {};
+    const mem = full.memoryStorage || {};
+    const disp = full.display || {};
+    const graph = full.graphics || {};
+    const conn = full.connectivityPorts || {};
+    const build = full.batteryBuild || {};
+    const cond = full.conditionWarranty || {};
+
+    const curRam = selectedRam || lap.ram;
+    const curStorage = selectedStorage || lap.storage;
+    const storFormatted = curStorage >= 1000 ? '1 TB' : `${curStorage} GB`;
+
+    const ramDisplay = `${curRam} GB ${mem.ramType || 'DDR4'}${mem.ramSpeed ? ' ' + mem.ramSpeed : ''}`;
+    const storDisplay = `${storFormatted} ${mem.storageType || 'NVMe SSD'}`;
+
+    const categories = [
+      {
+        title: "Performance",
+        icon: `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><path d="M9 1v3M15 1v3M9 20v3M15 20v3M20 9h3M20 14h3M1 9h3M1 14h3"/></svg>`,
+        rows: [
+          { key: "Processor", val: perf.processor || lap.cpu },
+          { key: "Cores & Threads", val: perf.coresThreads },
+          { key: "Clock Speeds", val: perf.clocks },
+          { key: "Cache", val: perf.cache }
+        ]
+      },
+      {
+        title: "Memory & Storage",
+        icon: `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="12" x2="2" y2="12"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/><line x1="6" y1="16" x2="6.01" y2="16"/><line x1="10" y1="16" x2="10.01" y2="16"/></svg>`,
+        rows: [
+          { key: "RAM (Selected)", val: ramDisplay, highlight: true },
+          { key: "RAM Expansion", val: mem.ramSlots || (lap.isRamUpgradable ? 'Upgradable' : 'Soldered (Non-upgradable)') },
+          { key: "Storage (Selected)", val: storDisplay, highlight: true },
+          { key: "Drive Interface", val: mem.interface || lap.storageType },
+          { key: "Transfer Speed", val: mem.readSpeed }
+        ]
+      },
+      {
+        title: "Display",
+        icon: `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>`,
+        rows: [
+          { key: "Screen Size", val: disp.size },
+          { key: "Resolution", val: disp.resolution },
+          { key: "Panel Technology", val: disp.panelType },
+          { key: "Refresh Rate", val: disp.refreshRate },
+          { key: "Touch / Surface", val: disp.touchAntiGlare }
+        ]
+      },
+      {
+        title: "Graphics",
+        icon: `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg>`,
+        rows: [
+          { key: "Graphics Model", val: graph.gpuName || lap.gpu },
+          { key: "Architecture", val: graph.type || (lap.isDedicatedGpu ? 'Dedicated' : 'Integrated') },
+          { key: "Dedicated VRAM", val: graph.vram }
+        ]
+      },
+      {
+        title: "Connectivity & Ports",
+        icon: `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>`,
+        rows: [
+          { key: "External Ports", val: conn.ports },
+          { key: "Wireless", val: conn.wireless }
+        ]
+      },
+      {
+        title: "Battery & Build",
+        icon: `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="6" width="18" height="12" rx="2"/><line x1="23" y1="11" x2="23" y2="13"/></svg>`,
+        rows: [
+          { key: "Battery", val: build.battery },
+          { key: "Weight", val: build.weight },
+          { key: "Keyboard", val: build.keyboard },
+          { key: "Webcam & Mics", val: build.webcam },
+          { key: "Operating System", val: build.os }
+        ]
+      },
+      {
+        title: "Condition & Warranty",
+        icon: `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>`,
+        rows: [
+          { key: "Condition Grade", val: cond.condition || lap.condition },
+          { key: "Store Warranty", val: cond.warranty || lap.warranty }
+        ]
+      }
+    ];
+
+    container.innerHTML = categories.map(cat => {
+      const validRows = cat.rows.filter(r => r.val && String(r.val).trim() !== '' && String(r.val).trim() !== '-');
+      if (validRows.length === 0) return '';
+      
+      const rowsHtml = validRows.map(r => {
+        const isUnverified = String(r.val).toLowerCase().includes('unverified');
+        let valClass = isUnverified ? 'spec-val unverified-val' : 'spec-val';
+        if (r.highlight) valClass += ' highlight-spec';
+        return `
+          <div class="spec-row">
+            <span class="spec-key">${escapeHtml(r.key)}</span>
+            <span class="${valClass}">${escapeHtml(r.val)}</span>
+          </div>`;
+      }).join('');
+
+      return `
+        <div class="spec-cat-block">
+          <div class="spec-cat-header">
+            ${cat.icon}
+            <span>${escapeHtml(cat.title)}</span>
+          </div>
+          <div class="spec-rows-list">
+            ${rowsHtml}
+          </div>
+        </div>`;
+    }).join('');
+  }
+
   function updateModalPricingAndUI() {
     if (!activeModalLaptop) return;
     const basePrice = activeModalLaptop.price;
@@ -2434,18 +3104,30 @@
     modalCalculatedPrice = Math.max(25000, basePrice + ramDelta + storageDelta);
 
     document.getElementById('lmodalPrice').textContent = `Rs ${modalCalculatedPrice.toLocaleString('en-PK')}`;
-    document.getElementById('lblSelectedRam').textContent = `${modalSelectedRam} GB DDR4/DDR5`;
-    const storText = modalSelectedStorage >= 1000 ? '1 TB NVMe' : `${modalSelectedStorage} GB NVMe`;
+    const ramType = activeModalLaptop.fullSpecs?.memoryStorage?.ramType || 'DDR4';
+    document.getElementById('lblSelectedRam').textContent = `${modalSelectedRam} GB ${ramType}`;
+    const storType = activeModalLaptop.fullSpecs?.memoryStorage?.storageType || 'NVMe';
+    const storText = modalSelectedStorage >= 1000 ? `1 TB ${storType}` : `${modalSelectedStorage} GB ${storType}`;
     document.getElementById('lblSelectedStorage').textContent = storText;
+
+    // Dynamically update full specifications section to reflect selected upgrades
+    renderModalFullSpecs(activeModalLaptop, modalSelectedRam, modalSelectedStorage);
 
     // Update pill difference tags
     [8, 16, 32].forEach(r => {
       const d = getRamDelta(r, baseRam);
       const tag = document.getElementById(`ramDiff${r}`);
       if (tag) {
-        if (d === 0) tag.textContent = 'Included';
-        else if (d > 0) tag.textContent = `+Rs ${d.toLocaleString('en-PK')}`;
-        else tag.textContent = `-Rs ${Math.abs(d).toLocaleString('en-PK')}`;
+        if (d === 0) {
+          tag.textContent = 'Included';
+          tag.className = 'pill-diff base-spec-pill';
+        } else if (d > 0) {
+          tag.textContent = `+Rs ${d.toLocaleString('en-PK')}`;
+          tag.className = 'pill-diff';
+        } else {
+          tag.textContent = `-Rs ${Math.abs(d).toLocaleString('en-PK')}`;
+          tag.className = 'pill-diff';
+        }
       }
     });
 
@@ -2453,13 +3135,20 @@
       const d = getStorageDelta(s, baseStorage);
       const tag = document.getElementById(`storDiff${s}`);
       if (tag) {
-        if (d === 0) tag.textContent = 'Included';
-        else if (d > 0) tag.textContent = `+Rs ${d.toLocaleString('en-PK')}`;
-        else tag.textContent = `-Rs ${Math.abs(d).toLocaleString('en-PK')}`;
+        if (d === 0) {
+          tag.textContent = 'Included';
+          tag.className = 'pill-diff base-spec-pill';
+        } else if (d > 0) {
+          tag.textContent = `+Rs ${d.toLocaleString('en-PK')}`;
+          tag.className = 'pill-diff';
+        } else {
+          tag.textContent = `-Rs ${Math.abs(d).toLocaleString('en-PK')}`;
+          tag.className = 'pill-diff';
+        }
       }
     });
 
-    // Sync active classes on pills
+    // Sync active classes on pills - ONLY the selected option is highlighted
     document.querySelectorAll('#ramPillsContainer .spec-pill-btn').forEach(btn => {
       btn.classList.toggle('active', parseInt(btn.dataset.ram, 10) === modalSelectedRam);
     });
@@ -2471,7 +3160,9 @@
   function addModalItemToCart() {
     if (!activeModalLaptop) return;
     const comment = document.getElementById('lmodalComment').value.trim();
-    const storText = modalSelectedStorage >= 1000 ? '1TB' : `${modalSelectedStorage}GB`;
+    const storText = modalSelectedStorage >= 1000 ? '1 TB NVMe SSD' : `${modalSelectedStorage} GB NVMe SSD`;
+    const ramText = `${modalSelectedRam} GB ${activeModalLaptop.fullSpecs?.memoryStorage?.ramType || 'RAM'}`;
+    const cpuName = activeModalLaptop.fullSpecs?.performance?.processor || activeModalLaptop.cpu;
 
     // Add unique item entry or increment if identical specs exist
     const existing = cart.find(i => i.id === activeModalLaptop.id && i.ram === modalSelectedRam && i.storage === modalSelectedStorage && i.comment === comment);
@@ -2483,8 +3174,9 @@
         name: activeModalLaptop.name,
         price: modalCalculatedPrice,
         basePrice: activeModalLaptop.price,
-        cpu: activeModalLaptop.cpu,
+        cpu: cpuName,
         ram: modalSelectedRam,
+        ramLabel: ramText,
         storage: modalSelectedStorage,
         storageLabel: storText,
         comment: comment,
@@ -2495,22 +3187,26 @@
 
     saveCart();
     closeLaptopModal();
-    showToast(`Added ${activeModalLaptop.name} (${modalSelectedRam}GB / ${storText}) to cart!`);
+    showToast(`Added ${activeModalLaptop.name} (${ramText} / ${storText}) to cart!`);
     openCart();
   }
 
   function orderModalViaWhatsApp() {
     if (!activeModalLaptop) return;
     const comment = document.getElementById('lmodalComment').value.trim();
-    const storText = modalSelectedStorage >= 1000 ? '1TB NVMe' : `${modalSelectedStorage}GB NVMe`;
+    const storText = modalSelectedStorage >= 1000 ? '1 TB NVMe SSD' : `${modalSelectedStorage} GB NVMe SSD`;
+    const ramText = `${modalSelectedRam} GB ${activeModalLaptop.fullSpecs?.memoryStorage?.ramType || 'RAM'}`;
+    const cpuName = activeModalLaptop.fullSpecs?.performance?.processor || activeModalLaptop.cpu;
 
-    let msg = `*🛒 Custom Laptop Inquiry — LaptopHUB Pakistan*%0A`;
+    let msg = `*Custom Laptop Order — LaptopHUB Pakistan*%0A`;
     msg += `------------------------------------------%0A`;
     msg += `*Model:* ${encodeURIComponent(activeModalLaptop.name)}%0A`;
-    msg += `*Processor:* ${encodeURIComponent(activeModalLaptop.cpu)}%0A`;
-    msg += `*Selected RAM:* ${modalSelectedRam}GB%0A`;
-    msg += `*Selected Storage:* ${storText}%0A`;
-    msg += `*Configured Price:* Rs ${modalCalculatedPrice.toLocaleString('en-PK')}%0A`;
+    msg += `*Processor:* ${encodeURIComponent(cpuName)}%0A`;
+    msg += `*Selected RAM:* ${encodeURIComponent(ramText)}%0A`;
+    msg += `*Selected Storage:* ${encodeURIComponent(storText)}%0A`;
+    msg += `*Display:* ${encodeURIComponent(activeModalLaptop.display)}%0A`;
+    msg += `*Graphics:* ${encodeURIComponent(activeModalLaptop.gpu)}%0A`;
+    msg += `*Configured Cash Price:* Rs ${modalCalculatedPrice.toLocaleString('en-PK')}%0A`;
     msg += `*Condition:* ${encodeURIComponent(activeModalLaptop.condition)}%0A`;
     if (comment) {
       msg += `*Special Request / Note:* "${encodeURIComponent(comment)}"%0A`;
@@ -2588,7 +3284,9 @@
       const displayName = currentUser.name || (currentUser.email ? currentUser.email.split('@')[0] : 'Customer');
       section.innerHTML = `
         <button class="nav-user-btn" onclick="toggleUserDropdown()" aria-label="Account menu">
-          <span class="user-avatar-badge">👤</span>
+          <span class="user-avatar-badge" style="display:inline-flex;align-items:center;justify-content:center;">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          </span>
           <span>${escapeHtml(displayName)}</span> ▾
         </button>
         <div class="user-dropdown" id="userDropdown">
@@ -2596,9 +3294,18 @@
             <div class="user-dropdown-name">${escapeHtml(currentUser.name || 'Valued Customer')}</div>
             <div class="user-dropdown-email">${escapeHtml(currentUser.email || currentUser.phone || '')}</div>
           </div>
-          <button class="user-dropdown-item" onclick="openCart(); toggleUserDropdown(false)">🛍️ View My Cart (<span class="user-cart-count">${cart.reduce((s,i)=>s+i.qty,0)}</span>)</button>
-          <a href="custom-laptop.html" class="user-dropdown-item">🛠️ Build Custom Laptop</a>
-          <button class="user-dropdown-item danger" onclick="signOutUser()">🚪 Sign Out</button>
+          <button class="user-dropdown-item" onclick="openCart(); toggleUserDropdown(false)">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+            <span>View My Cart (<span class="user-cart-count">${cart.reduce((s,i)=>s+i.qty,0)}</span>)</span>
+          </button>
+          <a href="custom-laptop.html" class="user-dropdown-item">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+            <span>Build Custom Laptop</span>
+          </a>
+          <button class="user-dropdown-item danger" onclick="signOutUser()">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+            <span>Sign Out</span>
+          </button>
         </div>
       `;
     } else {
@@ -2685,11 +3392,6 @@
     showToast('You have been signed out.');
   }
 
-  function escapeHtml(str) {
-    if (!str) return '';
-    return str.replace(/[&<>'"]/g, t => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[t] || t));
-  }
-
   // Toast
   let toastTimer;
   function showToast(msg) {
@@ -2718,10 +3420,54 @@
     });
   });
 
+  // Mobile Nav Drawer Toggle
+  function toggleMobileNav(force) {
+    const drawer = document.getElementById('mobileNavDrawer');
+    const overlay = document.getElementById('mobileNavOverlay');
+    if (!drawer || !overlay) return;
+    const isOpen = typeof force === 'boolean' ? force : !drawer.classList.contains('open');
+    drawer.classList.toggle('open', isOpen);
+    overlay.classList.toggle('open', isOpen);
+    document.body.style.overflow = isOpen ? 'hidden' : '';
+  }
+
+  // Global Keyboard Accessibility: ESC closes all open modals and drawers
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      closeLaptopModal();
+      closeCart();
+      closeCheckoutModal();
+      closeLoginModal();
+      toggleMobileNav(false);
+      toggleUserDropdown(false);
+    }
+  });
+
+  // Scroll reveal observer for natural section flow
+  function initScrollReveal() {
+    const revEls = document.querySelectorAll('.rev');
+    if (!revEls.length) return;
+    if (!('IntersectionObserver' in window)) {
+      revEls.forEach(el => el.classList.add('in'));
+      return;
+    }
+    document.documentElement.classList.add('js-reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('in');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.05, rootMargin: '0px 0px 60px 0px' });
+    revEls.forEach(el => observer.observe(el));
+  }
+
   // Init
   renderProducts();
   updateCartUI();
   initUserSession();
+  initScrollReveal();
 </script>
 
 <!-- CUSTOM CURSOR -->
@@ -2730,63 +3476,89 @@
 
 <script>
   (function() {
+    // Only initialize on desktop devices with fine pointer (not touch)
+    if (!window.matchMedia || !window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+    if ('ontouchstart' in window || navigator.maxTouchPoints > 0) return;
+
     const dot  = document.getElementById('cursor-dot');
     const ring = document.getElementById('cursor-ring');
+    if (!dot || !ring) return;
+
     let mouseX = -100, mouseY = -100;
     let ringX  = -100, ringY  = -100;
-    let rafId;
+    let hasMoved = false;
+    let isVisible = false;
+
+    function showCursor() {
+      if (!hasMoved) return;
+      dot.style.opacity  = '1';
+      ring.style.opacity = '0.6';
+      isVisible = true;
+    }
+
+    function hideCursor() {
+      dot.style.opacity  = '0';
+      ring.style.opacity = '0';
+      isVisible = false;
+    }
 
     document.addEventListener('mousemove', e => {
       mouseX = e.clientX;
       mouseY = e.clientY;
+      if (!hasMoved) {
+        hasMoved = true;
+        ringX = mouseX;
+        ringY = mouseY;
+        document.body.classList.add('custom-cursor-active');
+        showCursor();
+      }
       dot.style.left = mouseX + 'px';
       dot.style.top  = mouseY + 'px';
-    });
+      if (!isVisible) showCursor();
+    }, { passive: true });
 
     function animateRing() {
-      ringX += (mouseX - ringX) * 0.12;
-      ringY += (mouseY - ringY) * 0.12;
-      ring.style.left = ringX + 'px';
-      ring.style.top  = ringY + 'px';
-      rafId = requestAnimationFrame(animateRing);
+      if (hasMoved) {
+        // Tight, responsive lerp (0.42 instead of 0.12) so ring and dot remain unified without lagging behind
+        ringX += (mouseX - ringX) * 0.42;
+        ringY += (mouseY - ringY) * 0.42;
+        ring.style.left = ringX + 'px';
+        ring.style.top  = ringY + 'px';
+      }
+      requestAnimationFrame(animateRing);
     }
-    animateRing();
+    requestAnimationFrame(animateRing);
 
-    const hoverTargets = 'a, button, [role="button"], input, select, textarea, label, .filter-btn, .card, .cart-item, .faq-item, .nav-link, .cta-btn, .theme-toggle';
+    const hoverTargets = 'a, button, [role="button"], input, select, textarea, label, .filter-btn, .pcard, .cart-item, .faq-item, .nav-link, .support-btn, .theme-toggle-btn';
 
     document.addEventListener('mouseover', e => {
-      if (e.target.closest(hoverTargets)) {
+      if (e.target && e.target.closest && e.target.closest(hoverTargets)) {
         dot.classList.add('hovering');
         ring.classList.add('hovering');
       }
-    });
+    }, { passive: true });
 
     document.addEventListener('mouseout', e => {
-      if (e.target.closest(hoverTargets)) {
+      if (e.target && e.target.closest && e.target.closest(hoverTargets)) {
         dot.classList.remove('hovering');
         ring.classList.remove('hovering');
       }
-    });
+    }, { passive: true });
 
     document.addEventListener('mousedown', () => {
       dot.classList.add('clicking');
       ring.classList.add('clicking');
-    });
+    }, { passive: true });
 
     document.addEventListener('mouseup', () => {
       dot.classList.remove('clicking');
       ring.classList.remove('clicking');
-    });
+    }, { passive: true });
 
-    // Hide when mouse leaves window
-    document.addEventListener('mouseleave', () => {
-      dot.style.opacity  = '0';
-      ring.style.opacity = '0';
-    });
-    document.addEventListener('mouseenter', () => {
-      dot.style.opacity  = '';
-      ring.style.opacity = '';
-    });
+    // Hide when mouse leaves window or window blurs
+    document.addEventListener('mouseleave', hideCursor);
+    document.addEventListener('mouseenter', showCursor);
+    window.addEventListener('blur', hideCursor);
   })();
 </script>
 

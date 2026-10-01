@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<title>Image Blending Test Preview</title>
+<link rel="stylesheet" href="../css/theme.css">
+<style>
+  body {
+    padding: 2rem;
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Plus Jakarta Sans', sans-serif;
+  }
+  .controls {
+    display: flex; gap: 1rem; margin-bottom: 2rem; align-items: center;
+  }
+  .btn-theme {
+    padding: 8px 16px; border-radius: 8px; cursor: pointer;
+    background: var(--blue); color: #fff; border: none; font-weight: 600;
+  }
+  .preview-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+    max-width: 1200px;
+  }
+  .card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 1.25rem;
+    box-shadow: var(--card-shadow);
+  }
+  .photo-wrap {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    border-radius: 10px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    margin-bottom: 0.9rem;
+    background: radial-gradient(ellipse at 50% 45%, var(--card-tint, transparent) 0%, var(--photo-bg) 85%);
+  }
+  .photo {
+    max-width: 92%;
+    max-height: 92%;
+    object-fit: contain;
+    transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+    filter: drop-shadow(0 12px 24px rgba(0, 0, 0, 0.35));
+  }
+  .card:hover .photo {
+    transform: scale(1.04);
+  }
+  /* Feathered mask for colorful and dark */
+  .photo-wrap[data-tone="colorful"] .photo,
+  .photo-wrap[data-tone="dark"] .photo {
+    -webkit-mask-image: radial-gradient(ellipse 90% 86% at 50% 50%, black 72%, rgba(0, 0, 0, 0.5) 88%, transparent 100%);
+    mask-image: radial-gradient(ellipse 90% 86% at 50% 50%, black 72%, rgba(0, 0, 0, 0.5) 88%, transparent 100%);
+    filter: none;
+  }
+  /* Multiply blend for white in light theme fallback */
+  [data-theme="light"] .photo-wrap[data-tone="white"] .photo.blend-fallback {
+    mix-blend-mode: multiply;
+  }
+  .card-title {
+    font-size: 1rem; font-weight: 700; color: var(--heading);
+  }
+  .card-meta {
+    font-size: 0.8rem; color: var(--muted); margin-top: 4px;
+  }
+</style>
+</head>
+<body>
+  <h1>Image Blending Test Preview</h1>
+  <div class="controls">
+    <button class="btn-theme" onclick="toggleTheme()">Toggle Theme (Light / Dark)</button>
+    <span id="themeName">Current Theme: DARK</span>
+  </div>
+
+  <div class="preview-grid">
+    <!-- Card 1: Cutout White Background -->
+    <div class="card">
+      <div class="photo-wrap" data-tone="white" style="--card-tint: rgba(76, 124, 255, 0.04);">
+        <img src="../images/processed/laptop-1-cutout.webp" class="photo" alt="ThinkPad T14">
+      </div>
+      <div class="card-title">Lenovo ThinkPad T14 Gen 1</div>
+      <div class="card-meta">White tone &middot; Transparent WebP Cutout + Shadow</div>
+    </div>
+
+    <!-- Card 2: Surface Pink Box (Colorful) -->
+    <div class="card">
+      <div class="photo-wrap" data-tone="colorful" style="--card-tint: rgba(184, 159, 138, 0.16);">
+        <img src="../images/laptop-2-microsoft-surface-pro-7-1.jpg" class="photo" alt="Surface Pro 7">
+      </div>
+      <div class="card-title">Microsoft Surface Pro 7</div>
+      <div class="card-meta">Colorful tone &middot; Feather Mask + Soft Tint Spill</div>
+    </div>
+
+    <!-- Card 3: HP Blue Background (Colorful) -->
+    <div class="card">
+      <div class="photo-wrap" data-tone="colorful" style="--card-tint: rgba(20, 82, 127, 0.16);">
+        <img src="../images/laptop-3-hp-elitebook-840-g9-1.jpg" class="photo" alt="HP EliteBook 840 G9">
+      </div>
+      <div class="card-title">HP EliteBook 840 G9</div>
+      <div class="card-meta">Colorful tone &middot; Feather Mask + Soft Tint Spill</div>
+    </div>
+
+    <!-- Card 4: Cutout White Background -->
+    <div class="card">
+      <div class="photo-wrap" data-tone="white" style="--card-tint: rgba(76, 124, 255, 0.04);">
+        <img src="../images/processed/laptop-4-cutout.webp" class="photo" alt="X1 Yoga">
+      </div>
+      <div class="card-title">Lenovo ThinkPad X1 Yoga Gen 7</div>
+      <div class="card-meta">White tone &middot; Transparent WebP Cutout + Shadow</div>
+    </div>
+
+    <!-- Card 55: HP Spectre (Dark tone) -->
+    <div class="card">
+      <div class="photo-wrap" data-tone="dark" style="--card-tint: rgba(30, 40, 60, 0.06);">
+        <img src="../images/laptop-55-hp-spectre-x360-14-2024-1.jpg" class="photo" alt="HP Spectre x360">
+      </div>
+      <div class="card-title">HP Spectre x360 14 (2024)</div>
+      <div class="card-meta">Dark tone &middot; Feather Mask + Capped Low Tint</div>
+    </div>
+  </div>
+
+  <script>
+    function toggleTheme() {
+      const cur = document.documentElement.getAttribute('data-theme') || 'dark';
+      const next = cur === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', next);
+      document.getElementById('themeName').textContent = 'Current Theme: ' + next.toUpperCase();
+    }
+  </script>
+</body>
+</html>
