@@ -1,19 +1,18 @@
 /**
  * store-config.js
- * Central Configuration & Utilities for LaptopHUB & VOLTS Stores
- * 
+ * Central Configuration & Utilities for LaptopHUB
+ *
  * Single source of truth for:
  * - Owner contact numbers (WhatsApp / Calls)
  * - Store identity & metadata
  * - Cart & User session state helpers
- * - Message formatting for WhatsApp orders & custom specs
+ * - Message formatting for WhatsApp orders
  */
 
 const STORE_CONFIG = {
   storeName: "LaptopHUB Pakistan",
-  editionVolts: "VOLTS Performance Arsenal",
   tagline: "Premium Laptops. Every Spec. Honest Prices.",
-  
+
   // PRIMARY OWNER CONTACT (Used across all stores, carts, and configurators)
   contact: {
     whatsapp: "923261398594",
@@ -42,18 +41,14 @@ const STORE_CONFIG = {
     cart: "lh_cart_items",
     user: "lh_user",
     orders: "lh_orders",
-    customRequests: "lh_custom_requests",
     theme: "laptophub_theme"
   },
 
   // NAVIGATION ROUTES
   routes: {
     home: "laptophub.html",
-    createLaptop: "custom-laptop.html",
     consult: "consult.html",
-    volts: "volts.html",
-    inventory: "inventory.html",
-    suitePortal: "index.html"
+    admin: "/admin/"
   }
 };
 
@@ -108,6 +103,9 @@ function saveLocalCart(cart) {
 
 /**
  * Get active user session from localStorage
+ * NOTE: With the new server-side session system this is only used as a
+ * UI-only cache for display name / email. Role and auth are always
+ * verified against /api/auth/me on page load.
  * @returns {Object|null} User session or null
  */
 function getActiveUser() {
@@ -119,7 +117,7 @@ function getActiveUser() {
 }
 
 /**
- * Save user session to localStorage
+ * Save user session to localStorage (display cache only)
  * @param {Object} user - User session object
  */
 function saveActiveUser(user) {
@@ -161,39 +159,6 @@ function formatCartWhatsAppMessage(cart, customer = {}) {
   return msg;
 }
 
-/**
- * Build WhatsApp quotation message for custom laptop configurator
- * @param {Object} specs - Configured laptop specs
- * @param {Object} client - Client contact info
- * @returns {string} Plaintext formatted message
- */
-function formatCustomSpecWhatsAppMessage(specs, client = {}) {
-  let msg = `*🛠️ CUSTOM LAPTOP SPECIFICATION REQUEST*\n`;
-  msg += `*${STORE_CONFIG.storeName} — Custom Build Desk*\n`;
-  msg += `------------------------------------------\n`;
-  if (client.name) msg += `*Client Name:* ${client.name}\n`;
-  if (client.phone) msg += `*Phone / WhatsApp:* ${client.phone}\n`;
-  if (client.city) msg += `*City:* ${client.city}\n`;
-  if (client.timeline) msg += `*Timeline:* ${client.timeline}\n`;
-  msg += `------------------------------------------\n`;
-  if (specs.brand) msg += `*Brand:* ${specs.brand}\n`;
-  if (specs.formFactor) msg += `*Chassis:* ${specs.formFactor}\n`;
-  if (specs.cpu) msg += `*Processor (CPU):* ${specs.cpu}\n`;
-  if (specs.gpu) msg += `*Graphics (GPU):* ${specs.gpu}\n`;
-  if (specs.ram) msg += `*Memory (RAM):* ${specs.ram}\n`;
-  if (specs.storage) msg += `*Storage (SSD):* ${specs.storage}\n`;
-  if (specs.display) msg += `*Display:* ${specs.display}\n`;
-  if (specs.condition) msg += `*Condition:* ${specs.condition}\n`;
-  if (specs.budget) msg += `*Target Budget:* Rs ${Number(specs.budget).toLocaleString('en-PK')}\n`;
-  if (specs.useCases && specs.useCases.length) msg += `*Use Cases:* ${specs.useCases.join(', ')}\n`;
-  if (specs.features && specs.features.length) msg += `*Features:* ${specs.features.join(', ')}\n`;
-  if (client.notes) msg += `*Notes:* ${client.notes}\n`;
-  msg += `------------------------------------------\n`;
-  msg += `Please send available matching inventory and best cash price!`;
-
-  return msg;
-}
-
 // Export for Node/CommonJS environments if required
 if (typeof module !== 'undefined' && module.exports) {
   module.exports = {
@@ -204,7 +169,6 @@ if (typeof module !== 'undefined' && module.exports) {
     saveLocalCart,
     getActiveUser,
     saveActiveUser,
-    formatCartWhatsAppMessage,
-    formatCustomSpecWhatsAppMessage
+    formatCartWhatsAppMessage
   };
 }

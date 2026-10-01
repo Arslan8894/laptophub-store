@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en" data-theme="dark">
 <head>
 <meta charset="UTF-8">
@@ -342,8 +342,6 @@
 
   <div class="tabs">
     <button class="tab-btn active laptophub" onclick="switchView('laptophub')">🇵🇰 LaptopHUB (69 Laptops)</button>
-    <button class="tab-btn custom" onclick="switchView('custom')">🛠️ Create Your Laptop</button>
-    <button class="tab-btn volts" onclick="switchView('volts')">⚡ VOLTS (69 Laptops)</button>
     <button class="tab-btn consult" onclick="switchView('consult')">🔍 Consult Me</button>
     <button class="tab-btn inventory" onclick="switchView('inventory')">📦 Inventory Manager</button>
     <button class="tab-btn review" onclick="switchView('review')">📋 Code & UX Audit</button>
@@ -542,13 +540,6 @@
       directLink.href = 'laptophub.html';
       directLink.style.display = 'inline-block';
       document.querySelector('.tab-btn.laptophub').classList.add('active');
-    } else if (tab === 'volts') {
-      frame.style.display = 'block';
-      review.style.display = 'none';
-      frame.src = 'volts.html';
-      directLink.href = 'volts.html';
-      directLink.style.display = 'inline-block';
-      document.querySelector('.tab-btn.volts').classList.add('active');
     } else if (tab === 'consult') {
       frame.style.display = 'block';
       review.style.display = 'none';
@@ -556,18 +547,11 @@
       directLink.href = 'consult.html';
       directLink.style.display = 'inline-block';
       document.querySelector('.tab-btn.consult').classList.add('active');
-    } else if (tab === 'custom') {
-      frame.style.display = 'block';
-      review.style.display = 'none';
-      frame.src = 'custom-laptop.html';
-      directLink.href = 'custom-laptop.html';
-      directLink.style.display = 'inline-block';
-      document.querySelector('.tab-btn.custom').classList.add('active');
     } else if (tab === 'inventory') {
       frame.style.display = 'block';
       review.style.display = 'none';
-      frame.src = 'inventory.html';
-      directLink.href = 'inventory.html';
+      frame.src = '/admin/';
+      directLink.href = '/admin/';
       directLink.style.display = 'inline-block';
       document.querySelector('.tab-btn.inventory').classList.add('active');
     } else if (tab === 'review') {
