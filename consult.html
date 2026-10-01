@@ -1,0 +1,842 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Consult Me — LaptopHUB</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,700;0,800;1,700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #07080d;
+    --s1: #0c0e15;
+    --s2: #12141e;
+    --s3: #181b28;
+    --text: #dde0ed;
+    --heading: #ffffff;
+    --muted: #6b7088;
+    --subtle: #8e93ad;
+    --blue: #4c7cff;
+    --blue-hover: #3a6bf5;
+    --blue-dim: rgba(76,124,255,0.12);
+    --blue-glow: rgba(76,124,255,0.25);
+    --border: rgba(255,255,255,0.065);
+    --border2: rgba(255,255,255,0.12);
+    --green: #10b981;
+    --gold: #f59e0b;
+    --card-bg: #0c0e15;
+    --card-shadow: 0 15px 35px rgba(0,0,0,0.5);
+    --nav-bg: rgba(7,8,13,0.9);
+  }
+
+  [data-theme="light"] {
+    --bg: #f8fafc;
+    --s1: #ffffff;
+    --s2: #f1f5f9;
+    --s3: #e2e8f0;
+    --text: #334155;
+    --heading: #0f172a;
+    --muted: #64748b;
+    --subtle: #475569;
+    --blue: #2563eb;
+    --blue-hover: #1d4ed8;
+    --blue-dim: rgba(37,99,235,0.08);
+    --blue-glow: rgba(37,99,235,0.18);
+    --border: rgba(0,0,0,0.08);
+    --border2: rgba(0,0,0,0.14);
+    --green: #059669;
+    --gold: #d97706;
+    --card-bg: #ffffff;
+    --card-shadow: 0 8px 25px rgba(0,0,0,0.07);
+    --nav-bg: rgba(255,255,255,0.92);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    transition: background 0.3s, color 0.3s;
+  }
+
+  /* NAV */
+  nav {
+    position: sticky; top: 0;
+    background: var(--nav-bg);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+    padding: 1rem 2.5rem;
+    display: flex; align-items: center; justify-content: space-between;
+    z-index: 100;
+    transition: background 0.3s, border-color 0.3s;
+  }
+  .nav-logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.4rem; font-weight: 800;
+    color: var(--heading);
+    text-decoration: none;
+    letter-spacing: -0.02em;
+  }
+  .nav-logo span { color: var(--blue); }
+  .nav-actions { display: flex; gap: 10px; align-items: center; }
+  .btn-nav {
+    background: var(--s2);
+    border: 1px solid var(--border2);
+    color: var(--heading);
+    padding: 0.45rem 1rem;
+    border-radius: 8px;
+    font-family: inherit; font-size: 0.82rem; font-weight: 600;
+    cursor: pointer; text-decoration: none;
+    transition: all 0.2s;
+  }
+  .btn-nav:hover { border-color: var(--blue); }
+  .theme-btn {
+    background: var(--s2); border: 1px solid var(--border2);
+    color: var(--heading); padding: 0.45rem 0.85rem;
+    border-radius: 20px; font-family: inherit; font-size: 0.78rem; font-weight: 600;
+    cursor: pointer; display: flex; align-items: center; gap: 5px;
+    transition: all 0.2s;
+  }
+  .theme-btn:hover { border-color: var(--blue); }
+
+  /* HERO */
+  .hero {
+    text-align: center;
+    padding: 4rem 2rem 3rem;
+    background: linear-gradient(180deg, var(--s1) 0%, var(--bg) 100%);
+    border-bottom: 1px solid var(--border);
+  }
+  .hero-pre {
+    font-size: 0.72rem; font-weight: 700; letter-spacing: 0.16em;
+    text-transform: uppercase; color: var(--blue); margin-bottom: 1rem;
+  }
+  .hero-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.2rem, 5vw, 3.8rem);
+    font-weight: 800; letter-spacing: -0.03em; line-height: 1.05;
+    color: var(--heading); margin-bottom: 1rem;
+  }
+  .hero-sub {
+    font-size: 1.05rem; color: var(--muted); max-width: 500px; margin: 0 auto;
+    line-height: 1.65;
+  }
+
+  /* WIZARD WRAPPER */
+  .wizard-wrap {
+    max-width: 860px; margin: 3rem auto 4rem;
+    padding: 0 1.5rem;
+  }
+
+  /* PROGRESS BAR */
+  .progress-bar-outer {
+    background: var(--s2);
+    border-radius: 999px; height: 6px;
+    margin-bottom: 0.6rem;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    transition: background 0.3s;
+  }
+  .progress-bar-inner {
+    height: 100%;
+    background: linear-gradient(90deg, var(--blue), #7ca7ff);
+    border-radius: 999px;
+    transition: width 0.45s ease;
+  }
+  .progress-labels {
+    display: flex; justify-content: space-between;
+    font-size: 0.74rem; color: var(--muted); margin-bottom: 2rem;
+  }
+  .step-label { font-weight: 600; }
+  .step-label.active { color: var(--blue); }
+
+  /* WIZARD CARD */
+  .wizard-card {
+    background: var(--card-bg);
+    border: 1.5px solid var(--border2);
+    border-radius: 20px;
+    padding: 2.5rem;
+    box-shadow: var(--card-shadow);
+    transition: background 0.3s, border-color 0.3s;
+    min-height: 400px;
+    display: flex; flex-direction: column;
+  }
+
+  .step-panel { display: none; flex-direction: column; flex: 1; }
+  .step-panel.active { display: flex; }
+
+  .step-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.75rem; font-weight: 800;
+    color: var(--heading); margin-bottom: 0.5rem;
+    letter-spacing: -0.02em;
+    transition: color 0.3s;
+  }
+  .step-subtitle {
+    font-size: 0.9rem; color: var(--muted);
+    margin-bottom: 2rem; line-height: 1.55;
+    transition: color 0.3s;
+  }
+
+  /* OPTION TILES */
+  .option-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+    gap: 1rem;
+    flex: 1;
+  }
+  .option-tile {
+    background: var(--s2);
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    padding: 1.2rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex; flex-direction: column; gap: 0.5rem;
+    text-align: left;
+    user-select: none;
+  }
+  .option-tile:hover {
+    border-color: var(--blue);
+    background: var(--blue-dim);
+  }
+  .option-tile.selected {
+    border-color: var(--blue);
+    background: var(--blue-dim);
+    box-shadow: 0 0 0 4px var(--blue-glow);
+  }
+  .tile-icon { font-size: 1.6rem; }
+  .tile-label { font-size: 0.9rem; font-weight: 700; color: var(--heading); transition: color 0.3s; }
+  .tile-desc { font-size: 0.75rem; color: var(--muted); line-height: 1.4; transition: color 0.3s; }
+
+  /* SLIDER */
+  .slider-wrap { padding: 1rem 0; flex: 1; }
+  .slider-value {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.8rem; font-weight: 800;
+    color: var(--blue); margin-bottom: 0.5rem;
+    letter-spacing: -0.04em;
+  }
+  .slider-label { font-size: 0.85rem; color: var(--muted); margin-bottom: 1.5rem; }
+  input[type="range"] {
+    width: 100%; -webkit-appearance: none;
+    height: 6px; border-radius: 999px;
+    background: linear-gradient(90deg, var(--blue) var(--pct, 40%), var(--s3) var(--pct, 40%));
+    outline: none; cursor: pointer; margin-bottom: 0.75rem;
+    transition: background 0.1s;
+  }
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 20px; height: 20px; border-radius: 50%;
+    background: var(--blue); border: 3px solid var(--card-bg);
+    box-shadow: 0 2px 8px rgba(76,124,255,0.5);
+    cursor: pointer;
+  }
+  .range-ticks {
+    display: flex; justify-content: space-between;
+    font-size: 0.72rem; color: var(--muted); font-weight: 600;
+  }
+
+  /* BOTTOM NAV */
+  .wizard-nav {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-top: 2rem; padding-top: 1.5rem;
+    border-top: 1px solid var(--border);
+    transition: border-color 0.3s;
+  }
+  .btn-prev, .btn-next {
+    padding: 0.7rem 1.6rem;
+    border-radius: 8px;
+    font-family: inherit; font-size: 0.88rem; font-weight: 700;
+    cursor: pointer; border: none;
+    transition: all 0.2s;
+  }
+  .btn-prev {
+    background: var(--s2); color: var(--heading);
+    border: 1px solid var(--border2);
+  }
+  .btn-prev:hover { border-color: var(--blue); }
+  .btn-prev:disabled { opacity: 0.35; cursor: not-allowed; }
+  .btn-next {
+    background: var(--blue); color: #fff;
+    box-shadow: 0 4px 16px rgba(76,124,255,0.3);
+  }
+  .btn-next:hover { background: var(--blue-hover); transform: translateY(-2px); }
+
+  .step-counter {
+    font-size: 0.78rem; color: var(--muted); font-weight: 600;
+  }
+
+  /* RESULTS */
+  #step-result .step-title { margin-bottom: 1.2rem; }
+  .results-summary {
+    background: var(--blue-dim);
+    border: 1px solid var(--blue-glow);
+    border-radius: 12px;
+    padding: 1.2rem 1.5rem;
+    font-size: 0.85rem; color: var(--text);
+    margin-bottom: 2rem;
+    line-height: 1.7;
+    transition: background 0.3s, border-color 0.3s, color 0.3s;
+  }
+  .results-summary strong { color: var(--heading); }
+
+  .results-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 1.2rem;
+    margin-bottom: 2rem;
+  }
+  .result-card {
+    background: var(--s2);
+    border: 1.5px solid var(--border2);
+    border-radius: 14px;
+    padding: 1.4rem;
+    display: flex; flex-direction: column; gap: 0.6rem;
+    transition: all 0.2s;
+  }
+  .result-card:hover { border-color: var(--blue); transform: translateY(-3px); }
+  .rc-match {
+    font-size: 0.7rem; font-weight: 700; letter-spacing: 0.08em;
+    text-transform: uppercase; color: var(--green);
+    background: rgba(16,185,129,0.12); padding: 2px 8px; border-radius: 4px;
+    width: fit-content;
+  }
+  .rc-match.partial { color: var(--gold); background: rgba(245,158,11,0.12); }
+  .rc-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem; font-weight: 800; color: var(--heading);
+    transition: color 0.3s;
+  }
+  .rc-specs { font-size: 0.78rem; color: var(--muted); line-height: 1.6; transition: color 0.3s; }
+  .rc-price { font-size: 1.3rem; font-weight: 800; color: var(--blue); letter-spacing: -0.02em; }
+  .rc-wa {
+    display: flex; align-items: center; gap: 6px;
+    background: rgba(37,211,102,0.12);
+    color: #1ebe5d;
+    border: 1px solid rgba(37,211,102,0.3);
+    padding: 0.5rem 0.9rem;
+    border-radius: 7px;
+    font-size: 0.8rem; font-weight: 700;
+    text-decoration: none;
+    transition: all 0.2s;
+    width: fit-content; margin-top: 0.25rem;
+  }
+  .rc-wa:hover { background: rgba(37,211,102,0.22); transform: translateY(-2px); }
+
+  .no-results {
+    text-align: center; padding: 3rem 1rem;
+    color: var(--muted);
+  }
+  .no-results-icon { font-size: 3rem; margin-bottom: 1rem; }
+
+  .btn-restart {
+    background: var(--s2); color: var(--heading);
+    border: 1.5px solid var(--border2);
+    padding: 0.7rem 1.5rem; border-radius: 8px;
+    font-family: inherit; font-size: 0.88rem; font-weight: 700;
+    cursor: pointer; transition: all 0.2s;
+  }
+  .btn-restart:hover { border-color: var(--blue); }
+
+  .wa-fab {
+    position: fixed; bottom: 2rem; right: 2rem;
+    width: 54px; height: 54px;
+    background: #25d366; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 8px 30px rgba(37,211,102,0.4);
+    z-index: 999; text-decoration: none; color: #fff;
+    transition: transform 0.25s, box-shadow 0.25s;
+    animation: waPulse 2.5s ease-in-out infinite;
+  }
+  .wa-fab:hover { transform: scale(1.1); animation: none; }
+  @keyframes waPulse {
+    0%,100% { box-shadow: 0 8px 30px rgba(37,211,102,0.4); }
+    50% { box-shadow: 0 8px 50px rgba(37,211,102,0.65); }
+  }
+
+  @media (max-width: 600px) {
+    .wizard-card { padding: 1.5rem; }
+    nav { padding: 1rem; }
+    .hero-title { font-size: 2rem; }
+    .option-grid { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+<script src="laptops-data.js"></script>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="laptophub.html">Laptop<span>HUB</span></a>
+  <div class="nav-actions">
+    <a class="btn-nav" href="custom-laptop.html" style="color:var(--blue);font-weight:700">🛠️ Create Laptop</a>
+    <button class="theme-btn" onclick="toggleTheme()">
+      <span id="themeIcon">☀️</span>
+      <span id="themeLabel">Light</span>
+    </button>
+    <a class="btn-nav" href="laptophub.html">← Back to Store</a>
+  </div>
+</nav>
+
+<div class="hero">
+  <p class="hero-pre">🔍 Personalised Laptop Finder</p>
+  <h1 class="hero-title">Consult Me</h1>
+  <p class="hero-sub">Tell us what you need and we'll match you with the perfect laptop from our inventory.</p>
+</div>
+
+<div class="wizard-wrap">
+  <!-- PROGRESS -->
+  <div class="progress-bar-outer">
+    <div class="progress-bar-inner" id="progressBar" style="width:16.66%"></div>
+  </div>
+  <div class="progress-labels">
+    <span class="step-label active" id="lbl-1">Use Case</span>
+    <span class="step-label" id="lbl-2">Processor</span>
+    <span class="step-label" id="lbl-3">RAM</span>
+    <span class="step-label" id="lbl-4">Storage</span>
+    <span class="step-label" id="lbl-5">GPU</span>
+    <span class="step-label" id="lbl-6">Budget</span>
+  </div>
+
+  <div class="wizard-card">
+
+    <!-- STEP 1 — USE CASE -->
+    <div class="step-panel active" id="step-1">
+      <div class="step-title">What will you use it for?</div>
+      <div class="step-subtitle">Pick the primary use case — you can change this later.</div>
+      <div class="option-grid">
+        <div class="option-tile" onclick="select(this,'usecase','office')" data-val="office">
+          <div class="tile-icon">💼</div>
+          <div class="tile-label">Business / Office</div>
+          <div class="tile-desc">Emails, documents, video calls, meetings</div>
+        </div>
+        <div class="option-tile" onclick="select(this,'usecase','student')" data-val="student">
+          <div class="tile-icon">🎓</div>
+          <div class="tile-label">Student</div>
+          <div class="tile-desc">Assignments, research, lightweight tasks</div>
+        </div>
+        <div class="option-tile" onclick="select(this,'usecase','gaming')" data-val="gaming">
+          <div class="tile-icon">🎮</div>
+          <div class="tile-label">Gaming</div>
+          <div class="tile-desc">High-FPS gaming, dedicated GPU required</div>
+        </div>
+        <div class="option-tile" onclick="select(this,'usecase','creator')" data-val="creator">
+          <div class="tile-icon">🎨</div>
+          <div class="tile-label">Creative / Design</div>
+          <div class="tile-desc">Video editing, Photoshop, illustration</div>
+        </div>
+        <div class="option-tile" onclick="select(this,'usecase','programming')" data-val="programming">
+          <div class="tile-icon">💻</div>
+          <div class="tile-label">Programming / Dev</div>
+          <div class="tile-desc">Coding, IDEs, VMs, containers, builds</div>
+        </div>
+        <div class="option-tile" onclick="select(this,'usecase','any')" data-val="any">
+          <div class="tile-icon">⚡</div>
+          <div class="tile-label">General / Anything</div>
+          <div class="tile-desc">All-rounder for everyday tasks</div>
+        </div>
+      </div>
+      <div class="wizard-nav">
+        <button class="btn-prev" disabled>← Back</button>
+        <span class="step-counter" id="ctr-1">Step 1 of 6</span>
+        <button class="btn-next" onclick="goNext(1)">Next →</button>
+      </div>
+    </div>
+
+    <!-- STEP 2 — PROCESSOR -->
+    <div class="step-panel" id="step-2">
+      <div class="step-title">Preferred Processor</div>
+      <div class="step-subtitle">Choose your CPU brand or family.</div>
+      <div class="option-grid">
+        <div class="option-tile" onclick="select(this,'cpu','intel_i5')" data-val="intel_i5">
+          <div class="tile-icon">🔵</div>
+          <div class="tile-label">Intel Core i5</div>
+          <div class="tile-desc">12th/13th Gen — great all-round performance</div>
+        </div>
+        <div class="option-tile" onclick="select(this,'cpu','intel_i7')" data-val="intel_i7">
+          <div class="tile-icon">🔵</div>
+          <div class="tile-label">Intel Core i7</div>
+          <div class="tile-desc">High performance, excellent multitasking</div>
+        </div>
+        <div class="option-tile" onclick="select(this,'cpu','intel_ultra')" data-val="intel_ultra">
+          <div class="tile-icon">🔵</div>
+          <div class="tile-label">Intel Core Ultra</div>
+          <div class="tile-desc">Latest AI-enhanced, ultra-thin laptops</div>
+        </div>
+        <div class="option-tile" onclick="select(this,'cpu','amd')" data-val="amd">
+          <div class="tile-icon">🔴</div>
+          <div class="tile-label">AMD Ryzen</div>
+          <div class="tile-desc">Ryzen 5/7/9 — strong value & efficiency</div>
+        </div>
+        <div class="option-tile" onclick="select(this,'cpu','apple')" data-val="apple">
+          <div class="tile-icon">🍎</div>
+          <div class="tile-label">Apple M2</div>
+          <div class="tile-desc">Incredible power efficiency, macOS only</div>
+        </div>
+        <div class="option-tile" onclick="select(this,'cpu','any')" data-val="any">
+          <div class="tile-icon">🎯</div>
+          <div class="tile-label">No Preference</div>
+          <div class="tile-desc">Show me everything</div>
+        </div>
+      </div>
+      <div class="wizard-nav">
+        <button class="btn-prev" onclick="goPrev(2)">← Back</button>
+        <span class="step-counter">Step 2 of 6</span>
+        <button class="btn-next" onclick="goNext(2)">Next →</button>
+      </div>
+    </div>
+
+    <!-- STEP 3 — RAM -->
+    <div class="step-panel" id="step-3">
+      <div class="step-title">How Much RAM?</div>
+      <div class="step-subtitle">More RAM = smoother multitasking and future-proofing.</div>
+      <div class="slider-wrap">
+        <div class="slider-value" id="ramVal">16 GB</div>
+        <div class="slider-label">Minimum RAM needed</div>
+        <input type="range" id="ramSlider" min="0" max="3" value="1" step="1"
+          oninput="updateRamSlider(this.value)">
+        <div class="range-ticks">
+          <span>8 GB</span><span>16 GB</span><span>32 GB</span><span>64 GB</span>
+        </div>
+        <br><br>
+        <div style="font-size:0.84rem;color:var(--muted);line-height:1.8">
+          <strong style="color:var(--heading)">8 GB</strong> — Student / basic office use<br>
+          <strong style="color:var(--heading)">16 GB</strong> — Most professionals and developers<br>
+          <strong style="color:var(--heading)">32 GB</strong> — Heavy multitasking, VMs, creative work<br>
+          <strong style="color:var(--heading)">64 GB</strong> — Workstation-level performance
+        </div>
+      </div>
+      <div class="wizard-nav">
+        <button class="btn-prev" onclick="goPrev(3)">← Back</button>
+        <span class="step-counter">Step 3 of 6</span>
+        <button class="btn-next" onclick="goNext(3)">Next →</button>
+      </div>
+    </div>
+
+    <!-- STEP 4 — STORAGE -->
+    <div class="step-panel" id="step-4">
+      <div class="step-title">Storage Capacity</div>
+      <div class="step-subtitle">How much local storage do you need?</div>
+      <div class="option-grid">
+        <div class="option-tile" onclick="select(this,'storage','256')" data-val="256">
+          <div class="tile-icon">💾</div>
+          <div class="tile-label">256 GB SSD</div>
+          <div class="tile-desc">Lightweight, fast boot, cloud-reliant</div>
+        </div>
+        <div class="option-tile" onclick="select(this,'storage','512')" data-val="512">
+          <div class="tile-icon">💾</div>
+          <div class="tile-label">512 GB SSD</div>
+          <div class="tile-desc">Comfortable for most users — our top pick</div>
+        </div>
+        <div class="option-tile" onclick="select(this,'storage','1000')" data-val="1000">
+          <div class="tile-icon">🗄️</div>
+          <div class="tile-label">1 TB SSD</div>
+          <div class="tile-desc">Large projects, games, media storage</div>
+        </div>
+        <div class="option-tile" onclick="select(this,'storage','2000')" data-val="2000">
+          <div class="tile-icon">🗄️</div>
+          <div class="tile-label">2 TB SSD</div>
+          <div class="tile-desc">Professional-grade local storage</div>
+        </div>
+      </div>
+      <div class="wizard-nav">
+        <button class="btn-prev" onclick="goPrev(4)">← Back</button>
+        <span class="step-counter">Step 4 of 6</span>
+        <button class="btn-next" onclick="goNext(4)">Next →</button>
+      </div>
+    </div>
+
+    <!-- STEP 5 — GPU -->
+    <div class="step-panel" id="step-5">
+      <div class="step-title">Graphics / GPU</div>
+      <div class="step-subtitle">Do you need a dedicated GPU for gaming or creative work?</div>
+      <div class="option-grid">
+        <div class="option-tile" onclick="select(this,'gpu','integrated')" data-val="integrated">
+          <div class="tile-icon">🖥️</div>
+          <div class="tile-label">Integrated Only</div>
+          <div class="tile-desc">Intel Iris Xe / AMD Radeon — great for office & dev</div>
+        </div>
+        <div class="option-tile" onclick="select(this,'gpu','any_discrete')" data-val="any_discrete">
+          <div class="tile-icon">🎮</div>
+          <div class="tile-label">Any Dedicated GPU</div>
+          <div class="tile-desc">RTX / GTX / Radeon discrete graphics</div>
+        </div>
+        <div class="option-tile" onclick="select(this,'gpu','rtx')" data-val="rtx">
+          <div class="tile-icon">🚀</div>
+          <div class="tile-label">NVIDIA RTX</div>
+          <div class="tile-desc">Ray tracing, DLSS, professional rendering</div>
+        </div>
+        <div class="option-tile" onclick="select(this,'gpu','apple_gpu')" data-val="apple_gpu">
+          <div class="tile-icon">🍎</div>
+          <div class="tile-label">Apple GPU (M-Series)</div>
+          <div class="tile-desc">Unified memory, incredible efficiency on macOS</div>
+        </div>
+        <div class="option-tile" onclick="select(this,'gpu','no_pref')" data-val="no_pref">
+          <div class="tile-icon">✅</div>
+          <div class="tile-label">No Preference</div>
+          <div class="tile-desc">Any GPU is fine for my needs</div>
+        </div>
+      </div>
+      <div class="wizard-nav">
+        <button class="btn-prev" onclick="goPrev(5)">← Back</button>
+        <span class="step-counter">Step 5 of 6</span>
+        <button class="btn-next" onclick="goNext(5)">Next →</button>
+      </div>
+    </div>
+
+    <!-- STEP 6 — BUDGET -->
+    <div class="step-panel" id="step-6">
+      <div class="step-title">Your Budget</div>
+      <div class="step-subtitle">Slide to set your maximum budget in PKR.</div>
+      <div class="slider-wrap">
+        <div class="slider-value" id="budgetVal">PKR 130,000</div>
+        <div class="slider-label">Maximum budget</div>
+        <input type="range" id="budgetSlider" min="35000" max="800000" value="130000" step="5000"
+          oninput="updateBudgetSlider(this.value)">
+        <div class="range-ticks">
+          <span>35K</span><span>100K</span><span>250K</span><span>500K</span><span>800K</span>
+        </div>
+        <br><br>
+        <div style="font-size:0.84rem;color:var(--muted);line-height:1.8">
+          <strong style="color:var(--heading)">Under 100K</strong> — Entry-level business/student<br>
+          <strong style="color:var(--heading)">100K – 180K</strong> — Mid-range professionals<br>
+          <strong style="color:var(--heading)">180K – 300K</strong> — Premium business ultrabooks<br>
+          <strong style="color:var(--heading)">300K+</strong> — MacBook, Spectre, Surface flagship tier
+        </div>
+      </div>
+      <div class="wizard-nav">
+        <button class="btn-prev" onclick="goPrev(6)">← Back</button>
+        <span class="step-counter">Step 6 of 6</span>
+        <button class="btn-next" onclick="showResults()" style="background:#10b981;box-shadow:0 4px 16px rgba(16,185,129,0.35);">✨ Find My Laptop</button>
+      </div>
+    </div>
+
+    <!-- STEP RESULT -->
+    <div class="step-panel" id="step-result">
+      <div class="step-title">🎯 Your Matches</div>
+      <div class="results-summary" id="resultsSummary"></div>
+      <div class="results-grid" id="resultsGrid"></div>
+      <div style="display:flex;gap:1rem;flex-wrap:wrap;align-items:center">
+        <button class="btn-restart" onclick="restart()">🔄 Start Over</button>
+        <a href="https://wa.me/923261398594?text=Hi%21%20I%20used%20the%20Consult%20Me%20tool%20and%20need%20help%20choosing%20a%20laptop." target="_blank" style="display:inline-flex;align-items:center;gap:7px;background:rgba(37,211,102,0.12);color:#1ebe5d;border:1.5px solid rgba(37,211,102,0.3);padding:0.65rem 1.2rem;border-radius:8px;font-family:inherit;font-size:0.85rem;font-weight:700;text-decoration:none;transition:all 0.2s">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          Ask us on WhatsApp
+        </a>
+      </div>
+    </div>
+
+  </div><!-- /wizard-card -->
+</div><!-- /wizard-wrap -->
+
+<!-- WhatsApp FAB -->
+<a class="wa-fab" href="https://wa.me/923261398594?text=Hi%2C%20I%20need%20help%20choosing%20a%20laptop!" target="_blank" title="Chat on WhatsApp">
+  <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+</a>
+
+<script>
+  // ── THEME ──────────────────────────────────────────────────────────────────
+  function initTheme() {
+    const t = localStorage.getItem('laptophub_theme') ||
+      (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+    applyTheme(t);
+  }
+  function applyTheme(t) {
+    document.documentElement.setAttribute('data-theme', t);
+    localStorage.setItem('laptophub_theme', t);
+    document.getElementById('themeIcon').textContent = t === 'light' ? '🌙' : '☀️';
+    document.getElementById('themeLabel').textContent = t === 'light' ? 'Dark' : 'Light';
+  }
+  function toggleTheme() {
+    const cur = document.documentElement.getAttribute('data-theme') || 'dark';
+    applyTheme(cur === 'dark' ? 'light' : 'dark');
+  }
+  initTheme();
+
+  // ── STATE ──────────────────────────────────────────────────────────────────
+  const answers = { usecase: null, cpu: null, ram: 16, storage: 512, gpu: null, budget: 130000 };
+
+  // ── OPTION TILES ───────────────────────────────────────────────────────────
+  function select(el, key, val) {
+    el.closest('.option-grid').querySelectorAll('.option-tile').forEach(t => t.classList.remove('selected'));
+    el.classList.add('selected');
+    answers[key] = val;
+  }
+
+  // ── SLIDERS ────────────────────────────────────────────────────────────────
+  const RAM_VALS = [8, 16, 32, 64];
+  function updateRamSlider(idx) {
+    answers.ram = RAM_VALS[+idx];
+    document.getElementById('ramVal').textContent = RAM_VALS[+idx] + ' GB';
+    updateSliderBg(document.getElementById('ramSlider'), +idx / 3);
+  }
+  function updateBudgetSlider(val) {
+    answers.budget = +val;
+    document.getElementById('budgetVal').textContent = 'PKR ' + Number(val).toLocaleString('en-PK');
+    const pct = (val - 50000) / (500000 - 50000);
+    updateSliderBg(document.getElementById('budgetSlider'), pct);
+  }
+  function updateSliderBg(el, pct) {
+    el.style.setProperty('--pct', (pct * 100).toFixed(1) + '%');
+  }
+  // Init sliders
+  updateRamSlider(1);
+  updateBudgetSlider(130000);
+
+  // ── NAVIGATION ─────────────────────────────────────────────────────────────
+  let currentStep = 1;
+  const TOTAL = 6;
+  const PCTS = ['16.66%','33.33%','50%','66.66%','83.33%','100%'];
+  const STEP_KEYS = [null,'usecase','cpu','ram','storage','gpu','budget'];
+
+  function showStep(n) {
+    document.querySelectorAll('.step-panel').forEach(p => p.classList.remove('active'));
+    document.getElementById('step-' + n).classList.add('active');
+    document.getElementById('progressBar').style.width = PCTS[n - 1];
+    for (let i = 1; i <= TOTAL; i++) {
+      const lbl = document.getElementById('lbl-' + i);
+      if (lbl) lbl.classList.toggle('active', i === n);
+    }
+    currentStep = n;
+  }
+
+  function goNext(from) {
+    const key = STEP_KEYS[from];
+    if (key && key !== 'ram' && key !== 'budget' && !answers[key]) {
+      flash(from); return;
+    }
+    if (from < TOTAL) showStep(from + 1);
+  }
+
+  function goPrev(from) {
+    if (from > 1) showStep(from - 1);
+  }
+
+  function flash(step) {
+    const card = document.getElementById('step-' + step);
+    card.style.outline = '2px solid var(--blue)';
+    setTimeout(() => card.style.outline = '', 600);
+  }
+
+    // ── LAPTOP DATABASE (Connected to all 69 models from laptops-data.js) ────────
+  let inventory = [];
+  if (typeof LAPTOPS_INVENTORY !== 'undefined') {
+    inventory = LAPTOPS_INVENTORY.map(lap => ({
+      name: lap.name,
+      brand: lap.brand,
+      cpu: lap.cpu,
+      cpuTags: [lap.cpuTag, 'any', lap.brand],
+      ram: lap.ram,
+      storage: lap.storage,
+      gpu: lap.gpuType,
+      gpuTags: [lap.gpuType, (lap.gpuType === 'rtx' || lap.gpuType === 'discrete') ? 'any_discrete' : 'integrated', 'no_pref'],
+      price: lap.price,
+      useCaseTags: [...lap.useCases, 'any'],
+      img: lap.img,
+      highlight: `${lap.category} · ${lap.display} · ${lap.gpu}`
+    }));
+  } else {
+    // Fallback if standalone
+    inventory = [
+      { name: 'Dell Latitude 7430', cpu: 'Intel Core i7-1265U', cpuTags: ['intel_i7','any'], ram: 16, storage: 512, gpu: 'integrated', gpuTags: ['integrated','no_pref'], price: 154000, useCaseTags: ['office','programming','any'], img: 'images/dell-latitude-7430.png', highlight: 'Enterprise Ultrabook · 14" FHD IPS' }
+    ];
+  }
+// ── RESULTS ENGINE ─────────────────────────────────────────────────────────
+  function showResults() {
+    document.querySelectorAll('.step-panel').forEach(p => p.classList.remove('active'));
+    document.getElementById('step-result').classList.add('active');
+    document.getElementById('progressBar').style.width = '100%';
+
+    const { usecase, cpu, ram, storage, gpu, budget } = answers;
+    const grid = document.getElementById('resultsGrid');
+    grid.innerHTML = '';
+
+    // Score each laptop
+    const scored = inventory.map(lap => {
+      let score = 0;
+      let exact = true;
+
+      // Budget
+      if (lap.price <= budget) score += 3; else { exact = false; }
+
+      // Use case
+      if (!usecase || usecase === 'any' || lap.useCaseTags.includes(usecase)) score += 2;
+      else exact = false;
+
+      // CPU
+      if (!cpu || cpu === 'any' || lap.cpuTags.includes(cpu)) score += 2;
+      else exact = false;
+
+      // RAM (16GB is baseline for all inventory; flag if user wants ≤16)
+      if (ram <= lap.ram) score += 1;
+      else exact = false;
+
+      // Storage
+      if (storage <= lap.storage) score += 1;
+      else exact = false;
+
+      // GPU
+      if (!gpu || gpu === 'no_pref' || lap.gpuTags.includes(gpu)) score += 1;
+      else exact = false;
+
+      return { ...lap, score, exact };
+    });
+
+    scored.sort((a, b) => b.score - a.score);
+
+    // Summary
+    const usecaseLabel = { office:'Business/Office', student:'Student', gaming:'Gaming', creator:'Creative/Design', programming:'Programming/Dev', any:'General' };
+    const cpuLabel = { intel_i5:'Intel i5', intel_i7:'Intel i7', intel_ultra:'Intel Ultra', amd:'AMD Ryzen', apple:'Apple M-Series', any:'Any CPU' };
+    const gpuLabel = { integrated:'Integrated GPU', any_discrete:'Dedicated GPU', rtx:'NVIDIA RTX', apple_gpu:'Apple GPU', no_pref:'Any GPU' };
+
+    document.getElementById('resultsSummary').innerHTML =
+      `🎯 Searching for: <strong>${usecaseLabel[usecase]||'General'}</strong> · 
+       <strong>${cpuLabel[cpu]||'Any CPU'}</strong> · 
+       <strong>≥${ram} GB RAM</strong> · 
+       <strong>≥${storage} GB Storage</strong> · 
+       <strong>${gpuLabel[gpu]||'Any GPU'}</strong> · 
+       Budget: <strong>PKR ${Number(budget).toLocaleString('en-PK')}</strong>`;
+
+    const top = scored.filter(l => l.score >= 4);
+    const show = top.length ? top : scored.slice(0, 3);
+
+    if (show.length === 0) {
+      grid.innerHTML = `<div class="no-results"><div class="no-results-icon">😔</div><p>No exact matches — try raising your budget or relaxing your specs.</p></div>`;
+      return;
+    }
+
+    show.forEach(lap => {
+      const waMsg = encodeURIComponent(`Hi! I used the Consult Me tool on LaptopHUB and I'm interested in the ${lap.name}. My budget is PKR ${Number(budget).toLocaleString()}. Please assist!`);
+      grid.innerHTML += `
+        <div class="result-card">
+          <span class="rc-match ${lap.exact ? '' : 'partial'}">${lap.exact ? '✓ Best Match' : 'Good Match'}</span>
+          <img src="${lap.img}" alt="${lap.name}" style="width:100%;height:140px;object-fit:contain;background:var(--s2);border-radius:10px;padding:10px;margin:0.25rem 0">
+          <div class="rc-name">${lap.name}</div>
+          <div class="rc-specs">
+            ${lap.cpu}<br>
+            ${lap.ram} GB RAM · ${lap.storage >= 1000 ? (lap.storage/1000)+'TB' : lap.storage+'GB'} SSD<br>
+            ${lap.highlight}
+          </div>
+          <div class="rc-price">PKR ${Number(lap.price).toLocaleString('en-PK')}</div>
+          <a class="rc-wa" href="https://wa.me/923261398594?text=${waMsg}" target="_blank">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            Enquire on WhatsApp
+          </a>
+        </div>`;
+    });
+  }
+
+  function restart() {
+    answers.usecase = null; answers.cpu = null; answers.ram = 16;
+    answers.storage = 512; answers.gpu = null; answers.budget = 130000;
+    document.querySelectorAll('.option-tile').forEach(t => t.classList.remove('selected'));
+    updateRamSlider(1);
+    updateBudgetSlider(130000);
+    showStep(1);
+  }
+</script>
+</body>
+</html>

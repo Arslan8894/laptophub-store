@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 320" width="100%" height="100%">
+  <defs>
+    <linearGradient id="tp_lid" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#242629"/>
+      <stop offset="60%" stop-color="#18191c"/>
+      <stop offset="100%" stop-color="#121315"/>
+    </linearGradient>
+    <linearGradient id="tp_screen" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0f1118"/>
+      <stop offset="100%" stop-color="#05070a"/>
+    </linearGradient>
+    <linearGradient id="tp_base" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#222427"/>
+      <stop offset="100%" stop-color="#141517"/>
+    </linearGradient>
+    <filter id="tp_drop" x="-10%" y="-10%" width="120%" height="130%">
+      <feDropShadow dx="0" dy="16" stdDeviation="14" flood-color="#000" flood-opacity="0.5"/>
+    </filter>
+  </defs>
+
+  <g filter="url(#tp_drop)">
+    <!-- Base bottom plate -->
+    <path d="M 40 240 L 460 240 L 475 258 C 475 264 470 268 462 268 L 38 268 C 30 268 25 264 25 258 Z" fill="url(#tp_base)"/>
+    <!-- Base top keyboard deck -->
+    <path d="M 50 200 L 450 200 L 465 240 L 35 240 Z" fill="#1b1c20" stroke="#33373d" stroke-width="1"/>
+    
+    <!-- Keyboard & TrackPoint -->
+    <rect x="80" y="206" width="340" height="24" rx="3" fill="#111215" stroke="#25272c"/>
+    <!-- Red Trackpoint dot -->
+    <circle cx="250" cy="218" r="3.5" fill="#e11d48"/>
+    <!-- Trackpad & red accent buttons -->
+    <rect x="220" y="244" width="60" height="18" rx="2" fill="#17181c" stroke="#2b2d33"/>
+    <line x1="228" y1="243" x2="272" y2="243" stroke="#e11d48" stroke-width="1.8"/>
+
+    <!-- Screen Lid (open at perspective) -->
+    <path d="M 68 36 L 432 36 C 438 36 443 41 443 47 L 450 200 L 50 200 L 57 47 C 57 41 62 36 68 36 Z" fill="url(#tp_lid)" stroke="#383c44" stroke-width="1.5"/>
+    
+    <!-- Screen Bezel & Panel -->
+    <rect x="74" y="48" width="352" height="142" rx="4" fill="url(#tp_screen)"/>
+    
+    <!-- ThinkPad wallpaper code / display glow -->
+    <circle cx="250" cy="119" r="45" fill="none" stroke="#e11d48" stroke-width="1.5" opacity="0.35"/>
+    <text x="250" y="115" font-family="'Plus Jakarta Sans', system-ui, sans-serif" font-weight="800" font-size="14" fill="#ffffff" text-anchor="middle" letter-spacing="1">ThinkPad</text>
+    <text x="250" y="132" font-family="monospace" font-size="9" fill="#94a3b8" text-anchor="middle">MIL-STD 810H TOUGH</text>
+
+    <!-- ThinkPad Corner Logo with glowing red dot on 'i' -->
+    <text x="408" y="190" font-family="sans-serif" font-weight="700" font-style="italic" font-size="9" fill="#9ca3af">ThinkPad</text>
+    <circle cx="414" cy="183.5" r="1.5" fill="#ef4444"/>
+    
+    <!-- Webcam -->
+    <circle cx="250" cy="42" r="2" fill="#38bdf8"/>
+  </g>
+</svg>

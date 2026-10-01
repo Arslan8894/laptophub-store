@@ -1,0 +1,1819 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Create Your Laptop — Custom Spec Builder | LaptopHUB</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Syne:wght@700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #07080d;
+    --s1: #0d0f17;
+    --s2: #141724;
+    --s3: #1b1f30;
+    --card: #10131f;
+    --card-border: rgba(255, 255, 255, 0.08);
+    --card-border-hover: rgba(76, 124, 255, 0.5);
+    --text: #e2e5f3;
+    --heading: #ffffff;
+    --muted: #737894;
+    --subtle: #989eb8;
+    --blue: #4c7cff;
+    --blue-hover: #3a6bf5;
+    --blue-dim: rgba(76, 124, 255, 0.12);
+    --blue-glow: rgba(76, 124, 255, 0.28);
+    --green: #10b981;
+    --green-dim: rgba(16, 185, 129, 0.12);
+    --gold: #f59e0b;
+    --gold-dim: rgba(245, 158, 11, 0.12);
+    --purple: #a855f7;
+    --border: rgba(255, 255, 255, 0.07);
+    --border2: rgba(255, 255, 255, 0.14);
+    --nav-bg: rgba(7, 8, 13, 0.94);
+    --shadow-lg: 0 20px 45px rgba(0, 0, 0, 0.6);
+  }
+
+  [data-theme="light"] {
+    --bg: #f8fafc;
+    --s1: #ffffff;
+    --s2: #f1f5f9;
+    --s3: #e2e8f0;
+    --card: #ffffff;
+    --card-border: rgba(0, 0, 0, 0.08);
+    --card-border-hover: rgba(37, 99, 235, 0.4);
+    --text: #334155;
+    --heading: #0f172a;
+    --muted: #64748b;
+    --subtle: #475569;
+    --blue: #2563eb;
+    --blue-hover: #1d4ed8;
+    --blue-dim: rgba(37, 99, 235, 0.08);
+    --blue-glow: rgba(37, 99, 235, 0.18);
+    --green: #059669;
+    --green-dim: rgba(5, 150, 105, 0.08);
+    --gold: #d97706;
+    --gold-dim: rgba(217, 119, 6, 0.08);
+    --purple: #9333ea;
+    --border: rgba(0, 0, 0, 0.08);
+    --border2: rgba(0, 0, 0, 0.14);
+    --nav-bg: rgba(255, 255, 255, 0.95);
+    --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.08);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow-x: hidden;
+    transition: background 0.3s ease, color 0.3s ease;
+  }
+
+  /* TOP DEMO NOTIFICATION BAR */
+  .top-banner {
+    background: linear-gradient(90deg, #1e3a8a, #3b82f6, #06b6d4);
+    color: #fff;
+    padding: 0.45rem 1rem;
+    font-size: 0.78rem;
+    font-weight: 600;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    z-index: 101;
+  }
+  .top-banner a {
+    color: #fff;
+    text-decoration: underline;
+    margin-left: 0.5rem;
+  }
+
+  /* NAVIGATION */
+  nav {
+    position: sticky; top: 0;
+    background: var(--nav-bg);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+    padding: 0.85rem 2rem;
+    display: flex; align-items: center; justify-content: space-between;
+    z-index: 100;
+    transition: background 0.3s, border-color 0.3s;
+  }
+  .logo-mark {
+    display: flex; align-items: center; gap: 0.75rem;
+    text-decoration: none;
+  }
+  .logo-icon {
+    width: 38px; height: 38px;
+    background: linear-gradient(135deg, var(--blue), #60a5fa);
+    border-radius: 9px;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Syne', sans-serif;
+    font-weight: 800; font-size: 1.05rem;
+    color: #fff;
+    box-shadow: 0 0 20px var(--blue-glow);
+  }
+  .logo-text {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.35rem; font-weight: 800;
+    letter-spacing: -0.02em;
+    color: var(--heading);
+  }
+  .logo-text span { color: var(--blue); }
+
+  .nav-links {
+    display: flex; list-style: none; gap: 1.5rem; align-items: center;
+  }
+  .nav-links a {
+    color: var(--muted); text-decoration: none;
+    font-size: 0.86rem; font-weight: 600;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover, .nav-links a.active {
+    color: var(--heading);
+  }
+  .nav-links a.active { color: var(--blue); }
+
+  .nav-right {
+    display: flex; align-items: center; gap: 10px;
+  }
+  .theme-toggle-btn {
+    background: var(--s2);
+    border: 1px solid var(--border2);
+    color: var(--heading);
+    padding: 0.45rem 0.85rem;
+    border-radius: 20px;
+    font-family: inherit; font-size: 0.8rem; font-weight: 600;
+    cursor: pointer;
+    display: flex; align-items: center; gap: 6px;
+    transition: all 0.2s;
+  }
+  .theme-toggle-btn:hover { border-color: var(--blue); }
+
+  .wa-quick-btn {
+    background: #25d366;
+    color: #fff;
+    border: none;
+    padding: 0.5rem 1.1rem;
+    border-radius: 8px;
+    font-family: inherit; font-size: 0.82rem; font-weight: 700;
+    cursor: pointer; text-decoration: none;
+    display: flex; align-items: center; gap: 6px;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .wa-quick-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4);
+  }
+
+  /* HERO HEADER */
+  .config-hero {
+    text-align: center;
+    padding: 3.5rem 1.5rem 2.5rem;
+    background: radial-gradient(ellipse 70% 50% at 50% 20%, rgba(76, 124, 255, 0.12) 0%, transparent 70%);
+    border-bottom: 1px solid var(--border);
+    position: relative;
+  }
+  .hero-pill {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: var(--s2);
+    border: 1px solid var(--border2);
+    padding: 0.35rem 1rem;
+    border-radius: 100px;
+    font-size: 0.76rem; font-weight: 700;
+    color: var(--blue);
+    text-transform: uppercase; letter-spacing: 0.08em;
+    margin-bottom: 1rem;
+  }
+  .config-hero h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(2.2rem, 5vw, 3.8rem);
+    font-weight: 800;
+    line-height: 1.05;
+    letter-spacing: -0.03em;
+    color: var(--heading);
+    margin-bottom: 0.9rem;
+  }
+  .config-hero h1 span {
+    background: linear-gradient(135deg, #60a5fa, #a855f7);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .config-hero p {
+    font-size: 1.02rem;
+    color: var(--muted);
+    max-width: 640px;
+    margin: 0 auto 1.5rem;
+    line-height: 1.6;
+  }
+
+  /* MAIN BUILDER WORKSPACE (SPLIT LAYOUT) */
+  .builder-workspace {
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 2.5rem 2rem 5rem;
+    display: grid;
+    grid-template-columns: 1fr 380px;
+    gap: 2.5rem;
+    align-items: start;
+    width: 100%;
+  }
+
+  /* LEFT CONFIGURATION PANELS */
+  .config-flow {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  .step-card {
+    background: var(--card);
+    border: 1px solid var(--card-border);
+    border-radius: 16px;
+    padding: 1.8rem;
+    box-shadow: 0 4px 25px rgba(0,0,0,0.2);
+    transition: border-color 0.2s, box-shadow 0.2s;
+    position: relative;
+  }
+  .step-card:hover {
+    border-color: var(--card-border-hover);
+  }
+
+  .step-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 1.25rem;
+    padding-bottom: 0.9rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .step-number {
+    width: 32px; height: 32px;
+    background: var(--blue-dim);
+    color: var(--blue);
+    border: 1px solid var(--blue);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 700; font-size: 0.88rem;
+    flex-shrink: 0;
+  }
+  .step-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--heading);
+  }
+  .step-desc {
+    font-size: 0.82rem;
+    color: var(--muted);
+    margin-left: auto;
+  }
+
+  /* OPTION TILES / GRIDS */
+  .options-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 10px;
+  }
+  .options-grid-lg {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+    gap: 12px;
+  }
+
+  .opt-tile {
+    background: var(--s1);
+    border: 1.5px solid var(--border);
+    border-radius: 12px;
+    padding: 1rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: relative;
+    user-select: none;
+  }
+  .opt-tile:hover {
+    border-color: var(--blue);
+    background: var(--s2);
+    transform: translateY(-2px);
+  }
+  .opt-tile.active {
+    border-color: var(--blue);
+    background: var(--blue-dim);
+    box-shadow: 0 0 18px var(--blue-glow);
+  }
+  .opt-tile.active .opt-check {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  .opt-icon {
+    font-size: 1.4rem;
+    margin-bottom: 0.5rem;
+    color: var(--heading);
+  }
+  .opt-name {
+    font-weight: 700;
+    font-size: 0.92rem;
+    color: var(--heading);
+    margin-bottom: 3px;
+  }
+  .opt-sub {
+    font-size: 0.74rem;
+    color: var(--muted);
+    line-height: 1.35;
+  }
+  .opt-price-tag {
+    margin-top: 0.6rem;
+    font-size: 0.75rem;
+    font-weight: 700;
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--blue);
+  }
+  .opt-check {
+    position: absolute;
+    top: 8px; right: 8px;
+    width: 18px; height: 18px;
+    background: var(--blue);
+    color: #fff;
+    border-radius: 50%;
+    font-size: 0.65rem;
+    display: flex; align-items: center; justify-content: center;
+    opacity: 0;
+    transform: scale(0.5);
+    transition: all 0.2s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+  }
+
+  /* TEXT INPUTS & SELECTS */
+  .custom-input-box {
+    margin-top: 1rem;
+    background: var(--s1);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 0.85rem 1rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .custom-input-box input {
+    background: transparent;
+    border: none;
+    outline: none;
+    color: var(--heading);
+    font-family: inherit;
+    font-size: 0.88rem;
+    width: 100%;
+  }
+  .custom-input-box input::placeholder {
+    color: var(--muted);
+  }
+
+  /* BUDGET SLIDER */
+  .budget-container {
+    background: var(--s1);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 1.5rem;
+  }
+  .budget-display {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 1rem;
+  }
+  .budget-amount {
+    font-family: 'Syne', sans-serif;
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--blue);
+  }
+  .budget-note {
+    font-size: 0.82rem;
+    color: var(--muted);
+  }
+  .budget-slider {
+    width: 100%;
+    height: 8px;
+    border-radius: 4px;
+    background: var(--s3);
+    outline: none;
+    accent-color: var(--blue);
+    cursor: pointer;
+  }
+  .budget-ranges {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 0.5rem;
+    font-size: 0.72rem;
+    color: var(--muted);
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  /* MULTI-SELECT CHIPS */
+  .chips-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .chip-btn {
+    background: var(--s1);
+    border: 1px solid var(--border);
+    color: var(--muted);
+    padding: 0.45rem 0.95rem;
+    border-radius: 100px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    user-select: none;
+  }
+  .chip-btn:hover {
+    color: var(--heading);
+    border-color: var(--blue);
+  }
+  .chip-btn.active {
+    background: var(--blue-dim);
+    color: var(--blue);
+    border-color: var(--blue);
+    font-weight: 700;
+  }
+
+  /* CLIENT FORM */
+  .client-form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .form-group.full {
+    grid-column: 1 / -1;
+  }
+  .form-label {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--heading);
+  }
+  .form-control {
+    background: var(--s1);
+    border: 1px solid var(--border);
+    color: var(--heading);
+    padding: 0.65rem 0.9rem;
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 0.86rem;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .form-control:focus {
+    border-color: var(--blue);
+  }
+
+  /* RIGHT STICKY SUMMARY CARD */
+  .summary-sidebar {
+    position: sticky;
+    top: 5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .summary-card {
+    background: var(--card);
+    border: 1.5px solid var(--blue);
+    border-radius: 18px;
+    padding: 1.8rem;
+    box-shadow: var(--shadow-lg), 0 0 35px var(--blue-glow);
+    position: relative;
+    overflow: hidden;
+  }
+  .summary-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--blue), #60a5fa, #a855f7);
+  }
+
+  .sum-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.25rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .sum-title {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 1.2rem;
+    color: var(--heading);
+  }
+  .sum-badge {
+    background: var(--blue-dim);
+    color: var(--blue);
+    padding: 0.25rem 0.65rem;
+    border-radius: 20px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+
+  .spec-summary-list {
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+    margin-bottom: 1.5rem;
+  }
+  .sum-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.83rem;
+  }
+  .sum-label {
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .sum-val {
+    font-weight: 700;
+    color: var(--heading);
+    text-align: right;
+    max-width: 190px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .sum-price-box {
+    background: var(--s2);
+    border: 1px solid var(--border2);
+    border-radius: 12px;
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+    text-align: center;
+  }
+  .sum-price-label {
+    font-size: 0.72rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    margin-bottom: 4px;
+  }
+  .sum-price-range {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.55rem;
+    font-weight: 800;
+    color: var(--blue);
+  }
+
+  .btn-submit-wa {
+    background: #25d366;
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    padding: 0.9rem 1.4rem;
+    width: 100%;
+    font-family: inherit;
+    font-weight: 800;
+    font-size: 0.95rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 20px rgba(37, 211, 102, 0.35);
+    margin-bottom: 0.75rem;
+  }
+  .btn-submit-wa:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(37, 211, 102, 0.5);
+  }
+
+  .btn-submit-local {
+    background: var(--s2);
+    border: 1px solid var(--border2);
+    color: var(--heading);
+    border-radius: 10px;
+    padding: 0.8rem 1.2rem;
+    width: 100%;
+    font-family: inherit;
+    font-weight: 700;
+    font-size: 0.86rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: all 0.2s;
+  }
+  .btn-submit-local:hover {
+    border-color: var(--blue);
+    color: var(--blue);
+    background: var(--s3);
+  }
+
+  /* IN-STOCK MATCHES BANNER */
+  .stock-matches-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 1.4rem;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+  }
+  .stock-matches-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0.85rem;
+  }
+  .stock-title {
+    font-size: 0.9rem;
+    font-weight: 800;
+    color: var(--heading);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .stock-count-badge {
+    background: var(--green-dim);
+    color: var(--green);
+    border: 1px solid rgba(16, 185, 129, 0.3);
+    font-size: 0.72rem;
+    font-weight: 800;
+    padding: 2px 7px;
+    border-radius: 10px;
+  }
+
+  .stock-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-height: 380px;
+    overflow-y: auto;
+    padding-right: 4px;
+  }
+  .stock-item {
+    background: var(--s1);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 0.75rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: border-color 0.2s;
+  }
+  .stock-item:hover {
+    border-color: var(--blue);
+  }
+  .stock-item-img {
+    width: 48px;
+    height: 48px;
+    object-fit: contain;
+    border-radius: 6px;
+    background: var(--s2);
+    padding: 3px;
+    flex-shrink: 0;
+  }
+  .stock-item-info {
+    flex-grow: 1;
+    min-width: 0;
+  }
+  .stock-item-name {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--heading);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .stock-item-specs {
+    font-size: 0.7rem;
+    color: var(--muted);
+  }
+  .stock-item-price {
+    font-size: 0.78rem;
+    font-weight: 800;
+    color: var(--blue);
+  }
+  .stock-item-link {
+    background: var(--blue-dim);
+    color: var(--blue);
+    border: none;
+    border-radius: 6px;
+    padding: 4px 8px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    cursor: pointer;
+    text-decoration: none;
+    flex-shrink: 0;
+  }
+
+  /* SUCCESS MODAL */
+  #confirmModal {
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.75);
+    backdrop-filter: blur(10px);
+    z-index: 10000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem;
+  }
+  #confirmModal.open {
+    display: flex;
+  }
+  .modal-box {
+    background: var(--card);
+    border: 1px solid var(--blue);
+    border-radius: 20px;
+    max-width: 500px;
+    width: 100%;
+    padding: 2.2rem;
+    text-align: center;
+    box-shadow: 0 25px 60px rgba(0,0,0,0.8);
+    position: relative;
+    animation: zoomUp 0.3s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+  }
+  @keyframes zoomUp {
+    from { opacity: 0; transform: scale(0.9); }
+    to { opacity: 1; transform: scale(1); }
+  }
+  .modal-icon {
+    width: 60px; height: 60px;
+    background: rgba(37, 211, 102, 0.15);
+    color: #25d366;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.8rem;
+    margin: 0 auto 1.25rem;
+  }
+  .modal-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.6rem;
+    font-weight: 800;
+    color: var(--heading);
+    margin-bottom: 0.5rem;
+  }
+  .modal-sub {
+    font-size: 0.88rem;
+    color: var(--muted);
+    margin-bottom: 1.5rem;
+    line-height: 1.5;
+  }
+  .modal-ticket {
+    background: var(--s2);
+    border: 1px dashed var(--border2);
+    border-radius: 12px;
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+    text-align: left;
+    font-size: 0.83rem;
+  }
+
+  /* TOAST */
+  #toast {
+    position: fixed;
+    bottom: 2rem; right: 2rem;
+    background: var(--s2);
+    border: 1px solid var(--blue);
+    color: var(--heading);
+    padding: 0.85rem 1.4rem;
+    border-radius: 10px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+    display: flex; align-items: center; gap: 8px;
+    z-index: 10001;
+    transform: translateY(120%);
+    transition: transform 0.3s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+    font-size: 0.88rem;
+  }
+  #toast.show { transform: translateY(0); }
+
+  /* CUSTOM CURSOR */
+  #cursor-dot {
+    width: 8px; height: 8px; background: var(--blue);
+    border-radius: 50%; position: fixed; pointer-events: none;
+    z-index: 99999; transform: translate(-50%, -50%);
+    transition: transform 0.05s linear;
+  }
+  #cursor-ring {
+    width: 28px; height: 28px; border: 1.5px solid var(--blue);
+    border-radius: 50%; position: fixed; pointer-events: none;
+    z-index: 99998; transform: translate(-50%, -50%);
+    transition: width 0.2s, height 0.2s, border-color 0.2s;
+  }
+
+  /* RESPONSIVENESS */
+  @media (max-width: 1024px) {
+    .builder-workspace {
+      grid-template-columns: 1fr;
+    }
+    .summary-sidebar {
+      position: static;
+      order: -1;
+    }
+  }
+  @media (max-width: 768px) {
+    nav { padding: 0.8rem 1.2rem; }
+    .nav-links { display: none; }
+    .builder-workspace { padding: 1.5rem 1rem; }
+    .client-form-grid { grid-template-columns: 1fr; }
+    .options-grid { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+<script src="laptops-data.js"></script>
+</head>
+<body>
+
+<div id="cursor-dot"></div>
+<div id="cursor-ring"></div>
+
+<!-- TOP BANNER -->
+<div class="top-banner">
+  <span>🛠️ Custom Laptop Builder & Quotations — LaptopHUB Pakistan</span>
+  <div>
+    <span>Direct WhatsApp Desk: <strong>+92 326 1398594</strong></span>
+    <a href="laptophub.html">Back to Store Catalog →</a>
+  </div>
+</div>
+
+<!-- NAV -->
+<nav>
+  <a href="laptophub.html" class="logo-mark">
+    <div class="logo-icon">LH</div>
+    <div class="logo-text">Laptop<span>HUB</span></div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="laptophub.html">Catalog (69 Laptops)</a></li>
+    <li><a href="custom-laptop.html" class="active">🛠️ Create Your Laptop</a></li>
+    <li><a href="consult.html">🔍 Consult AI</a></li>
+    <li><a href="volts.html">VOLTS Edition</a></li>
+    <li><a href="inventory.html">📦 Inventory Admin</a></li>
+  </ul>
+  <div class="nav-right">
+    <button class="theme-toggle-btn" id="themeBtn" onclick="toggleTheme()" aria-label="Toggle theme">
+      <span id="themeIcon">☀️</span>
+      <span id="themeLabel">Light</span>
+    </button>
+    <a href="https://wa.me/923261398594?text=Hi%20LaptopHUB!%20I%20want%20to%20customize%20a%20laptop" target="_blank" class="wa-quick-btn">
+      <i class="fab fa-whatsapp"></i> +92 326 1398594
+    </a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="config-hero">
+  <div class="hero-pill">
+    <span>✨ Tailored Configuration Studio</span>
+  </div>
+  <h1>Create Your <span>Dream Laptop.</span></h1>
+  <p>Select your exact processor, graphics card, RAM, NVMe storage, and display specifications. We configure, test, and ship your build with full warranty across Pakistan.</p>
+</section>
+
+<!-- MAIN BUILDER WORKSPACE -->
+<main class="builder-workspace">
+
+  <!-- LEFT CONFIGURATION FORM -->
+  <div class="config-flow">
+
+    <!-- STEP 1: BRAND & CHASSIS -->
+    <div class="step-card" id="stepBrand">
+      <div class="step-header">
+        <div class="step-number">1</div>
+        <div>
+          <h2 class="step-title">Brand & Form Factor</h2>
+          <div class="step-desc">Pick your preferred laptop manufacturer or chassis design</div>
+        </div>
+      </div>
+
+      <div class="options-grid" id="gridBrand">
+        <div class="opt-tile active" onclick="selectOption('brand', 'Dell XPS / Latitude', this, 0)">
+          <div class="opt-check">✓</div>
+          <div class="opt-icon">💻</div>
+          <div class="opt-name">Dell XPS / Latitude</div>
+          <div class="opt-sub">Enterprise durability, CNC aluminum, superb keyboards</div>
+        </div>
+        <div class="opt-tile" onclick="selectOption('brand', 'Lenovo ThinkPad / Yoga', this, 0)">
+          <div class="opt-check">✓</div>
+          <div class="opt-icon">⚡</div>
+          <div class="opt-name">Lenovo ThinkPad</div>
+          <div class="opt-sub">Legendary TrackPoint, MIL-STD toughness, best typing</div>
+        </div>
+        <div class="opt-tile" onclick="selectOption('brand', 'HP EliteBook / Spectre', this, 0)">
+          <div class="opt-check">✓</div>
+          <div class="opt-icon">✨</div>
+          <div class="opt-name">HP EliteBook / Spectre</div>
+          <div class="opt-sub">Gem-cut luxury, Bang & Olufsen audio, Privacy screens</div>
+        </div>
+        <div class="opt-tile" onclick="selectOption('brand', 'Apple MacBook Pro / Air', this, 40000)">
+          <div class="opt-check">✓</div>
+          <div class="opt-icon">🍏</div>
+          <div class="opt-name">Apple MacBook</div>
+          <div class="opt-sub">Apple Silicon M-series, Liquid Retina XDR, all-day battery</div>
+        </div>
+        <div class="opt-tile" onclick="selectOption('brand', 'Microsoft Surface', this, 15000)">
+          <div class="opt-check">✓</div>
+          <div class="opt-icon">🪟</div>
+          <div class="opt-name">Microsoft Surface</div>
+          <div class="opt-sub">3:2 PixelSense touch screen, Alcantara/metal luxury</div>
+        </div>
+        <div class="opt-tile" onclick="selectOption('brand', 'Asus ROG / ZenBook', this, 20000)">
+          <div class="opt-check">✓</div>
+          <div class="opt-icon">🎮</div>
+          <div class="opt-name">Asus ROG / ZenBook</div>
+          <div class="opt-sub">High-refresh OLED panels, vapor chamber cooling</div>
+        </div>
+        <div class="opt-tile" onclick="selectOption('brand', 'Any / Best Value Match', this, 0)">
+          <div class="opt-check">✓</div>
+          <div class="opt-icon">🎯</div>
+          <div class="opt-name">Any / Best Match</div>
+          <div class="opt-sub">We match the fastest specs for your target budget</div>
+        </div>
+      </div>
+
+      <!-- Form Factor Chips -->
+      <div style="margin-top:1.25rem">
+        <label class="form-label" style="margin-bottom:8px;display:block">Form Factor Preference:</label>
+        <div class="chips-row" id="chipsFormFactor">
+          <button type="button" class="chip-btn active" onclick="selectChip('formFactor', '13-14\" Ultraportable Slim (< 1.3kg)', this)">13-14" Ultraportable Slim (< 1.3kg)</button>
+          <button type="button" class="chip-btn" onclick="selectChip('formFactor', '15.6\" Balanced Workstation', this)">15.6" Balanced Workstation</button>
+          <button type="button" class="chip-btn" onclick="selectChip('formFactor', '16-17.3\" Creator / Gaming Titan', this)">16-17.3" Creator / Gaming Titan</button>
+          <button type="button" class="chip-btn" onclick="selectChip('formFactor', '2-in-1 x360 Touch Convertible', this)">2-in-1 x360 Touch Convertible</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 2: PROCESSOR (CPU) -->
+    <div class="step-card" id="stepCPU">
+      <div class="step-header">
+        <div class="step-number">2</div>
+        <div>
+          <h2 class="step-title">Processor (CPU)</h2>
+          <div class="step-desc">The brain of your laptop for compilation, multitasking, and rendering</div>
+        </div>
+      </div>
+
+      <div class="options-grid-lg" id="gridCPU">
+        <div class="opt-tile" onclick="selectOption('cpu', 'Intel Core i5 (11th-13th Gen)', this, 0)">
+          <div class="opt-check">✓</div>
+          <div class="opt-name">Intel Core i5 (11th-13th Gen)</div>
+          <div class="opt-sub">Solid everyday performance, office productivity & web dev</div>
+          <div class="opt-price-tag">Entry Baseline</div>
+        </div>
+        <div class="opt-tile active" onclick="selectOption('cpu', 'Intel Core i7 (11th-13th Gen High Performance)', this, 35000)">
+          <div class="opt-check">✓</div>
+          <div class="opt-name">Intel Core i7 (11th-13th Gen)</div>
+          <div class="opt-sub">High clock speeds, excellent for code compiling, CAD, Adobe suite</div>
+          <div class="opt-price-tag">+ Rs 35,000</div>
+        </div>
+        <div class="opt-tile" onclick="selectOption('cpu', 'Intel Core i9 Extreme / Core Ultra 7/9 AI', this, 85000)">
+          <div class="opt-check">✓</div>
+          <div class="opt-icon">🔥</div>
+          <div class="opt-name">Core i9 / Core Ultra 7/9 AI</div>
+          <div class="opt-sub">14-24 Core beast with dedicated AI NPU for heavy rendering</div>
+          <div class="opt-price-tag">+ Rs 85,000</div>
+        </div>
+        <div class="opt-tile" onclick="selectOption('cpu', 'AMD Ryzen 5 (5000/6000 Series)', this, 5000)">
+          <div class="opt-check">✓</div>
+          <div class="opt-name">AMD Ryzen 5 (6-Core)</div>
+          <div class="opt-sub">Efficient power consumption, 12 threads, great battery life</div>
+          <div class="opt-price-tag">+ Rs 5,000</div>
+        </div>
+        <div class="opt-tile" onclick="selectOption('cpu', 'AMD Ryzen 7 PRO (8-Core / 16-Thread)', this, 30000)">
+          <div class="opt-check">✓</div>
+          <div class="opt-name">AMD Ryzen 7 PRO (8-Core)</div>
+          <div class="opt-sub">Massive multicore output, cooler temps, ideal for Linux/Docker</div>
+          <div class="opt-price-tag">+ Rs 30,000</div>
+        </div>
+        <div class="opt-tile" onclick="selectOption('cpu', 'Apple M2 / M3 Pro / M3 Max', this, 110000)">
+          <div class="opt-check">✓</div>
+          <div class="opt-name">Apple Silicon M2 / M3 Pro</div>
+          <div class="opt-sub">Unified architecture, whisper quiet, unmatched efficiency</div>
+          <div class="opt-price-tag">+ Rs 110,000</div>
+        </div>
+      </div>
+
+      <div class="custom-input-box">
+        <span style="font-size:1.1rem">✍️</span>
+        <input type="text" id="customCpuInput" placeholder="Want a specific processor model? (e.g. i7-13700H, Ryzen 7 7840HS, i9-12900HK)" oninput="handleCustomInput('cpu', this.value)">
+      </div>
+    </div>
+
+    <!-- STEP 3: GRAPHICS (GPU) -->
+    <div class="step-card" id="stepGPU">
+      <div class="step-header">
+        <div class="step-number">3</div>
+        <div>
+          <h2 class="step-title">Graphics (GPU)</h2>
+          <div class="step-desc">Dedicated vs Integrated GPU for 3D modeling, gaming, and 4K export</div>
+        </div>
+      </div>
+
+      <div class="options-grid-lg" id="gridGPU">
+        <div class="opt-tile" onclick="selectOption('gpu', 'Integrated Intel Iris Xe / AMD Radeon', this, 0)">
+          <div class="opt-check">✓</div>
+          <div class="opt-name">Intel Iris Xe / Radeon 680M</div>
+          <div class="opt-sub">Maximum battery runtime, lightweight, perfect for coding & business</div>
+          <div class="opt-price-tag">Standard Integrated</div>
+        </div>
+        <div class="opt-tile active" onclick="selectOption('gpu', 'NVIDIA GeForce RTX 3050 / 3060 (4GB-6GB)', this, 50000)">
+          <div class="opt-check">✓</div>
+          <div class="opt-name">NVIDIA RTX 3050 / 3060</div>
+          <div class="opt-sub">Great entry to ray tracing, video editing, Premiere & 1080p gaming</div>
+          <div class="opt-price-tag">+ Rs 50,000</div>
+        </div>
+        <div class="opt-tile" onclick="selectOption('gpu', 'NVIDIA GeForce RTX 4060 / 4070 (8GB GDDR6)', this, 110000)">
+          <div class="opt-check">✓</div>
+          <div class="opt-name">NVIDIA RTX 4060 / 4070</div>
+          <div class="opt-sub">DLSS 3.5, Ada Lovelace, Unreal Engine 5, Blender & 1440p gaming</div>
+          <div class="opt-price-tag">+ Rs 110,000</div>
+        </div>
+        <div class="opt-tile" onclick="selectOption('gpu', 'NVIDIA RTX A2000 / A3000 / Quadro Workstation', this, 130000)">
+          <div class="opt-check">✓</div>
+          <div class="opt-name">NVIDIA RTX Workstation / Quadro</div>
+          <div class="opt-sub">ISV certified for SolidWorks, AutoCAD, CATIA, and scientific simulation</div>
+          <div class="opt-price-tag">+ Rs 130,000</div>
+        </div>
+        <div class="opt-tile" onclick="selectOption('gpu', 'Apple Neural M-Series Integrated GPU', this, 60000)">
+          <div class="opt-check">✓</div>
+          <div class="opt-name">Apple M-Series GPU (16-38 Core)</div>
+          <div class="opt-sub">Hardware accelerated ProRes, Metal 3, DaVinci Resolve color grading</div>
+          <div class="opt-price-tag">+ Rs 60,000</div>
+        </div>
+      </div>
+
+      <div class="custom-input-box">
+        <span style="font-size:1.1rem">✍️</span>
+        <input type="text" id="customGpuInput" placeholder="Specific GPU or VRAM request? (e.g. RTX 4080 12GB, RTX 3070 Ti, Quadro T1200)" oninput="handleCustomInput('gpu', this.value)">
+      </div>
+    </div>
+
+    <!-- STEP 4: RAM & MEMORY -->
+    <div class="step-card" id="stepRAM">
+      <div class="step-header">
+        <div class="step-number">4</div>
+        <div>
+          <h2 class="step-title">Memory (RAM)</h2>
+          <div class="step-desc">High-speed DDR4 / DDR5 RAM for tabs, virtual machines, and IDEs</div>
+        </div>
+      </div>
+
+      <div class="options-grid" id="gridRAM">
+        <div class="opt-tile" onclick="selectOption('ram', '8GB DDR4/DDR5', this, 0)">
+          <div class="opt-check">✓</div>
+          <div class="opt-name">8 GB RAM</div>
+          <div class="opt-sub">Basic student browsing and MS Office</div>
+          <div class="opt-price-tag">Baseline</div>
+        </div>
+        <div class="opt-tile active" onclick="selectOption('ram', '16GB DDR4/DDR5 Dual Channel', this, 12000)">
+          <div class="opt-check">✓</div>
+          <div class="opt-name">16 GB RAM (Recommended)</div>
+          <div class="opt-sub">Gold standard for developers, multitasking & gaming</div>
+          <div class="opt-price-tag">+ Rs 12,000</div>
+        </div>
+        <div class="opt-tile" onclick="selectOption('ram', '32GB DDR5 High-Speed', this, 28000)">
+          <div class="opt-check">✓</div>
+          <div class="opt-name">32 GB High-Speed</div>
+          <div class="opt-sub">Heavy Docker containers, 4K Premiere editing, After Effects</div>
+          <div class="opt-price-tag">+ Rs 28,000</div>
+        </div>
+        <div class="opt-tile" onclick="selectOption('ram', '64GB DDR5 Enterprise Workstation', this, 60000)">
+          <div class="opt-check">✓</div>
+          <div class="opt-name">64 GB Extreme</div>
+          <div class="opt-sub">Virtualization, local LLMs, huge 3D architectural scenes</div>
+          <div class="opt-price-tag">+ Rs 60,000</div>
+        </div>
+        <div class="opt-tile" onclick="selectOption('ram', '128GB DDR5 Server Workstation', this, 120000)">
+          <div class="opt-check">✓</div>
+          <div class="opt-name">128 GB Enterprise</div>
+          <div class="opt-sub">Maximum capacity for enterprise simulation & rendering farms</div>
+          <div class="opt-price-tag">+ Rs 120,000</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 5: STORAGE (NVMe SSD) -->
+    <div class="step-card" id="stepStorage">
+      <div class="step-header">
+        <div class="step-number">5</div>
+        <div>
+          <h2 class="step-title">Storage (NVMe SSD)</h2>
+          <div class="step-desc">Ultra-fast PCIe Gen3 / Gen4 M.2 Solid State Drive</div>
+        </div>
+      </div>
+
+      <div class="options-grid" id="gridStorage">
+        <div class="opt-tile" onclick="selectOption('storage', '256GB NVMe SSD', this, 0)">
+          <div class="opt-check">✓</div>
+          <div class="opt-name">256 GB NVMe</div>
+          <div class="opt-sub">OS & essential applications</div>
+          <div class="opt-price-tag">Standard</div>
+        </div>
+        <div class="opt-tile active" onclick="selectOption('storage', '512GB PCIe Gen4 M.2 SSD', this, 8000)">
+          <div class="opt-check">✓</div>
+          <div class="opt-name">512 GB NVMe (Recommended)</div>
+          <div class="opt-sub">Great balance for work, projects, and media</div>
+          <div class="opt-price-tag">+ Rs 8,000</div>
+        </div>
+        <div class="opt-tile" onclick="selectOption('storage', '1TB Ultra High-Speed PCIe 4.0 SSD', this, 18000)">
+          <div class="opt-check">✓</div>
+          <div class="opt-name">1 TB NVMe SuperFast</div>
+          <div class="opt-sub">Ample space for large video files, games & datasets</div>
+          <div class="opt-price-tag">+ Rs 18,000</div>
+        </div>
+        <div class="opt-tile" onclick="selectOption('storage', '2TB NVMe PCIe 4.0 SSD', this, 38000)">
+          <div class="opt-check">✓</div>
+          <div class="opt-name">2 TB NVMe Massive</div>
+          <div class="opt-sub">Ideal for content creators who never want to delete files</div>
+          <div class="opt-price-tag">+ Rs 38,000</div>
+        </div>
+        <div class="opt-tile" onclick="selectOption('storage', '4TB Pro NVMe Dual Drive', this, 80000)">
+          <div class="opt-check">✓</div>
+          <div class="opt-name">4 TB Ultra Pro</div>
+          <div class="opt-sub">Dual high-speed drives in RAID or partition</div>
+          <div class="opt-price-tag">+ Rs 80,000</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 6: DISPLAY & SCREEN -->
+    <div class="step-card" id="stepDisplay">
+      <div class="step-header">
+        <div class="step-number">6</div>
+        <div>
+          <h2 class="step-title">Display & Screen Quality</h2>
+          <div class="step-desc">Choose resolution, refresh rate, and color fidelity</div>
+        </div>
+      </div>
+
+      <div class="options-grid-lg" id="gridDisplay">
+        <div class="opt-tile active" onclick="selectOption('display', '14.0\" Full HD (1920x1080) IPS Anti-Glare', this, 0)">
+          <div class="opt-check">✓</div>
+          <div class="opt-name">14.0" FHD IPS (1080p)</div>
+          <div class="opt-sub">Crisp matte finish, comfortable for coding & long reading hours</div>
+          <div class="opt-price-tag">Standard Clear</div>
+        </div>
+        <div class="opt-tile" onclick="selectOption('display', '15.6\" FHD (1920x1080) 144Hz Smooth Gaming', this, 15000)">
+          <div class="opt-check">✓</div>
+          <div class="opt-name">15.6" 144Hz / 165Hz Smooth</div>
+          <div class="opt-sub">Ultra fluid high refresh rate for esports & responsive UI</div>
+          <div class="opt-price-tag">+ Rs 15,000</div>
+        </div>
+        <div class="opt-tile" onclick="selectOption('display', '14\" - 16\" 2.5K / 2.8K OLED 120Hz (100% DCI-P3)', this, 38000)">
+          <div class="opt-check">✓</div>
+          <div class="opt-name">2.5K / 2.8K OLED 120Hz</div>
+          <div class="opt-sub">Deep infinite blacks, HDR 500, incredible for photo/video editing</div>
+          <div class="opt-price-tag">+ Rs 38,000</div>
+        </div>
+        <div class="opt-tile" onclick="selectOption('display', '4K UHD (3840x2160) Touchscreen / OLED', this, 55000)">
+          <div class="opt-check">✓</div>
+          <div class="opt-name">4K UHD Touch / Stylus Pen</div>
+          <div class="opt-sub">Maximum pixel density, touch gestures, artist pen compatible</div>
+          <div class="opt-price-tag">+ Rs 55,000</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 7: INTENDED USE CASES -->
+    <div class="step-card" id="stepUseCases">
+      <div class="step-header">
+        <div class="step-number">7</div>
+        <div>
+          <h2 class="step-title">Intended Workloads & Use Cases</h2>
+          <div class="step-desc">Select all that apply so we optimize thermal profile and drivers</div>
+        </div>
+      </div>
+
+      <div class="chips-row" id="chipsUseCases">
+        <button type="button" class="chip-btn active" onclick="toggleMultiChip(this, 'Software Development & Docker')">💻 Software Development & Docker</button>
+        <button type="button" class="chip-btn active" onclick="toggleMultiChip(this, '4K Video Editing (Premiere / DaVinci)')">🎬 4K Video Editing</button>
+        <button type="button" class="chip-btn" onclick="toggleMultiChip(this, '3D Modeling & CAD (Blender / AutoCAD)')">📐 3D Modeling & CAD</button>
+        <button type="button" class="chip-btn" onclick="toggleMultiChip(this, 'AAA Gaming & Streaming')">🎮 AAA Gaming</button>
+        <button type="button" class="chip-btn active" onclick="toggleMultiChip(this, 'Business, Office & Multitasking')">💼 Corporate Business & Office</button>
+        <button type="button" class="chip-btn" onclick="toggleMultiChip(this, 'University / CS Student')">🎓 University & Studies</button>
+        <button type="button" class="chip-btn" onclick="toggleMultiChip(this, 'Data Science, Machine Learning & AI')">🤖 Data Science & AI</button>
+      </div>
+    </div>
+
+    <!-- STEP 8: BUDGET & CONDITION -->
+    <div class="step-card" id="stepBudget">
+      <div class="step-header">
+        <div class="step-number">8</div>
+        <div>
+          <h2 class="step-title">Target Budget & Condition</h2>
+          <div class="step-desc">Set your target price range and hardware condition preference</div>
+        </div>
+      </div>
+
+      <div class="budget-container">
+        <div class="budget-display">
+          <div>
+            <span class="budget-note">Your Target Budget:</span>
+            <div class="budget-amount" id="budgetLabel">Rs 185,000</div>
+          </div>
+          <div style="text-align:right">
+            <span class="budget-note">Cash on Delivery</span>
+            <div style="font-weight:700;font-size:0.85rem;color:var(--green)">Free Shipping Across Pakistan</div>
+          </div>
+        </div>
+
+        <input type="range" class="budget-slider" id="budgetRange" min="50000" max="650000" step="5000" value="185000" oninput="updateBudgetSlider(this.value)">
+
+        <div class="budget-ranges">
+          <span>Rs 50k (Entry)</span>
+          <span>Rs 150k (Mid-Range)</span>
+          <span>Rs 300k (Pro Creator)</span>
+          <span>Rs 650k+ (Flagship Titan)</span>
+        </div>
+      </div>
+
+      <div style="margin-top:1.25rem">
+        <label class="form-label" style="margin-bottom:8px;display:block">Condition Preference:</label>
+        <div class="chips-row" id="chipsCondition">
+          <button type="button" class="chip-btn active" onclick="selectChip('condition', 'Brand New Box Pack (Official Warranty)', this)">Brand New Box Pack</button>
+          <button type="button" class="chip-btn" onclick="selectChip('condition', 'Open Box / Like New (Grade A+ Pristine)', this)">Open Box / Like New (A+)</button>
+          <button type="button" class="chip-btn" onclick="selectChip('condition', 'Refurbished Grade A (Maximum Value)', this)">Refurbished Grade A (Value)</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 9: SPECIAL FEATURES & ADD-ONS -->
+    <div class="step-card" id="stepFeatures">
+      <div class="step-header">
+        <div class="step-number">9</div>
+        <div>
+          <h2 class="step-title">Special Features & Requirements</h2>
+          <div class="step-desc">Select hardware amenities you must have</div>
+        </div>
+      </div>
+
+      <div class="chips-row" id="chipsFeatures">
+        <button type="button" class="chip-btn active" onclick="toggleMultiChip(this, 'Backlit Keyboard', 'features')">💡 Backlit Keyboard</button>
+        <button type="button" class="chip-btn active" onclick="toggleMultiChip(this, 'Thunderbolt 4 / Type-C PD Charging', 'features')">⚡ Thunderbolt 4 / Type-C Charging</button>
+        <button type="button" class="chip-btn active" onclick="toggleMultiChip(this, 'Fingerprint / Windows Hello Face ID', 'features')">🔒 Fingerprint / Face Unlock</button>
+        <button type="button" class="chip-btn" onclick="toggleMultiChip(this, 'Long Battery Life (8+ Hours)', 'features')">🔋 Long Battery Life (8+ Hours)</button>
+        <button type="button" class="chip-btn" onclick="toggleMultiChip(this, 'Ultralight (< 1.4kg)', 'features')">🪶 Ultralight (< 1.4kg)</button>
+        <button type="button" class="chip-btn" onclick="toggleMultiChip(this, 'Numeric Keypad', 'features')">🔢 Numeric Keypad</button>
+        <button type="button" class="chip-btn" onclick="toggleMultiChip(this, 'Full Aluminum CNC Unibody', 'features')">🛡️ Aluminum CNC Body</button>
+      </div>
+    </div>
+
+    <!-- STEP 10: CUSTOMER INFORMATION -->
+    <div class="step-card" id="stepClient">
+      <div class="step-header">
+        <div class="step-number">10</div>
+        <div>
+          <h2 class="step-title">Your Contact Information</h2>
+          <div class="step-desc">Where should we deliver quotation and availability updates?</div>
+        </div>
+      </div>
+
+      <div class="client-form-grid">
+        <div class="form-group">
+          <label class="form-label">Full Name *</label>
+          <input type="text" class="form-control" id="clientName" placeholder="e.g. Arslan / Muhammad Ali" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">WhatsApp / Phone Number *</label>
+          <input type="tel" class="form-control" id="clientPhone" placeholder="e.g. 0326 1398594" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">City *</label>
+          <select class="form-control" id="clientCity" required>
+            <option value="Lahore">Lahore (Same Day Dispatch)</option>
+            <option value="Karachi">Karachi (24h Express)</option>
+            <option value="Islamabad">Islamabad (24h Express)</option>
+            <option value="Rawalpindi">Rawalpindi</option>
+            <option value="Faisalabad">Faisalabad</option>
+            <option value="Multan">Multan</option>
+            <option value="Peshawar">Peshawar</option>
+            <option value="Quetta">Quetta</option>
+            <option value="Other">Other City (All Pakistan Delivery)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">When do you need the laptop?</label>
+          <select class="form-control" id="clientTimeline">
+            <option value="Immediately (Within 24-48 Hours)">Immediately (Within 24-48 Hours)</option>
+            <option value="Within this week">Within this week</option>
+            <option value="Planning / Inquiring for next month">Planning / Inquiring for next month</option>
+          </select>
+        </div>
+        <div class="form-group full">
+          <label class="form-label">Additional Instructions / Specific Model Notes</label>
+          <textarea class="form-control" id="clientNotes" rows="2" placeholder="Mention any extra preferences like specific port requirements, Windows 11 Pro, thermal paste preference, etc."></textarea>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+
+  <!-- RIGHT STICKY SUMMARY & IN-STOCK MATCHES -->
+  <aside class="summary-sidebar">
+
+    <!-- LIVE SPECIFICATION SUMMARY CARD -->
+    <div class="summary-card">
+      <div class="sum-head">
+        <div class="sum-title">Build Summary</div>
+        <div class="sum-badge">Custom Sheet</div>
+      </div>
+
+      <div class="spec-summary-list">
+        <div class="sum-row">
+          <span class="sum-label">🏷️ Brand</span>
+          <span class="sum-val" id="sumBrand">Dell XPS / Latitude</span>
+        </div>
+        <div class="sum-row">
+          <span class="sum-label">⚙️ CPU</span>
+          <span class="sum-val" id="sumCPU">Intel Core i7 11th-13th</span>
+        </div>
+        <div class="sum-row">
+          <span class="sum-label">🎮 GPU</span>
+          <span class="sum-val" id="sumGPU">NVIDIA RTX 3050/3060</span>
+        </div>
+        <div class="sum-row">
+          <span class="sum-label">🧠 RAM</span>
+          <span class="sum-val" id="sumRAM">16GB Dual Channel</span>
+        </div>
+        <div class="sum-row">
+          <span class="sum-label">💾 SSD</span>
+          <span class="sum-val" id="sumStorage">512GB PCIe Gen4</span>
+        </div>
+        <div class="sum-row">
+          <span class="sum-label">🖥️ Screen</span>
+          <span class="sum-val" id="sumDisplay">14.0" FHD IPS</span>
+        </div>
+        <div class="sum-row">
+          <span class="sum-label">📦 Condition</span>
+          <span class="sum-val" id="sumCondition">Brand New Box Pack</span>
+        </div>
+      </div>
+
+      <div class="sum-price-box">
+        <div class="sum-price-label">Estimated Pakistani Market Value</div>
+        <div class="sum-price-range" id="sumEstimatedPrice">Rs 170k – 195k</div>
+        <div style="font-size:0.72rem;color:var(--muted);margin-top:3px">Cash on Delivery Available Across Pakistan</div>
+      </div>
+
+      <!-- WHATSAPP SUBMIT BUTTON -->
+      <button type="button" class="btn-submit-wa" onclick="submitToWhatsApp()">
+        <i class="fab fa-whatsapp" style="font-size:1.2rem"></i>
+        <span>Send Specs to WhatsApp</span>
+      </button>
+
+      <!-- SAVE / SUBMIT ONLINE TICKET -->
+      <button type="button" class="btn-submit-local" onclick="submitCustomTicket()">
+        <span>📋 Submit Custom Order Ticket</span>
+      </button>
+    </div>
+
+    <!-- IN-STOCK INVENTORY MATCHES PREVIEW -->
+    <div class="stock-matches-card">
+      <div class="stock-matches-head">
+        <div class="stock-title">
+          <span>📦 In-Stock Store Matches</span>
+        </div>
+        <span class="stock-count-badge" id="stockMatchBadge">0 Available</span>
+      </div>
+      <p style="font-size:0.76rem;color:var(--muted);margin-bottom:0.75rem">
+        Laptops in our 69-model inventory that closely match your requested specs:
+      </p>
+
+      <div class="stock-list" id="stockMatchList">
+        <!-- Rendered dynamically -->
+      </div>
+    </div>
+
+  </aside>
+
+</main>
+
+<!-- CONFIRMATION MODAL -->
+<div id="confirmModal">
+  <div class="modal-box">
+    <div class="modal-icon">✓</div>
+    <h3 class="modal-title">Custom Request Received!</h3>
+    <p class="modal-sub">Your custom configuration has been logged in our system. Our procurement desk will verify live warehouse stock.</p>
+
+    <div class="modal-ticket">
+      <div style="margin-bottom:6px"><strong>Ticket ID:</strong> <span id="ticketId" style="color:var(--blue);font-family:'JetBrains Mono'">#CUSTOM-9182</span></div>
+      <div style="margin-bottom:6px"><strong>Customer:</strong> <span id="ticketCustomer">Customer</span></div>
+      <div style="margin-bottom:6px"><strong>Specs:</strong> <span id="ticketSpecs">Core i7, 16GB, RTX 3050</span></div>
+      <div><strong>WhatsApp Support Desk:</strong> <span style="color:#25d366">+92 326 1398594</span></div>
+    </div>
+
+    <button type="button" class="btn-submit-wa" onclick="sendTicketWhatsApp()">
+      <i class="fab fa-whatsapp"></i> Continue to WhatsApp for Fast Quote
+    </button>
+    <button type="button" class="btn-submit-local" style="margin-top:8px" onclick="closeConfirmModal()">
+      Close & Continue Browsing
+    </button>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div id="toast">
+  <span style="color:var(--green)">✓</span>
+  <span id="toastMsg">Updated configuration!</span>
+</div>
+
+<script>
+  // STATE MANAGEMENT
+  const state = {
+    brand: 'Dell XPS / Latitude',
+    formFactor: '13-14" Ultraportable Slim (< 1.3kg)',
+    cpu: 'Intel Core i7 (11th-13th Gen High Performance)',
+    cpuCustom: '',
+    gpu: 'NVIDIA GeForce RTX 3050 / 3060 (4GB-6GB)',
+    gpuCustom: '',
+    ram: '16GB DDR4/DDR5 Dual Channel',
+    storage: '512GB PCIe Gen4 M.2 SSD',
+    display: '14.0" Full HD (1920x1080) IPS Anti-Glare',
+    condition: 'Brand New Box Pack (Official Warranty)',
+    budget: 185000,
+    useCases: ['Software Development & Docker', '4K Video Editing (Premiere / DaVinci)', 'Business, Office & Multitasking'],
+    features: ['Backlit Keyboard', 'Thunderbolt 4 / Type-C PD Charging', 'Fingerprint / Windows Hello Face ID'],
+    client: {
+      name: '',
+      phone: '',
+      city: 'Lahore',
+      timeline: 'Immediately (Within 24-48 Hours)',
+      notes: ''
+    }
+  };
+
+  // Base price table for estimate calculation (in PKR)
+  const priceModifiers = {
+    brand: 0,
+    cpu: 35000,
+    gpu: 50000,
+    ram: 12000,
+    storage: 8000,
+    display: 0
+  };
+
+  // Inventory source
+  const inventory = (typeof LAPTOPS_INVENTORY !== 'undefined') ? LAPTOPS_INVENTORY : [];
+
+  // Theme Management
+  function initTheme() {
+    const saved = localStorage.getItem('laptophub_theme') || 
+      (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+    applyTheme(saved);
+  }
+
+  function applyTheme(theme) {
+    document.documentElement.setAttribute('data-theme', theme);
+    localStorage.setItem('laptophub_theme', theme);
+    const icon = document.getElementById('themeIcon');
+    const label = document.getElementById('themeLabel');
+    if (icon && label) {
+      if (theme === 'light') {
+        icon.textContent = '🌙'; label.textContent = 'Dark';
+      } else {
+        icon.textContent = '☀️'; label.textContent = 'Light';
+      }
+    }
+  }
+
+  function toggleTheme() {
+    const cur = document.documentElement.getAttribute('data-theme') || 'dark';
+    const next = cur === 'dark' ? 'light' : 'dark';
+    applyTheme(next);
+    showToast(`Switched to ${next.toUpperCase()} mode`);
+  }
+
+  // Pre-fill user if logged in
+  function initSavedUser() {
+    try {
+      const savedUser = JSON.parse(localStorage.getItem('lh_user') || 'null');
+      if (savedUser && savedUser.loggedIn) {
+        if (savedUser.name) document.getElementById('clientName').value = savedUser.name;
+        if (savedUser.phone) document.getElementById('clientPhone').value = savedUser.phone;
+        if (savedUser.city) document.getElementById('clientCity').value = savedUser.city;
+      }
+    } catch(e) {}
+  }
+
+  // Option Tile Selection
+  function selectOption(category, value, el, priceAdd) {
+    state[category] = value;
+    priceModifiers[category] = priceAdd || 0;
+
+    // Remove active from sibling tiles
+    const parent = el.parentElement;
+    parent.querySelectorAll('.opt-tile').forEach(t => t.classList.remove('active'));
+    el.classList.add('active');
+
+    updateSummaryUI();
+    findStockMatches();
+  }
+
+  // Single-select Chip
+  function selectChip(category, value, el) {
+    state[category] = value;
+    const parent = el.parentElement;
+    parent.querySelectorAll('.chip-btn').forEach(c => c.classList.remove('active'));
+    el.classList.add('active');
+    updateSummaryUI();
+  }
+
+  // Multi-select Chips (Use Cases / Features)
+  function toggleMultiChip(el, value, group) {
+    el.classList.toggle('active');
+    const targetArr = (group === 'features') ? state.features : state.useCases;
+    const idx = targetArr.indexOf(value);
+    if (idx > -1) {
+      targetArr.splice(idx, 1);
+    } else {
+      targetArr.push(value);
+    }
+    updateSummaryUI();
+  }
+
+  // Custom text inputs
+  function handleCustomInput(category, val) {
+    if (category === 'cpu') state.cpuCustom = val.trim();
+    if (category === 'gpu') state.gpuCustom = val.trim();
+    updateSummaryUI();
+    findStockMatches();
+  }
+
+  // Budget Slider
+  function updateBudgetSlider(val) {
+    state.budget = parseInt(val, 10);
+    document.getElementById('budgetLabel').textContent = `Rs ${state.budget.toLocaleString('en-PK')}`;
+    findStockMatches();
+  }
+
+  // Summary and Price Calculator
+  function updateSummaryUI() {
+    document.getElementById('sumBrand').textContent = state.brand;
+    document.getElementById('sumCPU').textContent = state.cpuCustom || state.cpu;
+    document.getElementById('sumGPU').textContent = state.gpuCustom || state.gpu;
+    document.getElementById('sumRAM').textContent = state.ram;
+    document.getElementById('sumStorage').textContent = state.storage;
+    document.getElementById('sumDisplay').textContent = state.display;
+    document.getElementById('sumCondition').textContent = state.condition.split('(')[0].trim();
+
+    // Calculate approximate estimated price
+    let base = 75000;
+    Object.values(priceModifiers).forEach(m => base += m);
+
+    // Apply condition modifier
+    if (state.condition.includes('Refurbished')) base = Math.round(base * 0.75);
+    else if (state.condition.includes('Open Box')) base = Math.round(base * 0.88);
+
+    const minEst = Math.round(base * 0.95 / 5000) * 5000;
+    const maxEst = Math.round(base * 1.12 / 5000) * 5000;
+
+    document.getElementById('sumEstimatedPrice').textContent = `Rs ${(minEst/1000).toFixed(0)}k – ${(maxEst/1000).toFixed(0)}k`;
+  }
+
+  // Match in-stock laptops from laptops-data.js
+  function findStockMatches() {
+    const container = document.getElementById('stockMatchList');
+    const badge = document.getElementById('stockMatchBadge');
+    if (!container || inventory.length === 0) return;
+
+    // Filter rules
+    const matches = inventory.filter(lap => {
+      // Brand match (if not "Any")
+      if (!state.brand.includes('Any')) {
+        const brandKey = state.brand.toLowerCase();
+        if (brandKey.includes('dell') && lap.brand !== 'dell') return false;
+        if (brandKey.includes('lenovo') && lap.brand !== 'lenovo') return false;
+        if (brandKey.includes('hp') && lap.brand !== 'hp') return false;
+        if (brandKey.includes('apple') && lap.brand !== 'apple') return false;
+        if (brandKey.includes('surface') && lap.brand !== 'microsoft') return false;
+      }
+
+      // Budget boundary (+/- 40% margin of user's budget)
+      if (lap.price > state.budget * 1.45 || lap.price < state.budget * 0.55) {
+        return false;
+      }
+
+      return true;
+    });
+
+    // Sort closest to user's budget
+    matches.sort((a, b) => Math.abs(a.price - state.budget) - Math.abs(b.price - state.budget));
+    const topMatches = matches.slice(0, 4);
+
+    badge.textContent = `${matches.length} Available`;
+
+    if (topMatches.length === 0) {
+      container.innerHTML = `
+        <div style="text-align:center;padding:1.5rem 0.5rem;font-size:0.8rem;color:var(--muted)">
+          No exact in-stock match within current budget. Send us your specs on WhatsApp for a custom procurement quote!
+        </div>`;
+      return;
+    }
+
+    container.innerHTML = topMatches.map(lap => {
+      return `
+        <div class="stock-item">
+          <img src="${lap.img}" alt="${lap.name}" class="stock-item-img" onerror="this.src='images/dell-xps.svg'">
+          <div class="stock-item-info">
+            <div class="stock-item-name" title="${lap.name}">${lap.name}</div>
+            <div class="stock-item-specs">${lap.cpu} · ${lap.ram}GB RAM · ${lap.storage}GB</div>
+            <div class="stock-item-price">${lap.priceFormatted}</div>
+          </div>
+          <a href="laptophub.html#inventory" class="stock-item-link" target="_blank" title="View in Store">View</a>
+        </div>`;
+    }).join('');
+  }
+
+  // Compile Message for WhatsApp
+  function buildWhatsAppMessage() {
+    const name = document.getElementById('clientName').value.trim() || 'Valued Customer';
+    const phone = document.getElementById('clientPhone').value.trim() || 'Not specified';
+    const city = document.getElementById('clientCity').value || 'Lahore';
+    const timeline = document.getElementById('clientTimeline').value;
+    const notes = document.getElementById('clientNotes').value.trim();
+
+    const cpuChosen = state.cpuCustom ? `${state.cpuCustom} (Custom)` : state.cpu;
+    const gpuChosen = state.gpuCustom ? `${state.gpuCustom} (Custom)` : state.gpu;
+
+    let msg = `*🛠️ CUSTOM LAPTOP SPECIFICATION REQUEST*%0A`;
+    msg += `*LaptopHUB Pakistan — Store Desk*%0A`;
+    msg += `------------------------------------------%0A`;
+    msg += `*👤 Client:* ${encodeURIComponent(name)}%0A`;
+    msg += `*📞 Phone / WA:* ${encodeURIComponent(phone)}%0A`;
+    msg += `*📍 City:* ${encodeURIComponent(city)}%0A`;
+    msg += `*⏱️ Timeline:* ${encodeURIComponent(timeline)}%0A`;
+    msg += `------------------------------------------%0A`;
+    msg += `*💻 Brand Preference:* ${encodeURIComponent(state.brand)}%0A`;
+    msg += `*📐 Form Factor:* ${encodeURIComponent(state.formFactor)}%0A`;
+    msg += `*⚙️ Processor (CPU):* ${encodeURIComponent(cpuChosen)}%0A`;
+    msg += `*🎮 Graphics (GPU):* ${encodeURIComponent(gpuChosen)}%0A`;
+    msg += `*🧠 Memory (RAM):* ${encodeURIComponent(state.ram)}%0A`;
+    msg += `*💾 Storage:* ${encodeURIComponent(state.storage)}%0A`;
+    msg += `*🖥️ Display:* ${encodeURIComponent(state.display)}%0A`;
+    msg += `*📦 Condition:* ${encodeURIComponent(state.condition)}%0A`;
+    msg += `*💰 Target Budget:* Rs ${state.budget.toLocaleString('en-PK')}%0A`;
+    if (state.useCases.length > 0) {
+      msg += `*🎯 Key Use Cases:* ${encodeURIComponent(state.useCases.join(', '))}%0A`;
+    }
+    if (state.features.length > 0) {
+      msg += `*✨ Desired Features:* ${encodeURIComponent(state.features.join(', '))}%0A`;
+    }
+    if (notes) {
+      msg += `*📝 Client Notes:* ${encodeURIComponent(notes)}%0A`;
+    }
+    msg += `------------------------------------------%0A`;
+    msg += `Please confirm stock availability and best cash-on-delivery pricing!`;
+
+    return msg;
+  }
+
+  // Send to WhatsApp
+  function submitToWhatsApp() {
+    const name = document.getElementById('clientName').value.trim();
+    const phone = document.getElementById('clientPhone').value.trim();
+
+    if (!name || !phone) {
+      showToast('⚠️ Please enter your Name and WhatsApp Number in Step 10');
+      document.getElementById('stepClient').scrollIntoView({ behavior: 'smooth' });
+      document.getElementById('clientName').focus();
+      return;
+    }
+
+    const msg = buildWhatsAppMessage();
+    const waUrl = `https://wa.me/923261398594?text=${msg}`;
+    window.open(waUrl, '_blank');
+  }
+
+  // Submit and save local ticket
+  let currentTicket = null;
+  function submitCustomTicket() {
+    const name = document.getElementById('clientName').value.trim();
+    const phone = document.getElementById('clientPhone').value.trim();
+    const city = document.getElementById('clientCity').value;
+
+    if (!name || !phone) {
+      showToast('⚠️ Please enter your Name and WhatsApp Number in Step 10');
+      document.getElementById('stepClient').scrollIntoView({ behavior: 'smooth' });
+      document.getElementById('clientName').focus();
+      return;
+    }
+
+    const ticketNumber = '#CUSTOM-' + Math.floor(1000 + Math.random() * 9000);
+    const cpuChosen = state.cpuCustom || state.cpu;
+    const gpuChosen = state.gpuCustom || state.gpu;
+
+    currentTicket = {
+      id: ticketNumber,
+      date: new Date().toLocaleDateString(),
+      name, phone, city,
+      brand: state.brand,
+      cpu: cpuChosen,
+      gpu: gpuChosen,
+      ram: state.ram,
+      storage: state.storage,
+      display: state.display,
+      budget: state.budget
+    };
+
+    // Store in localStorage
+    try {
+      const requests = JSON.parse(localStorage.getItem('lh_custom_requests') || '[]');
+      requests.unshift(currentTicket);
+      localStorage.setItem('lh_custom_requests', JSON.stringify(requests));
+    } catch(e) {}
+
+    // Populate modal
+    document.getElementById('ticketId').textContent = ticketNumber;
+    document.getElementById('ticketCustomer').textContent = `${name} (${city})`;
+    document.getElementById('ticketSpecs').textContent = `${state.brand} · ${cpuChosen} · ${state.ram} · ${gpuChosen}`;
+
+    document.getElementById('confirmModal').classList.add('open');
+  }
+
+  function closeConfirmModal() {
+    document.getElementById('confirmModal').classList.remove('open');
+  }
+
+  function sendTicketWhatsApp() {
+    closeConfirmModal();
+    const msg = buildWhatsAppMessage();
+    const waUrl = `https://wa.me/923261398594?text=${msg}`;
+    window.open(waUrl, '_blank');
+  }
+
+  // Toast
+  let toastTimer;
+  function showToast(msg) {
+    const toast = document.getElementById('toast');
+    if (!toast) return;
+    document.getElementById('toastMsg').textContent = msg;
+    toast.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => toast.classList.remove('show'), 3500);
+  }
+
+  // Interactive Cursor
+  (function() {
+    const dot  = document.getElementById('cursor-dot');
+    const ring = document.getElementById('cursor-ring');
+    let mouseX = -100, mouseY = -100;
+    let ringX  = -100, ringY  = -100;
+
+    document.addEventListener('mousemove', e => {
+      mouseX = e.clientX; mouseY = e.clientY;
+      dot.style.left = mouseX + 'px';
+      dot.style.top  = mouseY + 'px';
+    });
+
+    function animateRing() {
+      ringX += (mouseX - ringX) * 0.15;
+      ringY += (mouseY - ringY) * 0.15;
+      ring.style.left = ringX + 'px';
+      ring.style.top  = ringY + 'px';
+      requestAnimationFrame(animateRing);
+    }
+    animateRing();
+
+    document.addEventListener('mouseover', e => {
+      if (e.target.closest('button, a, .opt-tile, .chip-btn, input, select, textarea')) {
+        ring.style.transform = 'translate(-50%, -50%) scale(1.6)';
+        ring.style.borderColor = 'var(--blue)';
+      }
+    });
+    document.addEventListener('mouseout', e => {
+      if (e.target.closest('button, a, .opt-tile, .chip-btn, input, select, textarea')) {
+        ring.style.transform = 'translate(-50%, -50%) scale(1)';
+        ring.style.borderColor = 'var(--blue)';
+      }
+    });
+  })();
+
+  // Initial load
+  initTheme();
+  initSavedUser();
+  updateSummaryUI();
+  findStockMatches();
+</script>
+
+</body>
+</html>

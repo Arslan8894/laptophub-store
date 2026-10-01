@@ -1,0 +1,967 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VOLTS — Premium Laptops</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #080808;
+    --surface: #111111;
+    --surface2: #1a1a1a;
+    --accent: #e8ff00;
+    --accent2: #00ffcc;
+    --text: #f0f0f0;
+    --muted: #666;
+    --border: rgba(255,255,255,0.07);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  /* CURSOR */
+  #cursor {
+    width: 12px; height: 12px;
+    background: var(--accent);
+    border-radius: 50%;
+    position: fixed;
+    pointer-events: none;
+    z-index: 9999;
+    transition: transform 0.15s, width 0.2s, height 0.2s, background 0.2s;
+    transform: translate(-50%, -50%);
+  }
+  #cursor-trail {
+    width: 36px; height: 36px;
+    border: 1px solid rgba(232,255,0,0.3);
+    border-radius: 50%;
+    position: fixed;
+    pointer-events: none;
+    z-index: 9998;
+    transform: translate(-50%, -50%);
+    transition: left 0.12s ease-out, top 0.12s ease-out, transform 0.2s;
+  }
+  body:hover #cursor { opacity: 1; }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1.2rem 3rem;
+    background: rgba(8,8,8,0.7);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+  }
+  .logo {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.5rem; font-weight: 800;
+    letter-spacing: -0.03em;
+    color: var(--accent);
+  }
+  .nav-links {
+    display: flex; gap: 2.5rem; list-style: none;
+  }
+  .nav-links a {
+    text-decoration: none; color: var(--muted);
+    font-size: 0.85rem; letter-spacing: 0.05em; text-transform: uppercase;
+    font-weight: 500;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--text); }
+  .nav-cta {
+    background: var(--accent); color: #000;
+    border: none; padding: 0.6rem 1.4rem;
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 600; font-size: 0.85rem;
+    cursor: none;
+    letter-spacing: 0.03em;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .nav-cta:hover { transform: scale(1.04); box-shadow: 0 0 20px rgba(232,255,0,0.3); }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    padding: 8rem 2rem 4rem;
+  }
+
+  .hero-bg {
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse 80% 60% at 50% 40%, rgba(232,255,0,0.05) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .grid-lines {
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none;
+  }
+
+  .hero-tag {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    background: var(--surface); border: 1px solid var(--border);
+    padding: 0.35rem 0.9rem;
+    font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--muted); margin-bottom: 2rem;
+    animation: fadeUp 0.8s ease both;
+  }
+  .hero-tag::before {
+    content: '';
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--accent);
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(1.4); }
+  }
+
+  h1.hero-title {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(3.5rem, 10vw, 8rem);
+    font-weight: 800;
+    line-height: 0.92;
+    letter-spacing: -0.04em;
+    margin-bottom: 1.5rem;
+    animation: fadeUp 0.8s 0.1s ease both;
+  }
+  .accent-word { color: var(--accent); }
+
+  .hero-sub {
+    font-size: 1.05rem; color: var(--muted);
+    max-width: 480px; line-height: 1.7;
+    margin-bottom: 3rem;
+    animation: fadeUp 0.8s 0.2s ease both;
+  }
+
+  .hero-btns {
+    display: flex; gap: 1rem;
+    animation: fadeUp 0.8s 0.3s ease both;
+  }
+  .btn-primary {
+    background: var(--accent); color: #000;
+    padding: 0.85rem 2.2rem; border: none;
+    font-family: 'DM Sans'; font-weight: 600; font-size: 0.9rem;
+    cursor: none; transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(232,255,0,0.25); }
+  .btn-ghost {
+    background: transparent; color: var(--text);
+    padding: 0.85rem 2.2rem;
+    border: 1px solid var(--border);
+    font-family: 'DM Sans'; font-weight: 500; font-size: 0.9rem;
+    cursor: none; transition: border-color 0.2s, background 0.2s;
+  }
+  .btn-ghost:hover { border-color: var(--muted); background: var(--surface); }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* 3D LAPTOP SCENE */
+  .laptop-scene {
+    position: relative;
+    margin-top: 4rem;
+    animation: fadeUp 0.8s 0.4s ease both;
+    perspective: 1200px;
+  }
+
+  .laptop-3d {
+    width: 420px;
+    transform-style: preserve-3d;
+    animation: float3d 6s ease-in-out infinite;
+    position: relative;
+  }
+
+  @keyframes float3d {
+    0%, 100% { transform: rotateX(8deg) rotateY(-12deg) translateY(0px); }
+    33% { transform: rotateX(10deg) rotateY(8deg) translateY(-12px); }
+    66% { transform: rotateX(6deg) rotateY(-5deg) translateY(-6px); }
+  }
+
+  .laptop-lid {
+    width: 100%; padding-bottom: 66%;
+    background: linear-gradient(145deg, #1c1c1c, #0a0a0a);
+    border-radius: 12px 12px 2px 2px;
+    position: relative;
+    border: 1px solid rgba(255,255,255,0.1);
+    box-shadow:
+      0 0 0 1px rgba(255,255,255,0.03),
+      inset 0 1px 0 rgba(255,255,255,0.06);
+    transform-origin: bottom center;
+    transform: rotateX(-8deg);
+  }
+
+  .laptop-screen {
+    position: absolute;
+    inset: 6px 8px 4px 8px;
+    background: #000;
+    border-radius: 6px;
+    overflow: hidden;
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  .screen-content {
+    width: 100%; height: 100%;
+    background: linear-gradient(135deg, #0d0d0d 0%, #111 100%);
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    gap: 6px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .screen-bars {
+    width: 70%; display: flex; flex-direction: column; gap: 5px;
+  }
+  .bar {
+    height: 4px; border-radius: 2px;
+    background: var(--accent);
+    opacity: 0.8;
+    animation: barLoad 3s ease infinite;
+  }
+  .bar:nth-child(2) { width: 80%; opacity: 0.5; animation-delay: 0.2s; }
+  .bar:nth-child(3) { width: 60%; opacity: 0.3; animation-delay: 0.4s; }
+  .bar:nth-child(4) { width: 90%; opacity: 0.4; animation-delay: 0.1s; }
+
+  @keyframes barLoad {
+    0%, 100% { opacity: 0.8; }
+    50% { opacity: 0.2; }
+  }
+
+  .screen-glow {
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse 60% 50% at 50% 30%, rgba(232,255,0,0.06), transparent);
+    pointer-events: none;
+  }
+
+  .laptop-base {
+    width: 108%; margin-left: -4%;
+    height: 14px;
+    background: linear-gradient(180deg, #1a1a1a, #0e0e0e);
+    border-radius: 0 0 4px 4px;
+    border: 1px solid rgba(255,255,255,0.07);
+    position: relative;
+    top: -1px;
+  }
+
+  .laptop-reflect {
+    position: absolute;
+    bottom: -60px; left: 0; right: 0;
+    height: 60px;
+    background: linear-gradient(180deg, rgba(232,255,0,0.04), transparent);
+    transform: scaleY(-1) translateY(-10px);
+    opacity: 0.5;
+    pointer-events: none;
+  }
+
+  /* ORBIT BADGES */
+  .orbit-badge {
+    position: absolute;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 0.5rem 0.9rem;
+    font-size: 0.72rem;
+    font-weight: 500;
+    white-space: nowrap;
+    color: var(--text);
+    letter-spacing: 0.03em;
+    animation: orbitBadge 8s ease-in-out infinite;
+  }
+  .orbit-badge span { color: var(--accent); }
+  .badge-1 { top: 10%; left: -120px; animation-delay: 0s; }
+  .badge-2 { top: 55%; right: -130px; animation-delay: 2s; }
+  .badge-3 { bottom: 5%; left: -100px; animation-delay: 4s; }
+
+  @keyframes orbitBadge {
+    0%, 100% { transform: translateY(0px); opacity: 0.8; }
+    50% { transform: translateY(-8px); opacity: 1; }
+  }
+
+  /* MARQUEE */
+  .marquee-wrap {
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    background: var(--surface);
+    overflow: hidden;
+    padding: 1rem 0;
+    white-space: nowrap;
+  }
+  .marquee-track {
+    display: inline-flex; gap: 0;
+    animation: marquee 20s linear infinite;
+  }
+  .marquee-item {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.8rem; font-weight: 600;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--muted);
+    padding: 0 2.5rem;
+  }
+  .marquee-item.accent { color: var(--accent); }
+  .marquee-dot {
+    color: var(--border); margin: 0 0.5rem;
+  }
+
+  @keyframes marquee {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+
+  /* PRODUCTS */
+  .section { padding: 7rem 3rem; }
+  .section-header {
+    display: flex; align-items: flex-end;
+    justify-content: space-between;
+    margin-bottom: 4rem;
+  }
+  .section-label {
+    font-size: 0.72rem; letter-spacing: 0.15em; text-transform: uppercase;
+    color: var(--muted); margin-bottom: 0.75rem;
+  }
+  .section-title {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 800; letter-spacing: -0.04em;
+    line-height: 1;
+  }
+  .see-all {
+    font-size: 0.8rem; color: var(--muted);
+    text-decoration: none; letter-spacing: 0.05em;
+    text-transform: uppercase; font-weight: 500;
+    transition: color 0.2s;
+    cursor: none;
+  }
+  .see-all:hover { color: var(--accent); }
+
+  .products-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5px;
+  }
+
+  .product-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 2.5rem 2rem;
+    position: relative;
+    overflow: hidden;
+    cursor: none;
+    transition: background 0.3s;
+    group: true;
+  }
+  .product-card:hover { background: var(--surface2); }
+  .product-card:hover .card-arrow { opacity: 1; transform: translate(0,0); }
+  .product-card:hover .card-glow { opacity: 1; }
+  .product-card:hover .mini-laptop { transform: rotateX(12deg) rotateY(15deg) translateY(-8px) scale(1.06); }
+
+  .card-badge {
+    display: inline-block;
+    padding: 0.25rem 0.6rem;
+    font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase;
+    font-weight: 600; margin-bottom: 1.5rem;
+  }
+  .badge-new { background: rgba(232,255,0,0.12); color: var(--accent); }
+  .badge-hot { background: rgba(255,80,50,0.12); color: #ff5032; }
+  .badge-pro { background: rgba(0,255,204,0.1); color: var(--accent2); }
+
+  .mini-laptop {
+    width: 100%;
+    margin: 1.5rem 0;
+    perspective: 600px;
+    transform-style: preserve-3d;
+    transform: rotateX(8deg) rotateY(-8deg);
+    transition: transform 0.5s ease;
+  }
+
+  .mini-lid {
+    width: 100%;
+    padding-bottom: 62%;
+    border-radius: 8px 8px 1px 1px;
+    position: relative;
+    border: 1px solid rgba(255,255,255,0.1);
+  }
+  .mini-screen {
+    position: absolute;
+    inset: 4px 6px 3px 6px;
+    border-radius: 4px;
+    display: flex; align-items: center; justify-content: center;
+    overflow: hidden;
+  }
+  .mini-base {
+    width: 106%; margin-left: -3%;
+    height: 9px;
+    border-radius: 0 0 3px 3px;
+    position: relative; top: -1px;
+    border: 1px solid rgba(255,255,255,0.07);
+  }
+
+  /* individual laptop colors */
+  .laptop-a .mini-lid { background: linear-gradient(135deg, #1e1e1e, #0c0c0c); }
+  .laptop-a .mini-screen { background: linear-gradient(135deg, #0a0a18, #050510); }
+  .laptop-a .mini-base { background: linear-gradient(180deg, #1a1a1a, #0e0e0e); }
+  .laptop-a .mini-screen::after { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 60% 40% at 50% 40%, rgba(100,100,255,0.15), transparent); }
+
+  .laptop-b .mini-lid { background: linear-gradient(135deg, #1a1512, #0c0a08); }
+  .laptop-b .mini-screen { background: linear-gradient(135deg, #0d0a06, #050400); }
+  .laptop-b .mini-base { background: linear-gradient(180deg, #181410, #0c0a08); }
+  .laptop-b .mini-screen::after { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 60% 40% at 50% 40%, rgba(255,160,40,0.12), transparent); }
+
+  .laptop-c .mini-lid { background: linear-gradient(135deg, #111a15, #050e09); }
+  .laptop-c .mini-screen { background: linear-gradient(135deg, #06100a, #020a05); }
+  .laptop-c .mini-base { background: linear-gradient(180deg, #111a14, #080e0b); }
+  .laptop-c .mini-screen::after { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 60% 40% at 50% 40%, rgba(0,255,130,0.12), transparent); }
+
+  .card-name {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.3rem; font-weight: 700;
+    letter-spacing: -0.02em;
+    margin-bottom: 0.4rem;
+  }
+  .card-specs {
+    font-size: 0.78rem; color: var(--muted);
+    line-height: 1.7; margin-bottom: 1.5rem;
+  }
+  .card-price-row {
+    display: flex; align-items: center;
+    justify-content: space-between;
+  }
+  .card-price {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.6rem; font-weight: 800;
+    letter-spacing: -0.03em;
+  }
+  .card-arrow {
+    width: 36px; height: 36px;
+    border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    opacity: 0;
+    transform: translate(-4px, 4px);
+    transition: opacity 0.3s, transform 0.3s;
+    font-size: 1rem;
+  }
+
+  .card-glow {
+    position: absolute;
+    width: 200px; height: 200px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(232,255,0,0.06), transparent 70%);
+    top: -50px; right: -50px;
+    opacity: 0;
+    transition: opacity 0.4s;
+    pointer-events: none;
+  }
+
+  /* SPECS STRIP */
+  .specs-strip {
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 4rem 3rem;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background-color: var(--border);
+  }
+  .spec-block {
+    padding: 2.5rem 2rem;
+    background: var(--bg);
+    text-align: center;
+  }
+  .spec-num {
+    font-family: 'Syne', sans-serif;
+    font-size: 3.5rem; font-weight: 800;
+    letter-spacing: -0.04em;
+    color: var(--accent);
+    line-height: 1;
+    margin-bottom: 0.5rem;
+  }
+  .spec-label {
+    font-size: 0.78rem; color: var(--muted);
+    letter-spacing: 0.08em; text-transform: uppercase;
+    font-weight: 500;
+  }
+
+  /* FEATURED */
+  .featured-block {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5px;
+    background: var(--border);
+    border: 1px solid var(--border);
+  }
+  .featured-info {
+    background: var(--bg);
+    padding: 4rem 3rem;
+    display: flex; flex-direction: column;
+    justify-content: center;
+  }
+  .featured-tag {
+    font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase;
+    color: var(--accent); font-weight: 600; margin-bottom: 1rem;
+  }
+  .featured-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 2.8rem; font-weight: 800;
+    letter-spacing: -0.04em; line-height: 1.05;
+    margin-bottom: 1.2rem;
+  }
+  .featured-desc {
+    color: var(--muted); font-size: 0.9rem;
+    line-height: 1.75; margin-bottom: 2rem;
+    max-width: 380px;
+  }
+  .featured-specs {
+    display: flex; flex-direction: column; gap: 0.6rem;
+    margin-bottom: 2.5rem;
+  }
+  .spec-row {
+    display: flex; justify-content: space-between;
+    align-items: center;
+    padding: 0.6rem 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 0.82rem;
+  }
+  .spec-row-label { color: var(--muted); }
+  .spec-row-val { font-weight: 600; color: var(--text); }
+  .btn-add {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    background: var(--accent); color: #000;
+    padding: 0.9rem 2rem;
+    border: none; cursor: none;
+    font-family: 'DM Sans'; font-weight: 700; font-size: 0.88rem;
+    letter-spacing: 0.02em;
+    transition: transform 0.2s, box-shadow 0.2s;
+    width: fit-content;
+  }
+  .btn-add:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(232,255,0,0.25); }
+
+  .featured-visual {
+    background: var(--surface);
+    display: flex; align-items: center; justify-content: center;
+    position: relative; overflow: hidden;
+    min-height: 500px;
+  }
+
+  .big-laptop {
+    perspective: 1000px;
+    transform-style: preserve-3d;
+  }
+
+  .big-laptop-inner {
+    animation: bigFloat 7s ease-in-out infinite;
+    transform-style: preserve-3d;
+  }
+  @keyframes bigFloat {
+    0%, 100% { transform: rotateX(10deg) rotateY(-15deg) translateY(0); }
+    40% { transform: rotateX(8deg) rotateY(10deg) translateY(-16px); }
+    70% { transform: rotateX(12deg) rotateY(-5deg) translateY(-8px); }
+  }
+
+  .big-lid {
+    width: 300px;
+    padding-bottom: 200px;
+    background: linear-gradient(145deg, #1f1f1f, #0a0a0a);
+    border-radius: 10px 10px 2px 2px;
+    border: 1px solid rgba(255,255,255,0.1);
+    position: relative;
+    box-shadow: 0 40px 100px rgba(0,0,0,0.8), 0 0 0 1px rgba(255,255,255,0.03);
+  }
+  .big-scr {
+    position: absolute;
+    inset: 8px 10px 6px 10px;
+    background: #000;
+    border-radius: 5px;
+    overflow: hidden;
+  }
+  .big-scr-inner {
+    width: 100%; height: 100%;
+    background: linear-gradient(135deg, #0b0b1a, #050510);
+    display: flex; align-items: center; justify-content: center;
+    position: relative;
+  }
+  .big-scr-inner::before {
+    content: 'VOLTS';
+    font-family: 'Syne', sans-serif;
+    font-size: 1.4rem; font-weight: 800;
+    letter-spacing: -0.04em;
+    color: var(--accent);
+    opacity: 0.15;
+    position: absolute;
+  }
+  .scr-lines {
+    position: absolute; bottom: 15px; left: 15px; right: 15px;
+    display: flex; flex-direction: column; gap: 5px;
+  }
+  .scr-line {
+    height: 3px; background: rgba(232,255,0,0.3);
+    border-radius: 2px;
+    animation: lineAnim 3.5s ease infinite;
+  }
+  .scr-line:nth-child(2) { width: 75%; opacity: 0.6; animation-delay: 0.3s; }
+  .scr-line:nth-child(3) { width: 55%; opacity: 0.4; animation-delay: 0.6s; }
+  @keyframes lineAnim {
+    0%, 100% { opacity: 0.6; }
+    50% { opacity: 0.15; }
+  }
+
+  .big-base {
+    width: 110%; margin-left: -5%;
+    height: 18px;
+    background: linear-gradient(180deg, #1c1c1c, #0d0d0d);
+    border-radius: 0 0 5px 5px;
+    border: 1px solid rgba(255,255,255,0.07);
+    position: relative; top: -1px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+  }
+
+  .featured-glow {
+    position: absolute;
+    width: 300px; height: 300px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(232,255,0,0.07), transparent 70%);
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+  }
+
+  /* FOOTER */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 3rem;
+    display: flex; align-items: center; justify-content: space-between;
+    color: var(--muted); font-size: 0.8rem;
+  }
+  .footer-logo {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.2rem; font-weight: 800;
+    color: var(--accent);
+  }
+
+  /* SCROLL REVEAL */
+  .reveal {
+    opacity: 0; transform: translateY(30px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  /* MEDIA */
+  @media (max-width: 900px) {
+    nav { padding: 1rem 1.5rem; }
+    .nav-links { display: none; }
+    .section { padding: 5rem 1.5rem; }
+    .products-grid { grid-template-columns: 1fr; gap: 1px; }
+    .featured-block { grid-template-columns: 1fr; }
+    .featured-visual { min-height: 300px; }
+    .specs-strip { grid-template-columns: repeat(2,1fr); }
+    .section-header { flex-direction: column; align-items: flex-start; gap: 1rem; }
+    h1.hero-title { font-size: 3rem; }
+    .laptop-3d { width: 280px; }
+    .orbit-badge { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<div id="cursor"></div>
+<div id="cursor-trail"></div>
+
+<!-- NAV -->
+<nav>
+  <div class="logo">VOLTS</div>
+  <ul class="nav-links">
+    <li><a href="#">Shop</a></li>
+    <li><a href="#">Compare</a></li>
+    <li><a href="#">Specs</a></li>
+    <li><a href="#">Support</a></li>
+  </ul>
+  <button class="nav-cta">Shop Now</button>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="grid-lines"></div>
+  <div class="hero-tag">New 2025 Collection — Available Now</div>
+  <h1 class="hero-title">MACHINES<br>BUILT FOR<br><span class="accent-word">POWER.</span></h1>
+  <p class="hero-sub">Premium laptops engineered for those who refuse to compromise. Lightweight builds. Unstoppable performance.</p>
+  <div class="hero-btns">
+    <button class="btn-primary">Explore Models</button>
+    <button class="btn-ghost">Watch Film</button>
+  </div>
+
+  <div class="laptop-scene">
+    <div class="orbit-badge badge-1">⚡ <span>AMD Ryzen 9</span> — 5.4 GHz</div>
+    <div class="orbit-badge badge-2">🔋 Battery: <span>22hr</span> life</div>
+    <div class="orbit-badge badge-3">💻 Weight: <span>1.1 kg</span></div>
+
+    <div class="laptop-3d">
+      <div class="laptop-lid">
+        <div class="laptop-screen">
+          <div class="screen-content">
+            <div class="screen-bars">
+              <div class="bar"></div>
+              <div class="bar"></div>
+              <div class="bar"></div>
+              <div class="bar"></div>
+            </div>
+            <div class="screen-glow"></div>
+          </div>
+        </div>
+      </div>
+      <div class="laptop-base"></div>
+      <div class="laptop-reflect"></div>
+    </div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-wrap">
+  <div class="marquee-track">
+    <span class="marquee-item">Performance</span>
+    <span class="marquee-item accent">— VOLTS</span>
+    <span class="marquee-item">Precision Engineering</span>
+    <span class="marquee-item accent">— 2025</span>
+    <span class="marquee-item">Ultra Thin Builds</span>
+    <span class="marquee-item accent">— Free Shipping</span>
+    <span class="marquee-item">Next-Gen Chips</span>
+    <span class="marquee-item accent">— Premium Grade</span>
+    <span class="marquee-item">Performance</span>
+    <span class="marquee-item accent">— VOLTS</span>
+    <span class="marquee-item">Precision Engineering</span>
+    <span class="marquee-item accent">— 2025</span>
+    <span class="marquee-item">Ultra Thin Builds</span>
+    <span class="marquee-item accent">— Free Shipping</span>
+    <span class="marquee-item">Next-Gen Chips</span>
+    <span class="marquee-item accent">— Premium Grade</span>
+  </div>
+</div>
+
+<!-- PRODUCTS -->
+<section class="section reveal">
+  <div class="section-header">
+    <div>
+      <p class="section-label">Our Lineup</p>
+      <h2 class="section-title">Top Models</h2>
+    </div>
+    <a href="#" class="see-all">View all models →</a>
+  </div>
+
+  <div class="products-grid">
+    <div class="product-card">
+      <div class="card-glow"></div>
+      <span class="card-badge badge-new">New</span>
+      <div class="mini-laptop laptop-a">
+        <div class="mini-lid">
+          <div class="mini-screen"></div>
+        </div>
+        <div class="mini-base"></div>
+      </div>
+      <p class="card-name">Phantom X1</p>
+      <p class="card-specs">Ryzen 9 7950X · 32GB LPDDR5<br>1TB NVMe · OLED 2.8K 120Hz</p>
+      <div class="card-price-row">
+        <span class="card-price">$1,299</span>
+        <div class="card-arrow">→</div>
+      </div>
+    </div>
+
+    <div class="product-card">
+      <div class="card-glow"></div>
+      <span class="card-badge badge-hot">Bestseller</span>
+      <div class="mini-laptop laptop-b">
+        <div class="mini-lid">
+          <div class="mini-screen"></div>
+        </div>
+        <div class="mini-base"></div>
+      </div>
+      <p class="card-name">Vortex Pro</p>
+      <p class="card-specs">Intel Core Ultra 9 · 64GB DDR5<br>2TB NVMe · IPS 165Hz 2K</p>
+      <div class="card-price-row">
+        <span class="card-price">$1,799</span>
+        <div class="card-arrow">→</div>
+      </div>
+    </div>
+
+    <div class="product-card">
+      <div class="card-glow"></div>
+      <span class="card-badge badge-pro">Creator</span>
+      <div class="mini-laptop laptop-c">
+        <div class="mini-lid">
+          <div class="mini-screen"></div>
+        </div>
+        <div class="mini-base"></div>
+      </div>
+      <p class="card-name">Nova Studio</p>
+      <p class="card-specs">M3 Max · 128GB Unified<br>4TB SSD · Mini-LED Pro Display</p>
+      <div class="card-price-row">
+        <span class="card-price">$2,499</span>
+        <div class="card-arrow">→</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS STRIP -->
+<div class="specs-strip reveal">
+  <div class="spec-block">
+    <div class="spec-num">47+</div>
+    <div class="spec-label">Models Available</div>
+  </div>
+  <div class="spec-block">
+    <div class="spec-num">22hr</div>
+    <div class="spec-label">Max Battery Life</div>
+  </div>
+  <div class="spec-block">
+    <div class="spec-num">1.1kg</div>
+    <div class="spec-label">Lightest Build</div>
+  </div>
+  <div class="spec-block">
+    <div class="spec-num">3yr</div>
+    <div class="spec-label">Warranty Coverage</div>
+  </div>
+</div>
+
+<!-- FEATURED -->
+<section class="section reveal">
+  <div class="section-label" style="margin-bottom:2rem">Featured Build</div>
+  <div class="featured-block">
+    <div class="featured-info">
+      <p class="featured-tag">Editor's Choice 2025</p>
+      <h3 class="featured-title">Phantom X1<br>Ultra Black</h3>
+      <p class="featured-desc">The thinnest laptop we've ever made. 13.4mm at its peak, weighing just 1.08kg — with a processor that outperforms machines twice its weight.</p>
+      <div class="featured-specs">
+        <div class="spec-row">
+          <span class="spec-row-label">Processor</span>
+          <span class="spec-row-val">AMD Ryzen 9 7950X</span>
+        </div>
+        <div class="spec-row">
+          <span class="spec-row-label">Memory</span>
+          <span class="spec-row-val">32GB LPDDR5X</span>
+        </div>
+        <div class="spec-row">
+          <span class="spec-row-label">Storage</span>
+          <span class="spec-row-val">1TB PCIe Gen 5</span>
+        </div>
+        <div class="spec-row">
+          <span class="spec-row-label">Display</span>
+          <span class="spec-row-val">14" OLED 2880×1800 120Hz</span>
+        </div>
+        <div class="spec-row">
+          <span class="spec-row-label">Weight</span>
+          <span class="spec-row-val">1.08 kg</span>
+        </div>
+      </div>
+      <button class="btn-add">Add to Cart — $1,299</button>
+    </div>
+
+    <div class="featured-visual">
+      <div class="featured-glow"></div>
+      <div class="big-laptop">
+        <div class="big-laptop-inner">
+          <div class="big-lid">
+            <div class="big-scr">
+              <div class="big-scr-inner">
+                <div class="scr-lines">
+                  <div class="scr-line"></div>
+                  <div class="scr-line"></div>
+                  <div class="scr-line"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="big-base"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">VOLTS</div>
+  <span>© 2025 Volts Tech. All rights reserved.</span>
+  <span>Built for the relentless.</span>
+</footer>
+
+<script>
+  const cursor = document.getElementById('cursor');
+  const trail = document.getElementById('cursor-trail');
+  let mx = 0, my = 0;
+
+  document.addEventListener('mousemove', e => {
+    mx = e.clientX; my = e.clientY;
+    cursor.style.left = mx + 'px';
+    cursor.style.top = my + 'px';
+    setTimeout(() => {
+      trail.style.left = mx + 'px';
+      trail.style.top = my + 'px';
+    }, 60);
+  });
+
+  document.querySelectorAll('button, a, .product-card, .see-all').forEach(el => {
+    el.addEventListener('mouseenter', () => {
+      cursor.style.transform = 'translate(-50%,-50%) scale(2.5)';
+      cursor.style.background = '#e8ff00';
+      cursor.style.mixBlendMode = 'difference';
+    });
+    el.addEventListener('mouseleave', () => {
+      cursor.style.transform = 'translate(-50%,-50%) scale(1)';
+      cursor.style.mixBlendMode = 'normal';
+    });
+  });
+
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.15 });
+
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+  document.querySelectorAll('.product-card').forEach(card => {
+    card.addEventListener('mousemove', e => {
+      const rect = card.getBoundingClientRect();
+      const x = (e.clientX - rect.left) / rect.width - 0.5;
+      const y = (e.clientY - rect.top) / rect.height - 0.5;
+      card.style.transform = `perspective(600px) rotateX(${-y * 6}deg) rotateY(${x * 6}deg)`;
+    });
+    card.addEventListener('mouseleave', () => {
+      card.style.transform = 'none';
+    });
+  });
+
+  const counters = document.querySelectorAll('.spec-num');
+  const countObserver = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.style.animation = 'fadeUp 0.6s ease both';
+        countObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.5 });
+  counters.forEach(c => countObserver.observe(c));
+</script>
+</body>
+</html>

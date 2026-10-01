@@ -1,0 +1,1793 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Inventory Management — LaptopHub & VOLTS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Syne:wght@700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #090a0f;
+    --surface: #12141d;
+    --surface-card: #181b26;
+    --surface-hover: #222634;
+    --accent-blue: #4c7cff;
+    --accent-blue-hover: #3b68e5;
+    --accent-lime: #e8ff00;
+    --accent-purple: #9d4edd;
+    --success: #10b981;
+    --danger: #ef4444;
+    --warning: #f59e0b;
+    --text: #e6e9f5;
+    --heading: #ffffff;
+    --muted: #828a9e;
+    --border: rgba(255,255,255,0.08);
+    --border-bright: rgba(255,255,255,0.18);
+    --header-bg: rgba(18, 20, 29, 0.95);
+    --modal-overlay: rgba(0,0,0,0.85);
+  }
+
+  body {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow-x: hidden;
+  }
+
+  /* TOP HEADER */
+  header {
+    background: var(--header-bg);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+    padding: 0.9rem 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    gap: 1.5rem;
+  }
+
+  .header-left {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .logo-box {
+    background: linear-gradient(135deg, #4c7cff, #e8ff00);
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    color: #000;
+    font-weight: 800;
+    box-shadow: 0 4px 15px rgba(76, 124, 255, 0.3);
+  }
+
+  .title-group h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: var(--heading);
+    letter-spacing: -0.01em;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .title-group p {
+    font-size: 0.78rem;
+    color: var(--muted);
+  }
+
+  .status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 0.72rem;
+    font-weight: 600;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid var(--border);
+  }
+
+  .status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--muted);
+  }
+
+  .status-badge.connected .status-dot { background: var(--success); box-shadow: 0 0 8px var(--success); }
+  .status-badge.standalone .status-dot { background: var(--warning); box-shadow: 0 0 8px var(--warning); }
+
+  .header-nav {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .nav-link {
+    color: var(--text);
+    text-decoration: none;
+    font-size: 0.82rem;
+    font-weight: 600;
+    padding: 0.45rem 0.85rem;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: rgba(255,255,255,0.03);
+    transition: all 0.2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .nav-link:hover {
+    background: rgba(255,255,255,0.08);
+    border-color: var(--border-bright);
+    color: #fff;
+  }
+
+  .header-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .btn {
+    font-family: inherit;
+    font-size: 0.84rem;
+    font-weight: 700;
+    padding: 0.55rem 1.1rem;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+  }
+
+  .btn-primary {
+    background: linear-gradient(135deg, var(--accent-blue), #3b68e5);
+    color: #fff;
+    box-shadow: 0 4px 15px rgba(76,124,255,0.3);
+  }
+
+  .btn-primary:hover {
+    background: linear-gradient(135deg, #5b87ff, #4c7cff);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(76,124,255,0.45);
+  }
+
+  .btn-success {
+    background: rgba(16, 185, 129, 0.15);
+    color: #34d399;
+    border: 1px solid rgba(16, 185, 129, 0.3);
+  }
+
+  .btn-success:hover {
+    background: rgba(16, 185, 129, 0.25);
+    border-color: rgba(16, 185, 129, 0.5);
+  }
+
+  .btn-outline {
+    background: var(--surface-card);
+    color: var(--text);
+    border: 1px solid var(--border);
+  }
+
+  .btn-outline:hover {
+    background: var(--surface-hover);
+    border-color: var(--border-bright);
+    color: #fff;
+  }
+
+  .btn-sm {
+    padding: 0.35rem 0.75rem;
+    font-size: 0.76rem;
+    border-radius: 6px;
+  }
+
+  .btn-danger {
+    background: rgba(239, 68, 68, 0.15);
+    color: #f87171;
+    border: 1px solid rgba(239, 68, 68, 0.3);
+  }
+
+  .btn-danger:hover {
+    background: rgba(239, 68, 68, 0.25);
+    border-color: rgba(239, 68, 68, 0.5);
+  }
+
+  /* MAIN LAYOUT */
+  main {
+    flex: 1;
+    max-width: 1600px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 1.8rem 2rem 4rem;
+  }
+
+  /* METRICS STRIP */
+  .metrics-strip {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.2rem;
+    margin-bottom: 2rem;
+  }
+
+  .metric-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.2rem 1.4rem;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .metric-card::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: var(--accent-blue);
+    opacity: 0.4;
+  }
+
+  .metric-card.lime::after { background: var(--accent-lime); }
+  .metric-card.purple::after { background: var(--accent-purple); }
+  .metric-card.success::after { background: var(--success); }
+
+  .metric-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--muted);
+  }
+
+  .metric-val {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: var(--heading);
+  }
+
+  .metric-sub {
+    font-size: 0.76rem;
+    color: var(--muted);
+  }
+
+  /* TOOLBAR */
+  .toolbar {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.2rem;
+    margin-bottom: 1.8rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .toolbar-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .search-box {
+    flex: 1;
+    min-width: 280px;
+    position: relative;
+  }
+
+  .search-box input {
+    width: 100%;
+    background: var(--surface-card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 0.65rem 1rem 0.65rem 2.5rem;
+    color: #fff;
+    font-family: inherit;
+    font-size: 0.85rem;
+    transition: all 0.2s;
+  }
+
+  .search-box input:focus {
+    outline: none;
+    border-color: var(--accent-blue);
+    box-shadow: 0 0 0 3px rgba(76,124,255,0.2);
+  }
+
+  .search-icon {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--muted);
+    font-size: 0.9rem;
+    pointer-events: none;
+  }
+
+  .filters-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .pill-btn {
+    background: var(--surface-card);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 0.35rem 0.85rem;
+    border-radius: 100px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+  }
+
+  .pill-btn:hover {
+    background: var(--surface-hover);
+    color: #fff;
+    border-color: var(--border-bright);
+  }
+
+  .pill-btn.active {
+    background: var(--accent-blue);
+    color: #fff;
+    border-color: var(--accent-blue);
+    box-shadow: 0 2px 10px rgba(76,124,255,0.3);
+  }
+
+  .select-filter {
+    background: var(--surface-card);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 0.45rem 0.85rem;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    font-family: inherit;
+    cursor: pointer;
+    outline: none;
+  }
+
+  .select-filter:focus {
+    border-color: var(--accent-blue);
+  }
+
+  .view-toggle {
+    display: flex;
+    background: var(--surface-card);
+    border-radius: 8px;
+    padding: 3px;
+    border: 1px solid var(--border);
+  }
+
+  .view-btn {
+    background: transparent;
+    border: none;
+    color: var(--muted);
+    padding: 0.35rem 0.7rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    transition: all 0.2s;
+  }
+
+  .view-btn.active {
+    background: var(--surface-hover);
+    color: #fff;
+  }
+
+  /* LAPTOPS GRID */
+  .laptops-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .laptop-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+    position: relative;
+  }
+
+  .laptop-card:hover {
+    transform: translateY(-3px);
+    border-color: rgba(76,124,255,0.4);
+    box-shadow: 0 12px 30px rgba(0,0,0,0.35);
+  }
+
+  .card-media {
+    width: 100%;
+    height: 200px;
+    background: #0d0f17;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    overflow: hidden;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .card-media img {
+    max-width: 90%;
+    max-height: 90%;
+    object-fit: contain;
+    transition: transform 0.3s;
+    filter: drop-shadow(0 8px 16px rgba(0,0,0,0.4));
+  }
+
+  .laptop-card:hover .card-media img {
+    transform: scale(1.05);
+  }
+
+  .badge-tag {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    padding: 3px 9px;
+    border-radius: 6px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    backdrop-filter: blur(8px);
+  }
+
+  .badge-id {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: rgba(0,0,0,0.6);
+    color: var(--muted);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.72rem;
+    padding: 2px 7px;
+    border-radius: 4px;
+    border: 1px solid rgba(255,255,255,0.08);
+  }
+
+  .b-corp { background: rgba(76, 124, 255, 0.2); color: #7096ff; border: 1px solid rgba(76, 124, 255, 0.4); }
+  .b-val  { background: rgba(232, 255, 0, 0.15); color: #e8ff00; border: 1px solid rgba(232, 255, 0, 0.3); }
+  .b-gen  { background: rgba(16, 185, 129, 0.2); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.4); }
+  .b-game { background: rgba(239, 68, 68, 0.2); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.4); }
+  .b-apple{ background: rgba(255, 255, 255, 0.15); color: #ffffff; border: 1px solid rgba(255, 255, 255, 0.3); }
+
+  .card-body {
+    padding: 1.2rem;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    gap: 0.8rem;
+  }
+
+  .card-brand-series {
+    font-size: 0.74rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+  }
+
+  .card-title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--heading);
+    line-height: 1.35;
+  }
+
+  .specs-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .spec-pill {
+    background: var(--surface-card);
+    border: 1px solid var(--border);
+    padding: 2px 7px;
+    border-radius: 4px;
+    font-size: 0.72rem;
+    font-family: 'JetBrains Mono', monospace;
+    color: #ccd2e3;
+  }
+
+  .spec-pill.highlight {
+    border-color: rgba(76,124,255,0.4);
+    color: var(--accent-blue);
+  }
+
+  .card-price-row {
+    margin-top: auto;
+    padding-top: 0.9rem;
+    border-top: 1px solid var(--border);
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+  }
+
+  .card-price-pkr {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: var(--heading);
+  }
+
+  .card-price-usd {
+    font-size: 0.82rem;
+    color: var(--muted);
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  .card-actions {
+    display: flex;
+    gap: 8px;
+    padding-top: 0.8rem;
+  }
+
+  .card-actions .btn {
+    flex: 1;
+    justify-content: center;
+  }
+
+  /* TABLE VIEW */
+  .table-container {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow-x: auto;
+    display: none;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.82rem;
+    text-align: left;
+  }
+
+  th {
+    background: var(--surface-card);
+    padding: 0.9rem 1rem;
+    font-weight: 700;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-size: 0.72rem;
+    border-bottom: 1px solid var(--border);
+    white-space: nowrap;
+  }
+
+  td {
+    padding: 0.85rem 1rem;
+    border-bottom: 1px solid var(--border);
+    vertical-align: middle;
+  }
+
+  tr:hover td {
+    background: var(--surface-hover);
+  }
+
+  .table-thumb {
+    width: 48px;
+    height: 38px;
+    background: #0d0f17;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    border: 1px solid var(--border);
+  }
+
+  .table-thumb img {
+    max-width: 90%;
+    max-height: 90%;
+    object-fit: contain;
+  }
+
+  /* MODAL */
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: var(--modal-overlay);
+    backdrop-filter: blur(10px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 1.5rem;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s;
+  }
+
+  .modal-overlay.open {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .modal-box {
+    background: var(--surface);
+    border: 1px solid var(--border-bright);
+    border-radius: 16px;
+    width: 100%;
+    max-width: 820px;
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 25px 60px rgba(0,0,0,0.6);
+    transform: scale(0.95);
+    transition: transform 0.25s;
+    overflow: hidden;
+  }
+
+  .modal-overlay.open .modal-box {
+    transform: scale(1);
+  }
+
+  .modal-header {
+    padding: 1.3rem 1.8rem;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--surface-card);
+  }
+
+  .modal-header h2 {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: var(--heading);
+  }
+
+  .modal-close {
+    background: transparent;
+    border: none;
+    color: var(--muted);
+    font-size: 1.5rem;
+    cursor: pointer;
+    line-height: 1;
+    transition: color 0.2s;
+  }
+
+  .modal-close:hover { color: #fff; }
+
+  .modal-body {
+    padding: 1.8rem;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .form-section-title {
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: var(--accent-blue);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.6rem;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+
+  .form-grid.cols-3 {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .form-group.full {
+    grid-column: span 2;
+  }
+
+  .form-group label {
+    font-size: 0.76rem;
+    font-weight: 600;
+    color: var(--muted);
+  }
+
+  .form-control {
+    background: var(--surface-card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 0.6rem 0.9rem;
+    color: #fff;
+    font-family: inherit;
+    font-size: 0.84rem;
+    transition: border-color 0.2s;
+  }
+
+  .form-control:focus {
+    outline: none;
+    border-color: var(--accent-blue);
+    box-shadow: 0 0 0 2px rgba(76,124,255,0.25);
+  }
+
+  .photo-preview-wrap {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+  }
+
+  .photo-preview-box {
+    width: 100px;
+    height: 75px;
+    background: #0d0f17;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+
+  .photo-preview-box img {
+    max-width: 90%;
+    max-height: 90%;
+    object-fit: contain;
+  }
+
+  .checkbox-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 4px;
+  }
+
+  .checkbox-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.8rem;
+    cursor: pointer;
+    background: var(--surface-card);
+    padding: 5px 10px;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    user-select: none;
+  }
+
+  .checkbox-label input {
+    cursor: pointer;
+  }
+
+  .modal-footer {
+    padding: 1.2rem 1.8rem;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    background: var(--surface-card);
+  }
+
+  /* TOAST NOTIFICATION */
+  .toast {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    background: var(--surface-card);
+    border: 1px solid var(--border-bright);
+    color: #fff;
+    padding: 0.8rem 1.2rem;
+    border-radius: 10px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    z-index: 2000;
+    transform: translateY(100px);
+    opacity: 0;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .toast.show {
+    transform: translateY(0);
+    opacity: 1;
+  }
+
+  .toast.success { border-color: var(--success); }
+  .toast.error { border-color: var(--danger); }
+
+  /* CONFIRM DIALOG */
+  .confirm-box {
+    max-width: 440px;
+    padding: 1.8rem;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    align-items: center;
+  }
+
+  .confirm-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: rgba(239, 68, 68, 0.15);
+    color: var(--danger);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4rem;
+  }
+
+  /* EMPTY STATE */
+  .empty-state {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 4rem 1rem;
+    color: var(--muted);
+  }
+
+  .empty-state h3 {
+    font-size: 1.2rem;
+    color: #fff;
+    margin-bottom: 0.5rem;
+  }
+
+  @media (max-width: 900px) {
+    header { flex-direction: column; align-items: stretch; gap: 0.8rem; padding: 1rem; }
+    .header-nav { overflow-x: auto; padding-bottom: 4px; }
+    .form-grid, .form-grid.cols-3 { grid-template-columns: 1fr; }
+    .form-group.full { grid-column: span 1; }
+  }
+</style>
+</head>
+<body>
+
+<!-- TOP HEADER -->
+<header>
+  <div class="header-left">
+    <div class="logo-box">📦</div>
+    <div class="title-group">
+      <h1>Laptop Inventory Control</h1>
+      <p>LaptopHub & VOLTS Store Inventory Database</p>
+    </div>
+    <div class="status-badge" id="syncStatusBadge">
+      <span class="status-dot"></span>
+      <span id="syncStatusText">Checking Server...</span>
+    </div>
+  </div>
+
+  <nav class="header-nav">
+    <a href="index.html" class="nav-link">⚡ Showcase Portal</a>
+    <a href="laptophub.html" target="_blank" class="nav-link">🇵🇰 LaptopHub</a>
+    <a href="volts.html" target="_blank" class="nav-link">⚡ VOLTS</a>
+    <a href="consult.html" target="_blank" class="nav-link">🔍 Consult Wizard</a>
+  </nav>
+
+  <div class="header-actions">
+    <button class="btn btn-outline btn-sm" onclick="exportDataFile()" title="Download updated laptops-data.js">
+      📥 Export Data
+    </button>
+    <button class="btn btn-primary" onclick="openAddModal()">
+      + Add Laptop
+    </button>
+  </div>
+</header>
+
+<main>
+  <!-- METRICS STRIP -->
+  <section class="metrics-strip">
+    <div class="metric-card">
+      <span class="metric-label">Total In Stock</span>
+      <span class="metric-val" id="totalCount">0</span>
+      <span class="metric-sub" id="photoStatusSub">Checking photos...</span>
+    </div>
+
+    <div class="metric-card lime">
+      <span class="metric-label">Total Inventory Value (PKR)</span>
+      <span class="metric-val" id="totalValuePkr">Rs 0</span>
+      <span class="metric-sub" id="avgPriceSub">Avg: Rs 0 / unit</span>
+    </div>
+
+    <div class="metric-card purple">
+      <span class="metric-label">Valuation (USD)</span>
+      <span class="metric-val" id="totalValueUsd">$0</span>
+      <span class="metric-sub">Exchange Rate: ~278 PKR/USD</span>
+    </div>
+
+    <div class="metric-card success">
+      <span class="metric-label">Brand Breakdown</span>
+      <span class="metric-val" id="brandBreakdownText">5 Brands</span>
+      <span class="metric-sub" id="brandSubText">Lenovo, Dell, HP, Apple, Surface</span>
+    </div>
+  </section>
+
+  <!-- TOOLBAR -->
+  <section class="toolbar">
+    <div class="toolbar-top">
+      <div class="search-box">
+        <span class="search-icon">🔍</span>
+        <input type="text" id="searchInput" placeholder="Search by name, series, CPU, GPU, RAM..." oninput="applyFilters()">
+      </div>
+
+      <div style="display: flex; gap: 8px; align-items: center;">
+        <select class="select-filter" id="categoryFilter" onchange="applyFilters()">
+          <option value="all">All Categories</option>
+          <option value="Corporate Ultrabook">Corporate Ultrabook</option>
+          <option value="2-in-1 Tablet PC">2-in-1 Tablet PC</option>
+          <option value="Executive Ultrabook">Executive Ultrabook</option>
+          <option value="Flagship 2-in-1">Flagship 2-in-1</option>
+          <option value="Heavy Workstation">Heavy Workstation</option>
+          <option value="Extreme Gaming">Extreme Gaming</option>
+          <option value="Pro Silicon Creator">Apple Silicon</option>
+        </select>
+
+        <select class="select-filter" id="sortFilter" onchange="applyFilters()">
+          <option value="id_asc">Sort: ID (Default)</option>
+          <option value="price_asc">Price: Low to High</option>
+          <option value="price_desc">Price: High to Low</option>
+          <option value="ram_desc">RAM: Highest First</option>
+          <option value="storage_desc">Storage: Highest First</option>
+          <option value="name_asc">Name: A to Z</option>
+        </select>
+
+        <div class="view-toggle">
+          <button class="view-btn active" id="btnGrid" onclick="setViewMode('grid')" title="Card Grid View">🔲</button>
+          <button class="view-btn" id="btnTable" onclick="setViewMode('table')" title="Table Spreadsheet View">☰</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- BRAND PILLS -->
+    <div class="filters-row" id="brandPills">
+      <button class="pill-btn active" data-brand="all" onclick="setBrandFilter('all')">All Laptops (<span id="countAll">0</span>)</button>
+      <button class="pill-btn" data-brand="lenovo" onclick="setBrandFilter('lenovo')">Lenovo (<span id="countLenovo">0</span>)</button>
+      <button class="pill-btn" data-brand="dell" onclick="setBrandFilter('dell')">Dell (<span id="countDell">0</span>)</button>
+      <button class="pill-btn" data-brand="hp" onclick="setBrandFilter('hp')">HP (<span id="countHp">0</span>)</button>
+      <button class="pill-btn" data-brand="apple" onclick="setBrandFilter('apple')">Apple (<span id="countApple">0</span>)</button>
+      <button class="pill-btn" data-brand="microsoft" onclick="setBrandFilter('microsoft')">Surface (<span id="countSurface">0</span>)</button>
+    </div>
+  </section>
+
+  <!-- LAPTOPS GRID -->
+  <div class="laptops-grid" id="laptopsGrid">
+    <!-- Populated dynamically -->
+  </div>
+
+  <!-- TABLE VIEW -->
+  <div class="table-container" id="tableContainer">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Photo</th>
+          <th>Model / Series</th>
+          <th>Brand</th>
+          <th>Processor / Gen</th>
+          <th>RAM / SSD</th>
+          <th>Display</th>
+          <th>Price (PKR)</th>
+          <th>Category / Badge</th>
+          <th style="text-align: right;">Actions</th>
+        </tr>
+      </thead>
+      <tbody id="tableBody">
+        <!-- Populated dynamically -->
+      </tbody>
+    </table>
+  </div>
+</main>
+
+<!-- ADD / EDIT MODAL -->
+<div class="modal-overlay" id="editModal">
+  <div class="modal-box">
+    <div class="modal-header">
+      <h2 id="modalTitle">Add New Laptop</h2>
+      <button class="modal-close" onclick="closeModal('editModal')">&times;</button>
+    </div>
+
+    <form id="laptopForm" onsubmit="handleFormSubmit(event)">
+      <div class="modal-body">
+        <input type="hidden" id="editId">
+
+        <!-- 1. IDENTIFICATION -->
+        <div>
+          <div class="form-section-title">🏷️ Basic Information</div>
+          <div class="form-grid">
+            <div class="form-group full">
+              <label for="fieldName">Listing Name *</label>
+              <input type="text" id="fieldName" class="form-control" placeholder="e.g. LENOVO T14G1 Core i7 10Th" required>
+            </div>
+
+            <div class="form-group">
+              <label for="fieldBrand">Brand *</label>
+              <select id="fieldBrand" class="form-control" required onchange="handleBrandChange()">
+                <option value="lenovo">Lenovo</option>
+                <option value="dell">Dell</option>
+                <option value="hp">HP</option>
+                <option value="apple">Apple</option>
+                <option value="microsoft">Microsoft</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="fieldSeries">Model / Series *</label>
+              <input type="text" id="fieldSeries" class="form-control" placeholder="e.g. ThinkPad T14" required>
+            </div>
+
+            <div class="form-group">
+              <label for="fieldCategory">Category</label>
+              <input type="text" id="fieldCategory" class="form-control" placeholder="e.g. Corporate Ultrabook" value="Corporate Ultrabook">
+            </div>
+
+            <div class="form-group">
+              <label for="fieldBadge">Badge Tag</label>
+              <input type="text" id="fieldBadge" class="form-control" placeholder="e.g. Best Seller, Top Value" value="Verified Stock">
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. HARDWARE SPECIFICATIONS -->
+        <div>
+          <div class="form-section-title">⚡ Hardware Specifications</div>
+          <div class="form-grid cols-3">
+            <div class="form-group" style="grid-column: span 2;">
+              <label for="fieldCpu">Processor (CPU) *</label>
+              <input type="text" id="fieldCpu" class="form-control" placeholder="e.g. Intel Core i7-10610U 10th Gen" required>
+            </div>
+
+            <div class="form-group">
+              <label for="fieldGen">Generation / Family</label>
+              <input type="text" id="fieldGen" class="form-control" placeholder="e.g. 10th, 12th, M2" value="11th">
+            </div>
+
+            <div class="form-group">
+              <label for="fieldRam">RAM (GB) *</label>
+              <input type="number" id="fieldRam" class="form-control" placeholder="16" value="16" required>
+            </div>
+
+            <div class="form-group">
+              <label for="fieldStorage">Storage SSD (GB) *</label>
+              <input type="number" id="fieldStorage" class="form-control" placeholder="512" value="512" required>
+            </div>
+
+            <div class="form-group">
+              <label for="fieldDisplay">Display</label>
+              <input type="text" id="fieldDisplay" class="form-control" placeholder="14\" FHD IPS Anti-Glare" value="14\" FHD IPS Anti-Glare">
+            </div>
+
+            <div class="form-group" style="grid-column: span 2;">
+              <label for="fieldGpu">Graphics (GPU)</label>
+              <input type="text" id="fieldGpu" class="form-control" placeholder="e.g. Intel Iris Xe Graphics" value="Intel UHD Graphics">
+            </div>
+
+            <div class="form-group">
+              <label for="fieldGpuType">GPU Class</label>
+              <select id="fieldGpuType" class="form-control">
+                <option value="integrated">Integrated (Intel/AMD/UHD)</option>
+                <option value="discrete">Dedicated GPU (GTX/Radeon)</option>
+                <option value="rtx">NVIDIA RTX Workstation/Gaming</option>
+                <option value="apple_gpu">Apple Silicon GPU</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3. PRICING & WARRANTY -->
+        <div>
+          <div class="form-section-title">💰 Pricing & Warranty</div>
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="fieldPrice">Price (PKR) *</label>
+              <input type="number" id="fieldPrice" class="form-control" placeholder="95000" required oninput="calcUsdPrice()">
+            </div>
+
+            <div class="form-group">
+              <label for="fieldPriceUsd">Price (USD)</label>
+              <input type="number" id="fieldPriceUsd" class="form-control" placeholder="340">
+            </div>
+
+            <div class="form-group">
+              <label for="fieldCondition">Condition</label>
+              <input type="text" id="fieldCondition" class="form-control" value="Like New (10/10) · Certified Refurbished">
+            </div>
+
+            <div class="form-group">
+              <label for="fieldWarranty">Warranty</label>
+              <input type="text" id="fieldWarranty" class="form-control" value="1 Year Local Warranty + 7 Days Checking">
+            </div>
+          </div>
+        </div>
+
+        <!-- 4. USE CASES -->
+        <div>
+          <div class="form-section-title">🎯 Recommended Use Cases</div>
+          <div class="checkbox-group">
+            <label class="checkbox-label"><input type="checkbox" name="useCase" value="office" checked> 🏢 Office & Business</label>
+            <label class="checkbox-label"><input type="checkbox" name="useCase" value="programming" checked> 💻 Programming & Coding</label>
+            <label class="checkbox-label"><input type="checkbox" name="useCase" value="student" checked> 🎓 Students & Academics</label>
+            <label class="checkbox-label"><input type="checkbox" name="useCase" value="creator"> 🎨 Content Creation & Design</label>
+            <label class="checkbox-label"><input type="checkbox" name="useCase" value="gaming"> 🎮 Gaming & 3D Render</label>
+          </div>
+        </div>
+
+        <!-- 5. PRODUCT PHOTO & INTERNET RETRIEVAL -->
+        <div>
+          <div class="form-section-title">📸 Product Photo & Internet Search</div>
+          <div class="photo-preview-wrap">
+            <div class="photo-preview-box">
+              <img id="modalImgPreview" src="images/lenovo-t14-g1.jpg" alt="Preview" onerror="this.src='images/dell-xps.svg'">
+            </div>
+            <div style="flex: 1; display: flex; flex-direction: column; gap: 6px;">
+              <div style="display: flex; gap: 8px;">
+                <input type="text" id="fieldImg" class="form-control" placeholder="e.g. images/laptop-1-thinkpad.jpg" value="images/lenovo-t14-g1.jpg" oninput="updateModalImgPreview()" style="flex: 1;">
+                <button type="button" class="btn btn-outline btn-sm" id="btnOnlineFetch" onclick="fetchPhotoFromInternet()" title="Search & Download Photo from Internet">
+                  🔍 Find Online
+                </button>
+              </div>
+              <span style="font-size: 0.72rem; color: var(--muted);">Click <strong>Find Online</strong> to retrieve photo from internet based on laptop name!</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline" onclick="closeModal('editModal')">Cancel</button>
+        <button type="submit" class="btn btn-primary" id="btnSaveLaptop">💾 Save Laptop</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- CONFIRM REMOVE MODAL -->
+<div class="modal-overlay" id="confirmModal">
+  <div class="modal-box confirm-box">
+    <div class="confirm-icon">🗑️</div>
+    <h3 style="font-family: 'Syne', sans-serif; font-size: 1.2rem; color: #fff;">Confirm Laptop Removal</h3>
+    <p style="font-size: 0.85rem; color: var(--muted); line-height: 1.5;" id="confirmDeleteText">
+      Are you sure you want to remove this laptop from the inventory?
+    </p>
+    <div style="display: flex; gap: 10px; width: 100%; margin-top: 0.5rem;">
+      <button class="btn btn-outline" style="flex: 1;" onclick="closeModal('confirmModal')">Cancel</button>
+      <button class="btn btn-danger" style="flex: 1;" id="btnExecuteDelete">Yes, Remove</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toastBox">
+  <span id="toastIcon">✓</span>
+  <span id="toastMsg">Operation successful</span>
+</div>
+
+<!-- DATASET SCRIPT -->
+<script src="laptops-data.js"></script>
+
+<script>
+  // STATE MANAGEMENT
+  let inventory = [];
+  let isServerActive = false;
+  let currentBrand = 'all';
+  let viewMode = 'grid';
+  let pendingDeleteId = null;
+
+  // Initialize
+  document.addEventListener('DOMContentLoaded', async () => {
+    await checkServerConnection();
+    await loadInitialInventory();
+    renderAll();
+  });
+
+  // Check if manage_inventory.py API is running
+  async function checkServerConnection() {
+    const badge = document.getElementById('syncStatusBadge');
+    const text = document.getElementById('syncStatusText');
+    try {
+      const res = await fetch('/api/inventory', { method: 'GET', signal: AbortSignal.timeout(2000) });
+      if (res.ok) {
+        isServerActive = true;
+        badge.className = 'status-badge connected';
+        text.innerText = 'Connected (Live Auto-Save)';
+        return;
+      }
+    } catch (e) {
+      // Server not active
+    }
+    isServerActive = false;
+    badge.className = 'status-badge standalone';
+    text.innerText = 'Browser Mode (Export Available)';
+  }
+
+  // Load Inventory Data
+  async function loadInitialInventory() {
+    // 1. Try server API first
+    if (isServerActive) {
+      try {
+        const res = await fetch('/api/inventory');
+        if (res.ok) {
+          inventory = await res.json();
+          return;
+        }
+      } catch (e) {
+        console.warn('API error, falling back to local JS', e);
+      }
+    }
+
+    // 2. Check localStorage
+    const savedLocal = localStorage.getItem('LAPTOPS_INVENTORY_LOCAL');
+    if (savedLocal) {
+      try {
+        inventory = JSON.parse(savedLocal);
+        return;
+      } catch (e) {}
+    }
+
+    // 3. Fallback to loaded laptops-data.js variable
+    if (typeof LAPTOPS_INVENTORY !== 'undefined' && Array.isArray(LAPTOPS_INVENTORY)) {
+      inventory = JSON.parse(JSON.stringify(LAPTOPS_INVENTORY));
+    }
+  }
+
+  // Persist Inventory Data
+  async function persistInventory() {
+    // Always update localStorage as immediate cache
+    localStorage.setItem('LAPTOPS_INVENTORY_LOCAL', JSON.stringify(inventory));
+
+    if (isServerActive) {
+      try {
+        const res = await fetch('/api/save-all', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ laptops: inventory })
+        });
+        if (res.ok) {
+          showToast('Changes saved directly to laptops-data.js!', 'success');
+          return;
+        }
+      } catch (e) {
+        console.error('Failed to sync to server', e);
+      }
+    }
+    showToast('Saved to browser cache. Use "Export Data" to download file.', 'success');
+  }
+
+  // Render Stats & UI
+  function renderAll() {
+    updateMetrics();
+    applyFilters();
+  }
+
+  function updateMetrics() {
+    document.getElementById('totalCount').innerText = inventory.length;
+
+    let totalPkr = 0;
+    let totalUsd = 0;
+    const brandCounts = { lenovo: 0, dell: 0, hp: 0, apple: 0, microsoft: 0 };
+    let photoCount = 0;
+
+    inventory.forEach(lap => {
+      const pkr = Number(lap.price) || 0;
+      const usd = Number(lap.priceUsd) || Math.round(pkr / 278);
+      totalPkr += pkr;
+      totalUsd += usd;
+
+      const brand = (lap.brand || '').toLowerCase();
+      if (brandCounts[brand] !== undefined) brandCounts[brand]++;
+
+      if (lap.img && !lap.img.endsWith('.svg')) {
+        photoCount++;
+      }
+    });
+
+    document.getElementById('totalValuePkr').innerText = `Rs ${totalPkr.toLocaleString()}`;
+    document.getElementById('totalValueUsd').innerText = `$${totalUsd.toLocaleString()}`;
+
+    const avgPkr = inventory.length ? Math.round(totalPkr / inventory.length) : 0;
+    document.getElementById('avgPriceSub').innerText = `Avg: Rs ${avgPkr.toLocaleString()} / unit`;
+
+    document.getElementById('photoStatusSub').innerText = `${photoCount} / ${inventory.length} real product photos`;
+
+    // Counts on pills
+    document.getElementById('countAll').innerText = inventory.length;
+    document.getElementById('countLenovo').innerText = brandCounts.lenovo;
+    document.getElementById('countDell').innerText = brandCounts.dell;
+    document.getElementById('countHp').innerText = brandCounts.hp;
+    document.getElementById('countApple').innerText = brandCounts.apple;
+    document.getElementById('countSurface').innerText = brandCounts.microsoft;
+  }
+
+  function setBrandFilter(brand) {
+    currentBrand = brand;
+    document.querySelectorAll('.pill-btn').forEach(btn => {
+      btn.classList.toggle('active', btn.getAttribute('data-brand') === brand);
+    });
+    applyFilters();
+  }
+
+  function setViewMode(mode) {
+    viewMode = mode;
+    document.getElementById('btnGrid').classList.toggle('active', mode === 'grid');
+    document.getElementById('btnTable').classList.toggle('active', mode === 'table');
+    document.getElementById('laptopsGrid').style.display = mode === 'grid' ? 'grid' : 'none';
+    document.getElementById('tableContainer').style.display = mode === 'table' ? 'block' : 'none';
+  }
+
+  function applyFilters() {
+    const query = (document.getElementById('searchInput').value || '').toLowerCase().trim();
+    const category = document.getElementById('categoryFilter').value;
+    const sort = document.getElementById('sortFilter').value;
+
+    let filtered = inventory.filter(lap => {
+      // Brand filter
+      if (currentBrand !== 'all' && (lap.brand || '').toLowerCase() !== currentBrand) return false;
+
+      // Category filter
+      if (category !== 'all' && lap.category !== category) return false;
+
+      // Search query
+      if (query) {
+        const text = `${lap.id} ${lap.name} ${lap.brand} ${lap.series} ${lap.cpu} ${lap.gpu} ${lap.ram}GB ${lap.storage}GB ${lap.category} ${lap.badge}`.toLowerCase();
+        if (!text.includes(query)) return false;
+      }
+      return true;
+    });
+
+    // Sorting
+    filtered.sort((a, b) => {
+      if (sort === 'price_asc') return (a.price || 0) - (b.price || 0);
+      if (sort === 'price_desc') return (b.price || 0) - (a.price || 0);
+      if (sort === 'ram_desc') return (b.ram || 0) - (a.ram || 0);
+      if (sort === 'storage_desc') return (b.storage || 0) - (a.storage || 0);
+      if (sort === 'name_asc') return (a.name || '').localeCompare(b.name || '');
+      return (a.id || 0) - (b.id || 0); // Default ID
+    });
+
+    renderGrid(filtered);
+    renderTable(filtered);
+  }
+
+  function renderGrid(laptops) {
+    const container = document.getElementById('laptopsGrid');
+    if (!laptops.length) {
+      container.innerHTML = `
+        <div class="empty-state">
+          <h3>No Laptops Match Search</h3>
+          <p>Try modifying your filters or click "+ Add Laptop" to insert a new model.</p>
+        </div>`;
+      return;
+    }
+
+    container.innerHTML = laptops.map(lap => {
+      const pkr = (lap.price || 0).toLocaleString();
+      const usd = lap.priceUsd ? `$${lap.priceUsd}` : `$${Math.round((lap.price || 0) / 278)}`;
+      const badgeCls = lap.badgeType || 'b-corp';
+      const imgSrc = lap.img || 'images/lenovo-t14-g1.jpg';
+
+      return `
+        <div class="laptop-card" id="card-${lap.id}">
+          <div class="card-media">
+            <span class="badge-tag ${badgeCls}">${lap.badge || 'Stock'}</span>
+            <span class="badge-id">#${lap.id}</span>
+            <img src="${imgSrc}" alt="${escapeHtml(lap.name)}" loading="lazy" onerror="this.src='images/dell-xps.svg'">
+          </div>
+          <div class="card-body">
+            <div class="card-brand-series">${escapeHtml(lap.brandName || lap.brand || '')} · ${escapeHtml(lap.series || '')}</div>
+            <h3 class="card-title">${escapeHtml(lap.name)}</h3>
+            
+            <div class="specs-pills">
+              <span class="spec-pill highlight">⚡ ${escapeHtml(lap.cpu || 'CPU')}</span>
+              <span class="spec-pill">💾 ${lap.ram || 0}GB RAM</span>
+              <span class="spec-pill">🚀 ${lap.storage || 0}GB SSD</span>
+              <span class="spec-pill">🖥️ ${escapeHtml(lap.display || 'FHD')}</span>
+              <span class="spec-pill">🎮 ${escapeHtml(lap.gpu || 'Graphics')}</span>
+            </div>
+
+            <div class="card-price-row">
+              <span class="card-price-pkr">Rs ${pkr}</span>
+              <span class="card-price-usd">${usd}</span>
+            </div>
+
+            <div class="card-actions">
+              <button class="btn btn-outline btn-sm" onclick="openEditModal(${lap.id})">✏️ Edit</button>
+              <button class="btn btn-outline btn-sm" onclick="quickFetchPhoto(${lap.id})" title="Retrieve new photo from internet">📷 Photo</button>
+              <button class="btn btn-outline btn-sm" onclick="duplicateLaptop(${lap.id})" title="Duplicate model">📋</button>
+              <button class="btn btn-danger btn-sm" onclick="promptDelete(${lap.id})" title="Remove from inventory">🗑️</button>
+            </div>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  function renderTable(laptops) {
+    const tbody = document.getElementById('tableBody');
+    if (!laptops.length) {
+      tbody.innerHTML = `<tr><td colspan="10" style="text-align: center; padding: 2rem; color: var(--muted);">No matching laptops found</td></tr>`;
+      return;
+    }
+
+    tbody.innerHTML = laptops.map(lap => `
+      <tr>
+        <td style="font-family: 'JetBrains Mono', monospace; font-weight: 700;">#${lap.id}</td>
+        <td>
+          <div class="table-thumb">
+            <img src="${lap.img || 'images/lenovo-t14-g1.jpg'}" alt="${escapeHtml(lap.name)}" onerror="this.src='images/dell-xps.svg'">
+          </div>
+        </td>
+        <td>
+          <strong style="color: #fff;">${escapeHtml(lap.name)}</strong>
+          <div style="font-size: 0.74rem; color: var(--muted);">${escapeHtml(lap.series || '')}</div>
+        </td>
+        <td style="text-transform: capitalize;">${escapeHtml(lap.brand || '')}</td>
+        <td>
+          <div>${escapeHtml(lap.cpu || '')}</div>
+          <span style="font-size: 0.72rem; color: var(--muted);">${escapeHtml(lap.gen || '')}</span>
+        </td>
+        <td style="font-family: 'JetBrains Mono', monospace;">
+          ${lap.ram}GB / ${lap.storage}GB
+        </td>
+        <td style="font-size: 0.76rem;">${escapeHtml(lap.display || '')}</td>
+        <td style="font-weight: 800; color: #fff; font-family: 'Syne', sans-serif;">
+          ${lap.priceFormatted || 'Rs ' + (lap.price || 0).toLocaleString()}
+        </td>
+        <td>
+          <span class="badge-tag ${lap.badgeType || 'b-corp'}" style="position: static;">${escapeHtml(lap.badge || 'Stock')}</span>
+        </td>
+        <td style="text-align: right; white-space: nowrap;">
+          <button class="btn btn-outline btn-sm" onclick="openEditModal(${lap.id})">✏️</button>
+          <button class="btn btn-outline btn-sm" onclick="quickFetchPhoto(${lap.id})" title="Fetch Photo">📷</button>
+          <button class="btn btn-danger btn-sm" onclick="promptDelete(${lap.id})" title="Remove">🗑️</button>
+        </td>
+      </tr>
+    `).join('');
+  }
+
+  // MODAL LOGIC (ADD & EDIT)
+  function openAddModal() {
+    document.getElementById('modalTitle').innerText = 'Add New Laptop';
+    document.getElementById('editId').value = '';
+    document.getElementById('laptopForm').reset();
+    
+    // Sensible defaults
+    document.getElementById('fieldBrand').value = 'lenovo';
+    document.getElementById('fieldCategory').value = 'Corporate Ultrabook';
+    document.getElementById('fieldBadge').value = 'New Arrival';
+    document.getElementById('fieldGen').value = '11th';
+    document.getElementById('fieldRam').value = '16';
+    document.getElementById('fieldStorage').value = '512';
+    document.getElementById('fieldDisplay').value = '14" FHD IPS Anti-Glare';
+    document.getElementById('fieldGpu').value = 'Intel Iris Xe Graphics';
+    document.getElementById('fieldGpuType').value = 'integrated';
+    document.getElementById('fieldCondition').value = 'Like New (10/10) · Certified Refurbished';
+    document.getElementById('fieldWarranty').value = '1 Year Local Warranty + 7 Days Checking';
+    document.getElementById('fieldImg').value = 'images/lenovo-t14-g1.jpg';
+    
+    updateModalImgPreview();
+    openModal('editModal');
+  }
+
+  function openEditModal(id) {
+    const item = inventory.find(l => l.id === id);
+    if (!item) return;
+
+    document.getElementById('modalTitle').innerText = `Edit Laptop #${item.id}`;
+    document.getElementById('editId').value = item.id;
+    document.getElementById('fieldName').value = item.name || '';
+    document.getElementById('fieldBrand').value = (item.brand || 'other').toLowerCase();
+    document.getElementById('fieldSeries').value = item.series || '';
+    document.getElementById('fieldCategory').value = item.category || 'Ultrabook';
+    document.getElementById('fieldBadge').value = item.badge || 'Verified Stock';
+    document.getElementById('fieldCpu').value = item.cpu || '';
+    document.getElementById('fieldGen').value = item.gen || '';
+    document.getElementById('fieldRam').value = item.ram || 16;
+    document.getElementById('fieldStorage').value = item.storage || 512;
+    document.getElementById('fieldDisplay').value = item.display || '';
+    document.getElementById('fieldGpu').value = item.gpu || '';
+    document.getElementById('fieldGpuType').value = item.gpuType || 'integrated';
+    document.getElementById('fieldPrice').value = item.price || 0;
+    document.getElementById('fieldPriceUsd').value = item.priceUsd || Math.round((item.price || 0)/278);
+    document.getElementById('fieldCondition').value = item.condition || '';
+    document.getElementById('fieldWarranty').value = item.warranty || '';
+    document.getElementById('fieldImg').value = item.img || '';
+
+    // Checkboxes
+    const useCases = item.useCases || [];
+    document.querySelectorAll('input[name="useCase"]').forEach(cb => {
+      cb.checked = useCases.includes(cb.value);
+    });
+
+    updateModalImgPreview();
+    openModal('editModal');
+  }
+
+  function handleFormSubmit(e) {
+    e.preventDefault();
+    const editId = document.getElementById('editId').value;
+    const priceVal = parseInt(document.getElementById('fieldPrice').value, 10) || 0;
+    const usdVal = parseInt(document.getElementById('fieldPriceUsd').value, 10) || Math.round(priceVal / 278);
+
+    const brandVal = document.getElementById('fieldBrand').value;
+    const brandNameMap = {
+      lenovo: 'Lenovo', dell: 'Dell', hp: 'HP', apple: 'Apple', microsoft: 'Microsoft', other: 'Custom'
+    };
+
+    const checkedUseCases = Array.from(document.querySelectorAll('input[name="useCase"]:checked')).map(cb => cb.value);
+
+    // Derive badge type
+    let badgeType = 'b-corp';
+    if (brandVal === 'apple') badgeType = 'b-apple';
+    else if (document.getElementById('fieldGpuType').value === 'rtx' || document.getElementById('fieldGpuType').value === 'discrete') badgeType = 'b-game';
+    else if (priceVal < 70000) badgeType = 'b-val';
+    else if (document.getElementById('fieldGen').value.includes('12th') || document.getElementById('fieldGen').value.includes('13th') || document.getElementById('fieldGen').value.includes('Ultra')) badgeType = 'b-gen';
+
+    const payload = {
+      name: document.getElementById('fieldName').value.trim(),
+      brand: brandVal,
+      brandName: brandNameMap[brandVal] || brandVal.toUpperCase(),
+      series: document.getElementById('fieldSeries').value.trim(),
+      cpu: document.getElementById('fieldCpu').value.trim(),
+      cpuTag: brandVal === 'apple' ? 'apple' : (document.getElementById('fieldCpu').value.toLowerCase().includes('i7') ? 'intel_i7' : 'intel_i5'),
+      gen: document.getElementById('fieldGen').value.trim(),
+      ram: parseInt(document.getElementById('fieldRam').value, 10) || 8,
+      storage: parseInt(document.getElementById('fieldStorage').value, 10) || 256,
+      display: document.getElementById('fieldDisplay').value.trim(),
+      gpu: document.getElementById('fieldGpu').value.trim(),
+      gpuType: document.getElementById('fieldGpuType').value,
+      category: document.getElementById('fieldCategory').value.trim(),
+      badge: document.getElementById('fieldBadge').value.trim(),
+      badgeType: badgeType,
+      price: priceVal,
+      priceFormatted: `Rs ${priceVal.toLocaleString()}`,
+      priceUsd: usdVal,
+      img: document.getElementById('fieldImg').value.trim() || 'images/lenovo-t14-g1.jpg',
+      condition: document.getElementById('fieldCondition').value.trim(),
+      warranty: document.getElementById('fieldWarranty').value.trim(),
+      useCases: checkedUseCases.length ? checkedUseCases : ['office', 'student']
+    };
+
+    if (editId) {
+      // Update existing
+      payload.id = parseInt(editId, 10);
+      const idx = inventory.findIndex(l => l.id === payload.id);
+      if (idx !== -1) {
+        inventory[idx] = Object.assign({}, inventory[idx], payload);
+        showToast(`Updated #${payload.id} - ${payload.name}`, 'success');
+      }
+    } else {
+      // Add new
+      const nextId = inventory.length ? Math.max(...inventory.map(l => l.id || 0)) + 1 : 1;
+      payload.id = nextId;
+      inventory.unshift(payload);
+      showToast(`Added new laptop #${payload.id}!`, 'success');
+    }
+
+    closeModal('editModal');
+    persistInventory();
+    renderAll();
+  }
+
+  // DELETE LAPTOP
+  function promptDelete(id) {
+    const item = inventory.find(l => l.id === id);
+    if (!item) return;
+
+    pendingDeleteId = id;
+    document.getElementById('confirmDeleteText').innerHTML = `
+      Are you sure you want to permanently remove <strong>#${item.id} — ${escapeHtml(item.name)}</strong> (${item.priceFormatted}) from the active inventory?
+    `;
+    document.getElementById('btnExecuteDelete').onclick = executeDelete;
+    openModal('confirmModal');
+  }
+
+  function executeDelete() {
+    if (!pendingDeleteId) return;
+    const targetId = pendingDeleteId;
+    inventory = inventory.filter(l => l.id !== targetId);
+    closeModal('confirmModal');
+    showToast(`Removed laptop #${targetId} from inventory.`, 'success');
+    persistInventory();
+    renderAll();
+    pendingDeleteId = null;
+  }
+
+  // DUPLICATE LAPTOP
+  function duplicateLaptop(id) {
+    const item = inventory.find(l => l.id === id);
+    if (!item) return;
+
+    const nextId = inventory.length ? Math.max(...inventory.map(l => l.id || 0)) + 1 : 1;
+    const clone = JSON.parse(JSON.stringify(item));
+    clone.id = nextId;
+    clone.name = `${clone.name} (Copy)`;
+    inventory.splice(inventory.findIndex(l => l.id === id) + 1, 0, clone);
+    
+    showToast(`Duplicated #${item.id} as new item #${nextId}!`, 'success');
+    persistInventory();
+    renderAll();
+  }
+
+  // PHOTO RETRIEVAL ONLINE
+  async function fetchPhotoFromInternet() {
+    const name = document.getElementById('fieldName').value.trim();
+    const series = document.getElementById('fieldSeries').value.trim();
+    const brand = document.getElementById('fieldBrand').value.trim();
+    const query = `${brand} ${series} ${name}`.trim();
+
+    if (!query) {
+      alert('Please enter a laptop name and brand first.');
+      return;
+    }
+
+    const btn = document.getElementById('btnOnlineFetch');
+    btn.disabled = true;
+    btn.innerText = '⏳ Searching...';
+
+    if (isServerActive) {
+      try {
+        const res = await fetch('/api/fetch-photo', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ query: query, id: document.getElementById('editId').value || 'new' })
+        });
+        const data = await res.json();
+        if (data.success && data.img) {
+          document.getElementById('fieldImg').value = data.img;
+          updateModalImgPreview();
+          showToast(`Retrieved photo from internet! (${Math.round((data.sizeBytes||0)/1024)} KB)`, 'success');
+          btn.disabled = false;
+          btn.innerText = '🔍 Find Online';
+          return;
+        }
+      } catch (e) {
+        console.error('Fetch photo error', e);
+      }
+    }
+
+    // Static fallback
+    showToast('Internet photo fetching requires local server running (`python manage_inventory.py`)', 'error');
+    btn.disabled = false;
+    btn.innerText = '🔍 Find Online';
+  }
+
+  async function quickFetchPhoto(id) {
+    const item = inventory.find(l => l.id === id);
+    if (!item) return;
+
+    if (!isServerActive) {
+      showToast('Start manage_inventory.py server to auto-fetch photos live!', 'error');
+      return;
+    }
+
+    showToast(`Searching web for ${item.name}...`, 'success');
+    try {
+      const res = await fetch('/api/fetch-photo', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ query: `${item.brand} ${item.series} ${item.name}`, id: item.id })
+      });
+      const data = await res.json();
+      if (data.success && data.img) {
+        item.img = data.img;
+        persistInventory();
+        renderAll();
+        showToast(`Updated photo for #${item.id}!`, 'success');
+      } else {
+        showToast(`Could not find photo for #${item.id}`, 'error');
+      }
+    } catch (e) {
+      showToast('Error querying image search', 'error');
+    }
+  }
+
+  // EXPORT DATA FILE
+  function exportDataFile() {
+    const jsContent = `// Complete ${inventory.length}-Laptop Real Inventory Dataset\nconst LAPTOPS_INVENTORY = ${JSON.stringify(inventory, null, 2)};\n\nif (typeof module !== 'undefined') module.exports = LAPTOPS_INVENTORY;\n`;
+    const blob = new Blob([jsContent], { type: 'application/javascript;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'laptops-data.js';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    showToast('Downloaded updated laptops-data.js!', 'success');
+  }
+
+  // UTILITIES
+  function calcUsdPrice() {
+    const pkr = parseInt(document.getElementById('fieldPrice').value, 10) || 0;
+    document.getElementById('fieldPriceUsd').value = Math.round(pkr / 278);
+  }
+
+  function handleBrandChange() {
+    const b = document.getElementById('fieldBrand').value;
+    if (b === 'apple') {
+      document.getElementById('fieldGpuType').value = 'apple_gpu';
+      document.getElementById('fieldGen').value = 'M-Series';
+    }
+  }
+
+  function updateModalImgPreview() {
+    const src = document.getElementById('fieldImg').value.trim();
+    document.getElementById('modalImgPreview').src = src || 'images/lenovo-t14-g1.jpg';
+  }
+
+  function openModal(id) {
+    document.getElementById(id).classList.add('open');
+  }
+
+  function closeModal(id) {
+    document.getElementById(id).classList.remove('open');
+  }
+
+  function showToast(msg, type = 'success') {
+    const toast = document.getElementById('toastBox');
+    const toastMsg = document.getElementById('toastMsg');
+    const toastIcon = document.getElementById('toastIcon');
+
+    toastMsg.innerText = msg;
+    toastIcon.innerText = type === 'success' ? '✓' : '⚠️';
+    toast.className = `toast show ${type}`;
+
+    setTimeout(() => {
+      toast.classList.remove('show');
+    }, 3500);
+  }
+
+  function escapeHtml(str) {
+    if (!str) return '';
+    return str.replace(/[&<>'"]/g, tag => ({
+      '&': '&amp;',
+      '<': '&lt;',
+      '>': '&gt;',
+      "'": '&#39;',
+      '"': '&quot;'
+    }[tag] || tag));
+  }
+</script>
+</body>
+</html>

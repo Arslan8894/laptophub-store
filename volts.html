@@ -1,0 +1,1486 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VOLTS — Cybernetic Performance Laptops</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #080808;
+    --surface: #111111;
+    --surface2: #181818;
+    --accent: #e8ff00;
+    --accent-glow: rgba(232, 255, 0, 0.35);
+    --accent2: #00ffcc;
+    --text: #f0f0f0;
+    --muted: #888888;
+    --border: rgba(255,255,255,0.08);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    overflow-x: hidden;
+  }
+
+  /* Custom Cursor - desktop only */
+  @media (hover: hover) and (pointer: fine) {
+    body { cursor: none; }
+    #cursor {
+      width: 12px; height: 12px;
+      background: var(--accent);
+      border-radius: 50%;
+      position: fixed;
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
+      transition: width 0.2s, height 0.2s, background 0.2s, transform 0.15s;
+    }
+    #cursor-trail {
+      width: 38px; height: 38px;
+      border: 1px solid rgba(232,255,0,0.3);
+      border-radius: 50%;
+      position: fixed;
+      pointer-events: none;
+      z-index: 9998;
+      transform: translate(-50%, -50%);
+      transition: left 0.1s ease-out, top 0.1s ease-out, transform 0.2s;
+    }
+  }
+
+  @media (hover: none) or (pointer: coarse) {
+    #cursor, #cursor-trail { display: none !important; }
+  }
+
+  /* TOP DEMO SWITCHER BAR */
+  .demo-bar {
+    background: #000;
+    border-bottom: 1px solid var(--border);
+    padding: 0.5rem 1.5rem;
+    font-size: 0.75rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    z-index: 101;
+  }
+  .demo-bar span { color: var(--muted); }
+  .demo-bar a {
+    color: var(--accent2);
+    text-decoration: none;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    transition: opacity 0.2s;
+  }
+  .demo-bar a:hover { opacity: 0.8; }
+
+  /* NAV */
+  nav {
+    position: sticky; top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1.1rem 3rem;
+    background: rgba(8,8,8,0.75);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+  }
+  .logo {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.6rem; font-weight: 800;
+    letter-spacing: -0.03em;
+    color: var(--accent);
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    text-decoration: none;
+  }
+  .logo-tag {
+    font-size: 0.65rem;
+    font-family: 'DM Sans', sans-serif;
+    background: rgba(232,255,0,0.12);
+    color: var(--accent);
+    padding: 2px 6px;
+    border-radius: 4px;
+    letter-spacing: 0.05em;
+  }
+  .nav-links {
+    display: flex; gap: 2.5rem; list-style: none;
+  }
+  .nav-links a {
+    text-decoration: none; color: var(--muted);
+    font-size: 0.85rem; letter-spacing: 0.05em; text-transform: uppercase;
+    font-weight: 500;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--text); }
+  .nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+  .nav-cart-btn {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 0.55rem 1.1rem;
+    font-family: inherit;
+    font-size: 0.82rem;
+    font-weight: 500;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    transition: border-color 0.2s, background 0.2s;
+  }
+  .nav-cart-btn:hover { border-color: var(--accent); }
+  .cart-count {
+    background: var(--accent);
+    color: #000;
+    font-weight: 700;
+    font-size: 0.7rem;
+    padding: 1px 6px;
+    border-radius: 10px;
+  }
+  .nav-cta {
+    background: var(--accent); color: #000;
+    border: none; padding: 0.6rem 1.4rem;
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 700; font-size: 0.85rem;
+    letter-spacing: 0.03em;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .nav-cta:hover { transform: scale(1.03); box-shadow: 0 0 20px rgba(232,255,0,0.3); }
+
+  /* HERO */
+  .hero {
+    min-height: 80vh;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    padding: 5rem 2rem 3rem;
+  }
+
+  .hero-bg {
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse 70% 55% at 50% 35%, rgba(232,255,0,0.07) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .grid-lines {
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+    background-size: 60px 60px;
+    mask-image: radial-gradient(circle at center, black 40%, transparent 80%);
+    pointer-events: none;
+  }
+
+  .hero-tag {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    background: var(--surface); border: 1px solid var(--border);
+    padding: 0.4rem 1rem;
+    border-radius: 100px;
+    font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--muted); margin-bottom: 2rem;
+    animation: fadeUp 0.8s ease both;
+  }
+  .hero-tag::before {
+    content: '';
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 8px var(--accent);
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(1.4); }
+  }
+
+  h1.hero-title {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(3rem, 8vw, 6.5rem);
+    font-weight: 800;
+    line-height: 0.96;
+    letter-spacing: -0.04em;
+    margin-bottom: 1.5rem;
+    animation: fadeUp 0.8s 0.1s ease both;
+  }
+  .accent-word { color: var(--accent); }
+
+  .hero-sub {
+    font-size: 1.05rem; color: var(--muted);
+    max-width: 520px; line-height: 1.7;
+    margin-bottom: 2.5rem;
+    animation: fadeUp 0.8s 0.2s ease both;
+  }
+
+  .hero-btns {
+    display: flex; gap: 1rem;
+    animation: fadeUp 0.8s 0.3s ease both;
+  }
+  .btn-primary {
+    background: var(--accent); color: #000;
+    padding: 0.9rem 2.4rem; border: none;
+    font-family: 'DM Sans', sans-serif; font-weight: 700; font-size: 0.9rem;
+    border-radius: 4px; cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    text-decoration: none;
+    display: inline-block;
+  }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(232,255,0,0.3); }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* TICKER */
+  .marquee-wrap {
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    background: var(--surface);
+    overflow: hidden;
+    padding: 1rem 0;
+    white-space: nowrap;
+  }
+  .marquee-track {
+    display: inline-flex; gap: 0;
+    animation: marquee 22s linear infinite;
+  }
+  .marquee-item {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.8rem; font-weight: 600;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--muted);
+    padding: 0 2.5rem;
+  }
+  .marquee-item.accent { color: var(--accent); }
+
+  @keyframes marquee {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+
+  /* PRODUCTS */
+  .section { padding: 5rem 3rem; max-width: 1400px; margin: 0 auto; }
+  .section-header {
+    display: flex; align-items: flex-end;
+    justify-content: space-between;
+    margin-bottom: 3.5rem;
+  }
+  .section-label {
+    font-size: 0.72rem; letter-spacing: 0.15em; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 0.75rem; font-weight: 600;
+  }
+  .section-title {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(2rem, 5vw, 3.2rem);
+    font-weight: 800; letter-spacing: -0.04em;
+    line-height: 1;
+  }
+
+  .products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .product-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 2rem;
+    position: relative;
+    overflow: hidden;
+    transition: background 0.3s, transform 0.3s, border-color 0.3s;
+    display: flex;
+    flex-direction: column;
+  }
+  .product-card:hover {
+    background: var(--surface2);
+    border-color: rgba(232, 255, 0, 0.4);
+    transform: translateY(-4px);
+  }
+
+  .card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+  }
+  .card-badge {
+    padding: 0.25rem 0.65rem;
+    font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase;
+    font-weight: 700;
+    border-radius: 4px;
+  }
+  .badge-new { background: rgba(232,255,0,0.12); color: var(--accent); }
+  .badge-pro { background: rgba(0,255,204,0.1); color: var(--accent2); }
+  .badge-hot { background: rgba(255,80,50,0.12); color: #ff5032; }
+
+  /* PHOTO CONTAINER */
+  .photo-box {
+    width: 100%;
+    height: 200px;
+    background: radial-gradient(circle at center, rgba(232,255,0,0.03) 0%, transparent 70%);
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1.4rem;
+    overflow: hidden;
+    padding: 10px;
+  }
+  .laptop-img {
+    max-width: 90%;
+    max-height: 90%;
+    object-fit: contain;
+    transition: transform 0.4s ease;
+    filter: drop-shadow(0 15px 25px rgba(0,0,0,0.7));
+  }
+  .product-card:hover .laptop-img {
+    transform: scale(1.08) rotate(-1deg);
+  }
+
+  .card-name {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.35rem; font-weight: 700;
+    letter-spacing: -0.02em;
+    margin-bottom: 0.5rem;
+  }
+  .card-specs {
+    font-size: 0.78rem; color: var(--muted);
+    line-height: 1.7; margin-bottom: 1.5rem;
+    flex-grow: 1;
+  }
+
+  .tag-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 1.5rem;
+  }
+  .tag {
+    background: #000;
+    border: 1px solid var(--border);
+    padding: 3px 8px;
+    border-radius: 3px;
+    font-size: 0.72rem;
+    color: #ccc;
+  }
+
+  .card-price-row {
+    display: flex; align-items: center;
+    justify-content: space-between;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border);
+  }
+  .card-price {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.55rem; font-weight: 800;
+    letter-spacing: -0.03em;
+    color: var(--accent);
+  }
+  .btn-buy-card {
+    background: var(--accent);
+    color: #000;
+    border: none;
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 700;
+    font-size: 0.82rem;
+    padding: 0.6rem 1.2rem;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .btn-buy-card:hover {
+    transform: scale(1.04);
+    box-shadow: 0 0 15px rgba(232,255,0,0.4);
+  }
+
+  /* TOAST */
+  #toast {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    background: var(--surface2);
+    border: 1px solid var(--accent);
+    color: var(--text);
+    padding: 0.9rem 1.4rem;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    z-index: 10000;
+    transform: translateY(120%);
+    transition: transform 0.3s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+  }
+  #toast.show { transform: translateY(0); }
+  #toast .toast-icon { color: var(--accent); font-size: 1.1rem; }
+
+  /* FOOTER */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 3.5rem;
+    display: flex; align-items: center; justify-content: space-between;
+    color: var(--muted); font-size: 0.82rem;
+    max-width: 1400px; margin: 0 auto;
+  }
+  .footer-logo {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.3rem; font-weight: 800;
+    color: var(--accent);
+  }
+
+  /* MEDIA QUERIES */
+  @media (max-width: 960px) {
+    nav { padding: 1rem 1.5rem; }
+    .nav-links { display: none; }
+    .section { padding: 4.5rem 1.5rem; }
+    .products-grid { grid-template-columns: 1fr; }
+    h1.hero-title { font-size: 3.2rem; }
+    footer { flex-direction: column; gap: 1.5rem; text-align: center; }
+  }
+
+  .volts-filter-row {
+    display: flex; justify-content: space-between; align-items: center;
+    gap: 1rem; margin-bottom: 2.5rem; flex-wrap: wrap;
+  }
+  .v-filter-tabs { display: flex; gap: 6px; flex-wrap: wrap; }
+  .v-filter-btn {
+    background: var(--surface); border: 1px solid var(--border);
+    color: var(--muted); padding: 0.5rem 1.1rem; border-radius: 6px;
+    font-family: inherit; font-size: 0.8rem; font-weight: 700;
+    cursor: pointer; transition: all 0.2s;
+  }
+  .v-filter-btn:hover { color: #fff; border-color: var(--accent); }
+  .v-filter-btn.active {
+    background: var(--accent); color: #000; border-color: var(--accent);
+    box-shadow: 0 0 15px var(--accent-glow);
+  }
+  .v-search {
+    background: var(--surface); border: 1px solid var(--border);
+    color: #fff; padding: 0.55rem 1.2rem; border-radius: 6px;
+    font-family: inherit; font-size: 0.85rem; outline: none; width: 280px;
+    transition: border-color 0.2s;
+  }
+  .v-search:focus { border-color: var(--accent); }
+
+  /* CART DRAWER FOR VOLTS */
+  #cartOverlay {
+    position: fixed; inset: 0; background: rgba(0,0,0,0.8);
+    backdrop-filter: blur(8px); z-index: 10000;
+    opacity: 0; pointer-events: none; transition: opacity 0.3s ease;
+  }
+  #cartOverlay.open { opacity: 1; pointer-events: auto; }
+  
+  #cartDrawer {
+    position: fixed; top: 0; right: 0; bottom: 0;
+    width: min(440px, 100vw);
+    background: #0d0d0d;
+    border-left: 1.5px solid var(--accent);
+    z-index: 10001;
+    display: flex; flex-direction: column;
+    transform: translateX(100%);
+    transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: -10px 0 50px rgba(0,0,0,0.85);
+  }
+  #cartDrawer.open { transform: translateX(0); }
+  
+  .drawer-head {
+    padding: 1.4rem 1.6rem;
+    border-bottom: 1px solid var(--border);
+    display: flex; justify-content: space-between; align-items: center;
+    background: var(--surface);
+  }
+  .drawer-title {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800; font-size: 1.2rem;
+    color: var(--accent);
+    display: flex; align-items: center; gap: 8px;
+  }
+  .drawer-close {
+    background: transparent; border: none; color: var(--muted);
+    font-size: 1.3rem; cursor: pointer; padding: 4px;
+    transition: color 0.2s;
+  }
+  .drawer-close:hover { color: #fff; }
+  
+  .drawer-items {
+    flex-grow: 1; overflow-y: auto; padding: 1.2rem 1.6rem;
+    display: flex; flex-direction: column; gap: 1rem;
+  }
+  .cart-item {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 8px; padding: 0.9rem;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .cart-item-img {
+    width: 56px; height: 56px; object-fit: contain;
+    border-radius: 4px; background: #000; padding: 4px; flex-shrink: 0;
+  }
+  .cart-item-info { flex-grow: 1; min-width: 0; }
+  .cart-item-name {
+    font-weight: 700; font-size: 0.85rem; color: #fff;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .cart-item-specs { font-size: 0.72rem; color: var(--muted); margin: 2px 0 4px; }
+  .cart-item-price { font-weight: 700; font-size: 0.86rem; color: var(--accent); font-family: 'DM Sans', sans-serif; }
+  .cart-item-qty { display: flex; align-items: center; gap: 6px; }
+  .qty-btn {
+    background: var(--surface2); border: 1px solid var(--border);
+    color: #fff; width: 24px; height: 24px; border-radius: 4px;
+    font-size: 0.85rem; cursor: pointer; display: flex; align-items: center; justify-content: center;
+  }
+  .qty-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .qty-num { font-size: 0.82rem; font-weight: 700; min-width: 16px; text-align: center; }
+  .cart-item-del {
+    background: transparent; border: none; color: var(--muted);
+    cursor: pointer; font-size: 0.95rem; padding: 4px;
+  }
+  .cart-item-del:hover { color: #ef4444; }
+  
+  .drawer-footer {
+    border-top: 1px solid var(--border); padding: 1.4rem 1.6rem;
+    background: var(--surface);
+  }
+  .subtotal-row {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 0.8rem;
+  }
+  .subtotal-label { font-size: 0.85rem; color: var(--muted); font-weight: 600; }
+  .subtotal-val { font-size: 1.35rem; font-weight: 800; color: var(--accent); font-family: 'Syne', sans-serif; }
+  
+  .drawer-btn-wa {
+    width: 100%; background: #25d366; color: #fff;
+    border: none; padding: 0.85rem; border-radius: 6px;
+    font-family: inherit; font-size: 0.88rem; font-weight: 700;
+    cursor: pointer; display: flex; align-items: center; justify-content: center;
+    gap: 8px; box-shadow: 0 4px 16px rgba(37,211,102,0.3);
+    margin-bottom: 0.6rem; text-decoration: none;
+  }
+  .drawer-btn-wa:hover { box-shadow: 0 6px 22px rgba(37,211,102,0.5); }
+  
+  .drawer-btn-checkout {
+    width: 100%; background: var(--accent); color: #000;
+    border: none; padding: 0.85rem; border-radius: 6px;
+    font-family: inherit; font-size: 0.88rem; font-weight: 800;
+    cursor: pointer; display: flex; align-items: center; justify-content: center;
+    gap: 8px; box-shadow: 0 4px 16px var(--accent-glow);
+    text-decoration: none;
+  }
+  .drawer-btn-checkout:hover { transform: translateY(-1px); }
+
+  /* FLOATING WHATSAPP BUTTON */
+  .wa-fab {
+    position: fixed; bottom: 2rem; right: 2rem;
+    width: 54px; height: 54px; border-radius: 50%;
+    background: #25d366; color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 8px 30px rgba(37,211,102,0.45);
+    z-index: 9999; text-decoration: none;
+    transition: transform 0.25s, box-shadow 0.25s;
+  }
+  /* VOLTS PERFORMANCE CUSTOMIZER MODAL */
+  #voltsModal {
+    position: fixed; inset: 0;
+    background: rgba(0, 0, 0, 0.88);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    z-index: 10005;
+    display: none;
+    align-items: center; justify-content: center;
+    padding: 1.5rem;
+    opacity: 0;
+    transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  #voltsModal.open {
+    display: flex;
+    opacity: 1;
+  }
+  .vmodal-card {
+    background: var(--surface);
+    border: 1.5px solid rgba(232, 255, 0, 0.3);
+    border-radius: 14px;
+    width: min(880px, 100%);
+    max-height: 92vh;
+    overflow-y: auto;
+    position: relative;
+    box-shadow: 0 30px 80px rgba(0, 0, 0, 0.9), 0 0 35px rgba(232, 255, 0, 0.12);
+    transform: scale(0.92) translateY(24px);
+    transition: transform 0.35s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+  }
+  #voltsModal.open .vmodal-card {
+    transform: scale(1) translateY(0);
+  }
+  .vmodal-close {
+    position: absolute; top: 1.2rem; right: 1.4rem;
+    width: 36px; height: 36px; border-radius: 50%;
+    background: var(--surface2); border: 1px solid var(--border);
+    color: var(--muted); font-size: 1.1rem;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; z-index: 10;
+    transition: all 0.2s;
+  }
+  .vmodal-close:hover {
+    color: #fff;
+    border-color: var(--accent);
+    transform: rotate(90deg);
+  }
+
+  .vmodal-grid {
+    display: grid;
+    grid-template-columns: 360px 1fr;
+    gap: 0;
+  }
+  @media (max-width: 840px) {
+    .vmodal-grid { grid-template-columns: 1fr; }
+  }
+
+  .vmodal-visual {
+    background: #0d0d0d;
+    border-right: 1px solid var(--border);
+    padding: 2.2rem 1.8rem;
+    display: flex; flex-direction: column; justify-content: space-between;
+  }
+  .vmodal-img-wrap {
+    width: 100%; height: 260px;
+    display: flex; align-items: center; justify-content: center;
+    position: relative;
+    background: radial-gradient(circle at center, rgba(232, 255, 0, 0.06) 0%, transparent 70%);
+  }
+  .vmodal-img {
+    max-width: 90%; max-height: 230px;
+    object-fit: contain;
+    transition: transform 0.4s ease;
+    filter: drop-shadow(0 15px 30px rgba(0,0,0,0.8));
+  }
+  .vmodal-img:hover {
+    transform: scale(1.05) rotate(-1deg);
+  }
+  .vmodal-badge {
+    position: absolute; top: 0; left: 0;
+    background: rgba(232, 255, 0, 0.15); color: var(--accent);
+    border: 1px solid var(--accent);
+    padding: 3px 10px; border-radius: 4px;
+    font-size: 0.7rem; font-weight: 800; text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .vmodal-specs-grid {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 8px; margin-top: 1.5rem;
+  }
+  .vmodal-spec-item {
+    background: var(--surface2); border: 1px solid var(--border);
+    border-radius: 6px; padding: 0.65rem 0.8rem;
+    display: flex; flex-direction: column; gap: 2px;
+  }
+  .vspec-lbl { font-size: 0.68rem; color: var(--muted); text-transform: uppercase; font-weight: 700; letter-spacing: 0.05em; }
+  .vspec-val { font-size: 0.78rem; font-weight: 700; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+  .vmodal-content {
+    padding: 2.2rem;
+    display: flex; flex-direction: column; gap: 1.15rem;
+    background: var(--surface);
+  }
+  .vmodal-brand-tag {
+    font-size: 0.72rem; font-weight: 800; color: var(--accent);
+    text-transform: uppercase; letter-spacing: 0.12em;
+  }
+  .vmodal-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.5rem; font-weight: 800; color: #fff;
+    line-height: 1.2; letter-spacing: -0.02em;
+    margin: 2px 0 4px;
+  }
+  .vmodal-sub {
+    font-size: 0.82rem; color: var(--muted);
+  }
+
+  .vmodal-price-box {
+    background: var(--surface2); border: 1px solid rgba(232, 255, 0, 0.2);
+    border-radius: 8px; padding: 0.9rem 1.2rem;
+  }
+  .vmodal-price-lbl { font-size: 0.7rem; color: var(--muted); text-transform: uppercase; font-weight: 700; letter-spacing: 0.05em; }
+  .vmodal-price-row { display: flex; align-items: baseline; gap: 8px; margin-top: 2px; }
+  .vmodal-price-val { font-size: 1.7rem; font-weight: 800; color: var(--accent); font-family: 'Syne', sans-serif; }
+  .vmodal-price-usd { font-size: 0.85rem; color: var(--muted); font-weight: 600; }
+  .vmodal-price-sub { font-size: 0.74rem; color: var(--accent2); margin-top: 4px; }
+
+  .vspec-section {
+    display: flex; flex-direction: column; gap: 6px;
+  }
+  .vspec-header {
+    display: flex; justify-content: space-between; align-items: baseline;
+  }
+  .vspec-title {
+    font-size: 0.82rem; font-weight: 700; color: #fff;
+  }
+  .vspec-active-lbl {
+    font-size: 0.78rem; font-weight: 700; color: var(--accent); font-family: 'DM Sans', sans-serif;
+  }
+
+  .vspec-pills-row {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(85px, 1fr));
+    gap: 8px;
+  }
+  .vspec-pill {
+    background: var(--surface2); border: 1.5px solid var(--border);
+    border-radius: 6px; padding: 0.55rem 0.65rem;
+    cursor: pointer; display: flex; flex-direction: column; align-items: center;
+    transition: all 0.2s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+    font-family: inherit;
+  }
+  .vspec-pill:hover {
+    border-color: var(--accent); transform: translateY(-2px);
+  }
+  .vspec-pill.active {
+    background: rgba(232, 255, 0, 0.12); border-color: var(--accent);
+    box-shadow: 0 0 14px var(--accent-glow);
+  }
+  .vpill-title {
+    font-size: 0.85rem; font-weight: 700; color: #fff;
+  }
+  .vpill-diff {
+    font-size: 0.68rem; font-weight: 600; color: var(--muted);
+    margin-top: 2px;
+  }
+  .vspec-pill.active .vpill-diff { color: var(--accent); font-weight: 700; }
+
+  .vmodal-comment-box {
+    background: var(--surface2); border: 1px solid var(--border);
+    border-radius: 6px; padding: 0.7rem 0.9rem;
+    color: #fff; font-family: inherit; font-size: 0.82rem;
+    outline: none; resize: vertical; min-height: 60px;
+    transition: border-color 0.2s;
+  }
+  .vmodal-comment-box:focus { border-color: var(--accent); }
+
+  .vmodal-actions {
+    display: flex; flex-direction: column; gap: 8px; margin-top: 0.4rem;
+  }
+  .vmodal-btn-add {
+    background: var(--accent); color: #000;
+    border: none; border-radius: 6px; padding: 0.85rem;
+    font-family: inherit; font-weight: 800; font-size: 0.92rem;
+    cursor: pointer; box-shadow: 0 4px 18px var(--accent-glow);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .vmodal-btn-add:hover { transform: translateY(-1px); box-shadow: 0 6px 24px rgba(232,255,0,0.5); }
+
+  .vmodal-btn-row {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 8px;
+  }
+  .vmodal-btn-wa {
+    background: #25d366; color: #fff; border: none;
+    border-radius: 6px; padding: 0.75rem;
+    font-family: inherit; font-weight: 700; font-size: 0.82rem;
+    cursor: pointer; display: flex; align-items: center; justify-content: center;
+    gap: 6px; box-shadow: 0 4px 14px rgba(37, 211, 102, 0.3);
+    transition: transform 0.2s;
+    text-decoration: none;
+  }
+  .vmodal-btn-wa:hover { transform: translateY(-1px); }
+
+  .vmodal-btn-cod {
+    background: var(--surface2); border: 1px solid var(--border);
+    color: #fff; border-radius: 6px; padding: 0.75rem;
+    font-family: inherit; font-weight: 700; font-size: 0.82rem;
+    cursor: pointer; transition: all 0.2s;
+    display: flex; align-items: center; justify-content: center;
+    text-decoration: none;
+  }
+  .vmodal-btn-cod:hover { border-color: var(--accent); color: var(--accent); }
+
+  .product-card {
+    cursor: pointer;
+  }
+  .card-click-hint {
+    font-size: 0.7rem; color: var(--muted);
+    display: flex; align-items: center; gap: 4px;
+    margin-bottom: 0.8rem;
+    opacity: 0.75;
+    transition: color 0.2s, opacity 0.2s;
+  }
+  .product-card:hover .card-click-hint {
+    color: var(--accent);
+    opacity: 1;
+  }
+
+</style>
+<script src="laptops-data.js"></script>
+</head>
+<body>
+
+<div id="cursor"></div>
+<div id="cursor-trail"></div>
+
+<div class="demo-bar">
+  <span>⚡ VOLTS Edition (Cyber-Minimalist Theme) — 69 Performance Models</span>
+  <a href="laptophub.html">Switch to LaptopHUB Edition →</a>
+</div>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="logo">
+    VOLTS
+    <span class="logo-tag">PRO</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#models">Hardware</a></li>
+    <li><a href="custom-laptop.html" style="color:var(--accent);font-weight:700">🛠️ Create Laptop</a></li>
+    <li><a href="consult.html">🔍 Consult AI</a></li>
+    <li><a href="laptophub.html">LaptopHUB</a></li>
+  </ul>
+  <div class="nav-actions">
+    <button class="nav-cart-btn" onclick="openCartDrawer()">
+      Cart <span class="cart-count" id="cartCount">0</span>
+    </button>
+    <a href="custom-laptop.html" class="nav-cta" style="text-decoration:none">Create Custom</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="grid-lines"></div>
+  <div class="hero-tag">Verified Hardware Arsenal — 2025 Release</div>
+  <h1 class="hero-title">MACHINES<br>BUILT FOR<br><span class="accent-word">POWER.</span></h1>
+  <p class="hero-sub">Engineered for creators, developers, and power users who refuse compromise. Premium models from Dell, HP, Apple, and Microsoft.</p>
+  <div class="hero-btns">
+    <a href="#models" class="btn-primary">Explore All 69 Laptops</a>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-wrap">
+  <div class="marquee-track">
+    <span class="marquee-item">Dell Latitude 7430</span>
+    <span class="marquee-item accent">— VOLTS VERIFIED</span>
+    <span class="marquee-item">HP EliteBook 845 G7</span>
+    <span class="marquee-item accent">— RYZEN 7</span>
+    <span class="marquee-item">HP 630 G11</span>
+    <span class="marquee-item accent">— CORE ULTRA</span>
+    <span class="marquee-item">HP ProBook 640 G10</span>
+    <span class="marquee-item accent">— INTEL 13TH</span>
+    <span class="marquee-item">MacBook Pro M2</span>
+    <span class="marquee-item accent">— PRO SILICON</span>
+    <span class="marquee-item">Spectre x360</span>
+    <span class="marquee-item accent">— OLED TOUCH</span>
+    <span class="marquee-item">Surface Laptop</span>
+    <span class="marquee-item accent">— PIXELSENSE</span>
+  </div>
+</div>
+
+<!-- PRODUCTS -->
+<section class="section" id="models">
+  <div class="section-header">
+    <div>
+      <p class="section-label">Verified Inventory</p>
+      <h2 class="section-title">Hardware Lineup (69 Models)</h2>
+    </div>
+  </div>
+
+  <div class="volts-filter-row">
+    <div class="v-filter-tabs">
+      <button class="v-filter-btn active" onclick="vFilter('all', this)">All (69)</button>
+      <button class="v-filter-btn" onclick="vFilter('lenovo', this)">Lenovo (15)</button>
+      <button class="v-filter-btn" onclick="vFilter('dell', this)">Dell (19)</button>
+      <button class="v-filter-btn" onclick="vFilter('hp', this)">HP (22)</button>
+      <button class="v-filter-btn" onclick="vFilter('apple', this)">Apple (3)</button>
+      <button class="v-filter-btn" onclick="vFilter('microsoft', this)">Surface (7)</button>
+      <button class="v-filter-btn" onclick="vFilter('gaming', this)">Gaming (4)</button>
+    </div>
+    <input type="text" class="v-search" id="voltsSearch" placeholder="Search 69 models..." oninput="vSearch()">
+  </div>
+
+  <div class="products-grid" id="voltsProductsGrid">
+    <!-- Rendered dynamically from laptops-data.js -->
+  </div>
+</section>
+
+<!-- TOAST -->
+<div id="toast">
+  <span class="toast-icon">✓</span>
+  <span id="toastMsg">Item added to cart</span>
+</div>
+
+<!-- CART OVERLAY & SLIDE-OVER DRAWER -->
+<div id="cartOverlay" onclick="closeCartDrawer()"></div>
+<aside id="cartDrawer" aria-label="Shopping Cart">
+  <div class="drawer-head">
+    <div class="drawer-title">
+      <span>⚡ Hardware Cart</span>
+      <span class="cart-count" id="drawerCartCount" style="font-size:0.75rem;padding:2px 8px;border-radius:10px;background:var(--surface2)">0</span>
+    </div>
+    <button class="drawer-close" onclick="closeCartDrawer()" aria-label="Close cart">✕</button>
+  </div>
+
+  <div class="drawer-items" id="drawerItemsList">
+    <!-- Rendered dynamically -->
+  </div>
+
+  <div class="drawer-footer">
+    <div style="font-size:0.75rem;color:var(--accent);margin-bottom:0.75rem;display:flex;align-items:center;gap:6px">
+      <span>🚚</span> Cash on Delivery across Pakistan · 7-Day Guarantee
+    </div>
+    <div class="subtotal-row">
+      <span class="subtotal-label">Subtotal:</span>
+      <span class="subtotal-val" id="drawerSubtotal">Rs 0</span>
+    </div>
+    <button class="drawer-btn-wa" onclick="checkoutWhatsApp()">
+      💬 Order & Confirm on WhatsApp
+    </button>
+    <a href="laptophub.html#inventory" class="drawer-btn-checkout">
+      📦 Continue to COD Checkout
+    </a>
+  </div>
+</aside>
+
+<!-- VOLTS PERFORMANCE SPEC CUSTOMIZER MODAL -->
+<div id="voltsModal" onclick="handleVoltsModalBackdrop(event)">
+  <div class="vmodal-card" id="vmodalCard">
+    <button class="vmodal-close" onclick="closeVoltsModal()" aria-label="Close modal">✕</button>
+
+    <div class="vmodal-grid">
+      <!-- Left: Visual & Key Specs -->
+      <div class="vmodal-visual">
+        <div class="vmodal-img-wrap">
+          <img id="vmodalImg" src="" alt="Hardware Visual" class="vmodal-img">
+          <span class="vmodal-badge" id="vmodalBadge">PRO</span>
+        </div>
+        <div class="vmodal-specs-grid">
+          <div class="vmodal-spec-item">
+            <span class="vspec-lbl">Processor</span>
+            <span class="vspec-val" id="vmodalCpu">-</span>
+          </div>
+          <div class="vmodal-spec-item">
+            <span class="vspec-lbl">Display</span>
+            <span class="vspec-val" id="vmodalDisplay">-</span>
+          </div>
+          <div class="vmodal-spec-item">
+            <span class="vspec-lbl">GPU Graphics</span>
+            <span class="vspec-val" id="vmodalGpu">-</span>
+          </div>
+          <div class="vmodal-spec-item">
+            <span class="vspec-lbl">Condition</span>
+            <span class="vspec-val" id="vmodalCondition">-</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: Customizer & Action Controls -->
+      <div class="vmodal-content">
+        <div class="vmodal-top">
+          <div class="vmodal-brand-tag" id="vmodalBrand">DELL</div>
+          <h2 class="vmodal-title" id="vmodalTitle">Dell Latitude 7430</h2>
+          <p class="vmodal-sub" id="vmodalSub">Corporate Ultrabook · Grade A+ Like New</p>
+        </div>
+
+        <!-- Live Price Header -->
+        <div class="vmodal-price-box">
+          <div class="vmodal-price-lbl">Configured Hardware Price</div>
+          <div class="vmodal-price-row">
+            <span class="vmodal-price-val" id="vmodalPrice">Rs 154,000</span>
+            <span class="vmodal-price-usd" id="vmodalPriceUsd">($545)</span>
+          </div>
+          <div class="vmodal-price-sub">⚡ Free Insured Express Dispatch across Pakistan · 7-Day Replacement Guarantee</div>
+        </div>
+
+        <!-- RAM SELECTOR (8GB, 16GB, 32GB) -->
+        <div class="vspec-section">
+          <div class="vspec-header">
+            <span class="vspec-title">🧠 Choose RAM Capacity</span>
+            <span class="vspec-active-lbl" id="lblVoltsRam">16 GB DDR4/DDR5</span>
+          </div>
+          <div class="vspec-pills-row" id="voltsRamPills">
+            <button type="button" class="vspec-pill" data-ram="8" onclick="selectVoltsRam(8, this)">
+              <span class="vpill-title">8 GB</span>
+              <span class="vpill-diff" id="vramDiff8">-Rs 6,000</span>
+            </button>
+            <button type="button" class="vspec-pill active" data-ram="16" onclick="selectVoltsRam(16, this)">
+              <span class="vpill-title">16 GB</span>
+              <span class="vpill-diff" id="vramDiff16">Included</span>
+            </button>
+            <button type="button" class="vspec-pill" data-ram="32" onclick="selectVoltsRam(32, this)">
+              <span class="vpill-title">32 GB</span>
+              <span class="vpill-diff" id="vramDiff32">+Rs 14,000</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- STORAGE SELECTOR (128GB, 256GB, 512GB, 1TB) -->
+        <div class="vspec-section">
+          <div class="vspec-header">
+            <span class="vspec-title">💾 Choose Storage (NVMe High-Speed SSD)</span>
+            <span class="vspec-active-lbl" id="lblVoltsStorage">512 GB NVMe</span>
+          </div>
+          <div class="vspec-pills-row" id="voltsStoragePills">
+            <button type="button" class="vspec-pill" data-storage="128" onclick="selectVoltsStorage(128, this)">
+              <span class="vpill-title">128 GB</span>
+              <span class="vpill-diff" id="vstorDiff128">-Rs 4,000</span>
+            </button>
+            <button type="button" class="vspec-pill" data-storage="256" onclick="selectVoltsStorage(256, this)">
+              <span class="vpill-title">256 GB</span>
+              <span class="vpill-diff" id="vstorDiff256">-Rs 2,000</span>
+            </button>
+            <button type="button" class="vspec-pill active" data-storage="512" onclick="selectVoltsStorage(512, this)">
+              <span class="vpill-title">512 GB</span>
+              <span class="vpill-diff" id="vstorDiff512">Included</span>
+            </button>
+            <button type="button" class="vspec-pill" data-storage="1000" onclick="selectVoltsStorage(1000, this)">
+              <span class="vpill-title">1 TB NVMe</span>
+              <span class="vpill-diff" id="vstorDiff1000">+Rs 12,000</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- CLIENT COMMENTS / DESIRED REQUEST SECTION -->
+        <div class="vspec-section">
+          <div class="vspec-header">
+            <span class="vspec-title">💬 Desired Specs / Custom Requests</span>
+            <span style="font-size:0.72rem;color:var(--muted)">Optional</span>
+          </div>
+          <textarea class="vmodal-comment-box" id="vmodalComment" rows="2" placeholder="Tell us your desired additions (e.g. install Windows 11 Pro, apply fresh Arctic thermal paste, need Type-C hub, deliver on weekend)..."></textarea>
+        </div>
+
+        <!-- ACTIONS -->
+        <div class="vmodal-actions">
+          <button type="button" class="vmodal-btn-add" onclick="addVoltsModalToCart()">
+            🛒 Add to Cart with Selected Specs
+          </button>
+          <div class="vmodal-btn-row">
+            <button type="button" class="vmodal-btn-wa" onclick="orderVoltsViaWhatsApp()">
+              💬 Order on WhatsApp
+            </button>
+            <a href="laptophub.html#inventory" class="vmodal-btn-cod">
+              📦 Continue to COD
+            </a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FLOATING WHATSAPP BUTTON -->
+<a class="wa-fab" href="https://wa.me/923261398594?text=Hi%20VOLTS!%20I'm%20interested%20in%20a%20performance%20laptop" target="_blank" title="WhatsApp Support (+923261398594)">
+  <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+</a>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">VOLTS</div>
+  <span>© 2025 VOLTS Tech Systems. Direct WhatsApp: <a href="https://wa.me/923261398594" target="_blank" style="color:var(--accent);text-decoration:none">+92 326 1398594</a></span>
+  <span>Engineered for relentless performance.</span>
+</footer>
+
+
+<script>
+  let vCurrentBrand = 'all';
+  let vSearchQuery = '';
+  let cart = JSON.parse(localStorage.getItem('lh_cart_items') || '[]');
+
+  const inventory = (typeof LAPTOPS_INVENTORY !== 'undefined') ? LAPTOPS_INVENTORY : [];
+
+  function renderVoltsProducts() {
+    const grid = document.getElementById('voltsProductsGrid');
+    if (!grid) return;
+
+    let filtered = inventory.filter(lap => {
+      if (vCurrentBrand === 'gaming') {
+        if (lap.gpuType !== 'rtx' && lap.gpuType !== 'discrete') return false;
+      } else if (vCurrentBrand !== 'all') {
+        if (lap.brand !== vCurrentBrand) return false;
+      }
+
+      if (vSearchQuery) {
+        const q = vSearchQuery.toLowerCase();
+        const haystack = (lap.name + ' ' + lap.brandName + ' ' + lap.cpu + ' ' + lap.gpu).toLowerCase();
+        if (!haystack.includes(q)) return false;
+      }
+
+      return true;
+    });
+
+    if (filtered.length === 0) {
+      grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:3rem;color:var(--muted)">No models matched your search query.</div>';
+      return;
+    }
+
+    grid.innerHTML = filtered.map(lap => {
+      const badgeClass = lap.gpuType === 'rtx' ? 'badge-hot' : (lap.brand === 'apple' ? 'badge-pro' : 'badge-new');
+      return `
+        <div class="product-card" onclick="openVoltsModal(${lap.id}, event)">
+          <div class="card-top">
+            <span class="card-badge ${badgeClass}">${lap.badge}</span>
+            <span style="font-size:0.75rem;color:var(--muted);text-transform:uppercase;font-weight:700">${lap.brandName}</span>
+          </div>
+          <div class="photo-box">
+            <img src="${lap.img}" alt="${lap.name}" class="laptop-img" loading="lazy">
+          </div>
+          <div class="card-click-hint">⚙️ Customize RAM & Storage</div>
+          <h3 class="card-name">${lap.name}</h3>
+          <p class="card-specs">${lap.category} · ${lap.condition}</p>
+          <div class="tag-row">
+            <span class="tag">${lap.cpu}</span>
+            <span class="tag">${lap.ram}GB RAM</span>
+            <span class="tag">${lap.storage >= 1000 ? (lap.storage/1000)+'TB' : lap.storage+'GB'} SSD</span>
+            <span class="tag">${lap.display}</span>
+          </div>
+          <div class="card-price-row">
+            <span class="card-price">$${lap.priceUsd} <small style="font-size:0.75rem;color:var(--muted)">(${lap.priceFormatted})</small></span>
+            <button class="btn-buy-card" onclick="event.stopPropagation(); openVoltsModal(${lap.id}, event)">Customize</button>
+          </div>
+        </div>`;
+    }).join('');
+  }
+
+  function vFilter(brand, btn) {
+    vCurrentBrand = brand;
+    if (btn) {
+      document.querySelectorAll('.v-filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    }
+    renderVoltsProducts();
+  }
+
+  function vSearch() {
+    vSearchQuery = document.getElementById('voltsSearch').value.trim();
+    renderVoltsProducts();
+  }
+
+  function escapeHtml(str) {
+    if (!str) return '';
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#039;');
+  }
+
+  // CART SYNCHRONIZATION
+  function saveCart() {
+    localStorage.setItem('lh_cart_items', JSON.stringify(cart));
+    updateCartUI();
+  }
+
+  function updateCartUI() {
+    const totalCount = cart.reduce((sum, item) => sum + item.qty, 0);
+    const countEl = document.getElementById('cartCount');
+    const drawerBadge = document.getElementById('drawerCartCount');
+    if (countEl) countEl.textContent = totalCount;
+    if (drawerBadge) drawerBadge.textContent = totalCount;
+
+    const itemsContainer = document.getElementById('drawerItemsList');
+    const subtotalEl = document.getElementById('drawerSubtotal');
+    if (!itemsContainer || !subtotalEl) return;
+
+    if (cart.length === 0) {
+      itemsContainer.innerHTML = `
+        <div style="text-align:center;padding:3rem 1rem;color:var(--muted)">
+          <div style="font-size:2.5rem;margin-bottom:0.5rem">🛒</div>
+          <div style="font-weight:700;color:#fff;margin-bottom:4px">Your cart is empty</div>
+          <div style="font-size:0.8rem">Select any performance hardware model to begin.</div>
+        </div>`;
+      subtotalEl.textContent = 'Rs 0';
+      return;
+    }
+
+    let subtotal = 0;
+    itemsContainer.innerHTML = cart.map(item => {
+      const itemTotal = item.price * item.qty;
+      subtotal += itemTotal;
+      const storLabel = item.storage ? (item.storage >= 1000 ? (item.storage/1000)+'TB' : item.storage+'GB') : '';
+      return `
+        <div class="cart-item">
+          <img src="${item.img}" alt="${item.name}" class="cart-item-img" onerror="this.src='images/dell-xps.svg'">
+          <div class="cart-item-info">
+            <div class="cart-item-name">${item.name}</div>
+            <div class="cart-item-specs">${item.cpu} · ${item.ram}GB RAM ${storLabel ? `· ${storLabel} NVMe` : ''}</div>
+            ${item.comment ? `<div style="font-size:0.72rem;color:var(--accent);margin-top:2px;font-style:italic">Note: "${escapeHtml(item.comment)}"</div>` : ''}
+            <div class="cart-item-price">Rs ${itemTotal.toLocaleString('en-PK')}</div>
+          </div>
+          <div class="cart-item-qty">
+            <button class="qty-btn" onclick="changeQty(${item.id}, -1)">−</button>
+            <span class="qty-num">${item.qty}</span>
+            <button class="qty-btn" onclick="changeQty(${item.id}, 1)">+</button>
+          </div>
+          <button class="cart-item-del" onclick="removeFromCart(${item.id})" title="Remove">✕</button>
+        </div>`;
+    }).join('');
+
+    subtotalEl.textContent = `Rs ${subtotal.toLocaleString('en-PK')}`;
+  }
+
+  function addToCartById(id) {
+    openVoltsModal(id);
+  }
+
+  function changeQty(id, delta) {
+    const item = cart.find(i => i.id === id);
+    if (!item) return;
+    item.qty += delta;
+    if (item.qty <= 0) {
+      cart = cart.filter(i => i.id !== id);
+    }
+    saveCart();
+  }
+
+  function removeFromCart(id) {
+    cart = cart.filter(i => i.id !== id);
+    saveCart();
+    showToast('Item removed from cart');
+  }
+
+  function openCartDrawer() {
+    updateCartUI();
+    document.getElementById('cartOverlay').classList.add('open');
+    document.getElementById('cartDrawer').classList.add('open');
+  }
+
+  function closeCartDrawer() {
+    document.getElementById('cartOverlay').classList.remove('open');
+    document.getElementById('cartDrawer').classList.remove('open');
+  }
+
+  function checkoutWhatsApp() {
+    if (cart.length === 0) {
+      showToast('Your cart is empty!');
+      return;
+    }
+    let subtotal = 0;
+    let itemsText = cart.map((i, idx) => {
+      const lineTotal = i.price * i.qty;
+      subtotal += lineTotal;
+      const storStr = i.storage ? (i.storage >= 1000 ? (i.storage/1000)+'TB' : i.storage+'GB') : '';
+      let line = `${idx+1}. ${i.name} (x${i.qty}) [${i.ram}GB RAM / ${storStr}] - Rs ${lineTotal.toLocaleString('en-PK')}`;
+      if (i.comment) line += `%0A   Note: "${encodeURIComponent(i.comment)}"`;
+      return line;
+    }).join('%0A');
+
+    const msg = `*New Laptop Order - VOLTS Tech Store*%0A%0A*Items:*%0A${itemsText}%0A%0A*Subtotal:* Rs ${subtotal.toLocaleString('en-PK')}%0A*Delivery:* Free Cash on Delivery across Pakistan%0A%0APlease confirm availability & dispatch time!`;
+    window.open(`https://wa.me/923261398594?text=${msg}`, '_blank');
+  }
+
+  // =========================================================================
+  // VOLTS LAPTOP MODAL CUSTOMIZER & SPEC SELECTOR
+  // =========================================================================
+  let activeVoltsLaptop = null;
+  let voltsSelectedRam = 16;
+  let voltsSelectedStorage = 512;
+  let voltsCalculatedPrice = 0;
+
+  function openVoltsModal(id, e) {
+    if (e) e.stopPropagation();
+    const lap = inventory.find(l => l.id === id);
+    if (!lap) return;
+    activeVoltsLaptop = lap;
+
+    // Default to laptop's base RAM (or closest to 8, 16, 32)
+    if (lap.ram <= 8) voltsSelectedRam = 8;
+    else if (lap.ram <= 16) voltsSelectedRam = 16;
+    else voltsSelectedRam = 32;
+
+    // Default to laptop's base storage (or closest to 128, 256, 512, 1000)
+    if (lap.storage <= 128) voltsSelectedStorage = 128;
+    else if (lap.storage <= 256) voltsSelectedStorage = 256;
+    else if (lap.storage <= 512) voltsSelectedStorage = 512;
+    else voltsSelectedStorage = 1000;
+
+    // Populate modal fields
+    document.getElementById('vmodalImg').src = lap.img;
+    document.getElementById('vmodalBadge').textContent = lap.badge || 'PRO';
+    document.getElementById('vmodalBrand').textContent = lap.brandName || lap.brand.toUpperCase();
+    document.getElementById('vmodalTitle').textContent = lap.name;
+    document.getElementById('vmodalSub').textContent = `${lap.category} · ${lap.condition}`;
+    document.getElementById('vmodalCpu').textContent = lap.cpu;
+    document.getElementById('vmodalDisplay').textContent = lap.display;
+    document.getElementById('vmodalGpu').textContent = lap.gpu;
+    document.getElementById('vmodalCondition').textContent = lap.condition;
+    document.getElementById('vmodalComment').value = '';
+
+    updateVoltsModalPricingAndUI();
+
+    const modal = document.getElementById('voltsModal');
+    modal.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeVoltsModal() {
+    const modal = document.getElementById('voltsModal');
+    if (modal) modal.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  function handleVoltsModalBackdrop(e) {
+    if (e.target.id === 'voltsModal') {
+      closeVoltsModal();
+    }
+  }
+
+  function selectVoltsRam(ram, btn) {
+    voltsSelectedRam = ram;
+    updateVoltsModalPricingAndUI();
+  }
+
+  function selectVoltsStorage(storage, btn) {
+    voltsSelectedStorage = storage;
+    updateVoltsModalPricingAndUI();
+  }
+
+  function getVoltsRamDelta(targetRam, baseRam) {
+    if (targetRam === baseRam) return 0;
+    const ramValues = { 8: 0, 16: 6000, 32: 20000 };
+    const targetVal = ramValues[targetRam] ?? 6000;
+    const baseVal = ramValues[baseRam] ?? (baseRam >= 32 ? 20000 : (baseRam <= 8 ? 0 : 6000));
+    return targetVal - baseVal;
+  }
+
+  function getVoltsStorageDelta(targetStorage, baseStorage) {
+    if (targetStorage === baseStorage) return 0;
+    const storValues = { 128: 0, 256: 4000, 512: 9000, 1000: 21000 };
+    const targetVal = storValues[targetStorage] ?? 9000;
+    const baseVal = storValues[baseStorage] ?? (baseStorage >= 1000 ? 21000 : (baseStorage <= 128 ? 0 : (baseStorage <= 256 ? 4000 : 9000)));
+    return targetVal - baseVal;
+  }
+
+  function updateVoltsModalPricingAndUI() {
+    if (!activeVoltsLaptop) return;
+    const basePrice = activeVoltsLaptop.price;
+    const baseRam = activeVoltsLaptop.ram;
+    const baseStorage = activeVoltsLaptop.storage;
+
+    const ramDelta = getVoltsRamDelta(voltsSelectedRam, baseRam);
+    const storageDelta = getVoltsStorageDelta(voltsSelectedStorage, baseStorage);
+
+    voltsCalculatedPrice = Math.max(25000, basePrice + ramDelta + storageDelta);
+    const usdEstimate = Math.round(voltsCalculatedPrice / 280);
+
+    document.getElementById('vmodalPrice').textContent = `Rs ${voltsCalculatedPrice.toLocaleString('en-PK')}`;
+    document.getElementById('vmodalPriceUsd').textContent = `(~$${usdEstimate})`;
+    document.getElementById('lblVoltsRam').textContent = `${voltsSelectedRam} GB DDR4/DDR5`;
+    const storText = voltsSelectedStorage >= 1000 ? '1 TB NVMe' : `${voltsSelectedStorage} GB NVMe`;
+    document.getElementById('lblVoltsStorage').textContent = storText;
+
+    // Update pill difference tags
+    [8, 16, 32].forEach(r => {
+      const d = getVoltsRamDelta(r, baseRam);
+      const tag = document.getElementById(`vramDiff${r}`);
+      if (tag) {
+        if (d === 0) tag.textContent = 'Included';
+        else if (d > 0) tag.textContent = `+Rs ${d.toLocaleString('en-PK')}`;
+        else tag.textContent = `-Rs ${Math.abs(d).toLocaleString('en-PK')}`;
+      }
+    });
+
+    [128, 256, 512, 1000].forEach(s => {
+      const d = getVoltsStorageDelta(s, baseStorage);
+      const tag = document.getElementById(`vstorDiff${s}`);
+      if (tag) {
+        if (d === 0) tag.textContent = 'Included';
+        else if (d > 0) tag.textContent = `+Rs ${d.toLocaleString('en-PK')}`;
+        else tag.textContent = `-Rs ${Math.abs(d).toLocaleString('en-PK')}`;
+      }
+    });
+
+    // Sync active classes on pills
+    document.querySelectorAll('#voltsRamPills .vspec-pill').forEach(btn => {
+      btn.classList.toggle('active', parseInt(btn.dataset.ram, 10) === voltsSelectedRam);
+    });
+    document.querySelectorAll('#voltsStoragePills .vspec-pill').forEach(btn => {
+      btn.classList.toggle('active', parseInt(btn.dataset.storage, 10) === voltsSelectedStorage);
+    });
+  }
+
+  function addVoltsModalToCart() {
+    if (!activeVoltsLaptop) return;
+    const comment = document.getElementById('vmodalComment').value.trim();
+    const storText = voltsSelectedStorage >= 1000 ? '1TB' : `${voltsSelectedStorage}GB`;
+
+    const existing = cart.find(i => i.id === activeVoltsLaptop.id && i.ram === voltsSelectedRam && i.storage === voltsSelectedStorage && i.comment === comment);
+    if (existing) {
+      existing.qty++;
+    } else {
+      cart.push({
+        id: activeVoltsLaptop.id,
+        name: activeVoltsLaptop.name,
+        price: voltsCalculatedPrice,
+        basePrice: activeVoltsLaptop.price,
+        cpu: activeVoltsLaptop.cpu,
+        ram: voltsSelectedRam,
+        storage: voltsSelectedStorage,
+        storageLabel: storText,
+        comment: comment,
+        img: activeVoltsLaptop.img,
+        qty: 1
+      });
+    }
+
+    saveCart();
+    closeVoltsModal();
+    showToast(`Added ${activeVoltsLaptop.name} (${voltsSelectedRam}GB / ${storText}) to cart!`);
+    openCartDrawer();
+  }
+
+  function orderVoltsViaWhatsApp() {
+    if (!activeVoltsLaptop) return;
+    const comment = document.getElementById('vmodalComment').value.trim();
+    const storText = voltsSelectedStorage >= 1000 ? '1TB NVMe' : `${voltsSelectedStorage}GB NVMe`;
+
+    let msg = `*⚡ Custom Hardware Inquiry — VOLTS Cyber Performance*%0A`;
+    msg += `------------------------------------------%0A`;
+    msg += `*Model:* ${encodeURIComponent(activeVoltsLaptop.name)}%0A`;
+    msg += `*Processor:* ${encodeURIComponent(activeVoltsLaptop.cpu)}%0A`;
+    msg += `*Selected RAM:* ${voltsSelectedRam}GB%0A`;
+    msg += `*Selected Storage:* ${storText}%0A`;
+    msg += `*Configured Price:* Rs ${voltsCalculatedPrice.toLocaleString('en-PK')}%0A`;
+    msg += `*Condition:* ${encodeURIComponent(activeVoltsLaptop.condition)}%0A`;
+    if (comment) {
+      msg += `*Special Request / Note:* "${encodeURIComponent(comment)}"%0A`;
+    }
+    msg += `------------------------------------------%0A`;
+    msg += `Please confirm hardware availability & dispatch time!`;
+
+    window.open(`https://wa.me/923261398594?text=${msg}`, '_blank');
+  }
+
+  let toastTimer;
+  function showToast(msg) {
+    const toast = document.getElementById('toast');
+    if (!toast) return;
+    document.getElementById('toastMsg').textContent = msg;
+    toast.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => toast.classList.remove('show'), 3000);
+  }
+
+  renderVoltsProducts();
+  updateCartUI();
+</script>
+
+</body>
+</html>

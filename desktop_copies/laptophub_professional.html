@@ -1,0 +1,557 @@
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,700;0,800;1,700&display=swap');
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+--bg:#07080d;--s1:#0c0e15;--s2:#11131c;--s3:#181a24;
+--text:#dde0ed;--muted:#4a4d62;--subtle:#7b7f96;
+--blue:#4c7cff;--blue-dim:rgba(76,124,255,0.1);--blue-glow:rgba(76,124,255,0.2);
+--border:rgba(255,255,255,0.055);--border2:rgba(255,255,255,0.1);
+}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden;cursor:none}
+#cur{width:8px;height:8px;background:var(--blue);border-radius:50%;position:fixed;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:width .2s,height .2s,transform .2s}
+#cur2{width:32px;height:32px;border:1px solid rgba(76,124,255,.35);border-radius:50%;position:fixed;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:left .08s,top .08s}
+nav{position:sticky;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:1.1rem 3rem;background:rgba(7,8,13,0.8);backdrop-filter:blur(24px);border-bottom:1px solid var(--border)}
+.logo-mark{display:flex;align-items:center;gap:10px}
+.logo-icon{width:28px;height:28px;background:var(--blue);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:.65rem;font-weight:800;color:#fff;letter-spacing:-.02em}
+.logo-text{font-size:1.1rem;font-weight:700;letter-spacing:-.02em;color:var(--text)}
+.logo-text span{color:var(--blue)}
+.nav-links{display:flex;gap:2.2rem;list-style:none}
+.nav-links a{text-decoration:none;color:var(--muted);font-size:.82rem;font-weight:500;letter-spacing:.02em;transition:color .2s}
+.nav-links a:hover{color:var(--text)}
+.nav-right{display:flex;align-items:center;gap:1rem}
+.nav-cart{background:none;border:1px solid var(--border2);color:var(--subtle);padding:.5rem .9rem;font-family:inherit;font-size:.78rem;font-weight:500;cursor:none;border-radius:6px;transition:border-color .2s,color .2s}
+.nav-cart:hover{border-color:var(--blue);color:var(--blue)}
+.nav-btn{background:var(--blue);color:#fff;border:none;padding:.55rem 1.3rem;font-family:inherit;font-size:.8rem;font-weight:600;cursor:none;border-radius:6px;transition:opacity .2s,transform .2s}
+.nav-btn:hover{opacity:.85;transform:translateY(-1px)}
+.hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;position:relative;overflow:hidden;padding:8rem 2rem 5rem}
+.hero-noise{position:absolute;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");pointer-events:none;opacity:.4}
+.hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-size:80px 80px;mask-image:radial-gradient(ellipse 80% 70% at 50% 50%,black 30%,transparent 100%);pointer-events:none}
+.hero-glow{position:absolute;width:600px;height:400px;background:radial-gradient(ellipse,rgba(76,124,255,.08) 0%,transparent 70%);top:20%;left:50%;transform:translateX(-50%);pointer-events:none}
+.badge{display:inline-flex;align-items:center;gap:6px;background:var(--s2);border:1px solid var(--border2);border-radius:100px;padding:.3rem .9rem;font-size:.72rem;font-weight:600;color:var(--subtle);letter-spacing:.04em;text-transform:uppercase;margin-bottom:2rem;animation:up .7s ease both}
+.badge-dot{width:5px;height:5px;border-radius:50%;background:var(--blue);animation:blink 2s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+h1.hero-h{font-family:'Playfair Display',serif;font-size:clamp(3rem,9vw,7rem);font-weight:800;line-height:.96;letter-spacing:-.03em;margin-bottom:1.4rem;animation:up .7s .08s ease both}
+.hero-h em{font-style:italic;color:var(--blue)}
+.hero-p{font-size:1rem;color:var(--subtle);max-width:440px;line-height:1.75;margin-bottom:2.5rem;font-weight:400;animation:up .7s .16s ease both}
+.hero-actions{display:flex;gap:.75rem;justify-content:center;animation:up .7s .24s ease both}
+.btn-p{background:var(--blue);color:#fff;border:none;padding:.8rem 2rem;font-family:inherit;font-weight:700;font-size:.85rem;cursor:none;border-radius:7px;transition:transform .2s,box-shadow .2s}
+.btn-p:hover{transform:translateY(-2px);box-shadow:0 12px 35px rgba(76,124,255,.3)}
+.btn-s{background:var(--s2);color:var(--text);border:1px solid var(--border2);padding:.8rem 1.8rem;font-family:inherit;font-weight:500;font-size:.85rem;cursor:none;border-radius:7px;transition:background .2s,border-color .2s}
+.btn-s:hover{background:var(--s3);border-color:var(--border2)}
+@keyframes up{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+
+/* 3D LAPTOP HERO */
+.hero-laptop-wrap{margin-top:4rem;perspective:1400px;animation:up .7s .32s ease both}
+.hero-laptop{transform-style:preserve-3d;animation:heroFloat 8s ease-in-out infinite;width:440px;position:relative}
+@keyframes heroFloat{
+0%,100%{transform:rotateX(6deg) rotateY(-14deg)}
+35%{transform:rotateX(9deg) rotateY(10deg) translateY(-14px)}
+70%{transform:rotateX(5deg) rotateY(-4deg) translateY(-7px)}
+}
+.hl-lid{width:100%;padding-bottom:65%;position:relative;border-radius:14px 14px 3px 3px;background:linear-gradient(160deg,#1c1e2a 0%,#0d0e16 60%,#090a12 100%);border:1px solid rgba(255,255,255,.09);box-shadow:0 0 0 1px rgba(255,255,255,.03) inset;transform:rotateX(-2deg)}
+.hl-lid-shine{position:absolute;top:0;left:0;right:0;height:50%;background:linear-gradient(180deg,rgba(255,255,255,.04) 0%,transparent 100%);border-radius:14px 14px 0 0;pointer-events:none}
+.hl-logo{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:26px;height:26px;background:var(--blue);opacity:.12;border-radius:5px}
+.hl-screen{position:absolute;inset:7px 9px 5px 9px;border-radius:8px;background:#000;overflow:hidden}
+.hl-scr-inner{width:100%;height:100%;background:linear-gradient(135deg,#08091a 0%,#05060f 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;position:relative;overflow:hidden}
+.hl-scr-glow{position:absolute;width:70%;height:60%;background:radial-gradient(ellipse,rgba(76,124,255,.12),transparent 70%);top:30%;left:15%}
+.hl-scr-brand{font-family:'Playfair Display',serif;font-size:1rem;font-weight:800;color:rgba(76,124,255,.25);letter-spacing:.05em;position:relative}
+.hl-scr-bars{width:60%;display:flex;flex-direction:column;gap:5px;position:relative}
+.hl-bar{height:3px;border-radius:2px;background:var(--blue);opacity:.5;animation:barPulse 3s ease infinite}
+.hl-bar:nth-child(2){width:75%;opacity:.3;animation-delay:.3s}
+.hl-bar:nth-child(3){width:55%;opacity:.2;animation-delay:.6s}
+@keyframes barPulse{0%,100%{opacity:.5}50%{opacity:.12}}
+.hl-cam{position:absolute;top:5px;left:50%;transform:translateX(-50%);width:5px;height:5px;border-radius:50%;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.1)}
+.hl-hinge{width:98%;margin:0 auto;height:5px;background:linear-gradient(180deg,#1a1c28,#0c0d15);border-left:1px solid rgba(255,255,255,.06);border-right:1px solid rgba(255,255,255,.06)}
+.hl-base{width:104%;margin-left:-2%;background:linear-gradient(180deg,#161820 0%,#0e1018 100%);border-radius:2px 2px 10px 10px;border:1px solid rgba(255,255,255,.07);border-top:none;padding:.6rem .8rem .5rem;display:flex;flex-direction:column;gap:4px}
+.hl-keys{width:100%;height:36px;background:repeating-linear-gradient(90deg,rgba(255,255,255,.03) 0px,rgba(255,255,255,.03) 1px,transparent 1px,transparent 22px),repeating-linear-gradient(0deg,rgba(255,255,255,.03) 0px,rgba(255,255,255,.03) 1px,transparent 1px,transparent 14px);border-radius:2px}
+.hl-bottom{display:flex;justify-content:center}
+.hl-pad{width:35%;height:20px;border-radius:4px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.05)}
+.hl-shadow{position:absolute;bottom:-40px;left:5%;right:5%;height:40px;background:radial-gradient(ellipse,rgba(0,0,0,.6) 0%,transparent 70%);pointer-events:none}
+.float-pill{position:absolute;display:flex;align-items:center;gap:8px;background:var(--s2);border:1px solid var(--border2);border-radius:100px;padding:.45rem 1rem;font-size:.72rem;font-weight:600;white-space:nowrap;color:var(--text);backdrop-filter:blur(10px)}
+.float-pill .dot{width:6px;height:6px;border-radius:50%;background:var(--blue)}
+.fp1{top:8%;left:-130px;animation:fp 7s ease-in-out infinite}
+.fp2{top:52%;right:-140px;animation:fp 7s 2.5s ease-in-out infinite}
+.fp3{bottom:2%;left:-110px;animation:fp 7s 5s ease-in-out infinite}
+@keyframes fp{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+
+/* MARQUEE */
+.ticker{border-top:1px solid var(--border);border-bottom:1px solid var(--border);background:var(--s1);overflow:hidden;padding:.85rem 0;white-space:nowrap}
+.ticker-track{display:inline-flex;animation:tick 22s linear infinite}
+.tick-item{font-size:.72rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);padding:0 2.5rem}
+.tick-item.hi{color:var(--blue)}
+@keyframes tick{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+/* SECTIONS */
+.sec{padding:6rem 3rem}
+.sec-pre{font-size:.68rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--blue);margin-bottom:.75rem}
+.sec-title{font-family:'Playfair Display',serif;font-size:clamp(2rem,4.5vw,3.2rem);font-weight:800;letter-spacing:-.03em;line-height:1.05}
+.sec-head{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:3.5rem}
+.view-all{font-size:.78rem;color:var(--muted);text-decoration:none;font-weight:600;letter-spacing:.04em;text-transform:uppercase;transition:color .2s;cursor:none;padding-bottom:2px;border-bottom:1px solid var(--border2)}
+.view-all:hover{color:var(--blue);border-color:var(--blue)}
+
+/* PRODUCT CARDS */
+.pgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border)}
+.pcard{background:var(--bg);padding:2.5rem 2rem 2rem;position:relative;overflow:hidden;cursor:none;transition:background .3s}
+.pcard:hover{background:var(--s1)}
+.pcard:hover .pc-arrow{opacity:1;transform:none}
+.pcard:hover .pc-laptop{transform:rotateX(14deg) rotateY(18deg) translateY(-10px) scale(1.05)}
+.pcard-badge{display:inline-block;padding:.22rem .65rem;font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;border-radius:4px;margin-bottom:1.8rem}
+.b-new{background:rgba(76,124,255,.12);color:#7aa2ff}
+.b-hot{background:rgba(239,68,68,.1);color:#f87171}
+.b-pro{background:rgba(16,185,129,.1);color:#34d399}
+
+/* MINI 3D LAPTOP */
+.pc-laptop{width:100%;perspective:700px;transform-style:preserve-3d;transform:rotateX(8deg) rotateY(-10deg);transition:transform .5s ease;margin:1.2rem 0}
+.pc-lid{width:100%;padding-bottom:62%;position:relative;border-radius:8px 8px 2px 2px;border:1px solid rgba(255,255,255,.08)}
+.pc-scr{position:absolute;inset:4px 5px 3px 5px;border-radius:5px;background:#000;overflow:hidden}
+.pc-scr-inner{width:100%;height:100%;position:relative}
+.pc-base{width:105%;margin-left:-2.5%;height:10px;border-radius:0 0 5px 5px;border:1px solid rgba(255,255,255,.07);border-top:none;position:relative;top:-1px}
+.pc-keys{position:absolute;inset:0;background:repeating-linear-gradient(90deg,rgba(255,255,255,.04) 0,rgba(255,255,255,.04) 1px,transparent 1px,transparent 16px),repeating-linear-gradient(0deg,rgba(255,255,255,.04) 0,rgba(255,255,255,.04) 1px,transparent 1px,transparent 10px);border-radius:5px}
+
+.la .pc-lid{background:linear-gradient(145deg,#191b28,#0c0d18)}
+.la .pc-scr-inner{background:linear-gradient(135deg,#09091f,#050510)}
+.la .pc-scr-inner::after{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 55% 45% at 50% 35%,rgba(76,124,255,.18),transparent)}
+.la .pc-base{background:linear-gradient(180deg,#171920,#0e0f18)}
+
+.lb .pc-lid{background:linear-gradient(145deg,#1a1812,#0d0b09)}
+.lb .pc-scr-inner{background:linear-gradient(135deg,#0e0a06,#060402)}
+.lb .pc-scr-inner::after{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 55% 45% at 50% 35%,rgba(251,146,60,.14),transparent)}
+.lb .pc-base{background:linear-gradient(180deg,#181610,#0d0c0a)}
+
+.lc .pc-lid{background:linear-gradient(145deg,#121a16,#080e0b)}
+.lc .pc-scr-inner{background:linear-gradient(135deg,#050e08,#030805)}
+.lc .pc-scr-inner::after{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 55% 45% at 50% 35%,rgba(16,185,129,.13),transparent)}
+.lc .pc-base{background:linear-gradient(180deg,#101810,#090e0b)}
+
+.pc-name{font-family:'Playfair Display',serif;font-size:1.25rem;font-weight:800;letter-spacing:-.02em;margin-bottom:.35rem}
+.pc-spec{font-size:.76rem;color:var(--muted);line-height:1.8;margin-bottom:1.5rem}
+.pc-footer{display:flex;align-items:center;justify-content:space-between}
+.pc-price{font-size:1.55rem;font-weight:800;font-family:'Playfair Display',serif;letter-spacing:-.03em}
+.pc-arrow{width:34px;height:34px;border:1px solid var(--border2);border-radius:50%;display:flex;align-items:center;justify-content:center;opacity:0;transform:translate(-6px,6px);transition:opacity .3s,transform .3s;font-size:.85rem;color:var(--text)}
+.pc-hover-glow{position:absolute;width:250px;height:250px;border-radius:50%;background:radial-gradient(circle,rgba(76,124,255,.05),transparent 70%);top:-60px;right:-60px;pointer-events:none}
+
+/* STATS */
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);background:var(--s1);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.stat-cell{padding:3rem 2rem;text-align:center;border-right:1px solid var(--border)}
+.stat-cell:last-child{border-right:none}
+.stat-num{font-family:'Playfair Display',serif;font-size:2.8rem;font-weight:800;letter-spacing:-.04em;color:var(--blue);line-height:1;margin-bottom:.4rem}
+.stat-label{font-size:.73rem;color:var(--muted);font-weight:600;letter-spacing:.08em;text-transform:uppercase}
+
+/* FEATURED */
+.feat-grid{display:grid;grid-template-columns:1fr 1fr;border:1px solid var(--border);border-radius:16px;overflow:hidden}
+.feat-info{padding:4rem 3.5rem;background:var(--s1);display:flex;flex-direction:column;justify-content:center}
+.feat-tag{font-size:.65rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--blue);margin-bottom:1rem}
+.feat-title{font-family:'Playfair Display',serif;font-size:2.6rem;font-weight:800;letter-spacing:-.03em;line-height:1.08;margin-bottom:1rem}
+.feat-desc{color:var(--subtle);font-size:.9rem;line-height:1.78;margin-bottom:2rem;max-width:360px}
+.feat-spec-list{margin-bottom:2.5rem}
+.fsl-row{display:flex;justify-content:space-between;align-items:center;padding:.65rem 0;border-bottom:1px solid var(--border);font-size:.82rem}
+.fsl-k{color:var(--muted)}
+.fsl-v{font-weight:600;color:var(--text)}
+.feat-price-row{display:flex;align-items:center;gap:1.5rem;margin-bottom:1.5rem}
+.feat-price{font-family:'Playfair Display',serif;font-size:2.2rem;font-weight:800;letter-spacing:-.04em}
+.feat-old{font-size:.9rem;color:var(--muted);text-decoration:line-through}
+.btn-buy{background:var(--blue);color:#fff;border:none;padding:.9rem 2.2rem;font-family:inherit;font-weight:700;font-size:.85rem;cursor:none;border-radius:8px;transition:transform .2s,box-shadow .2s;display:inline-flex;align-items:center;gap:.5rem}
+.btn-buy:hover{transform:translateY(-2px);box-shadow:0 12px 35px rgba(76,124,255,.3)}
+.feat-visual{background:var(--s2);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;min-height:480px}
+.fv-glow{position:absolute;width:350px;height:350px;border-radius:50%;background:radial-gradient(circle,rgba(76,124,255,.08),transparent 70%);top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none}
+.big-laptop{perspective:1100px;transform-style:preserve-3d}
+.bl-inner{animation:bigFloat 8s ease-in-out infinite;transform-style:preserve-3d}
+@keyframes bigFloat{0%,100%{transform:rotateX(8deg) rotateY(-16deg)}38%{transform:rotateX(10deg) rotateY(12deg) translateY(-18px)}72%{transform:rotateX(6deg) rotateY(-4deg) translateY(-9px)}}
+.bl-lid{width:280px;padding-bottom:185px;background:linear-gradient(150deg,#1c1e2c,#0b0c16);border-radius:10px 10px 2px 2px;border:1px solid rgba(255,255,255,.09);position:relative;box-shadow:0 40px 100px rgba(0,0,0,.9)}
+.bl-scr{position:absolute;inset:7px 9px 5px 9px;border-radius:5px;background:#000;overflow:hidden}
+.bl-si{width:100%;height:100%;background:linear-gradient(135deg,#07091c,#040510);position:relative;display:flex;align-items:center;justify-content:center}
+.bl-si::before{content:'LaptopHUB';font-family:'Playfair Display',serif;font-size:.9rem;font-weight:800;color:rgba(76,124,255,.18);letter-spacing:.05em}
+.bl-scanlines{position:absolute;inset:0;background:repeating-linear-gradient(0deg,rgba(76,124,255,.03) 0,rgba(76,124,255,.03) 1px,transparent 1px,transparent 3px);pointer-events:none}
+.bl-cam{position:absolute;top:4px;left:50%;transform:translateX(-50%);width:4px;height:4px;border-radius:50%;background:rgba(255,255,255,.12)}
+.bl-hinge{width:96%;margin:0 auto;height:4px;background:#0e0f18}
+.bl-base{width:108%;margin-left:-4%;height:17px;background:linear-gradient(180deg,#191b28,#0e1018);border-radius:0 0 7px 7px;border:1px solid rgba(255,255,255,.07);border-top:none;box-shadow:0 20px 60px rgba(0,0,0,.7)}
+
+/* TESTIMONIALS */
+.tgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5px;background:var(--border)}
+.tcard{background:var(--s1);padding:2rem 1.8rem}
+.tcard-stars{display:flex;gap:3px;margin-bottom:1.2rem}
+.star{color:var(--blue);font-size:.8rem}
+.tcard-text{font-size:.875rem;line-height:1.75;color:var(--subtle);margin-bottom:1.5rem;font-style:italic}
+.tcard-author{display:flex;align-items:center;gap:.75rem}
+.tauthor-av{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;flex-shrink:0}
+.av-b{background:rgba(76,124,255,.15);color:#7aa2ff}
+.av-g{background:rgba(16,185,129,.12);color:#34d399}
+.av-r{background:rgba(239,68,68,.1);color:#f87171}
+.tauthor-name{font-size:.82rem;font-weight:700;color:var(--text)}
+.tauthor-role{font-size:.73rem;color:var(--muted)}
+
+/* FAQ */
+.faq-list{display:flex;flex-direction:column;gap:1px;background:var(--border);border:1px solid var(--border)}
+.faq-item{background:var(--s1);overflow:hidden}
+.faq-q{width:100%;display:flex;justify-content:space-between;align-items:center;padding:1.4rem 2rem;background:none;border:none;color:var(--text);font-family:inherit;font-size:.9rem;font-weight:600;cursor:none;text-align:left;transition:background .2s}
+.faq-q:hover{background:var(--s2)}
+.faq-icon{width:22px;height:22px;border:1px solid var(--border2);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.8rem;color:var(--muted);flex-shrink:0;transition:transform .3s,background .2s}
+.faq-item.open .faq-icon{transform:rotate(45deg);background:var(--blue);border-color:var(--blue);color:#fff}
+.faq-ans{max-height:0;overflow:hidden;transition:max-height .35s ease,padding .3s ease}
+.faq-item.open .faq-ans{max-height:200px;padding:0 2rem 1.4rem}
+.faq-ans p{font-size:.85rem;color:var(--muted);line-height:1.78}
+
+/* CTA BANNER */
+.cta-band{background:var(--blue);padding:4.5rem 3rem;display:flex;align-items:center;justify-content:space-between;gap:2rem}
+.cta-left h2{font-family:'Playfair Display',serif;font-size:2.2rem;font-weight:800;letter-spacing:-.03em;color:#fff;margin-bottom:.5rem}
+.cta-left p{color:rgba(255,255,255,.65);font-size:.9rem}
+.cta-form{display:flex;gap:.75rem;flex-shrink:0}
+.cta-input{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);color:#fff;padding:.8rem 1.3rem;font-family:inherit;font-size:.85rem;border-radius:7px;width:240px;outline:none;transition:border-color .2s}
+.cta-input::placeholder{color:rgba(255,255,255,.4)}
+.cta-input:focus{border-color:rgba(255,255,255,.5)}
+.btn-white{background:#fff;color:var(--blue);border:none;padding:.8rem 1.6rem;font-family:inherit;font-weight:700;font-size:.85rem;cursor:none;border-radius:7px;transition:opacity .2s}
+.btn-white:hover{opacity:.88}
+
+/* FOOTER */
+footer{background:var(--s1);border-top:1px solid var(--border);padding:4rem 3rem 2.5rem}
+.footer-top{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:3rem;margin-bottom:3rem}
+.footer-brand .logo-text{font-size:1.1rem;font-weight:700;letter-spacing:-.02em;color:var(--text);margin-bottom:.6rem;display:block}
+.footer-brand .logo-text span{color:var(--blue)}
+.footer-brand p{font-size:.82rem;color:var(--muted);line-height:1.75;max-width:240px}
+.footer-col h4{font-size:.72rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--subtle);margin-bottom:1rem}
+.footer-col ul{list-style:none;display:flex;flex-direction:column;gap:.5rem}
+.footer-col a{font-size:.82rem;color:var(--muted);text-decoration:none;transition:color .2s}
+.footer-col a:hover{color:var(--text)}
+.footer-bottom{display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--border);padding-top:2rem;font-size:.75rem;color:var(--muted)}
+.footer-bottom-links{display:flex;gap:1.5rem}
+.footer-bottom-links a{color:var(--muted);text-decoration:none;transition:color .2s}
+.footer-bottom-links a:hover{color:var(--text)}
+.rev{opacity:0;transform:translateY(24px);transition:opacity .6s ease,transform .6s ease}
+.rev.in{opacity:1;transform:none}
+</style>
+
+<div id="cur"></div>
+<div id="cur2"></div>
+
+<nav>
+  <div class="logo-mark">
+    <div class="logo-icon">LH</div>
+    <span class="logo-text">Laptop<span>HUB</span></span>
+  </div>
+  <ul class="nav-links">
+    <li><a href="#">Shop</a></li>
+    <li><a href="#">Brands</a></li>
+    <li><a href="#">Compare</a></li>
+    <li><a href="#">Support</a></li>
+  </ul>
+  <div class="nav-right">
+    <button class="nav-cart">Cart (0)</button>
+    <button class="nav-btn">Sign In</button>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="hero-noise"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-glow"></div>
+  <div class="badge"><span class="badge-dot"></span>New Arrivals — May 2025</div>
+  <h1 class="hero-h">Your Next<br>Machine,<br><em>Perfected.</em></h1>
+  <p class="hero-p">Premium laptops for professionals, creators, and students. Every spec. Every brand. Delivered fast across Pakistan.</p>
+  <div class="hero-actions">
+    <button class="btn-p">Browse Laptops</button>
+    <button class="btn-s">Compare Models</button>
+  </div>
+  <div class="hero-laptop-wrap">
+    <div style="position:relative;display:inline-block">
+      <div class="float-pill fp1"><span class="dot"></span>AMD Ryzen 9 — 5.4 GHz</div>
+      <div class="float-pill fp2"><span class="dot"></span>22hr Battery Life</div>
+      <div class="float-pill fp3"><span class="dot"></span>Free Delivery PK</div>
+      <div class="hero-laptop">
+        <div class="hl-lid">
+          <div class="hl-lid-shine"></div>
+          <div class="hl-logo"></div>
+          <div class="hl-cam"></div>
+          <div class="hl-screen">
+            <div class="hl-scr-inner">
+              <div class="hl-scr-glow"></div>
+              <div class="hl-scr-brand">LaptopHUB</div>
+              <div class="hl-scr-bars">
+                <div class="hl-bar"></div>
+                <div class="hl-bar"></div>
+                <div class="hl-bar"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="hl-hinge"></div>
+        <div class="hl-base">
+          <div class="hl-keys"></div>
+          <div class="hl-bottom"><div class="hl-pad"></div></div>
+        </div>
+        <div class="hl-shadow"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="ticker">
+  <div class="ticker-track">
+    <span class="tick-item">Free Shipping Pakistan</span><span class="tick-item hi">— LaptopHUB</span>
+    <span class="tick-item">Intel Core Ultra 9</span><span class="tick-item hi">— AMD Ryzen 9</span>
+    <span class="tick-item">3-Year Warranty</span><span class="tick-item hi">— 47+ Models</span>
+    <span class="tick-item">COD Available</span><span class="tick-item hi">— Easy Returns</span>
+    <span class="tick-item">Free Shipping Pakistan</span><span class="tick-item hi">— LaptopHUB</span>
+    <span class="tick-item">Intel Core Ultra 9</span><span class="tick-item hi">— AMD Ryzen 9</span>
+    <span class="tick-item">3-Year Warranty</span><span class="tick-item hi">— 47+ Models</span>
+    <span class="tick-item">COD Available</span><span class="tick-item hi">— Easy Returns</span>
+  </div>
+</div>
+
+<section class="sec rev">
+  <div class="sec-head">
+    <div>
+      <p class="sec-pre">Our Lineup</p>
+      <h2 class="sec-title">Top Picks This Month</h2>
+    </div>
+    <a href="#" class="view-all">All Models →</a>
+  </div>
+  <div class="pgrid">
+    <div class="pcard">
+      <div class="pc-hover-glow"></div>
+      <span class="pcard-badge b-new">New</span>
+      <div class="pc-laptop la">
+        <div class="pc-lid"><div class="pc-scr"><div class="pc-scr-inner"></div></div></div>
+        <div class="pc-base"><div class="pc-keys"></div></div>
+      </div>
+      <p class="pc-name">Phantom X1 Pro</p>
+      <p class="pc-spec">Ryzen 9 7950X &nbsp;·&nbsp; 32GB LPDDR5<br>1TB NVMe &nbsp;·&nbsp; OLED 2.8K 120Hz</p>
+      <div class="pc-footer">
+        <span class="pc-price">Rs 349,000</span>
+        <div class="pc-arrow">→</div>
+      </div>
+    </div>
+    <div class="pcard">
+      <div class="pc-hover-glow"></div>
+      <span class="pcard-badge b-hot">Bestseller</span>
+      <div class="pc-laptop lb">
+        <div class="pc-lid"><div class="pc-scr"><div class="pc-scr-inner"></div></div></div>
+        <div class="pc-base"><div class="pc-keys"></div></div>
+      </div>
+      <p class="pc-name">Vortex Pro 16</p>
+      <p class="pc-spec">Intel Core Ultra 9 &nbsp;·&nbsp; 64GB DDR5<br>2TB NVMe &nbsp;·&nbsp; IPS 165Hz 2K</p>
+      <div class="pc-footer">
+        <span class="pc-price">Rs 489,000</span>
+        <div class="pc-arrow">→</div>
+      </div>
+    </div>
+    <div class="pcard">
+      <div class="pc-hover-glow"></div>
+      <span class="pcard-badge b-pro">Creator</span>
+      <div class="pc-laptop lc">
+        <div class="pc-lid"><div class="pc-scr"><div class="pc-scr-inner"></div></div></div>
+        <div class="pc-base"><div class="pc-keys"></div></div>
+      </div>
+      <p class="pc-name">Nova Studio M3</p>
+      <p class="pc-spec">M3 Max &nbsp;·&nbsp; 128GB Unified<br>4TB SSD &nbsp;·&nbsp; Mini-LED Pro Display</p>
+      <div class="pc-footer">
+        <span class="pc-price">Rs 689,000</span>
+        <div class="pc-arrow">→</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="stats-row rev">
+  <div class="stat-cell"><div class="stat-num">47+</div><div class="stat-label">Models in Stock</div></div>
+  <div class="stat-cell"><div class="stat-num">22hr</div><div class="stat-label">Max Battery Life</div></div>
+  <div class="stat-cell"><div class="stat-num">3yr</div><div class="stat-label">Warranty Cover</div></div>
+  <div class="stat-cell"><div class="stat-num">12K+</div><div class="stat-label">Happy Customers</div></div>
+</div>
+
+<section class="sec rev">
+  <div>
+    <p class="sec-pre">Editor's Pick</p>
+    <h2 class="sec-title" style="margin-bottom:2.5rem">Featured Build</h2>
+  </div>
+  <div class="feat-grid">
+    <div class="feat-info">
+      <p class="feat-tag">Best Seller — April 2025</p>
+      <h3 class="feat-title">Phantom X1<br>Ultra Black</h3>
+      <p class="feat-desc">13.4mm thin. 1.08kg light. A processor that outperforms machines twice its weight. This is engineering with no compromise.</p>
+      <div class="feat-spec-list">
+        <div class="fsl-row"><span class="fsl-k">Processor</span><span class="fsl-v">AMD Ryzen 9 7950X</span></div>
+        <div class="fsl-row"><span class="fsl-k">Memory</span><span class="fsl-v">32GB LPDDR5X</span></div>
+        <div class="fsl-row"><span class="fsl-k">Storage</span><span class="fsl-v">1TB PCIe Gen 5</span></div>
+        <div class="fsl-row"><span class="fsl-k">Display</span><span class="fsl-v">14" OLED 2.8K 120Hz</span></div>
+        <div class="fsl-row"><span class="fsl-k">Weight</span><span class="fsl-v">1.08 kg</span></div>
+      </div>
+      <div class="feat-price-row">
+        <span class="feat-price">Rs 349,000</span>
+        <span class="feat-old">Rs 399,000</span>
+      </div>
+      <button class="btn-buy">Add to Cart &nbsp;→</button>
+    </div>
+    <div class="feat-visual">
+      <div class="fv-glow"></div>
+      <div class="big-laptop">
+        <div class="bl-inner">
+          <div class="bl-lid">
+            <div class="bl-cam"></div>
+            <div class="bl-scr">
+              <div class="bl-si">
+                <div class="bl-scanlines"></div>
+              </div>
+            </div>
+          </div>
+          <div class="bl-hinge"></div>
+          <div class="bl-base"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sec rev" style="padding-top:0">
+  <div class="sec-head">
+    <div>
+      <p class="sec-pre">Reviews</p>
+      <h2 class="sec-title">What Customers Say</h2>
+    </div>
+  </div>
+  <div class="tgrid">
+    <div class="tcard">
+      <div class="tcard-stars"><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span></div>
+      <p class="tcard-text">"Ordered a Ryzen 9 laptop and it arrived next day, fully packaged and tested. Best tech purchase I've made in Lahore."</p>
+      <div class="tcard-author">
+        <div class="tauthor-av av-b">AK</div>
+        <div><div class="tauthor-name">Ahmed K.</div><div class="tauthor-role">Software Engineer, Lahore</div></div>
+      </div>
+    </div>
+    <div class="tcard">
+      <div class="tcard-stars"><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span></div>
+      <p class="tcard-text">"Got a MacBook M3 at a price better than Hafeez Center. Came with warranty card and original box. Highly recommend."</p>
+      <div class="tcard-author">
+        <div class="tauthor-av av-g">SB</div>
+        <div><div class="tauthor-name">Sara B.</div><div class="tauthor-role">Graphic Designer, Karachi</div></div>
+      </div>
+    </div>
+    <div class="tcard">
+      <div class="tcard-stars"><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span></div>
+      <p class="tcard-text">"The compare feature helped me pick between 3 models in 5 minutes. Support team was super responsive on WhatsApp."</p>
+      <div class="tcard-author">
+        <div class="tauthor-av av-r">UR</div>
+        <div><div class="tauthor-name">Usman R.</div><div class="tauthor-role">Student, Islamabad</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sec rev" style="padding-top:0">
+  <div class="sec-head">
+    <div>
+      <p class="sec-pre">FAQs</p>
+      <h2 class="sec-title">Common Questions</h2>
+    </div>
+  </div>
+  <div class="faq-list">
+    <div class="faq-item">
+      <button class="faq-q"><span>Do you offer Cash on Delivery?</span><div class="faq-icon">+</div></button>
+      <div class="faq-ans"><p>Yes — COD is available across all major cities in Pakistan including Karachi, Lahore, Islamabad, Rawalpindi, Faisalabad, and Multan. No extra charges apply.</p></div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q"><span>Are the laptops brand new or refurbished?</span><div class="faq-icon">+</div></button>
+      <div class="faq-ans"><p>We clearly label every product. Brand new units come sealed in original packaging. Refurbished units are graded (A/B/C) and include a full diagnostic report and 6-month warranty.</p></div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q"><span>How long does delivery take?</span><div class="faq-icon">+</div></button>
+      <div class="faq-ans"><p>Lahore, Karachi, Islamabad: 24–48 hours. Other cities: 2–4 business days. Express same-day delivery is available in Lahore for orders placed before 12pm.</p></div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q"><span>What warranty do products come with?</span><div class="faq-icon">+</div></button>
+      <div class="faq-ans"><p>All new laptops carry official brand warranty (1–3 years depending on brand). We additionally offer LaptopHUB extended warranty plans covering accidental damage and battery replacement.</p></div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q"><span>Can I return or exchange a laptop?</span><div class="faq-icon">+</div></button>
+      <div class="faq-ans"><p>Yes — 7-day no-questions return policy on all sealed units. Opened units can be exchanged within 3 days if a defect is found. Contact our support team to initiate a return.</p></div>
+    </div>
+  </div>
+</section>
+
+<div class="cta-band rev">
+  <div class="cta-left">
+    <h2>Stay in the loop.</h2>
+    <p>New arrivals, price drops, and exclusive deals — straight to your inbox.</p>
+  </div>
+  <div class="cta-form">
+    <input class="cta-input" type="email" placeholder="your@email.com">
+    <button class="btn-white">Subscribe</button>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-top">
+    <div class="footer-brand">
+      <span class="logo-text">Laptop<span>HUB</span></span>
+      <p>Pakistan's most trusted online laptop store. Premium machines, honest prices, delivered fast.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Shop</h4>
+      <ul>
+        <li><a href="#">All Laptops</a></li>
+        <li><a href="#">Gaming</a></li>
+        <li><a href="#">Business</a></li>
+        <li><a href="#">Creator</a></li>
+        <li><a href="#">Student</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Brands</h4>
+      <ul>
+        <li><a href="#">Apple</a></li>
+        <li><a href="#">Dell</a></li>
+        <li><a href="#">HP</a></li>
+        <li><a href="#">Lenovo</a></li>
+        <li><a href="#">ASUS</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Support</h4>
+      <ul>
+        <li><a href="#">WhatsApp</a></li>
+        <li><a href="#">Track Order</a></li>
+        <li><a href="#">Returns</a></li>
+        <li><a href="#">Warranty</a></li>
+        <li><a href="#">Contact</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2025 LaptopHUB. All rights reserved.</span>
+    <div class="footer-bottom-links">
+      <a href="#">Privacy Policy</a>
+      <a href="#">Terms</a>
+      <a href="#">Sitemap</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+const cur=document.getElementById('cur'),cur2=document.getElementById('cur2');
+let mx=0,my=0;
+document.addEventListener('mousemove',e=>{
+  mx=e.clientX;my=e.clientY;
+  cur.style.left=mx+'px';cur.style.top=my+'px';
+  setTimeout(()=>{cur2.style.left=mx+'px';cur2.style.top=my+'px'},70);
+});
+document.querySelectorAll('button,a,.pcard').forEach(el=>{
+  el.addEventListener('mouseenter',()=>{cur.style.transform='translate(-50%,-50%) scale(3)';cur.style.opacity='.6'});
+  el.addEventListener('mouseleave',()=>{cur.style.transform='translate(-50%,-50%) scale(1)';cur.style.opacity='1'});
+});
+document.querySelectorAll('.pcard').forEach(c=>{
+  c.addEventListener('mousemove',e=>{
+    const r=c.getBoundingClientRect(),x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;
+    c.style.transform=`perspective(700px) rotateX(${-y*5}deg) rotateY(${x*5}deg)`;
+  });
+  c.addEventListener('mouseleave',()=>c.style.transform='');
+});
+const obs=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('in')}),{threshold:.12});
+document.querySelectorAll('.rev').forEach(el=>obs.observe(el));
+document.querySelectorAll('.faq-q').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    const item=btn.parentElement;
+    const wasOpen=item.classList.contains('open');
+    document.querySelectorAll('.faq-item').forEach(i=>i.classList.remove('open'));
+    if(!wasOpen)item.classList.add('open');
+  });
+});
+</script>

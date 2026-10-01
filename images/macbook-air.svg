@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 320" width="100%" height="100%">
+  <defs>
+    <linearGradient id="mba_lid" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e293b"/>
+      <stop offset="50%" stop-color="#0f172a"/>
+      <stop offset="100%" stop-color="#020617"/>
+    </linearGradient>
+    <linearGradient id="mba_screen" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#020617"/>
+      <stop offset="60%" stop-color="#0f172a"/>
+      <stop offset="100%" stop-color="#1e1b4b"/>
+    </linearGradient>
+    <filter id="mba_drop" x="-10%" y="-10%" width="120%" height="130%">
+      <feDropShadow dx="0" dy="14" stdDeviation="14" flood-color="#000" flood-opacity="0.4"/>
+    </filter>
+  </defs>
+
+  <g filter="url(#mba_drop)">
+    <!-- Bottom base wedge shape -->
+    <path d="M 40 240 L 460 240 L 476 254 C 476 260 470 264 460 264 L 40 264 C 30 264 24 260 24 254 Z" fill="#0f172a"/>
+    <!-- Top deck -->
+    <path d="M 50 198 L 450 198 L 464 240 L 36 240 Z" fill="#1e293b" stroke="#334155" stroke-width="1"/>
+    <!-- Magic keyboard -->
+    <rect x="80" y="204" width="340" height="24" rx="3" fill="#020617"/>
+    <!-- Force touch trackpad -->
+    <rect x="200" y="242" width="100" height="19" rx="3" fill="#0f172a" stroke="#334155" stroke-width="0.8"/>
+
+    <!-- Screen Lid (Midnight with camera notch) -->
+    <path d="M 65 35 L 435 35 C 440 35 444 39 444 44 L 450 198 L 50 198 L 56 44 C 56 39 60 35 65 35 Z" fill="url(#mba_lid)" stroke="#334155"/>
+    <rect x="62" y="42" width="376" height="150" rx="4" fill="url(#mba_screen)"/>
+
+    <!-- Camera notch -->
+    <path d="M 235 42 L 265 42 C 267 42 268 44 268 46 L 268 50 C 268 53 266 55 263 55 L 237 55 C 234 55 232 53 232 50 L 232 46 C 232 44 233 42 235 42 Z" fill="#020617"/>
+
+    <!-- Apple Wallpaper Glow -->
+    <circle cx="250" cy="120" r="45" fill="none" stroke="#60a5fa" stroke-width="2.5" opacity="0.6"/>
+    <text x="250" y="116" font-family="-apple-system, BlinkMacSystemFont, 'Plus Jakarta Sans', sans-serif" font-weight="700" font-size="16" fill="#ffffff" text-anchor="middle">MacBook Air M2</text>
+    <text x="250" y="134" font-family="sans-serif" font-size="10" fill="#93c5fd" text-anchor="middle" letter-spacing="1.5">Liquid Retina · Midnight Finish</text>
+  </g>
+</svg>
