@@ -1142,6 +1142,15 @@
     el.closest('.option-grid').querySelectorAll('.option-tile').forEach(t => t.classList.remove('selected'));
     el.classList.add('selected');
     answers[key] = val;
+
+    // Smoothly auto-advance to the next step so users never get stuck on a step
+    if (currentStep < TOTAL && key !== 'ram' && key !== 'budget') {
+      setTimeout(() => {
+        if (currentStep < TOTAL) {
+          goNext(currentStep);
+        }
+      }, 220);
+    }
   }
 
   // ── SLIDERS ────────────────────────────────────────────────────────────────

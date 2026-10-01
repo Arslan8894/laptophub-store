@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en" data-theme="dark">
 <head>
 <meta charset="UTF-8">
@@ -12,6 +12,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/theme.css">
+<link rel="stylesheet" href="css/header.css">
 <style>
   *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -191,95 +192,7 @@
   }
   .demo-bar a:hover { text-decoration: underline; }
 
-  /* NAV */
-  nav {
-    position: sticky; top: 0; left: 0; right: 0;
-    z-index: 100;
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 1.1rem 3rem;
-    background: var(--nav-bg);
-    backdrop-filter: blur(24px);
-    border-bottom: 1px solid var(--border);
-    transition: background-color 0.3s, border-color 0.3s;
-  }
-  .logo-mark {
-    display: flex; align-items: center; gap: 10px;
-    text-decoration: none;
-  }
-  .logo-icon {
-    width: 32px; height: 32px;
-    background: var(--blue);
-    border-radius: 8px;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 0.75rem; font-weight: 700; color: #fff;
-    box-shadow: 0 4px 15px rgba(76,124,255,0.3);
-  }
-  .logo-text {
-    font-size: 1.2rem; font-weight: 700;
-    letter-spacing: -0.02em; color: var(--heading);
-    transition: color 0.3s;
-  }
-  .logo-text span { color: var(--blue); }
-
-  .nav-links { display: flex; gap: 2.2rem; list-style: none; }
-  .nav-links a {
-    text-decoration: none; color: var(--muted);
-    font-size: 0.85rem; font-weight: 500; letter-spacing: 0.02em;
-    transition: color 0.2s;
-  }
-  .nav-links a:hover { color: var(--heading); }
-
-  .nav-right { display: flex; align-items: center; gap: 0.85rem; }
-
-  /* THEME SWITCHER BUTTON */
-  .theme-toggle-btn {
-    background: var(--s2);
-    border: 1px solid var(--border2);
-    color: var(--heading);
-    padding: 0.45rem 0.95rem;
-    font-family: inherit;
-    font-size: 0.8rem;
-    font-weight: 600;
-    border-radius: 20px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 7px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-    transition: all 0.25s ease;
-  }
-  .theme-toggle-btn:hover {
-    border-color: var(--blue);
-    transform: translateY(-1px);
-  }
-  .theme-icon {
-    font-size: 0.95rem;
-    line-height: 1;
-  }
-
-  .nav-cart {
-    background: none; border: 1px solid var(--border2);
-    color: var(--heading); padding: 0.5rem 1.1rem;
-    font-family: inherit; font-size: 0.82rem; font-weight: 600;
-    cursor: pointer; border-radius: 6px;
-    display: flex; align-items: center; gap: 8px;
-    transition: border-color 0.2s, color 0.2s, background 0.2s;
-  }
-  .nav-cart:hover { border-color: var(--blue); color: var(--blue); }
-  .cart-badge-count {
-    background: var(--blue); color: #fff;
-    font-size: 0.7rem; padding: 1px 7px;
-    border-radius: 10px; font-weight: 700;
-  }
-  .nav-btn {
-    background: var(--blue); color: #fff;
-    border: none; padding: 0.55rem 1.3rem;
-    font-family: inherit; font-size: 0.82rem; font-weight: 600;
-    cursor: pointer; border-radius: 6px;
-    box-shadow: 0 4px 15px rgba(76,124,255,0.25);
-    transition: opacity 0.2s, transform 0.2s, background 0.2s;
-  }
-  .nav-btn:hover { opacity: 0.9; transform: translateY(-1px); }
+  /* Header styles (nav, logo, centered links, unified 40px action buttons, responsive breakpoints) are modularized in css/header.css */
 
   /* HERO */
   .hero {
@@ -1073,15 +986,12 @@
     }
   }
 
-  /* RESPONSIVE */
+  /* RESPONSIVE LAYOUT (Header responsive styles are modularized in css/header.css) */
   @media (max-width: 1024px) {
     .stats-row { grid-template-columns: repeat(2, 1fr); }
     .footer-top { grid-template-columns: 1fr 1fr; }
   }
   @media (max-width: 768px) {
-    nav { padding: 1rem 1.2rem; }
-    .nav-links { display: none; }
-    .mobile-nav-toggle { display: inline-flex; }
     .sec, .catalog-toolbar { padding: 2.5rem 1.2rem; }
     .search-box { width: 100%; }
     .filter-tabs { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
@@ -1096,7 +1006,6 @@
     #toast { bottom: calc(1.5rem + 58px); right: 1.2rem; max-width: calc(100vw - 2.4rem); }
   }
   @media (max-width: 480px) {
-    nav { padding: 0.85rem 1rem; }
     .sec, .catalog-toolbar { padding: 2rem 1rem; }
     .pgrid { grid-template-columns: 1fr; gap: 1.2rem; }
     .pcard { padding: 1.2rem; }
@@ -1753,44 +1662,7 @@
   .b-game { background: rgba(6,182,212,0.14); color: #06b6d4; border: 1px solid rgba(6,182,212,0.3); }
   .b-touch { background: rgba(236,72,153,0.14); color: #ec4899; border: 1px solid rgba(236,72,153,0.3); }
 
-  /* USER ACCOUNT & AUTH MODAL */
-  .nav-user-btn {
-    background: var(--s2); border: 1.5px solid var(--border2);
-    color: var(--heading); padding: 0.45rem 0.95rem; border-radius: 8px;
-    font-family: inherit; font-size: 0.82rem; font-weight: 700;
-    display: inline-flex; align-items: center; gap: 7px;
-    cursor: pointer; transition: all 0.2s;
-  }
-  .nav-user-btn:hover { border-color: var(--blue); background: var(--s3); }
-  .user-avatar-badge {
-    background: var(--blue-dim); color: var(--blue);
-    width: 22px; height: 22px; border-radius: 50%;
-    display: flex; align-items: center; justify-content: center; font-size: 0.72rem;
-  }
-  .user-dropdown {
-    position: absolute; top: calc(100% + 8px); right: 0;
-    background: var(--s1); border: 1px solid var(--border2);
-    border-radius: 12px; width: 220px; box-shadow: 0 15px 35px rgba(0,0,0,0.5);
-    padding: 0.5rem; display: none; flex-direction: column; gap: 4px;
-    z-index: 1000;
-  }
-  .user-dropdown.open { display: flex; }
-  .user-dropdown-header {
-    padding: 0.6rem 0.8rem; border-bottom: 1px solid var(--border);
-    margin-bottom: 4px;
-  }
-  .user-dropdown-name { font-size: 0.84rem; font-weight: 600; color: var(--heading); }
-  .user-dropdown-email { font-size: 0.72rem; color: var(--muted); }
-  .user-dropdown-item {
-    background: none; border: none; color: var(--text);
-    padding: 0.5rem 0.8rem; border-radius: 6px; font-family: inherit;
-    font-size: 0.8rem; font-weight: 600; text-align: left;
-    cursor: pointer; display: flex; align-items: center; gap: 8px;
-    text-decoration: none; transition: background 0.2s;
-  }
-  .user-dropdown-item:hover { background: var(--s2); color: #fff; }
-  .user-dropdown-item.danger { color: #f87171; }
-  .user-dropdown-item.danger:hover { background: rgba(239,68,68,0.12); }
+
 
   /* AUTH MODAL */
   #loginModal {
@@ -1835,7 +1707,7 @@
 
 <!-- NAV -->
 <nav>
-  <a href="index.html" class="logo-mark">
+  <a href="laptophub.html" class="logo-mark">
     <div class="logo-icon">LH</div>
     <span class="logo-text">Laptop<span>HUB</span></span>
   </a>
@@ -1856,7 +1728,6 @@
     </li>
   </ul>
   <div class="nav-right">
-    <button class="mobile-nav-toggle" id="mobileNavBtn" onclick="toggleMobileNav()" aria-label="Open mobile navigation menu">☰</button>
     <!-- THEME TOGGLE BUTTON -->
     <button class="theme-toggle-btn" id="themeBtn" onclick="toggleTheme()" aria-label="Toggle theme">
       <span class="theme-icon" id="themeIcon">☀️</span>
@@ -1864,7 +1735,7 @@
     </button>
     <button class="nav-cart" onclick="openCart()">
       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg>
-      Cart <span class="cart-badge-count" id="cartCount">0</span>
+      <span class="cart-text">Cart</span> <span class="cart-badge-count" id="cartCount">0</span>
     </button>
     <div id="userAccountSection" style="position:relative">
       <button class="nav-btn" id="btnSignIn" onclick="openLoginModal()">Sign In</button>
@@ -1887,6 +1758,7 @@
         </button>
       </div>
     </div>
+    <button class="mobile-nav-toggle" id="mobileNavBtn" onclick="toggleMobileNav()" aria-label="Open mobile navigation menu">☰</button>
   </div>
 </nav>
 
@@ -2873,10 +2745,15 @@
     if (!lap) return;
     activeModalLaptop = lap;
 
-    // Default to laptop's base RAM (or closest to 8, 16, 32)
-    if (lap.ram <= 8) modalSelectedRam = 8;
-    else if (lap.ram <= 16) modalSelectedRam = 16;
-    else modalSelectedRam = 32;
+    // Default to laptop's base RAM (or closest to 8, 16, 32 if upgradable)
+    const isUpgradable = isLaptopRamUpgradable(lap);
+    if (!isUpgradable) {
+      modalSelectedRam = lap.ram;
+    } else {
+      if (lap.ram <= 8) modalSelectedRam = 8;
+      else if (lap.ram <= 16) modalSelectedRam = 16;
+      else modalSelectedRam = 32;
+    }
 
     // Default to laptop's base storage (or closest to 128, 256, 512, 1000)
     if (lap.storage <= 128) modalSelectedStorage = 128;
@@ -2948,20 +2825,35 @@
     updateModalPricingAndUI();
   }
 
-  function getRamDelta(targetRam, baseRam) {
-    if (targetRam === baseRam) return 0;
-    const ramValues = { 8: 0, 16: 6000, 32: 20000 };
-    const targetVal = ramValues[targetRam] ?? 6000;
-    const baseVal = ramValues[baseRam] ?? (baseRam >= 32 ? 20000 : (baseRam <= 8 ? 0 : 6000));
-    return targetVal - baseVal;
+  function isLaptopRamUpgradable(lap) {
+    if (!lap) return true;
+    if (lap.isRamUpgradable === false) return false;
+    const mem = lap.fullSpecs?.memoryStorage || {};
+    const ramType = String(mem.ramType || '').toUpperCase();
+    const ramSlots = String(mem.ramSlots || '').toLowerCase();
+    
+    if (ramType.includes('UNIFIED MEMORY')) return false;
+    if (ramSlots.includes('non-upgradable') || ramSlots.includes('soldered dual-channel')) return false;
+    if (ramSlots.includes('soldered') && !ramSlots.includes('upgradable')) return false;
+    return true;
   }
 
-  function getStorageDelta(targetStorage, baseStorage) {
+  function getLaptopRamDelta(targetRam, baseRam, ramType = 'DDR4', isUpgradable = true) {
+    if (typeof getRamDelta === 'function') {
+      return getRamDelta(targetRam, baseRam, ramType, isUpgradable);
+    }
+    if (!isUpgradable || targetRam === baseRam) return 0;
+    const table = { 8: 0, 16: 8000, 32: 23000 };
+    return (table[targetRam] ?? 0) - (table[baseRam] ?? 0);
+  }
+
+  function getLaptopStorageDelta(targetStorage, baseStorage) {
+    if (typeof getStorageDelta === 'function') {
+      return getStorageDelta(targetStorage, baseStorage);
+    }
     if (targetStorage === baseStorage) return 0;
-    const storValues = { 128: 0, 256: 4000, 512: 9000, 1000: 21000 };
-    const targetVal = storValues[targetStorage] ?? 9000;
-    const baseVal = storValues[baseStorage] ?? (baseStorage >= 1000 ? 21000 : (baseStorage <= 128 ? 0 : (baseStorage <= 256 ? 4000 : 9000)));
-    return targetVal - baseVal;
+    const table = { 128: 0, 256: 4000, 512: 9000, 1000: 21000 };
+    return (table[targetStorage] ?? 9000) - (table[baseStorage] ?? 9000);
   }
 
   function renderModalFullSpecs(lap, selectedRam, selectedStorage) {
@@ -3088,14 +2980,15 @@
     const basePrice = activeModalLaptop.price;
     const baseRam = activeModalLaptop.ram;
     const baseStorage = activeModalLaptop.storage;
+    const isUpgradable = isLaptopRamUpgradable(activeModalLaptop);
+    const ramType = (activeModalLaptop.fullSpecs?.memoryStorage?.ramType || 'DDR4').toUpperCase();
 
-    const ramDelta = getRamDelta(modalSelectedRam, baseRam);
-    const storageDelta = getStorageDelta(modalSelectedStorage, baseStorage);
+    const ramDelta = getLaptopRamDelta(modalSelectedRam, baseRam, ramType, isUpgradable);
+    const storageDelta = getLaptopStorageDelta(modalSelectedStorage, baseStorage);
 
     modalCalculatedPrice = Math.max(25000, basePrice + ramDelta + storageDelta);
 
     document.getElementById('lmodalPrice').textContent = `Rs ${modalCalculatedPrice.toLocaleString('en-PK')}`;
-    const ramType = activeModalLaptop.fullSpecs?.memoryStorage?.ramType || 'DDR4';
     document.getElementById('lblSelectedRam').textContent = `${modalSelectedRam} GB ${ramType}`;
     const storType = activeModalLaptop.fullSpecs?.memoryStorage?.storageType || 'NVMe';
     const storText = modalSelectedStorage >= 1000 ? `1 TB ${storType}` : `${modalSelectedStorage} GB ${storType}`;
@@ -3104,26 +2997,53 @@
     // Dynamically update full specifications section to reflect selected upgrades
     renderModalFullSpecs(activeModalLaptop, modalSelectedRam, modalSelectedStorage);
 
-    // Update pill difference tags
-    [8, 16, 32].forEach(r => {
-      const d = getRamDelta(r, baseRam);
-      const tag = document.getElementById(`ramDiff${r}`);
-      if (tag) {
-        if (d === 0) {
-          tag.textContent = 'Included';
-          tag.className = 'pill-diff base-spec-pill';
-        } else if (d > 0) {
-          tag.textContent = `+Rs ${d.toLocaleString('en-PK')}`;
-          tag.className = 'pill-diff';
-        } else {
-          tag.textContent = `-Rs ${Math.abs(d).toLocaleString('en-PK')}`;
-          tag.className = 'pill-diff';
+    // RAM Options Rendering
+    const ramContainer = document.getElementById('ramPillsContainer');
+    if (ramContainer) {
+      if (!isUpgradable) {
+        // Soldered / Non-upgradable RAM: Show fixed badge
+        ramContainer.innerHTML = `
+          <button type="button" class="spec-pill-btn active fixed-spec-pill" style="cursor:default" data-ram="${baseRam}">
+            <span class="pill-name">${baseRam} GB</span>
+            <span class="pill-diff base-spec-pill">Soldered (Fixed)</span>
+          </button>
+          <div style="font-size:0.75rem; color:var(--muted); margin-top:6px; display:inline-flex; align-items:center; gap:5px; width:100%;">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            <span>Factory onboard memory (Non-upgradable).</span>
+          </div>
+        `;
+      } else {
+        // Upgradable RAM: Render options relative to baseRam
+        const ramOptions = [8, 16, 32];
+        if (!ramOptions.includes(baseRam) && baseRam > 0) {
+          ramOptions.push(baseRam);
+          ramOptions.sort((a,b) => a - b);
         }
+        ramContainer.innerHTML = ramOptions.map(r => {
+          const d = getLaptopRamDelta(r, baseRam, ramType, isUpgradable);
+          let diffText = 'Included';
+          let diffClass = 'pill-diff base-spec-pill';
+          if (d > 0) {
+            diffText = `+Rs ${d.toLocaleString('en-PK')}`;
+            diffClass = 'pill-diff';
+          } else if (d < 0) {
+            diffText = `-Rs ${Math.abs(d).toLocaleString('en-PK')}`;
+            diffClass = 'pill-diff';
+          }
+          const activeClass = (r === modalSelectedRam) ? 'active' : '';
+          return `
+            <button type="button" class="spec-pill-btn ${activeClass}" data-ram="${r}" onclick="selectModalRam(${r}, this)">
+              <span class="pill-name">${r} GB</span>
+              <span class="${diffClass}" id="ramDiff${r}">${diffText}</span>
+            </button>
+          `;
+        }).join('');
       }
-    });
+    }
 
+    // Storage Options Rendering
     [128, 256, 512, 1000].forEach(s => {
-      const d = getStorageDelta(s, baseStorage);
+      const d = getLaptopStorageDelta(s, baseStorage);
       const tag = document.getElementById(`storDiff${s}`);
       if (tag) {
         if (d === 0) {
@@ -3139,10 +3059,7 @@
       }
     });
 
-    // Sync active classes on pills - ONLY the selected option is highlighted
-    document.querySelectorAll('#ramPillsContainer .spec-pill-btn').forEach(btn => {
-      btn.classList.toggle('active', parseInt(btn.dataset.ram, 10) === modalSelectedRam);
-    });
+    // Sync active classes on storage pills
     document.querySelectorAll('#storagePillsContainer .spec-pill-btn').forEach(btn => {
       btn.classList.toggle('active', parseInt(btn.dataset.storage, 10) === modalSelectedStorage);
     });
@@ -3278,7 +3195,8 @@
           <span class="user-avatar-badge" style="display:inline-flex;align-items:center;justify-content:center;">
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
           </span>
-          <span>${escapeHtml(displayName)}</span> ▾
+          <span class="user-name-text">${escapeHtml(displayName)}</span>
+          <span class="user-arrow">▾</span>
         </button>
         <div class="user-dropdown" id="userDropdown">
           <div class="user-dropdown-header">

@@ -1,0 +1,1073 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>LaptopHUB Admin Control Center</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/theme.css">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg: #0b0d14;
+  --surface: #121522;
+  --surface2: #191e30;
+  --surface3: #222942;
+  --border: rgba(255,255,255,0.08);
+  --border2: rgba(255,255,255,0.14);
+  --accent: #4f8ef7;
+  --accent-glow: rgba(79,142,247,0.25);
+  --success: #10b981;
+  --warning: #f59e0b;
+  --danger: #ef4444;
+  --text: #f0f3fa;
+  --text-muted: #8b95a8;
+  --font-sans: 'Plus Jakarta Sans', -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+}
+body {
+  font-family: var(--font-sans);
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+header.admin-bar {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 0.85rem 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  backdrop-filter: blur(12px);
+}
+.brand-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.brand-badge {
+  background: var(--accent);
+  color: #fff;
+  font-weight: 800;
+  font-size: 0.8rem;
+  padding: 4px 8px;
+  border-radius: 6px;
+}
+.brand-title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+.brand-title span { color: var(--accent); }
+.admin-badge {
+  background: rgba(79,142,247,0.12);
+  color: var(--accent);
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 6px;
+  border: 1px solid rgba(79,142,247,0.25);
+}
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.admin-user-info {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+}
+.admin-user-info strong { color: var(--text); }
+.btn-nav-out {
+  background: var(--surface2);
+  border: 1px solid var(--border2);
+  color: var(--text);
+  padding: 7px 14px;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.btn-nav-out:hover {
+  background: var(--surface3);
+  border-color: var(--accent);
+}
+.btn-danger {
+  color: #fca5a5;
+  border-color: rgba(239,68,68,0.3);
+}
+.btn-danger:hover {
+  background: rgba(239,68,68,0.15);
+  border-color: var(--danger);
+  color: #fff;
+}
+
+/* TABS NAV */
+.admin-nav-tabs {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 0 2rem;
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+}
+.tab-link {
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  color: var(--text-muted);
+  font-family: inherit;
+  font-size: 0.86rem;
+  font-weight: 600;
+  padding: 12px 16px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+.tab-link:hover { color: var(--text); }
+.tab-link.active {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+}
+.tab-count {
+  background: rgba(255,255,255,0.08);
+  font-size: 0.7rem;
+  padding: 2px 6px;
+  border-radius: 10px;
+  color: var(--text);
+}
+
+/* MAIN CONTENT */
+main.admin-body {
+  flex: 1;
+  padding: 2rem;
+  max-width: 1400px;
+  width: 100%;
+  margin: 0 auto;
+}
+.tab-pane {
+  display: none;
+}
+.tab-pane.active {
+  display: block;
+}
+
+/* SECTION CARDS */
+.admin-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+}
+.card-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.25rem;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.card-title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.card-sub {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  margin-top: 3px;
+}
+
+/* TABLES */
+.admin-table-wrap {
+  overflow-x: auto;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+}
+table.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.84rem;
+  text-align: left;
+}
+table.admin-table th {
+  background: var(--surface2);
+  color: var(--text-muted);
+  font-weight: 600;
+  padding: 11px 14px;
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+}
+table.admin-table td {
+  padding: 11px 14px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: middle;
+}
+table.admin-table tr:hover td {
+  background: rgba(255,255,255,0.02);
+}
+
+/* PRICING TIER EDITORS */
+.tier-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 1.5rem;
+}
+.tier-box {
+  background: var(--surface2);
+  border: 1px solid var(--border2);
+  border-radius: 12px;
+  padding: 1.25rem;
+}
+.tier-box-title {
+  font-size: 1rem;
+  font-weight: 700;
+  margin-bottom: 4px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.tier-box-desc {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  margin-bottom: 1rem;
+}
+.form-group {
+  margin-bottom: 12px;
+}
+.form-group label {
+  display: block;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  margin-bottom: 4px;
+}
+.form-control {
+  width: 100%;
+  padding: 9px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--border2);
+  background: var(--surface);
+  color: var(--text);
+  font-family: inherit;
+  font-size: 0.88rem;
+  outline: none;
+  transition: border-color 0.2s;
+}
+.form-control:focus {
+  border-color: var(--accent);
+}
+.btn-primary {
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.btn-primary:hover {
+  opacity: 0.92;
+  transform: translateY(-1px);
+}
+.btn-sm {
+  padding: 5px 10px;
+  font-size: 0.75rem;
+  border-radius: 6px;
+}
+.badge-status {
+  padding: 3px 8px;
+  border-radius: 6px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+.st-new { background: rgba(79,142,247,0.15); color: var(--accent); }
+.st-confirmed { background: rgba(245,158,11,0.15); color: var(--warning); }
+.st-shipped { background: rgba(16,185,129,0.15); color: var(--success); }
+.st-delivered { background: rgba(16,185,129,0.25); color: #34d399; }
+.st-cancelled { background: rgba(239,68,68,0.15); color: var(--danger); }
+
+/* TOAST */
+#toast {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  background: var(--surface2);
+  border: 1px solid var(--border2);
+  color: var(--text);
+  padding: 12px 20px;
+  border-radius: 10px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+  font-size: 0.85rem;
+  font-weight: 600;
+  display: none;
+  z-index: 10000;
+  transition: all 0.2s;
+}
+#toast.show { display: block; }
+</style>
+</head>
+<body>
+
+<header class="admin-bar">
+  <div class="brand-group">
+    <div class="brand-badge">LH</div>
+    <div class="brand-title">Laptop<span>HUB</span></div>
+    <span class="admin-badge">Admin Control Center</span>
+  </div>
+  <div class="header-actions">
+    <div class="admin-user-info" id="adminInfoText">Logged in as: <strong>Admin</strong></div>
+    <a href="../laptophub.html" target="_blank" class="btn-nav-out">
+      <span>Storefront ↗</span>
+    </a>
+    <button class="btn-nav-out btn-danger" onclick="adminSignOut()">
+      <span>Sign Out</span>
+    </button>
+  </div>
+</header>
+
+<nav class="admin-nav-tabs">
+  <button class="tab-link active" onclick="switchAdminTab('pricing')">
+    ⚡ RAM Pricing Tiers
+  </button>
+  <button class="tab-link" onclick="switchAdminTab('inventory')">
+    📦 Inventory (<span id="countInventory">69</span>)
+  </button>
+  <button class="tab-link" onclick="switchAdminTab('orders')">
+    🛒 Customer Orders (<span id="countOrders">0</span>)
+  </button>
+  <button class="tab-link" onclick="switchAdminTab('reviews')">
+    ⭐ Reviews (<span id="countReviews">0</span>)
+  </button>
+  <button class="tab-link" onclick="switchAdminTab('users')">
+    👥 Users (<span id="countUsers">0</span>)
+  </button>
+  <button class="tab-link" onclick="switchAdminTab('log')">
+    📜 Audit Log
+  </button>
+</nav>
+
+<main class="admin-body">
+
+  <!-- ============================================================ -->
+  <!-- TAB 1: RAM PRICING TIERS (DDR4 / DDR5) -->
+  <!-- ============================================================ -->
+  <section class="tab-pane active" id="pane-pricing">
+    <div class="admin-card">
+      <div class="card-header-row">
+        <div>
+          <h2 class="card-title">⚙️ RAM Upgrade Pricing Configuration</h2>
+          <p class="card-sub">Configure cumulative price per RAM size. Price differences (deltas) are computed relative to each laptop's factory base RAM.</p>
+        </div>
+        <button class="btn-primary" onclick="saveRamTiers()">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+          Save All Pricing Tiers
+        </button>
+      </div>
+
+      <div class="tier-grid">
+        <!-- DDR4 TIERS -->
+        <div class="tier-box">
+          <div class="tier-box-title">
+            <span style="color:var(--accent)">DDR4 Memory Tiers</span>
+          </div>
+          <p class="tier-box-desc">Applies to all DDR4 upgradable models (29 laptops). Rule: 8GB→16GB = +Rs 8,000 | 16GB→32GB = +Rs 15,000</p>
+          
+          <div class="form-group">
+            <label>8 GB Cumulative Price (PKR)</label>
+            <input type="number" id="tier-ddr4-8" class="form-control" value="0" min="0" step="500">
+          </div>
+          <div class="form-group">
+            <label>16 GB Cumulative Price (PKR)</label>
+            <input type="number" id="tier-ddr4-16" class="form-control" value="8000" min="0" step="500">
+          </div>
+          <div class="form-group">
+            <label>32 GB Cumulative Price (PKR)</label>
+            <input type="number" id="tier-ddr4-32" class="form-control" value="23000" min="0" step="500">
+          </div>
+
+          <div style="margin-top:1rem; padding:10px; background:rgba(0,0,0,0.25); border-radius:8px; font-size:0.75rem; color:var(--text-muted)">
+            <strong>Live Preview for DDR4:</strong><br>
+            • Base 16GB laptop → 8GB: <span id="prev-ddr4-16-to-8" style="color:#f87171">-Rs 8,000</span> | 16GB: Included | 32GB: <span id="prev-ddr4-16-to-32" style="color:#34d399">+Rs 15,000</span><br>
+            • Base 8GB laptop → 8GB: Included | 16GB: <span id="prev-ddr4-8-to-16" style="color:#34d399">+Rs 8,000</span> | 32GB: <span id="prev-ddr4-8-to-32" style="color:#34d399">+Rs 23,000</span>
+          </div>
+        </div>
+
+        <!-- DDR5 TIERS -->
+        <div class="tier-box">
+          <div class="tier-box-title">
+            <span style="color:#10b981">DDR5 Memory Tiers</span>
+          </div>
+          <p class="tier-box-desc">Applies to DDR5 upgradable models (HP 840 G9, Alienware m15 R7, HP 630 G11).</p>
+          
+          <div class="form-group">
+            <label>8 GB Cumulative Price (PKR)</label>
+            <input type="number" id="tier-ddr5-8" class="form-control" value="0" min="0" step="500">
+          </div>
+          <div class="form-group">
+            <label>16 GB Cumulative Price (PKR)</label>
+            <input type="number" id="tier-ddr5-16" class="form-control" value="10000" min="0" step="500">
+          </div>
+          <div class="form-group">
+            <label>32 GB Cumulative Price (PKR)</label>
+            <input type="number" id="tier-ddr5-32" class="form-control" value="28000" min="0" step="500">
+          </div>
+
+          <div style="margin-top:1rem; padding:10px; background:rgba(0,0,0,0.25); border-radius:8px; font-size:0.75rem; color:var(--text-muted)">
+            <strong>Live Preview for DDR5:</strong><br>
+            • Base 16GB laptop → 8GB: <span id="prev-ddr5-16-to-8" style="color:#f87171">-Rs 10,000</span> | 16GB: Included | 32GB: <span id="prev-ddr5-16-to-32" style="color:#34d399">+Rs 18,000</span><br>
+            • Base 8GB laptop → 8GB: Included | 16GB: <span id="prev-ddr5-8-to-16" style="color:#34d399">+Rs 10,000</span> | 32GB: <span id="prev-ddr5-8-to-32" style="color:#34d399">+Rs 28,000</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- TAB 2: INVENTORY -->
+  <!-- ============================================================ -->
+  <section class="tab-pane" id="pane-inventory">
+    <div class="admin-card">
+      <div class="card-header-row">
+        <div>
+          <h2 class="card-title">📦 Inventory Management</h2>
+          <p class="card-sub">Real-time inventory from laptops-data.js. Manage stock, archive/hide, and inspect specifications.</p>
+        </div>
+        <div style="display:flex;gap:10px;">
+          <input type="text" id="invSearch" class="form-control" style="width:240px" placeholder="Search laptops..." oninput="filterInventoryTable()">
+        </div>
+      </div>
+
+      <div class="admin-table-wrap">
+        <table class="admin-table" id="inventoryTable">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Laptop Name</th>
+              <th>Brand</th>
+              <th>RAM Type / Slots</th>
+              <th>Base Specs</th>
+              <th>Price (PKR)</th>
+              <th>Stock</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="inventoryTbody">
+            <tr><td colspan="9" style="text-align:center;padding:2rem">Loading inventory...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- TAB 3: CUSTOMER ORDERS -->
+  <!-- ============================================================ -->
+  <section class="tab-pane" id="pane-orders">
+    <div class="admin-card">
+      <div class="card-header-row">
+        <div>
+          <h2 class="card-title">🛒 Customer Orders (Cash on Delivery)</h2>
+          <p class="card-sub">Live customer orders stored securely in SQLite database.</p>
+        </div>
+        <button class="btn-nav-out" onclick="loadOrders()">↻ Refresh Orders</button>
+      </div>
+
+      <div class="admin-table-wrap">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>Order ID</th>
+              <th>Customer</th>
+              <th>Contact</th>
+              <th>City / Address</th>
+              <th>Configured Items</th>
+              <th>Total (PKR)</th>
+              <th>Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="ordersTbody">
+            <tr><td colspan="8" style="text-align:center;padding:2rem">Loading orders...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- TAB 4: REVIEWS -->
+  <!-- ============================================================ -->
+  <section class="tab-pane" id="pane-reviews">
+    <div class="admin-card">
+      <div class="card-header-row">
+        <div>
+          <h2 class="card-title">⭐ Review Moderation</h2>
+          <p class="card-sub">Approve or remove customer reviews before publishing.</p>
+        </div>
+        <button class="btn-nav-out" onclick="loadReviews()">↻ Refresh</button>
+      </div>
+      <div class="admin-table-wrap">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Reviewer</th>
+              <th>Rating</th>
+              <th>Review Content</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="reviewsTbody">
+            <tr><td colspan="6" style="text-align:center;padding:2rem">Loading reviews...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- TAB 5: USERS -->
+  <!-- ============================================================ -->
+  <section class="tab-pane" id="pane-users">
+    <div class="admin-card">
+      <div class="card-header-row">
+        <div>
+          <h2 class="card-title">👥 Registered Accounts</h2>
+          <p class="card-sub">Customers registered via public sign-up or admin accounts.</p>
+        </div>
+        <button class="btn-nav-out" onclick="loadUsers()">↻ Refresh</button>
+      </div>
+      <div class="admin-table-wrap">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Phone</th>
+              <th>Role</th>
+              <th>Account Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="usersTbody">
+            <tr><td colspan="7" style="text-align:center;padding:2rem">Loading users...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- TAB 6: AUDIT LOG -->
+  <!-- ============================================================ -->
+  <section class="tab-pane" id="pane-log">
+    <div class="admin-card">
+      <div class="card-header-row">
+        <div>
+          <h2 class="card-title">📜 Admin Action Audit Log</h2>
+          <p class="card-sub">Tamper-evident record of all administrative modifications.</p>
+        </div>
+        <button class="btn-nav-out" onclick="loadAuditLog()">↻ Refresh</button>
+      </div>
+      <div class="admin-table-wrap">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>Timestamp</th>
+              <th>Admin</th>
+              <th>Action</th>
+              <th>Target ID</th>
+              <th>Details</th>
+            </tr>
+          </thead>
+          <tbody id="logTbody">
+            <tr><td colspan="5" style="text-align:center;padding:2rem">Loading audit log...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<div id="toast">Changes saved successfully!</div>
+
+<script>
+let currentAdmin = null;
+let inventoryData = [];
+
+// INIT AUTH & DATA
+async function initAdmin() {
+  try {
+    const res = await fetch('/api/admin/me', { credentials: 'include' });
+    if (!res.ok) {
+      window.location.replace('/admin/login');
+      return;
+    }
+    currentAdmin = await res.json();
+    document.getElementById('adminInfoText').innerHTML = `Logged in as: <strong>${escapeHtml(currentAdmin.email)}</strong>`;
+    
+    // Load initial data
+    loadRamTiers();
+    loadInventory();
+    loadOrders();
+    loadReviews();
+    loadUsers();
+    loadAuditLog();
+  } catch (e) {
+    window.location.replace('/admin/login');
+  }
+}
+
+// TAB SWITCHER
+function switchAdminTab(tabName) {
+  document.querySelectorAll('.tab-link').forEach(btn => btn.classList.remove('active'));
+  document.querySelectorAll('.tab-pane').forEach(pane => pane.classList.remove('active'));
+  
+  const pane = document.getElementById(`pane-${tabName}`);
+  if (pane) pane.classList.add('active');
+  
+  const btn = Array.from(document.querySelectorAll('.tab-link')).find(b => b.getAttribute('onclick')?.includes(tabName));
+  if (btn) btn.classList.add('active');
+}
+
+// TOAST
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+// ESCAPE HTML
+function escapeHtml(str) {
+  if (!str) return '';
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}
+
+// ─────────────────────────────────────────────────────────────
+// RAM TIERS
+// ─────────────────────────────────────────────────────────────
+async function loadRamTiers() {
+  try {
+    const res = await fetch('/api/config/ram-pricing', { credentials: 'include' });
+    if (res.ok) {
+      const data = await res.json();
+      if (data.DDR4) {
+        document.getElementById('tier-ddr4-8').value = data.DDR4['8'] ?? 0;
+        document.getElementById('tier-ddr4-16').value = data.DDR4['16'] ?? 8000;
+        document.getElementById('tier-ddr4-32').value = data.DDR4['32'] ?? 23000;
+      }
+      if (data.DDR5) {
+        document.getElementById('tier-ddr5-8').value = data.DDR5['8'] ?? 0;
+        document.getElementById('tier-ddr5-16').value = data.DDR5['16'] ?? 10000;
+        document.getElementById('tier-ddr5-32').value = data.DDR5['32'] ?? 28000;
+      }
+      updateTierPreviews();
+    }
+  } catch (e) {
+    console.error("Failed to load RAM tiers", e);
+  }
+}
+
+function updateTierPreviews() {
+  const ddr4_8 = Number(document.getElementById('tier-ddr4-8').value || 0);
+  const ddr4_16 = Number(document.getElementById('tier-ddr4-16').value || 8000);
+  const ddr4_32 = Number(document.getElementById('tier-ddr4-32').value || 23000);
+
+  const ddr5_8 = Number(document.getElementById('tier-ddr5-8').value || 0);
+  const ddr5_16 = Number(document.getElementById('tier-ddr5-16').value || 10000);
+  const ddr5_32 = Number(document.getElementById('tier-ddr5-32').value || 28000);
+
+  // DDR4 preview
+  document.getElementById('prev-ddr4-16-to-8').textContent = `-Rs ${(ddr4_16 - ddr4_8).toLocaleString('en-PK')}`;
+  document.getElementById('prev-ddr4-16-to-32').textContent = `+Rs ${(ddr4_32 - ddr4_16).toLocaleString('en-PK')}`;
+  document.getElementById('prev-ddr4-8-to-16').textContent = `+Rs ${(ddr4_16 - ddr4_8).toLocaleString('en-PK')}`;
+  document.getElementById('prev-ddr4-8-to-32').textContent = `+Rs ${(ddr4_32 - ddr4_8).toLocaleString('en-PK')}`;
+
+  // DDR5 preview
+  document.getElementById('prev-ddr5-16-to-8').textContent = `-Rs ${(ddr5_16 - ddr5_8).toLocaleString('en-PK')}`;
+  document.getElementById('prev-ddr5-16-to-32').textContent = `+Rs ${(ddr5_32 - ddr5_16).toLocaleString('en-PK')}`;
+  document.getElementById('prev-ddr5-8-to-16').textContent = `+Rs ${(ddr5_16 - ddr5_8).toLocaleString('en-PK')}`;
+  document.getElementById('prev-ddr5-8-to-32').textContent = `+Rs ${(ddr5_32 - ddr5_8).toLocaleString('en-PK')}`;
+}
+
+// Live update previews when inputs change
+['tier-ddr4-8','tier-ddr4-16','tier-ddr4-32','tier-ddr5-8','tier-ddr5-16','tier-ddr5-32'].forEach(id => {
+  document.getElementById(id)?.addEventListener('input', updateTierPreviews);
+});
+
+async function saveRamTiers() {
+  const payload = {
+    DDR4: {
+      "8": Number(document.getElementById('tier-ddr4-8').value || 0),
+      "16": Number(document.getElementById('tier-ddr4-16').value || 8000),
+      "32": Number(document.getElementById('tier-ddr4-32').value || 23000)
+    },
+    DDR5: {
+      "8": Number(document.getElementById('tier-ddr5-8').value || 0),
+      "16": Number(document.getElementById('tier-ddr5-16').value || 10000),
+      "32": Number(document.getElementById('tier-ddr5-32').value || 28000)
+    }
+  };
+
+  try {
+    const res = await fetch('/api/admin/config/ram-pricing', {
+      method: 'POST',
+      credentials: 'include',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+    if (res.ok) {
+      showToast('RAM Pricing Tiers updated successfully!');
+      loadAuditLog();
+    } else {
+      showToast('Failed to save tiers.');
+    }
+  } catch (e) {
+    showToast('Network error while saving tiers.');
+  }
+}
+
+// ─────────────────────────────────────────────────────────────
+// INVENTORY
+// ─────────────────────────────────────────────────────────────
+async function loadInventory() {
+  try {
+    const res = await fetch('/api/admin/inventory', { credentials: 'include' });
+    if (res.ok) {
+      inventoryData = await res.json();
+      document.getElementById('countInventory').textContent = inventoryData.length;
+      renderInventoryTable(inventoryData);
+    }
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+function renderInventoryTable(items) {
+  const tbody = document.getElementById('inventoryTbody');
+  if (!items || items.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="9" style="text-align:center;padding:2rem">No laptops match.</td></tr>`;
+    return;
+  }
+  tbody.innerHTML = items.map(lap => {
+    const mem = lap.fullSpecs?.memoryStorage || {};
+    const ramType = mem.ramType || 'DDR4';
+    const ramSlots = mem.ramSlots || (lap.isRamUpgradable === false ? 'Soldered' : 'Upgradable');
+    const isHidden = lap.hidden ? true : false;
+    const stock = lap.stock ?? 1;
+
+    return `
+      <tr>
+        <td style="font-family:var(--font-mono);font-size:0.78rem">#${lap.id}</td>
+        <td>
+          <div style="font-weight:700">${escapeHtml(lap.name)}</div>
+          <div style="font-size:0.75rem;color:var(--text-muted)">${escapeHtml(lap.category || '')}</div>
+        </td>
+        <td>${escapeHtml(lap.brandName || lap.brand || '')}</td>
+        <td>
+          <span style="font-weight:600;font-size:0.8rem">${escapeHtml(ramType)}</span>
+          <div style="font-size:0.72rem;color:var(--text-muted)">${escapeHtml(ramSlots)}</div>
+        </td>
+        <td>${lap.ram}GB / ${lap.storage >= 1000 ? '1TB' : lap.storage + 'GB'}</td>
+        <td style="font-weight:700">${lap.priceFormatted || 'Rs ' + Number(lap.price).toLocaleString('en-PK')}</td>
+        <td>
+          <input type="number" value="${stock}" min="0" max="99" style="width:55px;padding:3px 6px;background:var(--surface2);border:1px solid var(--border2);color:var(--text);border-radius:4px" onchange="updateStock(${lap.id}, this.value)">
+        </td>
+        <td>
+          ${isHidden ? '<span class="badge-status st-cancelled">Hidden</span>' : '<span class="badge-status st-shipped">Live</span>'}
+        </td>
+        <td>
+          <div style="display:flex;gap:6px">
+            <button class="btn-nav-out btn-sm" onclick="toggleArchive(${lap.id}, ${isHidden})">
+              ${isHidden ? 'Unarchive' : 'Archive'}
+            </button>
+          </div>
+        </td>
+      </tr>
+    `;
+  }).join('');
+}
+
+function filterInventoryTable() {
+  const q = document.getElementById('invSearch').value.toLowerCase().trim();
+  if (!q) {
+    renderInventoryTable(inventoryData);
+    return;
+  }
+  const filtered = inventoryData.filter(l => 
+    String(l.name).toLowerCase().includes(q) ||
+    String(l.brand).toLowerCase().includes(q) ||
+    String(l.cpu).toLowerCase().includes(q) ||
+    String(l.id) === q
+  );
+  renderInventoryTable(filtered);
+}
+
+async function updateStock(id, newStock) {
+  try {
+    const res = await fetch('/api/admin/inventory/stock', {
+      method: 'POST',
+      credentials: 'include',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id, stock: parseInt(newStock, 10) })
+    });
+    if (res.ok) {
+      showToast(`Stock updated for laptop #${id}`);
+      loadInventory();
+      loadAuditLog();
+    }
+  } catch (e) {
+    showToast('Failed to update stock');
+  }
+}
+
+async function toggleArchive(id, currentlyHidden) {
+  const endpoint = currentlyHidden ? '/api/admin/inventory/unarchive' : '/api/admin/inventory/archive';
+  try {
+    const res = await fetch(endpoint, {
+      method: 'POST',
+      credentials: 'include',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id })
+    });
+    if (res.ok) {
+      showToast(currentlyHidden ? `Laptop #${id} made live` : `Laptop #${id} archived`);
+      loadInventory();
+      loadAuditLog();
+    }
+  } catch (e) {
+    showToast('Failed to update laptop status');
+  }
+}
+
+// ─────────────────────────────────────────────────────────────
+// ORDERS
+// ─────────────────────────────────────────────────────────────
+async function loadOrders() {
+  try {
+    const res = await fetch('/api/admin/orders', { credentials: 'include' });
+    if (res.ok) {
+      const orders = await res.json();
+      document.getElementById('countOrders').textContent = orders.length;
+      renderOrdersTable(orders);
+    }
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+function renderOrdersTable(orders) {
+  const tbody = document.getElementById('ordersTbody');
+  if (!orders || orders.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="8" style="text-align:center;padding:2rem">No orders placed yet.</td></tr>`;
+    return;
+  }
+  tbody.innerHTML = orders.map(o => {
+    const itemsSummary = (o.items || []).map(i => `${escapeHtml(i.name)} (${i.ram}GB/${i.storage >= 1000 ? '1TB' : i.storage + 'GB'}) x${i.qty}`).join('<br>');
+    return `
+      <tr>
+        <td style="font-family:var(--font-mono)">#LH-${o.id}</td>
+        <td><strong>${escapeHtml(o.cust_name)}</strong><br><span style="font-size:0.75rem;color:var(--text-muted)">${escapeHtml(o.email || '')}</span></td>
+        <td>${escapeHtml(o.cust_phone)}</td>
+        <td>${escapeHtml(o.cust_city)}<br><span style="font-size:0.75rem;color:var(--text-muted)">${escapeHtml(o.cust_address)}</span></td>
+        <td style="font-size:0.8rem">${itemsSummary}</td>
+        <td style="font-weight:700">Rs ${Number(o.total_pkr).toLocaleString('en-PK')}</td>
+        <td><span class="badge-status st-${o.status}">${o.status}</span></td>
+        <td>
+          <select style="background:var(--surface2);border:1px solid var(--border2);color:var(--text);border-radius:4px;padding:3px" onchange="updateOrderStatus(${o.id}, this.value)">
+            <option value="new" ${o.status==='new'?'selected':''}>New</option>
+            <option value="confirmed" ${o.status==='confirmed'?'selected':''}>Confirmed</option>
+            <option value="shipped" ${o.status==='shipped'?'selected':''}>Shipped</option>
+            <option value="delivered" ${o.status==='delivered'?'selected':''}>Delivered</option>
+            <option value="cancelled" ${o.status==='cancelled'?'selected':''}>Cancelled</option>
+          </select>
+        </td>
+      </tr>
+    `;
+  }).join('');
+}
+
+async function updateOrderStatus(orderId, status) {
+  try {
+    const res = await fetch('/api/admin/orders/status', {
+      method: 'POST',
+      credentials: 'include',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ orderId, status })
+    });
+    if (res.ok) {
+      showToast(`Order #${orderId} marked as ${status}`);
+      loadOrders();
+      loadAuditLog();
+    }
+  } catch (e) {
+    showToast('Failed to update status');
+  }
+}
+
+// ─────────────────────────────────────────────────────────────
+// REVIEWS
+// ─────────────────────────────────────────────────────────────
+async function loadReviews() {
+  try {
+    const res = await fetch('/api/admin/reviews', { credentials: 'include' });
+    if (res.ok) {
+      const data = await res.json();
+      document.getElementById('countReviews').textContent = data.length;
+      const tbody = document.getElementById('reviewsTbody');
+      if (!data.length) {
+        tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;padding:2rem">No reviews submitted.</td></tr>`;
+        return;
+      }
+      tbody.innerHTML = data.map(r => `
+        <tr>
+          <td>#${r.id}</td>
+          <td>${escapeHtml(r.reviewer)}<br><span style="font-size:0.75rem;color:var(--text-muted)">${escapeHtml(r.user_email || '')}</span></td>
+          <td>${'★'.repeat(r.rating)}</td>
+          <td>${escapeHtml(r.body)}</td>
+          <td>${r.approved ? '<span class="badge-status st-shipped">Approved</span>' : '<span class="badge-status st-confirmed">Pending</span>'}</td>
+          <td>
+            ${!r.approved ? `<button class="btn-nav-out btn-sm" onclick="approveReview(${r.id})">Approve</button>` : ''}
+            <button class="btn-nav-out btn-danger btn-sm" onclick="deleteReview(${r.id})">Delete</button>
+          </td>
+        </tr>
+      `).join('');
+    }
+  } catch (e) {}
+}
+
+async function approveReview(reviewId) {
+  await fetch('/api/admin/reviews/approve', {
+    method: 'POST', credentials: 'include',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ reviewId })
+  });
+  showToast('Review approved');
+  loadReviews();
+  loadAuditLog();
+}
+
+async function deleteReview(reviewId) {
+  if (!confirm('Are you sure you want to delete this review?')) return;
+  await fetch('/api/admin/reviews/delete', {
+    method: 'POST', credentials: 'include',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ reviewId })
+  });
+  showToast('Review deleted');
+  loadReviews();
+  loadAuditLog();
+}
+
+// ─────────────────────────────────────────────────────────────
+// USERS
+// ─────────────────────────────────────────────────────────────
+async function loadUsers() {
+  try {
+    const res = await fetch('/api/admin/users', { credentials: 'include' });
+    if (res.ok) {
+      const users = await res.json();
+      document.getElementById('countUsers').textContent = users.length;
+      const tbody = document.getElementById('usersTbody');
+      tbody.innerHTML = users.map(u => `
+        <tr>
+          <td>#${u.id}</td>
+          <td><strong>${escapeHtml(u.name || '')}</strong></td>
+          <td>${escapeHtml(u.email)}</td>
+          <td>${escapeHtml(u.phone || '—')}</td>
+          <td><span class="badge-status ${u.role==='admin'?'st-confirmed':'st-new'}">${u.role}</span></td>
+          <td>${u.is_active ? '<span class="badge-status st-shipped">Active</span>' : '<span class="badge-status st-cancelled">Disabled</span>'}</td>
+          <td>
+            ${(u.role !== 'admin' && u.is_active) ? `<button class="btn-nav-out btn-danger btn-sm" onclick="disableUser(${u.id})">Disable</button>` : '—'}
+          </td>
+        </tr>
+      `).join('');
+    }
+  } catch (e) {}
+}
+
+async function disableUser(userId) {
+  if (!confirm('Disable this user account?')) return;
+  await fetch('/api/admin/users/disable', {
+    method: 'POST', credentials: 'include',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ userId })
+  });
+  showToast('User disabled');
+  loadUsers();
+  loadAuditLog();
+}
+
+// ─────────────────────────────────────────────────────────────
+// AUDIT LOG
+// ─────────────────────────────────────────────────────────────
+async function loadAuditLog() {
+  try {
+    const res = await fetch('/api/admin/log', { credentials: 'include' });
+    if (res.ok) {
+      const logs = await res.json();
+      const tbody = document.getElementById('logTbody');
+      if (!logs.length) {
+        tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;padding:2rem">No actions recorded yet.</td></tr>`;
+        return;
+      }
+      tbody.innerHTML = logs.map(l => `
+        <tr>
+          <td style="font-size:0.75rem;font-family:var(--font-mono);color:var(--text-muted)">${escapeHtml(l.created_at)}</td>
+          <td>${escapeHtml(l.admin_email || 'Admin')}</td>
+          <td><strong style="color:var(--accent)">${escapeHtml(l.action)}</strong></td>
+          <td style="font-family:var(--font-mono)">${escapeHtml(l.target || '—')}</td>
+          <td style="font-size:0.8rem;color:var(--text-muted)">${escapeHtml(l.detail || '')}</td>
+        </tr>
+      `).join('');
+    }
+  } catch (e) {}
+}
+
+// SIGNOUT
+async function adminSignOut() {
+  await fetch('/api/admin/logout', { method: 'POST', credentials: 'include' });
+  window.location.replace('/admin/login');
+}
+
+// Start
+initAdmin();
+</script>
+</body>
+</html>

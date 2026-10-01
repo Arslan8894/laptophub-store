@@ -1,0 +1,452 @@
+/* ==========================================================================
+   LAPTOPHUB - MODULAR HEADER COMPONENT STYLES (css/header.css)
+   - 3-column balanced grid (1fr auto 1fr): Left Logo, Center Nav, Right Actions
+   - Unified 40px action buttons (Theme Toggle, Cart, Account Menu)
+   - 8px clean gap with balanced borders, padding, and vertical centering
+   - Truncated username badge for long names
+   - Clean mobile/tablet collapse without overlapping or wrapping
+   ========================================================================== */
+
+/* ── NAV BAR 3-COLUMN GRID ────────────────────────────────────────────── */
+nav {
+  position: sticky;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  padding: 0.75rem 2.5rem;
+  background: var(--nav-bg);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border-bottom: 1px solid var(--border);
+  transition: background-color 0.3s, border-color 0.3s;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+/* ── LEFT: BRAND LOGO ──────────────────────────────────────────────────── */
+.logo-mark {
+  justify-self: start;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  flex-shrink: 0;
+}
+.logo-icon {
+  width: 34px;
+  height: 34px;
+  background: var(--blue);
+  border-radius: 9px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #fff;
+  box-shadow: 0 4px 15px rgba(76, 124, 255, 0.3);
+  flex-shrink: 0;
+}
+.logo-text {
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--heading);
+  white-space: nowrap;
+  transition: color 0.3s;
+}
+.logo-text span {
+  color: var(--blue);
+}
+
+/* ── CENTER: NAVIGATION LINKS ──────────────────────────────────────────── */
+.nav-links {
+  justify-self: center;
+  display: inline-flex;
+  align-items: center;
+  gap: 2.2rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  white-space: nowrap;
+}
+.nav-links a {
+  text-decoration: none;
+  color: var(--muted);
+  font-size: 0.88rem;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  transition: color 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.nav-links a:hover {
+  color: var(--heading);
+}
+
+/* ── RIGHT: ACTIONS GROUP ──────────────────────────────────────────────── */
+.nav-right {
+  justify-self: end;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+/* ── UNIFIED 40PX ACTION BUTTONS ───────────────────────────────────────── */
+.theme-toggle-btn,
+.nav-cart,
+.nav-btn,
+.nav-user-btn,
+.mobile-nav-toggle {
+  height: 40px !important;
+  min-height: 40px !important;
+  max-height: 40px !important;
+  box-sizing: border-box !important;
+  border-radius: 10px !important;
+  border: 1px solid var(--border2) !important;
+  background: var(--s2) !important;
+  color: var(--heading) !important;
+  font-family: inherit !important;
+  font-size: 0.82rem !important;
+  font-weight: 600 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  line-height: 1 !important;
+  vertical-align: middle !important;
+  cursor: pointer !important;
+  padding: 0 14px !important;
+  transition: border-color 0.2s, background-color 0.2s, color 0.2s, transform 0.15s !important;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04) !important;
+}
+
+/* Theme Toggle Button */
+.theme-toggle-btn {
+  padding: 0 14px !important;
+  gap: 7px;
+}
+.theme-toggle-btn:hover {
+  border-color: var(--blue) !important;
+  color: var(--blue) !important;
+  transform: translateY(-1px);
+}
+.theme-icon {
+  font-size: 0.95rem;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+}
+
+/* Cart Button */
+.nav-cart {
+  padding: 0 14px !important;
+  gap: 8px;
+}
+.nav-cart:hover {
+  border-color: var(--blue) !important;
+  color: var(--blue) !important;
+  transform: translateY(-1px);
+}
+.cart-badge-count {
+  background: var(--blue);
+  color: #fff;
+  font-size: 0.72rem;
+  padding: 2px 7px;
+  border-radius: 999px;
+  font-weight: 700;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Sign In Button */
+.nav-btn {
+  background: var(--blue) !important;
+  color: #fff !important;
+  border-color: var(--blue) !important;
+  padding: 0 16px !important;
+  box-shadow: 0 4px 14px rgba(76, 124, 255, 0.25) !important;
+}
+.nav-btn:hover {
+  opacity: 0.92;
+  transform: translateY(-1px);
+}
+
+/* Logged In User Account Button */
+.nav-user-btn {
+  padding: 0 12px !important;
+  gap: 8px;
+  max-width: 175px;
+}
+.nav-user-btn:hover {
+  border-color: var(--blue) !important;
+  background: var(--s3) !important;
+}
+.nav-user-btn .user-name-text {
+  max-width: 95px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display: inline-block;
+  line-height: 1.2;
+  vertical-align: middle;
+}
+.nav-user-btn .user-arrow {
+  font-size: 0.72rem;
+  opacity: 0.75;
+  margin-left: 1px;
+}
+.user-avatar-badge {
+  background: var(--blue-dim);
+  color: var(--blue);
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+/* Mobile Hamburger Toggle */
+.mobile-nav-toggle {
+  width: 40px !important;
+  min-width: 40px !important;
+  padding: 0 !important;
+  display: none !important;
+  font-size: 1.15rem;
+  line-height: 1;
+}
+.mobile-nav-toggle:hover {
+  border-color: var(--blue) !important;
+  color: var(--blue) !important;
+}
+
+/* User Account Dropdown Menu */
+.user-dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  background: var(--s1);
+  border: 1px solid var(--border2);
+  border-radius: 12px;
+  width: 220px;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+  padding: 0.5rem;
+  display: none;
+  flex-direction: column;
+  gap: 4px;
+  z-index: 1000;
+}
+.user-dropdown.open {
+  display: flex;
+}
+.user-dropdown-header {
+  padding: 0.6rem 0.8rem;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 4px;
+}
+.user-dropdown-name {
+  font-size: 0.84rem;
+  font-weight: 600;
+  color: var(--heading);
+}
+.user-dropdown-email {
+  font-size: 0.72rem;
+  color: var(--muted);
+}
+.user-dropdown-item {
+  background: none;
+  border: none;
+  color: var(--text);
+  padding: 0.5rem 0.8rem;
+  border-radius: 6px;
+  font-family: inherit;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-align: left;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+  transition: background 0.2s;
+}
+.user-dropdown-item:hover {
+  background: var(--s2);
+  color: #fff;
+}
+.user-dropdown-item.danger {
+  color: #f87171;
+}
+.user-dropdown-item.danger:hover {
+  background: rgba(239, 68, 68, 0.12);
+}
+
+/* Mobile Nav Drawer & Overlay */
+.mobile-drawer-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 10002;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+.mobile-drawer-overlay.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+.mobile-nav-drawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: min(320px, 85vw);
+  background: var(--s1);
+  border-left: 1px solid var(--border2);
+  box-shadow: -10px 0 40px rgba(0, 0, 0, 0.4);
+  z-index: 10003;
+  transform: translateX(100%);
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  display: flex;
+  flex-direction: column;
+  padding: 1.5rem;
+}
+.mobile-nav-drawer.open {
+  transform: translateX(0);
+}
+.mobile-nav-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--border);
+}
+.mobile-nav-title {
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--heading);
+}
+.mobile-nav-close {
+  background: none;
+  border: 1px solid var(--border2);
+  color: var(--muted);
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+.mobile-nav-links {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.mobile-nav-links a {
+  text-decoration: none;
+  color: var(--heading);
+  font-size: 1.05rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.4rem 0;
+  border-radius: 6px;
+}
+.mobile-nav-links a:hover {
+  color: var(--blue);
+}
+
+/* ── RESPONSIVE VIEWPORT BREAKPOINTS ──────────────────────────────────── */
+@media (max-width: 992px) {
+  nav {
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    padding: 0.75rem 1.5rem !important;
+  }
+  .nav-links {
+    display: none !important;
+  }
+  .mobile-nav-toggle {
+    display: inline-flex !important;
+  }
+  .nav-right {
+    gap: 8px !important;
+  }
+}
+
+@media (max-width: 540px) {
+  nav {
+    padding: 0.65rem 0.85rem !important;
+  }
+  .theme-toggle-btn {
+    padding: 0 10px !important;
+  }
+  .theme-toggle-btn #themeLabel {
+    display: none !important;
+  }
+  .nav-cart {
+    padding: 0 10px !important;
+    gap: 6px !important;
+  }
+  .nav-user-btn {
+    max-width: 125px !important;
+    padding: 0 8px !important;
+  }
+  .nav-user-btn .user-name-text {
+    max-width: 55px !important;
+  }
+  .nav-btn {
+    padding: 0 12px !important;
+  }
+  .logo-text {
+    font-size: 1.15rem !important;
+  }
+}
+
+@media (max-width: 380px) {
+  nav {
+    padding: 0.5rem 0.5rem !important;
+  }
+  .nav-right {
+    gap: 6px !important;
+  }
+  .nav-cart .cart-text {
+    display: none !important;
+  }
+  .theme-toggle-btn {
+    padding: 0 8px !important;
+  }
+  .mobile-nav-toggle {
+    width: 40px !important;
+    height: 40px !important;
+  }
+  .logo-icon {
+    width: 30px !important;
+    height: 30px !important;
+    font-size: 0.75rem !important;
+  }
+  .logo-text {
+    font-size: 1.05rem !important;
+  }
+}

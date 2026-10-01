@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>LaptopHUB Admin — Login</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg: #0f1117; --surface: #181c2e; --border: rgba(255,255,255,0.08);
+  --accent: #4f8ef7; --danger: #ef4444; --muted: #6b7280;
+  --text: #f0f2f8; --text2: #9ca3af;
+}
+body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); color: var(--text);
+       min-height: 100vh; display: grid; place-items: center; padding: 24px; }
+.card {
+  background: var(--surface); border: 1px solid var(--border); border-radius: 16px;
+  padding: 40px 36px; width: 100%; max-width: 400px;
+  box-shadow: 0 20px 60px rgba(0,0,0,.5);
+}
+.logo { font-size: 22px; font-weight: 700; color: var(--text); margin-bottom: 6px; }
+.logo span { color: var(--accent); }
+.sub  { font-size: 13px; color: var(--muted); margin-bottom: 32px; }
+label { display: block; font-size: 13px; font-weight: 500; color: var(--text2); margin-bottom: 6px; }
+input {
+  width: 100%; padding: 11px 14px; border-radius: 8px;
+  border: 1px solid var(--border); background: rgba(255,255,255,.05);
+  color: var(--text); font-size: 14px; font-family: inherit;
+  outline: none; transition: border .2s;
+  margin-bottom: 18px;
+}
+input:focus { border-color: var(--accent); }
+button {
+  width: 100%; padding: 13px; border-radius: 9px;
+  background: var(--accent); color: #fff; font-weight: 600;
+  font-size: 14px; border: none; cursor: pointer; font-family: inherit;
+  transition: opacity .2s, transform .15s;
+}
+button:hover { opacity: .9; }
+button:active { transform: scale(.98); }
+button:disabled { opacity: .5; cursor: not-allowed; }
+.err { background: rgba(239,68,68,.12); border: 1px solid rgba(239,68,68,.3);
+       color: #fca5a5; border-radius: 8px; padding: 10px 14px;
+       font-size: 13px; margin-top: 14px; display: none; }
+.back { display: block; text-align: center; margin-top: 20px; font-size: 13px;
+        color: var(--muted); text-decoration: none; }
+.back:hover { color: var(--text); }
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="logo">Laptop<span>HUB</span></div>
+  <div class="sub">Admin Portal — Secure Sign-In</div>
+  <form id="loginForm" onsubmit="doLogin(event)">
+    <label for="email">Admin Email</label>
+    <input id="email" type="email" placeholder="admin@laptophub.pk" autocomplete="username" required>
+    <label for="password">Password</label>
+    <input id="password" type="password" placeholder="••••••••" autocomplete="current-password" required>
+    <button id="btn" type="submit">Sign In to Admin Panel</button>
+    <div class="err" id="errMsg"></div>
+  </form>
+  <a class="back" href="/laptophub.html">← Back to Store</a>
+</div>
+<script>
+async function doLogin(e) {
+  e.preventDefault();
+  const btn = document.getElementById('btn');
+  const err = document.getElementById('errMsg');
+  btn.disabled = true; btn.textContent = 'Signing in…';
+  err.style.display = 'none';
+  try {
+    const res = await fetch('/api/admin/login', {
+      method: 'POST', credentials: 'include',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        email: document.getElementById('email').value.trim(),
+        password: document.getElementById('password').value
+      })
+    });
+    const data = await res.json();
+    if (res.ok) {
+      window.location.replace('/admin/');
+    } else {
+      err.textContent = data.error || 'Login failed.';
+      err.style.display = 'block';
+      btn.disabled = false; btn.textContent = 'Sign In to Admin Panel';
+    }
+  } catch (ex) {
+    err.textContent = 'Network error. Is the server running?';
+    err.style.display = 'block';
+    btn.disabled = false; btn.textContent = 'Sign In to Admin Panel';
+  }
+}
+// If already logged in, redirect to admin SPA
+(async () => {
+  try {
+    const r = await fetch('/api/admin/me', { credentials: 'include' });
+    if (r.ok) window.location.replace('/admin/');
+  } catch (_) {}
+})();
+</script>
+</body>
+</html>

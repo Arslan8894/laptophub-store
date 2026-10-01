@@ -1,0 +1,44 @@
+{
+  // ==========================================================================
+  // LaptopHUB Workspace Settings for GSD, Roo Code, Ralph Loop & CodeRabbit
+  // ==========================================================================
+
+  // --- RALPH LOOP EXTENSION CONFIGURATION ---
+  "ralphLoop.taskFile": "PRD.md",
+  "ralphLoop.promptFile": ".ralph/PROMPT.md",
+  "ralphLoop.testCommand": "python scripts/test_fixes.py",
+  "ralphLoop.defaultMode": "Fast",
+  "ralphLoop.maxIterations": 30,
+  "ralphLoop.enabledBackpressure": [
+    "test"
+  ],
+
+  // --- ROO CODE / CLINE CONFIGURATION ---
+  "roo-cline.allowedCommands": [
+    "python",
+    "git",
+    "dir",
+    "type",
+    "netstat",
+    "taskkill"
+  ],
+
+  // --- CODERABBIT CONFIGURATION ---
+  "coderabbit.autoReviewMode": "OnSave",
+
+  // --- GET SHIT DONE (GSD) CONFIGURATION ---
+  "gsd.projectRoot": ".",
+  "gsd.specFile": ".gsd/SPEC.md",
+  "gsd.roadmapFile": ".gsd/ROADMAP.md",
+  "gsd.stateFile": ".gsd/STATE.md",
+
+  // --- WORKSPACE EDITOR DEFAULTS ---
+  "editor.tabSize": 2,
+  "editor.formatOnSave": false,
+  "files.trimTrailingWhitespace": true,
+  "files.exclude": {
+    "**/.git": true,
+    "**/.venv": true,
+    "**/__pycache__": true
+  }
+}

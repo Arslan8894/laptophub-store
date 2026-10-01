@@ -1,0 +1,63 @@
+# ==============================================================================
+# CodeRabbit Configuration for LaptopHUB
+# ==============================================================================
+language: "en"
+early_access: false
+
+reviews:
+  profile: "chill"
+  request_changes_workflow: false
+  high_level_summary: true
+  poem: false
+  review_status: true
+  collapse_walkthrough: false
+  auto_review:
+    enabled: true
+    drafts: false
+    base_branches:
+      - "main"
+      - "master"
+
+  # Path filters - ignore binaries, database files, and processed media
+  path_filters:
+    - "!images/**"
+    - "!db/*.db"
+    - "!db/*.db-journal"
+    - "!desktop_copies/**"
+    - "!.venv/**"
+    - "!__pycache__/**"
+    - "!node_modules/**"
+
+  # Custom prompt instructions enforcing LaptopHUB architectural rules
+  path_instructions:
+    - path: "laptops-data.js"
+      instructions: |
+        CRITICAL: laptops-data.js is the single source of truth for all 69 laptop models.
+        Ensure schema integrity: id, name, brand, cpu, ram, storage, gpu, price, priceFormatted, badge, useCases, img.
+        Do not allow accidental deletion, renumbering, or missing fields in any laptop object.
+
+    - path: "store-config.js"
+      instructions: |
+        Verify that RAM pricing tier tables (STORE_CONFIG.ramPricingTiers) and delta calculations
+        (getRamDelta, getStorageDelta) remain mathematically sound and compute relative to factory base RAM.
+
+    - path: "css/header.css"
+      instructions: |
+        Ensure header styling adheres to the 3-column grid (1fr auto 1fr), unified 40px action buttons
+        (theme toggle, cart, user button), 8px gap, text-overflow ellipsis on usernames,
+        and clean responsive mobile collapse.
+
+    - path: "server.py"
+      instructions: |
+        Ensure secure coding standards:
+        - Scrypt password hashing with unique salts (hash_password / verify_password)
+        - HttpOnly, SameSite=Strict cookies (lh_sess and lh_admin_sess)
+        - DB-backed rate limiting for authentication attempts
+        - All database queries must use parameterized placeholders (?) to prevent SQL injection.
+        - Admin-only routes must be protected with _require_admin().
+
+chat:
+  auto_reply: true
+
+knowledge_base:
+  opt_out: false
