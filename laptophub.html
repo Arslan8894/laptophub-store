@@ -2297,14 +2297,40 @@
       <button class="auth-tab active" id="tabSignIn" onclick="switchAuthTab('signin')">Sign In</button>
       <button class="auth-tab" id="tabRegister" onclick="switchAuthTab('register')">Create Account</button>
     </div>
+    <div id="authNoticeBanner" style="display:none;background:rgba(79,142,247,0.12);border:1px solid rgba(79,142,247,0.35);color:var(--blue);padding:10px 14px;border-radius:8px;font-size:0.84rem;margin:12px 1.5rem 0;font-weight:600;align-items:center;gap:8px;">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      <span id="authNoticeText">Please sign in to place your order</span>
+    </div>
     <form class="auth-body" id="authForm" onsubmit="handleAuthSubmit(event)">
       <div class="form-group" id="groupFullName" style="display:none">
         <label class="form-label">Full Name *</label>
         <input class="form-input" id="authName" type="text" placeholder="e.g. Arslan">
       </div>
+      <div class="form-group" id="groupPhone" style="display:none">
+        <label class="form-label">Phone / WhatsApp Number (03XX-XXXXXXX) *</label>
+        <input class="form-input" id="authPhone" type="tel" placeholder="e.g. 0326-1398594">
+      </div>
+      <div class="form-group" id="groupCity" style="display:none">
+        <label class="form-label">Delivery City *</label>
+        <select class="form-select" id="authCity">
+          <option value="Lahore">Lahore</option>
+          <option value="Karachi">Karachi</option>
+          <option value="Islamabad">Islamabad</option>
+          <option value="Rawalpindi">Rawalpindi</option>
+          <option value="Faisalabad">Faisalabad</option>
+          <option value="Multan">Multan</option>
+          <option value="Peshawar">Peshawar</option>
+          <option value="Quetta">Quetta</option>
+          <option value="Other">Other City</option>
+        </select>
+      </div>
+      <div class="form-group" id="groupAddress" style="display:none">
+        <label class="form-label">Delivery Address *</label>
+        <input class="form-input" id="authAddress" type="text" placeholder="House / Office #, Street, Area">
+      </div>
       <div class="form-group">
-        <label class="form-label">Email or Phone Number *</label>
-        <input class="form-input" id="authEmail" type="text" placeholder="e.g. 0326 1398594 or user@example.com" required>
+        <label class="form-label">Email or Username *</label>
+        <input class="form-input" id="authEmail" type="text" placeholder="e.g. user@example.com" required>
       </div>
       <div class="form-group">
         <label class="form-label">Password *</label>
@@ -2639,9 +2665,9 @@
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
                 <span>Details</span>
               </button>
-              <a href="https://wa.me/923261398594?text=${waMsg}" target="_blank" rel="noopener" class="btn-card-wa" title="Order on WhatsApp" onclick="event.stopPropagation()" aria-label="Order on WhatsApp">
+              <button type="button" class="btn-card-wa" title="Order on WhatsApp" onclick="orderCardViaWhatsApp(${lap.id}, event)" aria-label="Order on WhatsApp">
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-              </a>
+              </button>
             </div>
           </div>
         </div>`;
@@ -2789,11 +2815,33 @@
     if (drawer) drawer.classList.remove('open');
   }
 
+  function orderCardViaWhatsApp(lapId, event) {
+    if (event) event.stopPropagation();
+    const lap = inventory.find(l => l.id === lapId);
+    if (!lap) return;
+
+    if (!currentUser || !currentUser.loggedIn) {
+      pendingBuyAction = { type: 'card_whatsapp', lapId };
+      openLoginModal('Please sign in to place your order');
+      return;
+    }
+
+    const waMsg = encodeURIComponent(`Hi LaptopHUB! I am interested in purchasing the ${lap.name} (${lap.priceFormatted}). Please confirm availability!`);
+    window.open(`https://wa.me/923261398594?text=${waMsg}`, '_blank');
+  }
+
   function checkoutWhatsApp() {
     if (cart.length === 0) {
       showToast('Your cart is empty!');
       return;
     }
+
+    if (!currentUser || !currentUser.loggedIn) {
+      pendingBuyAction = { type: 'cart_whatsapp' };
+      openLoginModal('Please sign in to place your order');
+      return;
+    }
+
     let subtotal = 0;
     let itemsText = cart.map((i, idx) => {
       const lineTotal = i.price * i.qty;
@@ -3233,6 +3281,11 @@
       showToast('Please add items to cart first!');
       return;
     }
+    if (!currentUser || !currentUser.loggedIn) {
+      pendingBuyAction = { type: 'cod_checkout' };
+      openLoginModal('Please sign in to place your order');
+      return;
+    }
     closeCart();
     if (currentUser) {
       if (document.getElementById('custName') && currentUser.name) document.getElementById('custName').value = currentUser.name;
@@ -3285,6 +3338,7 @@
 
   // CUSTOMER AUTH & USER SESSION
   let currentUser = JSON.parse(localStorage.getItem('lh_user') || 'null');
+  let pendingBuyAction = null;   // stores { type, lapId? } while login is required
 
   async function checkUserSession() {
     try {
@@ -3378,11 +3432,25 @@
     document.getElementById('btnAuthSubmit').textContent = mode === 'register' ? 'Create Account & Sign In' : 'Sign In to LaptopHUB';
   }
 
-  function openLoginModal() {
+  function openLoginModal(msg) {
+    const banner = document.getElementById('authNoticeBanner');
+    const noticeText = document.getElementById('authNoticeText');
+    if (banner) {
+      if (msg) {
+        if (noticeText) noticeText.textContent = msg;
+        banner.style.display = 'flex';
+      } else {
+        banner.style.display = 'none';
+      }
+    }
     document.getElementById('loginModal').classList.add('open');
   }
 
   function closeLoginModal() {
+    // Hide notice banner when modal is dismissed
+    const banner = document.getElementById('authNoticeBanner');
+    if (banner) banner.style.display = 'none';
+    pendingBuyAction = null;
     document.getElementById('loginModal').classList.remove('open');
   }
 
@@ -3415,9 +3483,11 @@
         if (loginRes.ok) {
           currentUser = { ...loginData.user, loggedIn: true };
           localStorage.setItem('lh_user', JSON.stringify(currentUser));
+          const action = pendingBuyAction;
           closeLoginModal();
           renderUserNav();
           showToast(`Welcome, ${currentUser.name || 'Customer'}!`);
+          resumePendingBuyAction(action);
         } else {
           switchAuthTab('signin');
         }
@@ -3443,12 +3513,26 @@
         }
         currentUser = { ...data.user, loggedIn: true };
         localStorage.setItem('lh_user', JSON.stringify(currentUser));
+        const action = pendingBuyAction;
         closeLoginModal();
         renderUserNav();
         showToast(`Welcome back, ${currentUser.name || 'Customer'}!`);
+        resumePendingBuyAction(action);
       } catch (err) {
         showToast('Error connecting to authentication service.');
       }
+    }
+  }
+
+  /** Resume the buy action the user had started before being asked to sign in. */
+  function resumePendingBuyAction(action) {
+    if (!action) return;
+    if (action.type === 'cart_whatsapp') {
+      checkoutWhatsApp();
+    } else if (action.type === 'card_whatsapp' && action.lapId) {
+      orderCardViaWhatsApp(action.lapId);
+    } else if (action.type === 'cod_checkout') {
+      openCheckoutModal();
     }
   }
 
