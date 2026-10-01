@@ -330,6 +330,111 @@ table.admin-table tr:hover td {
   transition: all 0.2s;
 }
 #toast.show { display: block; }
+
+/* LIGHT THEME COMPATIBILITY */
+html[data-theme="light"] {
+  --bg: #f8fafc;
+  --surface: #ffffff;
+  --surface2: #f1f5f9;
+  --surface3: #e2e8f0;
+  --border: rgba(0,0,0,0.08);
+  --border2: rgba(0,0,0,0.16);
+  --accent: #2563eb;
+  --text: #0f172a;
+  --text-muted: #64748b;
+}
+
+/* MODALS */
+.admin-modal {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.78);
+  backdrop-filter: blur(8px); z-index: 1000;
+  display: none; align-items: center; justify-content: center;
+  padding: 1.5rem;
+}
+.admin-modal.open { display: flex; }
+.admin-modal-card {
+  background: var(--surface); border: 1px solid var(--border2);
+  border-radius: 16px; width: min(1050px, 98%); max-height: 92vh;
+  box-shadow: 0 25px 60px rgba(0,0,0,0.5); overflow: hidden;
+  display: flex; flex-direction: column;
+}
+.admin-modal-header {
+  background: var(--surface2); padding: 1.1rem 1.5rem;
+  display: flex; justify-content: space-between; align-items: center;
+  border-bottom: 1px solid var(--border);
+}
+.admin-modal-title { font-size: 1.15rem; font-weight: 700; color: var(--text); }
+.admin-modal-close {
+  background: transparent; border: none; color: var(--text-muted);
+  font-size: 1.3rem; cursor: pointer; padding: 4px; line-height: 1;
+}
+.admin-modal-close:hover { color: var(--text); }
+.admin-modal-body {
+  padding: 1.5rem; overflow-y: auto; flex: 1;
+}
+.admin-modal-footer {
+  background: var(--surface2); padding: 1rem 1.5rem;
+  display: flex; justify-content: flex-end; gap: 10px;
+  border-top: 1px solid var(--border);
+}
+
+/* MODAL 2-COLUMN LAYOUT */
+.modal-grid-layout {
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  gap: 1.5rem;
+  align-items: start;
+}
+@media (max-width: 900px) {
+  .modal-grid-layout { grid-template-columns: 1fr; }
+}
+
+/* LIVE CARD PREVIEW */
+.preview-sticky-wrap {
+  position: sticky; top: 0;
+  background: var(--surface2); border: 1px solid var(--border2);
+  border-radius: 14px; padding: 1rem;
+}
+.preview-title-bar {
+  font-size: 0.8rem; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.05em; color: var(--accent); margin-bottom: 0.75rem;
+  display: flex; align-items: center; gap: 6px;
+}
+
+/* MINI PRODUCT CARD PREVIEW (Matches LaptopHub Storefront) */
+.preview-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 14px; overflow: hidden; display: flex; flex-direction: column;
+  transition: all 0.2s; box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+}
+.preview-photo-wrap {
+  position: relative; height: 180px; width: 100%;
+  background: var(--surface2); display: flex; align-items: center; justify-content: center;
+  padding: 1rem; overflow: hidden;
+}
+.preview-photo {
+  max-width: 90%; max-height: 90%; object-fit: contain;
+}
+.preview-badge {
+  position: absolute; top: 10px; left: 10px;
+  background: var(--surface3); border: 1px solid var(--border2);
+  color: var(--text); font-size: 0.7rem; font-weight: 700;
+  padding: 3px 8px; border-radius: 20px;
+}
+.preview-content { padding: 1rem; display: flex; flex-direction: column; gap: 8px; }
+.preview-brand { font-size: 0.75rem; text-transform: uppercase; font-weight: 700; color: var(--accent); }
+.preview-name { font-size: 0.95rem; font-weight: 700; color: var(--text); line-height: 1.3; }
+.preview-chips { display: flex; flex-wrap: wrap; gap: 4px; }
+.preview-chip {
+  font-size: 0.72rem; padding: 2px 7px; border-radius: 6px;
+  background: var(--surface2); border: 1px solid var(--border); color: var(--text-muted);
+}
+.preview-footer {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-top: 6px; padding-top: 8px; border-top: 1px solid var(--border);
+}
+.preview-price { font-size: 1.05rem; font-weight: 800; color: var(--text); }
+
 </style>
 </head>
 <body>
@@ -342,6 +447,9 @@ table.admin-table tr:hover td {
   </div>
   <div class="header-actions">
     <div class="admin-user-info" id="adminInfoText">Logged in as: <strong>Admin</strong></div>
+    <button class="btn-nav-out" onclick="toggleAdminTheme()" id="adminThemeBtn">
+      <span id="adminThemeIcon">☀️</span> <span id="adminThemeLabel">Light Mode</span>
+    </button>
     <a href="../laptophub.html" target="_blank" class="btn-nav-out">
       <span>Storefront ↗</span>
     </a>
@@ -456,10 +564,29 @@ table.admin-table tr:hover td {
       <div class="card-header-row">
         <div>
           <h2 class="card-title">📦 Inventory Management</h2>
-          <p class="card-sub">Real-time inventory from laptops-data.js. Manage stock, archive/hide, and inspect specifications.</p>
+          <p class="card-sub">Real-time inventory from laptops-data.js. Add, edit, manage stock, archive/hide, and inspect specifications.</p>
         </div>
-        <div style="display:flex;gap:10px;">
-          <input type="text" id="invSearch" class="form-control" style="width:240px" placeholder="Search laptops..." oninput="filterInventoryTable()">
+        <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;">
+          <input type="text" id="invSearch" class="form-control" style="width:190px" placeholder="Search name, CPU, GPU..." oninput="filterInventoryTable()">
+          <select id="invBrandFilter" class="form-control" style="width:130px" onchange="filterInventoryTable()">
+            <option value="all">All Brands</option>
+            <option value="lenovo">Lenovo</option>
+            <option value="dell">Dell</option>
+            <option value="hp">HP</option>
+            <option value="apple">Apple</option>
+            <option value="microsoft">Microsoft</option>
+          </select>
+          <select id="invStatusFilter" class="form-control" style="width:150px" onchange="filterInventoryTable()">
+            <option value="all">All Statuses</option>
+            <option value="in_stock">In Stock (&gt;2)</option>
+            <option value="low_stock">Low Stock (1-2)</option>
+            <option value="out_of_stock">Out of Stock (0)</option>
+            <option value="hidden">Hidden / Archived</option>
+          </select>
+          <button class="btn-primary" onclick="openAddLaptopModal()">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            + Add Laptop
+          </button>
         </div>
       </div>
 
@@ -467,15 +594,15 @@ table.admin-table tr:hover td {
         <table class="admin-table" id="inventoryTable">
           <thead>
             <tr>
-              <th>ID</th>
-              <th>Laptop Name</th>
+              <th style="width:60px">Photo</th>
+              <th style="width:45px">ID</th>
+              <th>Laptop Model</th>
               <th>Brand</th>
-              <th>RAM Type / Slots</th>
-              <th>Base Specs</th>
-              <th>Price (PKR)</th>
-              <th>Stock</th>
+              <th>Short Specs</th>
+              <th>Price</th>
+              <th style="width:100px">Stock Qty</th>
               <th>Status</th>
-              <th>Actions</th>
+              <th style="text-align:right">Actions</th>
             </tr>
           </thead>
           <tbody id="inventoryTbody">
@@ -766,13 +893,15 @@ async function saveRamTiers() {
 // ─────────────────────────────────────────────────────────────
 // INVENTORY
 // ─────────────────────────────────────────────────────────────
+let pendingDeleteId = null;
+
 async function loadInventory() {
   try {
     const res = await fetch('/api/admin/inventory', { credentials: 'include' });
     if (res.ok) {
       inventoryData = await res.json();
       document.getElementById('countInventory').textContent = inventoryData.length;
-      renderInventoryTable(inventoryData);
+      filterInventoryTable();
     }
   } catch (e) {
     console.error(e);
@@ -782,40 +911,54 @@ async function loadInventory() {
 function renderInventoryTable(items) {
   const tbody = document.getElementById('inventoryTbody');
   if (!items || items.length === 0) {
-    tbody.innerHTML = `<tr><td colspan="9" style="text-align:center;padding:2rem">No laptops match.</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="9" style="text-align:center;padding:2.5rem;color:var(--text-muted)">No laptops match the current search or filters.</td></tr>`;
     return;
   }
   tbody.innerHTML = items.map(lap => {
-    const mem = lap.fullSpecs?.memoryStorage || {};
-    const ramType = mem.ramType || 'DDR4';
-    const ramSlots = mem.ramSlots || (lap.isRamUpgradable === false ? 'Soldered' : 'Upgradable');
     const isHidden = lap.hidden ? true : false;
-    const stock = lap.stock ?? 1;
+    const stock = Number(lap.stock ?? 1);
+
+    let statusPill = '';
+    if (isHidden) {
+      statusPill = '<span class="badge-status st-cancelled" style="background:rgba(239,68,68,0.15);color:#f87171">Hidden</span>';
+    } else if (stock <= 0) {
+      statusPill = '<span class="badge-status st-cancelled" style="background:rgba(239,68,68,0.25);color:#ef4444;font-weight:700">Out of Stock</span>';
+    } else if (stock <= 2) {
+      statusPill = `<span class="badge-status st-warning" style="background:rgba(245,158,11,0.2);color:#f59e0b;font-weight:700">Low Stock (${stock})</span>`;
+    } else {
+      statusPill = `<span class="badge-status st-shipped" style="background:rgba(16,185,129,0.15);color:#10b981">In Stock (${stock})</span>`;
+    }
+
+    const shortSpecs = `${lap.cpu || ''} · ${lap.ram || ''}GB RAM · ${lap.storage >= 1000 ? '1TB' : lap.storage + 'GB'} SSD`;
+    const imgSrc = lap.img ? `../${lap.img}` : '../images/lenovo-t14-g1.jpg';
 
     return `
       <tr>
-        <td style="font-family:var(--font-mono);font-size:0.78rem">#${lap.id}</td>
         <td>
-          <div style="font-weight:700">${escapeHtml(lap.name)}</div>
-          <div style="font-size:0.75rem;color:var(--text-muted)">${escapeHtml(lap.category || '')}</div>
+          <img src="${imgSrc}" alt="${escapeHtml(lap.name)}" style="width:48px;height:38px;object-fit:contain;background:var(--surface2);border-radius:6px;padding:2px" onerror="this.src='../images/lenovo-t14-g1.jpg'">
         </td>
-        <td>${escapeHtml(lap.brandName || lap.brand || '')}</td>
+        <td style="font-family:var(--font-mono);font-size:0.75rem;color:var(--text-muted)">#${lap.id}</td>
         <td>
-          <span style="font-weight:600;font-size:0.8rem">${escapeHtml(ramType)}</span>
-          <div style="font-size:0.72rem;color:var(--text-muted)">${escapeHtml(ramSlots)}</div>
+          <div style="font-weight:700;color:var(--text)">${escapeHtml(lap.name)}</div>
+          <div style="font-size:0.75rem;color:var(--text-muted)">${escapeHtml(lap.category || 'Ultrabook')} · ${escapeHtml(lap.badge || 'Verified')}</div>
         </td>
-        <td>${lap.ram}GB / ${lap.storage >= 1000 ? '1TB' : lap.storage + 'GB'}</td>
-        <td style="font-weight:700">${lap.priceFormatted || 'Rs ' + Number(lap.price).toLocaleString('en-PK')}</td>
+        <td style="font-weight:600;font-size:0.8rem;text-transform:uppercase">${escapeHtml(lap.brandName || lap.brand || '')}</td>
+        <td style="font-size:0.78rem;color:var(--text-muted);max-width:220px;white-space:normal">${escapeHtml(shortSpecs)}</td>
+        <td style="font-weight:700;white-space:nowrap">${lap.priceFormatted || 'Rs ' + Number(lap.price).toLocaleString('en-PK')}</td>
         <td>
-          <input type="number" value="${stock}" min="0" max="99" style="width:55px;padding:3px 6px;background:var(--surface2);border:1px solid var(--border2);color:var(--text);border-radius:4px" onchange="updateStock(${lap.id}, this.value)">
+          <input type="number" value="${stock}" min="0" max="99" style="width:60px;padding:5px 8px;background:var(--surface2);border:1px solid var(--border2);color:var(--text);border-radius:6px;font-weight:600" onchange="updateStock(${lap.id}, this.value)">
         </td>
-        <td>
-          ${isHidden ? '<span class="badge-status st-cancelled">Hidden</span>' : '<span class="badge-status st-shipped">Live</span>'}
-        </td>
-        <td>
-          <div style="display:flex;gap:6px">
+        <td>${statusPill}</td>
+        <td style="text-align:right">
+          <div style="display:flex;gap:6px;justify-content:flex-end">
+            <button class="btn-nav-out btn-sm" onclick="openEditLaptopModal(${lap.id})" title="Edit Specs">
+              ✏️ Edit
+            </button>
             <button class="btn-nav-out btn-sm" onclick="toggleArchive(${lap.id}, ${isHidden})">
               ${isHidden ? 'Unarchive' : 'Archive'}
+            </button>
+            <button class="btn-nav-out btn-danger btn-sm" onclick="confirmDeleteLaptop(${lap.id})">
+              🗑️
             </button>
           </div>
         </td>
@@ -825,17 +968,36 @@ function renderInventoryTable(items) {
 }
 
 function filterInventoryTable() {
-  const q = document.getElementById('invSearch').value.toLowerCase().trim();
-  if (!q) {
-    renderInventoryTable(inventoryData);
-    return;
+  const q = (document.getElementById('invSearch')?.value || '').toLowerCase().trim();
+  const brand = document.getElementById('invBrandFilter')?.value || 'all';
+  const status = document.getElementById('invStatusFilter')?.value || 'all';
+
+  let filtered = inventoryData || [];
+
+  if (brand !== 'all') {
+    filtered = filtered.filter(l => String(l.brand).toLowerCase() === brand.toLowerCase());
   }
-  const filtered = inventoryData.filter(l => 
-    String(l.name).toLowerCase().includes(q) ||
-    String(l.brand).toLowerCase().includes(q) ||
-    String(l.cpu).toLowerCase().includes(q) ||
-    String(l.id) === q
-  );
+
+  if (status === 'in_stock') {
+    filtered = filtered.filter(l => !l.hidden && Number(l.stock ?? 1) > 2);
+  } else if (status === 'low_stock') {
+    filtered = filtered.filter(l => !l.hidden && Number(l.stock ?? 1) > 0 && Number(l.stock ?? 1) <= 2);
+  } else if (status === 'out_of_stock') {
+    filtered = filtered.filter(l => !l.hidden && Number(l.stock ?? 1) <= 0);
+  } else if (status === 'hidden') {
+    filtered = filtered.filter(l => l.hidden);
+  }
+
+  if (q) {
+    filtered = filtered.filter(l => 
+      String(l.name).toLowerCase().includes(q) ||
+      String(l.brand).toLowerCase().includes(q) ||
+      String(l.cpu).toLowerCase().includes(q) ||
+      String(l.gpu).toLowerCase().includes(q) ||
+      String(l.id) === q
+    );
+  }
+
   renderInventoryTable(filtered);
 }
 
@@ -849,7 +1011,9 @@ async function updateStock(id, newStock) {
     });
     if (res.ok) {
       showToast(`Stock updated for laptop #${id}`);
-      loadInventory();
+      const item = inventoryData.find(l => l.id === id);
+      if (item) item.stock = parseInt(newStock, 10);
+      filterInventoryTable();
       loadAuditLog();
     }
   } catch (e) {
@@ -868,12 +1032,282 @@ async function toggleArchive(id, currentlyHidden) {
     });
     if (res.ok) {
       showToast(currentlyHidden ? `Laptop #${id} made live` : `Laptop #${id} archived`);
-      loadInventory();
+      const item = inventoryData.find(l => l.id === id);
+      if (item) item.hidden = !currentlyHidden;
+      filterInventoryTable();
       loadAuditLog();
     }
   } catch (e) {
     showToast('Failed to update laptop status');
   }
+}
+
+// ─────────────────────────────────────────────────────────────
+// ADD / EDIT LAPTOP MODAL & LIVE CARD PREVIEW
+// ─────────────────────────────────────────────────────────────
+function openAddLaptopModal() {
+  document.getElementById('laptopModalHeading').textContent = 'Add New Laptop to Inventory';
+  document.getElementById('editLaptopId').value = '';
+  document.getElementById('lapBrand').value = 'lenovo';
+  document.getElementById('lapName').value = '';
+  document.getElementById('lapCpu').value = '';
+  document.getElementById('lapGen').value = '';
+  document.getElementById('lapRam').value = '16';
+  document.getElementById('lapRamType').value = 'DDR4';
+  document.getElementById('lapStorage').value = '512';
+  document.getElementById('lapStorageType').value = 'NVMe SSD';
+  document.getElementById('lapGpu').value = 'Intel Iris Xe';
+  document.getElementById('lapDisplay').value = '14.0" FHD IPS (1920x1080)';
+  document.getElementById('lapPrice').value = '120000';
+  document.getElementById('lapStock').value = '1';
+  document.getElementById('lapCondition').value = 'Like New (10/10) · Certified Refurbished';
+  document.getElementById('lapBadge').value = 'New Arrival';
+  document.getElementById('lapCategory').value = 'Ultrabook';
+  document.getElementById('lapImgPath').value = 'images/laptop-1-lenovo-thinkpad-t14-gen-1-1.jpg';
+  document.getElementById('lapVisible').checked = true;
+  document.getElementById('lapDescription').value = '';
+  document.getElementById('imgUploadStatus').textContent = 'Upload an image file or keep existing path.';
+
+  onModalFormChange();
+  document.getElementById('laptopEditModal').classList.add('open');
+}
+
+function openEditLaptopModal(id) {
+  const lap = inventoryData.find(l => l.id === id);
+  if (!lap) return;
+
+  document.getElementById('laptopModalHeading').textContent = `Edit Laptop #${lap.id}: ${lap.name}`;
+  document.getElementById('editLaptopId').value = lap.id;
+  document.getElementById('lapBrand').value = (lap.brand || 'lenovo').toLowerCase();
+  document.getElementById('lapName').value = lap.name || '';
+  document.getElementById('lapCpu').value = lap.cpu || '';
+  document.getElementById('lapGen').value = lap.gen || '';
+  document.getElementById('lapRam').value = lap.ram || 16;
+  document.getElementById('lapRamType').value = lap.fullSpecs?.memoryStorage?.ramType || 'DDR4';
+  document.getElementById('lapStorage').value = String(lap.storage || 512);
+  document.getElementById('lapStorageType').value = lap.fullSpecs?.memoryStorage?.storageType || lap.storageType || 'NVMe SSD';
+  document.getElementById('lapGpu').value = lap.gpu || '';
+  document.getElementById('lapDisplay').value = lap.display || '';
+  document.getElementById('lapPrice').value = lap.price || '';
+  document.getElementById('lapStock').value = lap.stock ?? 1;
+  document.getElementById('lapCondition').value = lap.condition || 'Like New (10/10) · Certified Refurbished';
+  document.getElementById('lapBadge').value = lap.badge || '';
+  document.getElementById('lapCategory').value = lap.category || 'Ultrabook';
+  document.getElementById('lapImgPath').value = lap.img || '';
+  document.getElementById('lapVisible').checked = !lap.hidden;
+  document.getElementById('lapDescription').value = lap.description || '';
+  document.getElementById('imgUploadStatus').textContent = 'Current image loaded.';
+
+  onModalFormChange();
+  document.getElementById('laptopEditModal').classList.add('open');
+}
+
+function closeLaptopEditModal() {
+  document.getElementById('laptopEditModal').classList.remove('open');
+}
+
+function onModalFormChange() {
+  const brand = document.getElementById('lapBrand').value;
+  const name = document.getElementById('lapName').value || 'Laptop Model Name';
+  const cpu = document.getElementById('lapCpu').value || 'Intel Processor';
+  const ram = document.getElementById('lapRam').value || '16';
+  const storage = document.getElementById('lapStorage').value || '512';
+  const price = Number(document.getElementById('lapPrice').value || 0);
+  const stock = Number(document.getElementById('lapStock').value || 0);
+  const badge = document.getElementById('lapBadge').value || document.getElementById('lapCondition').value.split('·')[0].trim();
+  const imgPath = document.getElementById('lapImgPath').value.trim() || 'images/lenovo-t14-g1.jpg';
+
+  document.getElementById('prevBrand').textContent = brand.toUpperCase();
+  document.getElementById('prevName').textContent = name;
+  document.getElementById('prevBadge').textContent = badge;
+  document.getElementById('prevCpuChip').textContent = cpu.split('(')[0].trim().slice(0, 24);
+  document.getElementById('prevRamChip').textContent = `${ram} GB RAM`;
+  document.getElementById('prevStorChip').textContent = `${storage >= 1000 ? '1 TB' : storage + ' GB'} SSD`;
+  document.getElementById('prevPrice').textContent = `Rs ${price.toLocaleString('en-PK')}`;
+
+  const stockBadge = document.getElementById('prevStockBadge');
+  if (stock <= 0) {
+    stockBadge.className = 'badge-status st-cancelled';
+    stockBadge.textContent = 'Out of Stock';
+  } else if (stock <= 2) {
+    stockBadge.className = 'badge-status st-warning';
+    stockBadge.textContent = `Only ${stock} Left`;
+  } else {
+    stockBadge.className = 'badge-status st-shipped';
+    stockBadge.textContent = 'In Stock';
+  }
+
+  const prevImg = document.getElementById('prevImg');
+  prevImg.src = imgPath.startsWith('http') || imgPath.startsWith('data:') ? imgPath : `../${imgPath}`;
+  prevImg.onerror = function() { this.src = '../images/lenovo-t14-g1.jpg'; };
+}
+
+async function handleImageFileSelect(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+
+  const statusEl = document.getElementById('imgUploadStatus');
+  statusEl.textContent = 'Uploading and analyzing background blending...';
+  statusEl.style.color = 'var(--accent)';
+
+  const formData = new FormData();
+  formData.append('image', file);
+
+  try {
+    const res = await fetch('/api/admin/upload-image', {
+      method: 'POST',
+      credentials: 'include',
+      body: formData
+    });
+    const data = await res.json();
+    if (res.ok && data.path) {
+      document.getElementById('lapImgPath').value = data.path;
+      statusEl.textContent = `✓ Uploaded! Background tone: ${data.bgTone || 'detected'}`;
+      statusEl.style.color = 'var(--success)';
+      onModalFormChange();
+      showToast('Image uploaded and processed!');
+    } else {
+      statusEl.textContent = `Upload failed: ${data.error || 'Server error'}`;
+      statusEl.style.color = 'var(--danger)';
+    }
+  } catch (err) {
+    statusEl.textContent = 'Upload network error.';
+    statusEl.style.color = 'var(--danger)';
+  }
+}
+
+async function handleSaveLaptop(e) {
+  e.preventDefault();
+  const editId = document.getElementById('editLaptopId').value;
+  const isEditing = Boolean(editId);
+
+  const payload = {
+    brand: document.getElementById('lapBrand').value,
+    brandName: document.getElementById('lapBrand').value.charAt(0).toUpperCase() + document.getElementById('lapBrand').value.slice(1),
+    name: document.getElementById('lapName').value.trim(),
+    cpu: document.getElementById('lapCpu').value.trim(),
+    gen: document.getElementById('lapGen').value.trim() || '-',
+    ram: parseInt(document.getElementById('lapRam').value, 10),
+    storage: parseInt(document.getElementById('lapStorage').value, 10),
+    storageType: document.getElementById('lapStorageType').value.trim(),
+    gpu: document.getElementById('lapGpu').value.trim(),
+    display: document.getElementById('lapDisplay').value.trim(),
+    price: parseInt(document.getElementById('lapPrice').value, 10),
+    stock: parseInt(document.getElementById('lapStock').value, 10),
+    condition: document.getElementById('lapCondition').value,
+    badge: document.getElementById('lapBadge').value.trim() || 'Verified',
+    category: document.getElementById('lapCategory').value,
+    img: document.getElementById('lapImgPath').value.trim(),
+    hidden: !document.getElementById('lapVisible').checked,
+    description: document.getElementById('lapDescription').value.trim(),
+    fullSpecs: {
+      performance: {
+        processor: document.getElementById('lapCpu').value.trim(),
+        graphics: document.getElementById('lapGpu').value.trim()
+      },
+      memoryStorage: {
+        ramType: document.getElementById('lapRamType').value,
+        storageType: document.getElementById('lapStorageType').value.trim()
+      }
+    }
+  };
+
+  const endpoint = isEditing ? '/api/admin/inventory/update' : '/api/admin/inventory/add';
+  if (isEditing) payload.id = parseInt(editId, 10);
+
+  try {
+    const res = await fetch(endpoint, {
+      method: 'POST',
+      credentials: 'include',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+    const data = await res.json();
+    if (res.ok) {
+      showToast(isEditing ? 'Laptop updated successfully!' : 'New laptop added to inventory!');
+      closeLaptopEditModal();
+      loadInventory();
+      loadAuditLog();
+    } else {
+      showToast(data.error || 'Failed to save laptop.');
+    }
+  } catch (err) {
+    showToast('Network error while saving laptop.');
+  }
+}
+
+// ─────────────────────────────────────────────────────────────
+// DELETE CONFIRMATION & ARCHIVE RECOMMENDATION
+// ─────────────────────────────────────────────────────────────
+function confirmDeleteLaptop(id) {
+  pendingDeleteId = id;
+  const lap = inventoryData.find(l => l.id === id);
+  document.getElementById('deleteLapName').textContent = lap ? `#${lap.id} (${lap.name})` : `#${id}`;
+  document.getElementById('deleteConfirmModal').classList.add('open');
+}
+
+function closeDeleteConfirmModal() {
+  pendingDeleteId = null;
+  document.getElementById('deleteConfirmModal').classList.remove('open');
+}
+
+async function archiveInsteadOfDelete() {
+  if (!pendingDeleteId) return;
+  const id = pendingDeleteId;
+  closeDeleteConfirmModal();
+  await toggleArchive(id, false);
+}
+
+async function executePermanentDelete() {
+  if (!pendingDeleteId) return;
+  const id = pendingDeleteId;
+  closeDeleteConfirmModal();
+
+  try {
+    const res = await fetch('/api/admin/inventory/delete', {
+      method: 'POST',
+      credentials: 'include',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id, confirm: true })
+    });
+    const data = await res.json();
+    if (res.ok) {
+      showToast(`Laptop #${id} deleted from inventory.`);
+      loadInventory();
+      loadAuditLog();
+    } else {
+      showToast(data.error || 'Delete failed.');
+    }
+  } catch (e) {
+    showToast('Network error while deleting laptop.');
+  }
+}
+
+// ─────────────────────────────────────────────────────────────
+// THEME TOGGLE
+// ─────────────────────────────────────────────────────────────
+function initAdminTheme() {
+  const saved = localStorage.getItem('laptophub_admin_theme') || 'dark';
+  applyAdminTheme(saved);
+}
+
+function applyAdminTheme(t) {
+  document.documentElement.setAttribute('data-theme', t);
+  localStorage.setItem('laptophub_admin_theme', t);
+  const icon = document.getElementById('adminThemeIcon');
+  const label = document.getElementById('adminThemeLabel');
+  if (icon && label) {
+    if (t === 'light') {
+      icon.textContent = '🌙'; label.textContent = 'Dark Mode';
+    } else {
+      icon.textContent = '☀️'; label.textContent = 'Light Mode';
+    }
+  }
+}
+
+function toggleAdminTheme() {
+  const cur = document.documentElement.getAttribute('data-theme') || 'dark';
+  applyAdminTheme(cur === 'dark' ? 'light' : 'dark');
 }
 
 // ─────────────────────────────────────────────────────────────
@@ -1067,7 +1501,219 @@ async function adminSignOut() {
 }
 
 // Start
+initAdminTheme();
 initAdmin();
 </script>
+
+<!-- ADD / EDIT LAPTOP MODAL WITH LIVE PREVIEW -->
+<div class="admin-modal" id="laptopEditModal" role="dialog" aria-modal="true" aria-label="Laptop Editor">
+  <div class="admin-modal-card">
+    <div class="admin-modal-header">
+      <h3 class="admin-modal-title" id="laptopModalHeading">Add New Laptop</h3>
+      <button class="admin-modal-close" onclick="closeLaptopEditModal()">✕</button>
+    </div>
+    <div class="admin-modal-body">
+      <div class="modal-grid-layout">
+        <!-- FORM FIELDS (LEFT) -->
+        <form id="laptopForm" onsubmit="handleSaveLaptop(event)" style="display:flex;flex-direction:column;gap:12px;">
+          <input type="hidden" id="editLaptopId" value="">
+
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+            <div class="form-group">
+              <label>Brand *</label>
+              <select id="lapBrand" class="form-control" required onchange="onModalFormChange()">
+                <option value="lenovo">Lenovo</option>
+                <option value="dell">Dell</option>
+                <option value="hp">HP</option>
+                <option value="apple">Apple</option>
+                <option value="microsoft">Microsoft</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Model Name *</label>
+              <input type="text" id="lapName" class="form-control" placeholder="e.g. ThinkPad T14s Gen 3" required oninput="onModalFormChange()">
+            </div>
+          </div>
+
+          <div style="display:grid;grid-template-columns:1.5fr 1fr;gap:12px;">
+            <div class="form-group">
+              <label>Processor (CPU) *</label>
+              <input type="text" id="lapCpu" class="form-control" placeholder="e.g. Intel Core i7-1265U (10 Cores, up to 4.80 GHz)" required oninput="onModalFormChange()">
+            </div>
+            <div class="form-group">
+              <label>Generation</label>
+              <input type="text" id="lapGen" class="form-control" placeholder="e.g. 12th or M2" oninput="onModalFormChange()">
+            </div>
+          </div>
+
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:10px;">
+            <div class="form-group">
+              <label>RAM (GB) *</label>
+              <input type="number" id="lapRam" class="form-control" min="4" max="128" value="16" required oninput="onModalFormChange()">
+            </div>
+            <div class="form-group">
+              <label>RAM Type</label>
+              <select id="lapRamType" class="form-control" onchange="onModalFormChange()">
+                <option value="DDR4">DDR4</option>
+                <option value="DDR5">DDR5</option>
+                <option value="LPDDR4x">LPDDR4x</option>
+                <option value="LPDDR5">LPDDR5</option>
+                <option value="Unified Memory">Unified Memory</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Storage (GB) *</label>
+              <select id="lapStorage" class="form-control" onchange="onModalFormChange()">
+                <option value="128">128 GB</option>
+                <option value="256">256 GB</option>
+                <option value="512" selected>512 GB</option>
+                <option value="1000">1 TB (1000 GB)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Storage Type</label>
+              <input type="text" id="lapStorageType" class="form-control" value="NVMe SSD" oninput="onModalFormChange()">
+            </div>
+          </div>
+
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+            <div class="form-group">
+              <label>GPU (Graphics) *</label>
+              <input type="text" id="lapGpu" class="form-control" placeholder="e.g. Intel Iris Xe or NVIDIA RTX 3050" required oninput="onModalFormChange()">
+            </div>
+            <div class="form-group">
+              <label>Display *</label>
+              <input type="text" id="lapDisplay" class="form-control" placeholder='e.g. 14.0" FHD IPS Touch (1920x1080)' required oninput="onModalFormChange()">
+            </div>
+          </div>
+
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;">
+            <div class="form-group">
+              <label>Price in PKR *</label>
+              <input type="number" id="lapPrice" class="form-control" min="10000" step="1000" value="125000" required oninput="onModalFormChange()">
+            </div>
+            <div class="form-group">
+              <label>Stock Quantity *</label>
+              <input type="number" id="lapStock" class="form-control" min="0" max="999" value="1" required oninput="onModalFormChange()">
+            </div>
+            <div class="form-group">
+              <label>Condition</label>
+              <select id="lapCondition" class="form-control" onchange="onModalFormChange()">
+                <option value="Like New (10/10) · Certified Refurbished">Like New (10/10)</option>
+                <option value="Excellent (9.5/10) · Scratchless">Excellent (9.5/10)</option>
+                <option value="Very Good (9/10) · Minimal Signs">Very Good (9/10)</option>
+                <option value="Brand New · Box Packed">Brand New Box Packed</option>
+              </select>
+            </div>
+          </div>
+
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+            <div class="form-group">
+              <label>Badge / Flag</label>
+              <input type="text" id="lapBadge" class="form-control" placeholder="e.g. Best Seller or Hot Deal" oninput="onModalFormChange()">
+            </div>
+            <div class="form-group">
+              <label>Category</label>
+              <select id="lapCategory" class="form-control" onchange="onModalFormChange()">
+                <option value="Ultrabook">Ultrabook</option>
+                <option value="Business Laptop">Business Laptop</option>
+                <option value="2-in-1 Convertible">2-in-1 Convertible</option>
+                <option value="Creator / Workstation">Creator / Workstation</option>
+                <option value="Gaming">Gaming</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- IMAGE UPLOAD & BLENDING -->
+          <div class="form-group">
+            <label>Product Image (Upload new or use existing relative path)</label>
+            <div style="display:flex;gap:10px;align-items:center;">
+              <input type="text" id="lapImgPath" class="form-control" value="images/laptop-1-lenovo-thinkpad-t14-gen-1-1.jpg" required oninput="onModalFormChange()">
+              <label class="btn-nav-out" style="cursor:pointer;white-space:nowrap;margin:0">
+                <span>📁 Upload Image</span>
+                <input type="file" id="lapImgFileInput" accept="image/jpeg,image/png,image/webp" style="display:none" onchange="handleImageFileSelect(event)">
+              </label>
+            </div>
+            <div id="imgUploadStatus" style="font-size:0.75rem;color:var(--text-muted);margin-top:4px">Background blending analysis automatically applied on upload.</div>
+          </div>
+
+          <div class="form-group" style="display:flex;align-items:center;gap:10px;background:var(--surface2);padding:10px 14px;border-radius:8px">
+            <input type="checkbox" id="lapVisible" checked onchange="onModalFormChange()">
+            <label for="lapVisible" style="margin:0;cursor:pointer;color:var(--text);font-weight:600">Visible on Storefront (Uncheck to Archive / Hide)</label>
+          </div>
+
+          <div class="form-group">
+            <label>Description & Notes</label>
+            <textarea id="lapDescription" class="form-control" rows="2" placeholder="Brief summary of condition, features, ports..."></textarea>
+          </div>
+
+          <button type="submit" id="btnModalSaveLaptop" style="display:none"></button>
+        </form>
+
+        <!-- STICKY LIVE PREVIEW CARD (RIGHT) -->
+        <div class="preview-sticky-wrap">
+          <div class="preview-title-bar">
+            <span>👁️</span> Live Storefront Card Preview
+          </div>
+          <div class="preview-card" id="cardPreviewContainer">
+            <div class="preview-photo-wrap" id="prevPhotoWrap">
+              <span class="preview-badge" id="prevBadge">Like New (10/10)</span>
+              <img id="prevImg" src="../images/laptop-1-lenovo-thinkpad-t14-gen-1-1.jpg" alt="Preview" class="preview-photo">
+            </div>
+            <div class="preview-content">
+              <div class="preview-brand" id="prevBrand">LENOVO</div>
+              <div class="preview-name" id="prevName">ThinkPad T14s Gen 3</div>
+              <div class="preview-chips">
+                <span class="preview-chip" id="prevCpuChip">Core i7</span>
+                <span class="preview-chip" id="prevRamChip">16 GB RAM</span>
+                <span class="preview-chip" id="prevStorChip">512 GB SSD</span>
+              </div>
+              <div class="preview-footer">
+                <div class="preview-price" id="prevPrice">Rs 125,000</div>
+                <span class="badge-status st-shipped" id="prevStockBadge">In Stock</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="admin-modal-footer">
+      <button type="button" class="btn-nav-out" onclick="closeLaptopEditModal()">Cancel</button>
+      <button type="button" class="btn-primary" onclick="document.getElementById('btnModalSaveLaptop').click()">
+        Save Laptop Changes
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- DELETE CONFIRMATION MODAL -->
+<div class="admin-modal" id="deleteConfirmModal" role="dialog" aria-modal="true" aria-label="Confirm Delete">
+  <div class="admin-modal-card" style="width:min(480px, 95%)">
+    <div class="admin-modal-header" style="background:rgba(239,68,68,0.1)">
+      <h3 class="admin-modal-title" style="color:var(--danger);display:flex;align-items:center;gap:6px">
+        ⚠️ Confirm Deletion
+      </h3>
+      <button class="admin-modal-close" onclick="closeDeleteConfirmModal()">✕</button>
+    </div>
+    <div class="admin-modal-body" style="padding:1.5rem">
+      <p style="margin-bottom:1rem;color:var(--text);font-size:0.95rem">
+        Are you sure you want to permanently delete <strong id="deleteLapName" style="color:var(--danger)">this laptop</strong>?
+      </p>
+      <div style="background:var(--surface2);border-left:4px solid var(--warning);padding:12px;border-radius:6px;font-size:0.82rem;color:var(--text-muted);line-height:1.4">
+        <strong style="color:var(--warning)">Important Recommendation:</strong><br>
+        We strongly recommend using <strong>Archive / Hide</strong> instead. Permanently deleting this laptop removes it from the inventory dataset and may break order history records referencing this laptop ID.
+      </div>
+    </div>
+    <div class="admin-modal-footer">
+      <button type="button" class="btn-primary" onclick="archiveInsteadOfDelete()" style="background:var(--surface3);color:var(--text)">
+        Archive / Hide Instead
+      </button>
+      <button type="button" class="btn-nav-out btn-danger" onclick="executePermanentDelete()">
+        Permanently Delete
+      </button>
+    </div>
+  </div>
+</div>
+
 </body>
 </html>

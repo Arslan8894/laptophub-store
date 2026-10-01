@@ -104,7 +104,8 @@ const LAPTOPS_INVENTORY = [
     "bgTone": "white",
     "bgColor": "rgb(255, 255, 255)",
     "tintColor": "rgba(76, 124, 255, 0.04)",
-    "processedImg": "images/processed/laptop-1-cutout.webp"
+    "processedImg": "images/processed/laptop-1-cutout.webp",
+    "stock": 3
   },
   {
     "id": 2,
@@ -210,7 +211,8 @@ const LAPTOPS_INVENTORY = [
     "bgTone": "colorful",
     "bgColor": "rgb(183, 158, 138)",
     "tintColor": "rgba(183, 158, 138, 0.15)",
-    "processedImg": "images/laptop-2-microsoft-surface-pro-7-2.jpg"
+    "processedImg": "images/laptop-2-microsoft-surface-pro-7-2.jpg",
+    "stock": 3
   },
   {
     "id": 3,
@@ -316,7 +318,8 @@ const LAPTOPS_INVENTORY = [
     "bgTone": "colorful",
     "bgColor": "rgb(20, 82, 127)",
     "tintColor": "rgba(20, 82, 127, 0.15)",
-    "processedImg": "images/laptop-3-hp-elitebook-840-g9-3.jpg"
+    "processedImg": "images/laptop-3-hp-elitebook-840-g9-3.jpg",
+    "stock": 3
   },
   {
     "id": 4,
@@ -421,7 +424,8 @@ const LAPTOPS_INVENTORY = [
     "bgTone": "white",
     "bgColor": "rgb(255, 255, 255)",
     "tintColor": "rgba(76, 124, 255, 0.04)",
-    "processedImg": "images/processed/laptop-4-cutout.webp"
+    "processedImg": "images/processed/laptop-4-cutout.webp",
+    "stock": 3
   },
   {
     "id": 5,
@@ -526,7 +530,8 @@ const LAPTOPS_INVENTORY = [
     "bgTone": "white",
     "bgColor": "rgb(255, 255, 255)",
     "tintColor": "rgba(76, 124, 255, 0.04)",
-    "processedImg": "images/processed/laptop-5-cutout.webp"
+    "processedImg": "images/processed/laptop-5-cutout.webp",
+    "stock": 3
   },
   {
     "id": 6,
@@ -632,7 +637,8 @@ const LAPTOPS_INVENTORY = [
     "bgTone": "white",
     "bgColor": "rgb(253, 253, 253)",
     "tintColor": "rgba(76, 124, 255, 0.04)",
-    "processedImg": "images/processed/laptop-6-cutout.webp"
+    "processedImg": "images/processed/laptop-6-cutout.webp",
+    "stock": 3
   },
   {
     "id": 7,
@@ -739,7 +745,8 @@ const LAPTOPS_INVENTORY = [
     "bgTone": "white",
     "bgColor": "rgb(255, 255, 255)",
     "tintColor": "rgba(76, 124, 255, 0.04)",
-    "processedImg": "images/processed/laptop-7-cutout.webp"
+    "processedImg": "images/processed/laptop-7-cutout.webp",
+    "stock": 3
   },
   {
     "id": 8,
@@ -845,7 +852,8 @@ const LAPTOPS_INVENTORY = [
     "bgTone": "white",
     "bgColor": "rgb(255, 255, 255)",
     "tintColor": "rgba(76, 124, 255, 0.04)",
-    "processedImg": "images/processed/laptop-8-cutout.webp"
+    "processedImg": "images/processed/laptop-8-cutout.webp",
+    "stock": 3
   },
   {
     "id": 9,
@@ -951,7 +959,8 @@ const LAPTOPS_INVENTORY = [
     "bgTone": "colorful",
     "bgColor": "rgb(172, 177, 183)",
     "tintColor": "rgba(172, 177, 183, 0.15)",
-    "processedImg": "images/laptop-9-dell-latitude-5310-9.jpg"
+    "processedImg": "images/laptop-9-dell-latitude-5310-9.jpg",
+    "stock": 3
   },
   {
     "id": 10,
@@ -1057,7 +1066,8 @@ const LAPTOPS_INVENTORY = [
     "bgTone": "white",
     "bgColor": "rgb(255, 255, 255)",
     "tintColor": "rgba(76, 124, 255, 0.04)",
-    "processedImg": "images/processed/laptop-10-cutout.webp"
+    "processedImg": "images/processed/laptop-10-cutout.webp",
+    "stock": 3
   },
   {
     "id": 11,
@@ -1163,7 +1173,8 @@ const LAPTOPS_INVENTORY = [
     "bgTone": "white",
     "bgColor": "rgb(255, 255, 255)",
     "tintColor": "rgba(76, 124, 255, 0.04)",
-    "processedImg": "images/processed/laptop-11-cutout.webp"
+    "processedImg": "images/processed/laptop-11-cutout.webp",
+    "stock": 3
   },
   {
     "id": 12,
@@ -1270,7 +1281,8 @@ const LAPTOPS_INVENTORY = [
     "bgTone": "white",
     "bgColor": "rgb(255, 255, 255)",
     "tintColor": "rgba(76, 124, 255, 0.04)",
-    "processedImg": "images/processed/laptop-12-cutout.webp"
+    "processedImg": "images/processed/laptop-12-cutout.webp",
+    "stock": 3
   },
   {
     "id": 13,
@@ -1375,7 +1387,8 @@ const LAPTOPS_INVENTORY = [
     "bgTone": "white",
     "bgColor": "rgb(253, 253, 253)",
     "tintColor": "rgba(76, 124, 255, 0.04)",
-    "processedImg": "images/processed/laptop-13-cutout.webp"
+    "processedImg": "images/processed/laptop-13-cutout.webp",
+    "stock": 3
   },
   {
     "id": 14,
@@ -1481,7 +1494,8 @@ const LAPTOPS_INVENTORY = [
     "bgTone": "white",
     "bgColor": "rgb(255, 255, 255)",
     "tintColor": "rgba(76, 124, 255, 0.04)",
-    "processedImg": "images/processed/laptop-14-cutout.webp"
+    "processedImg": "images/processed/laptop-14-cutout.webp",
+    "stock": 3
   },
   {
     "id": 15,
@@ -1588,7 +1602,8 @@ const LAPTOPS_INVENTORY = [
     "bgTone": "white",
     "bgColor": "rgb(242, 242, 242)",
     "tintColor": "rgba(76, 124, 255, 0.04)",
-    "processedImg": "images/processed/laptop-15-cutout.webp"
+    "processedImg": "images/processed/laptop-15-cutout.webp",
+    "stock": 3
   },
   {
     "id": 16,
@@ -1695,7 +1710,8 @@ const LAPTOPS_INVENTORY = [
     "bgTone": "white",
     "bgColor": "rgb(254, 254, 254)",
     "tintColor": "rgba(76, 124, 255, 0.04)",
-    "processedImg": "images/processed/laptop-16-cutout.webp"
+    "processedImg": "images/processed/laptop-16-cutout.webp",
+    "stock": 3
   },
   {
     "id": 17,
@@ -1802,7 +1818,8 @@ const LAPTOPS_INVENTORY = [
     "bgTone": "white",
     "bgColor": "rgb(249, 247, 247)",
     "tintColor": "rgba(76, 124, 255, 0.04)",
-    "processedImg": "images/processed/laptop-17-cutout.webp"
+    "processedImg": "images/processed/laptop-17-cutout.webp",
+    "stock": 3
   },
   {
     "id": 18,
@@ -1907,7 +1924,8 @@ const LAPTOPS_INVENTORY = [
     "bgTone": "white",
     "bgColor": "rgb(249, 249, 249)",
     "tintColor": "rgba(76, 124, 255, 0.04)",
-    "processedImg": "images/processed/laptop-18-cutout.webp"
+    "processedImg": "images/processed/laptop-18-cutout.webp",
+    "stock": 3
   },
   {
     "id": 19,
@@ -2014,7 +2032,8 @@ const LAPTOPS_INVENTORY = [
     "bgTone": "white",
     "bgColor": "rgb(255, 255, 255)",
     "tintColor": "rgba(76, 124, 255, 0.04)",
-    "processedImg": "images/processed/laptop-19-cutout.webp"
+    "processedImg": "images/processed/laptop-19-cutout.webp",
+    "stock": 3
   },
   {
     "id": 20,
@@ -2120,7 +2139,8 @@ const LAPTOPS_INVENTORY = [
     "bgTone": "white",
     "bgColor": "rgb(254, 254, 254)",
     "tintColor": "rgba(76, 124, 255, 0.04)",
-    "processedImg": "images/processed/laptop-20-cutout.webp"
+    "processedImg": "images/processed/laptop-20-cutout.webp",
+    "stock": 3
   },
   {
     "id": 21,
@@ -2226,7 +2246,8 @@ const LAPTOPS_INVENTORY = [
     "bgTone": "white",
     "bgColor": "rgb(253, 253, 253)",
     "tintColor": "rgba(76, 124, 255, 0.04)",
-    "processedImg": "images/processed/laptop-21-cutout.webp"
+    "processedImg": "images/processed/laptop-21-cutout.webp",
+    "stock": 3
   },
   {
     "id": 22,
@@ -2332,7 +2353,8 @@ const LAPTOPS_INVENTORY = [
     "bgTone": "white",
     "bgColor": "rgb(255, 255, 255)",
     "tintColor": "rgba(76, 124, 255, 0.04)",
-    "processedImg": "images/processed/laptop-22-cutout.webp"
+    "processedImg": "images/processed/laptop-22-cutout.webp",
+    "stock": 3
   },
   {
     "id": 23,
@@ -2438,7 +2460,8 @@ const LAPTOPS_INVENTORY = [
     "bgTone": "white",
     "bgColor": "rgb(255, 255, 255)",
     "tintColor": "rgba(76, 124, 255, 0.04)",
-    "processedImg": "images/processed/laptop-23-cutout.webp"
+    "processedImg": "images/processed/laptop-23-cutout.webp",
+    "stock": 3
   },
   {
     "id": 24,
@@ -2544,7 +2567,8 @@ const LAPTOPS_INVENTORY = [
     "bgTone": "white",
     "bgColor": "rgb(255, 255, 255)",
     "tintColor": "rgba(76, 124, 255, 0.04)",
-    "processedImg": "images/processed/laptop-24-cutout.webp"
+    "processedImg": "images/processed/laptop-24-cutout.webp",
+    "stock": 3
   },
   {
     "id": 25,
@@ -2650,7 +2674,8 @@ const LAPTOPS_INVENTORY = [
     "bgTone": "white",
     "bgColor": "rgb(254, 254, 254)",
     "tintColor": "rgba(76, 124, 255, 0.04)",
-    "processedImg": "images/processed/laptop-25-cutout.webp"
+    "processedImg": "images/processed/laptop-25-cutout.webp",
+    "stock": 3
   },
   {
     "id": 26,
@@ -2756,7 +2781,8 @@ const LAPTOPS_INVENTORY = [
     "bgTone": "white",
     "bgColor": "rgb(255, 255, 255)",
     "tintColor": "rgba(76, 124, 255, 0.04)",
-    "processedImg": "images/processed/laptop-26-cutout.webp"
+    "processedImg": "images/processed/laptop-26-cutout.webp",
+    "stock": 3
   },
   {
     "id": 27,
@@ -2861,7 +2887,8 @@ const LAPTOPS_INVENTORY = [
     "bgTone": "white",
     "bgColor": "rgb(255, 255, 255)",
     "tintColor": "rgba(76, 124, 255, 0.04)",
-    "processedImg": "images/processed/laptop-27-cutout.webp"
+    "processedImg": "images/processed/laptop-27-cutout.webp",
+    "stock": 3
   },
   {
     "id": 28,
@@ -2966,7 +2993,8 @@ const LAPTOPS_INVENTORY = [
     "bgTone": "white",
     "bgColor": "rgb(255, 255, 255)",
     "tintColor": "rgba(76, 124, 255, 0.04)",
-    "processedImg": "images/processed/laptop-28-cutout.webp"
+    "processedImg": "images/processed/laptop-28-cutout.webp",
+    "stock": 3
   },
   {
     "id": 29,
@@ -3073,7 +3101,8 @@ const LAPTOPS_INVENTORY = [
     "bgTone": "white",
     "bgColor": "rgb(255, 255, 255)",
     "tintColor": "rgba(76, 124, 255, 0.04)",
-    "processedImg": "images/processed/laptop-29-cutout.webp"
+    "processedImg": "images/processed/laptop-29-cutout.webp",
+    "stock": 3
   },
   {
     "id": 30,
@@ -3179,7 +3208,8 @@ const LAPTOPS_INVENTORY = [
     "bgTone": "white",
     "bgColor": "rgb(255, 255, 255)",
     "tintColor": "rgba(76, 124, 255, 0.04)",
-    "processedImg": "images/processed/laptop-30-cutout.webp"
+    "processedImg": "images/processed/laptop-30-cutout.webp",
+    "stock": 3
   },
   {
     "id": 31,
@@ -3286,7 +3316,8 @@ const LAPTOPS_INVENTORY = [
     "bgTone": "white",
     "bgColor": "rgb(255, 255, 255)",
     "tintColor": "rgba(76, 124, 255, 0.04)",
-    "processedImg": "images/processed/laptop-31-cutout.webp"
+    "processedImg": "images/processed/laptop-31-cutout.webp",
+    "stock": 3
   },
   {
     "id": 32,
@@ -3393,7 +3424,8 @@ const LAPTOPS_INVENTORY = [
     "bgTone": "white",
     "bgColor": "rgb(255, 255, 255)",
     "tintColor": "rgba(76, 124, 255, 0.04)",
-    "processedImg": "images/processed/laptop-32-cutout.webp"
+    "processedImg": "images/processed/laptop-32-cutout.webp",
+    "stock": 3
   },
   {
     "id": 33,
@@ -3499,7 +3531,8 @@ const LAPTOPS_INVENTORY = [
     "bgTone": "white",
     "bgColor": "rgb(255, 255, 255)",
     "tintColor": "rgba(76, 124, 255, 0.04)",
-    "processedImg": "images/processed/laptop-33-cutout.webp"
+    "processedImg": "images/processed/laptop-33-cutout.webp",
+    "stock": 3
   },
   {
     "id": 34,
@@ -3606,7 +3639,8 @@ const LAPTOPS_INVENTORY = [
     "bgTone": "white",
     "bgColor": "rgb(255, 255, 255)",
     "tintColor": "rgba(76, 124, 255, 0.04)",
-    "processedImg": "images/processed/laptop-34-cutout.webp"
+    "processedImg": "images/processed/laptop-34-cutout.webp",
+    "stock": 3
   },
   {
     "id": 35,
@@ -3712,7 +3746,8 @@ const LAPTOPS_INVENTORY = [
     "bgTone": "white",
     "bgColor": "rgb(255, 255, 255)",
     "tintColor": "rgba(76, 124, 255, 0.04)",
-    "processedImg": "images/processed/laptop-35-cutout.webp"
+    "processedImg": "images/processed/laptop-35-cutout.webp",
+    "stock": 3
   },
   {
     "id": 36,
@@ -3818,7 +3853,8 @@ const LAPTOPS_INVENTORY = [
     "bgTone": "white",
     "bgColor": "rgb(255, 255, 255)",
     "tintColor": "rgba(76, 124, 255, 0.04)",
-    "processedImg": "images/processed/laptop-36-cutout.webp"
+    "processedImg": "images/processed/laptop-36-cutout.webp",
+    "stock": 3
   },
   {
     "id": 37,
@@ -3925,7 +3961,8 @@ const LAPTOPS_INVENTORY = [
     "bgTone": "white",
     "bgColor": "rgb(255, 255, 255)",
     "tintColor": "rgba(76, 124, 255, 0.04)",
-    "processedImg": "images/processed/laptop-37-cutout.webp"
+    "processedImg": "images/processed/laptop-37-cutout.webp",
+    "stock": 3
   },
   {
     "id": 38,
@@ -4032,7 +4069,8 @@ const LAPTOPS_INVENTORY = [
     "bgTone": "colorful",
     "bgColor": "rgb(92, 92, 92)",
     "tintColor": "rgba(92, 92, 92, 0.15)",
-    "processedImg": "images/laptop-38-hp-pavilion-15-38.jpg"
+    "processedImg": "images/laptop-38-hp-pavilion-15-38.jpg",
+    "stock": 3
   },
   {
     "id": 39,
@@ -4138,7 +4176,8 @@ const LAPTOPS_INVENTORY = [
     "bgTone": "white",
     "bgColor": "rgb(255, 255, 255)",
     "tintColor": "rgba(76, 124, 255, 0.04)",
-    "processedImg": "images/processed/laptop-39-cutout.webp"
+    "processedImg": "images/processed/laptop-39-cutout.webp",
+    "stock": 3
   },
   {
     "id": 40,
@@ -4243,7 +4282,8 @@ const LAPTOPS_INVENTORY = [
     "bgTone": "white",
     "bgColor": "rgb(255, 255, 255)",
     "tintColor": "rgba(76, 124, 255, 0.04)",
-    "processedImg": "images/processed/laptop-40-cutout.webp"
+    "processedImg": "images/processed/laptop-40-cutout.webp",
+    "stock": 3
   },
   {
     "id": 41,
@@ -4349,7 +4389,8 @@ const LAPTOPS_INVENTORY = [
     "bgTone": "white",
     "bgColor": "rgb(255, 255, 255)",
     "tintColor": "rgba(76, 124, 255, 0.04)",
-    "processedImg": "images/processed/laptop-41-cutout.webp"
+    "processedImg": "images/processed/laptop-41-cutout.webp",
+    "stock": 3
   },
   {
     "id": 42,
@@ -4454,7 +4495,8 @@ const LAPTOPS_INVENTORY = [
     "bgTone": "white",
     "bgColor": "rgb(255, 255, 255)",
     "tintColor": "rgba(76, 124, 255, 0.04)",
-    "processedImg": "images/processed/laptop-42-cutout.webp"
+    "processedImg": "images/processed/laptop-42-cutout.webp",
+    "stock": 3
   },
   {
     "id": 43,
@@ -4560,7 +4602,8 @@ const LAPTOPS_INVENTORY = [
     "bgTone": "white",
     "bgColor": "rgb(254, 254, 254)",
     "tintColor": "rgba(76, 124, 255, 0.04)",
-    "processedImg": "images/processed/laptop-43-cutout.webp"
+    "processedImg": "images/processed/laptop-43-cutout.webp",
+    "stock": 3
   },
   {
     "id": 44,
@@ -4667,7 +4710,8 @@ const LAPTOPS_INVENTORY = [
     "bgTone": "white",
     "bgColor": "rgb(255, 255, 255)",
     "tintColor": "rgba(76, 124, 255, 0.04)",
-    "processedImg": "images/processed/laptop-44-cutout.webp"
+    "processedImg": "images/processed/laptop-44-cutout.webp",
+    "stock": 3
   },
   {
     "id": 45,
@@ -4773,7 +4817,8 @@ const LAPTOPS_INVENTORY = [
     "bgTone": "white",
     "bgColor": "rgb(255, 255, 255)",
     "tintColor": "rgba(76, 124, 255, 0.04)",
-    "processedImg": "images/processed/laptop-45-cutout.webp"
+    "processedImg": "images/processed/laptop-45-cutout.webp",
+    "stock": 3
   },
   {
     "id": 46,
@@ -4879,7 +4924,8 @@ const LAPTOPS_INVENTORY = [
     "bgTone": "colorful",
     "bgColor": "rgb(177, 173, 165)",
     "tintColor": "rgba(177, 173, 165, 0.15)",
-    "processedImg": "images/laptop-46-hp-elitebook-845-g7-46.jpg"
+    "processedImg": "images/laptop-46-hp-elitebook-845-g7-46.jpg",
+    "stock": 3
   },
   {
     "id": 47,
@@ -4984,7 +5030,8 @@ const LAPTOPS_INVENTORY = [
     "bgTone": "white",
     "bgColor": "rgb(255, 255, 255)",
     "tintColor": "rgba(76, 124, 255, 0.04)",
-    "processedImg": "images/processed/laptop-47-cutout.webp"
+    "processedImg": "images/processed/laptop-47-cutout.webp",
+    "stock": 3
   },
   {
     "id": 48,
@@ -5089,7 +5136,8 @@ const LAPTOPS_INVENTORY = [
     "bgTone": "white",
     "bgColor": "rgb(255, 255, 255)",
     "tintColor": "rgba(76, 124, 255, 0.04)",
-    "processedImg": "images/processed/laptop-48-cutout.webp"
+    "processedImg": "images/processed/laptop-48-cutout.webp",
+    "stock": 3
   },
   {
     "id": 49,
@@ -5194,7 +5242,8 @@ const LAPTOPS_INVENTORY = [
     "bgTone": "white",
     "bgColor": "rgb(254, 254, 254)",
     "tintColor": "rgba(76, 124, 255, 0.04)",
-    "processedImg": "images/processed/laptop-49-cutout.webp"
+    "processedImg": "images/processed/laptop-49-cutout.webp",
+    "stock": 3
   },
   {
     "id": 50,
@@ -5299,7 +5348,8 @@ const LAPTOPS_INVENTORY = [
     "bgTone": "white",
     "bgColor": "rgb(255, 255, 255)",
     "tintColor": "rgba(76, 124, 255, 0.04)",
-    "processedImg": "images/processed/laptop-50-cutout.webp"
+    "processedImg": "images/processed/laptop-50-cutout.webp",
+    "stock": 3
   },
   {
     "id": 51,
@@ -5405,7 +5455,8 @@ const LAPTOPS_INVENTORY = [
     "bgTone": "white",
     "bgColor": "rgb(255, 255, 255)",
     "tintColor": "rgba(76, 124, 255, 0.04)",
-    "processedImg": "images/processed/laptop-51-cutout.webp"
+    "processedImg": "images/processed/laptop-51-cutout.webp",
+    "stock": 3
   },
   {
     "id": 52,
@@ -5511,7 +5562,8 @@ const LAPTOPS_INVENTORY = [
     "bgTone": "white",
     "bgColor": "rgb(255, 255, 255)",
     "tintColor": "rgba(76, 124, 255, 0.04)",
-    "processedImg": "images/processed/laptop-52-cutout.webp"
+    "processedImg": "images/processed/laptop-52-cutout.webp",
+    "stock": 3
   },
   {
     "id": 53,
@@ -5616,7 +5668,8 @@ const LAPTOPS_INVENTORY = [
     "bgTone": "white",
     "bgColor": "rgb(254, 254, 254)",
     "tintColor": "rgba(76, 124, 255, 0.04)",
-    "processedImg": "images/processed/laptop-53-cutout.webp"
+    "processedImg": "images/processed/laptop-53-cutout.webp",
+    "stock": 3
   },
   {
     "id": 54,
@@ -5721,7 +5774,8 @@ const LAPTOPS_INVENTORY = [
     "bgTone": "white",
     "bgColor": "rgb(247, 247, 247)",
     "tintColor": "rgba(76, 124, 255, 0.04)",
-    "processedImg": "images/processed/laptop-54-cutout.webp"
+    "processedImg": "images/processed/laptop-54-cutout.webp",
+    "stock": 3
   },
   {
     "id": 55,
@@ -5827,7 +5881,8 @@ const LAPTOPS_INVENTORY = [
     "bgTone": "dark",
     "bgColor": "rgb(0, 0, 0)",
     "tintColor": "rgba(45, 45, 60, 0.06)",
-    "processedImg": "images/laptop-55-hp-spectre-x360-14-ai-pc-55.jpg"
+    "processedImg": "images/laptop-55-hp-spectre-x360-14-ai-pc-55.jpg",
+    "stock": 3
   },
   {
     "id": 56,
@@ -5932,7 +5987,8 @@ const LAPTOPS_INVENTORY = [
     "bgTone": "white",
     "bgColor": "rgb(255, 255, 255)",
     "tintColor": "rgba(76, 124, 255, 0.04)",
-    "processedImg": "images/processed/laptop-56-cutout.webp"
+    "processedImg": "images/processed/laptop-56-cutout.webp",
+    "stock": 3
   },
   {
     "id": 57,
@@ -6038,7 +6094,8 @@ const LAPTOPS_INVENTORY = [
     "bgTone": "white",
     "bgColor": "rgb(255, 255, 255)",
     "tintColor": "rgba(76, 124, 255, 0.04)",
-    "processedImg": "images/processed/laptop-57-cutout.webp"
+    "processedImg": "images/processed/laptop-57-cutout.webp",
+    "stock": 3
   },
   {
     "id": 58,
@@ -6144,7 +6201,8 @@ const LAPTOPS_INVENTORY = [
     "bgTone": "white",
     "bgColor": "rgb(253, 253, 253)",
     "tintColor": "rgba(76, 124, 255, 0.04)",
-    "processedImg": "images/processed/laptop-58-cutout.webp"
+    "processedImg": "images/processed/laptop-58-cutout.webp",
+    "stock": 3
   },
   {
     "id": 59,
@@ -6250,7 +6308,8 @@ const LAPTOPS_INVENTORY = [
     "bgTone": "colorful",
     "bgColor": "rgb(177, 173, 165)",
     "tintColor": "rgba(177, 173, 165, 0.15)",
-    "processedImg": "images/laptop-59-hp-elitebook-845-g7-59.jpg"
+    "processedImg": "images/laptop-59-hp-elitebook-845-g7-59.jpg",
+    "stock": 3
   },
   {
     "id": 60,
@@ -6355,7 +6414,8 @@ const LAPTOPS_INVENTORY = [
     "bgTone": "white",
     "bgColor": "rgb(254, 254, 254)",
     "tintColor": "rgba(76, 124, 255, 0.04)",
-    "processedImg": "images/processed/laptop-60-cutout.webp"
+    "processedImg": "images/processed/laptop-60-cutout.webp",
+    "stock": 3
   },
   {
     "id": 61,
@@ -6462,7 +6522,8 @@ const LAPTOPS_INVENTORY = [
     "bgTone": "white",
     "bgColor": "rgb(255, 255, 255)",
     "tintColor": "rgba(76, 124, 255, 0.04)",
-    "processedImg": "images/processed/laptop-61-cutout.webp"
+    "processedImg": "images/processed/laptop-61-cutout.webp",
+    "stock": 3
   },
   {
     "id": 62,
@@ -6567,7 +6628,8 @@ const LAPTOPS_INVENTORY = [
     "bgTone": "white",
     "bgColor": "rgb(255, 255, 255)",
     "tintColor": "rgba(76, 124, 255, 0.04)",
-    "processedImg": "images/processed/laptop-62-cutout.webp"
+    "processedImg": "images/processed/laptop-62-cutout.webp",
+    "stock": 3
   },
   {
     "id": 63,
@@ -6672,7 +6734,8 @@ const LAPTOPS_INVENTORY = [
     "bgTone": "white",
     "bgColor": "rgb(251, 251, 251)",
     "tintColor": "rgba(76, 124, 255, 0.04)",
-    "processedImg": "images/processed/laptop-63-cutout.webp"
+    "processedImg": "images/processed/laptop-63-cutout.webp",
+    "stock": 3
   },
   {
     "id": 64,
@@ -6778,7 +6841,8 @@ const LAPTOPS_INVENTORY = [
     "bgTone": "white",
     "bgColor": "rgb(255, 255, 255)",
     "tintColor": "rgba(76, 124, 255, 0.04)",
-    "processedImg": "images/processed/laptop-64-cutout.webp"
+    "processedImg": "images/processed/laptop-64-cutout.webp",
+    "stock": 3
   },
   {
     "id": 65,
@@ -6884,7 +6948,8 @@ const LAPTOPS_INVENTORY = [
     "bgTone": "white",
     "bgColor": "rgb(255, 255, 255)",
     "tintColor": "rgba(76, 124, 255, 0.04)",
-    "processedImg": "images/processed/laptop-65-cutout.webp"
+    "processedImg": "images/processed/laptop-65-cutout.webp",
+    "stock": 3
   },
   {
     "id": 66,
@@ -6990,7 +7055,8 @@ const LAPTOPS_INVENTORY = [
     "bgTone": "white",
     "bgColor": "rgb(246, 246, 246)",
     "tintColor": "rgba(76, 124, 255, 0.04)",
-    "processedImg": "images/processed/laptop-66-cutout.webp"
+    "processedImg": "images/processed/laptop-66-cutout.webp",
+    "stock": 3
   },
   {
     "id": 67,
@@ -7095,7 +7161,8 @@ const LAPTOPS_INVENTORY = [
     "bgTone": "white",
     "bgColor": "rgb(253, 253, 253)",
     "tintColor": "rgba(76, 124, 255, 0.04)",
-    "processedImg": "images/processed/laptop-67-cutout.webp"
+    "processedImg": "images/processed/laptop-67-cutout.webp",
+    "stock": 3
   },
   {
     "id": 68,
@@ -7201,7 +7268,8 @@ const LAPTOPS_INVENTORY = [
     "bgTone": "white",
     "bgColor": "rgb(255, 255, 255)",
     "tintColor": "rgba(76, 124, 255, 0.04)",
-    "processedImg": "images/processed/laptop-68-cutout.webp"
+    "processedImg": "images/processed/laptop-68-cutout.webp",
+    "stock": 3
   },
   {
     "id": 69,
@@ -7306,7 +7374,8 @@ const LAPTOPS_INVENTORY = [
     "bgTone": "white",
     "bgColor": "rgb(254, 253, 253)",
     "tintColor": "rgba(76, 124, 255, 0.04)",
-    "processedImg": "images/processed/laptop-69-cutout.webp"
+    "processedImg": "images/processed/laptop-69-cutout.webp",
+    "stock": 3
   }
 ];
 

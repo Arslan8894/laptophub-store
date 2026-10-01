@@ -34,6 +34,7 @@ import urllib.parse
 from http.server import HTTPServer, BaseHTTPRequestHandler
 from http.cookies import SimpleCookie
 from datetime import datetime, timezone
+import base64
 
 # ─────────────────────────────────────────────────────────────
 # PATHS & CONSTANTS
@@ -198,7 +199,8 @@ def get_session_user(token: str, is_admin: bool = False) -> dict | None:
     ttl = ADMIN_TTL if is_admin else CUST_TTL
     with get_db() as conn:
         row = conn.execute(
-            "SELECT s.token, s.last_active, u.id, u.email, u.name, u.role, u.is_active "
+            "SELECT s.token, s.last_active, u.id, u.email, u.name, u.role, u.is_active, "
+            "u.phone, u.city, u.address "
             "FROM sessions s JOIN users u ON u.id=s.user_id WHERE s.token=?",
             (token,)).fetchone()
         if not row:
@@ -271,7 +273,11 @@ def load_inventory() -> list:
     start = text.find('[')
     end   = text.rfind(']') + 1
     if start != -1 and end > 0:
-        return json.loads(text[start:end])
+        laptops = json.loads(text[start:end])
+        for lap in laptops:
+            if 'stock' not in lap or lap.get('stock') is None:
+                lap['stock'] = 3
+        return laptops
     return []
 
 
@@ -279,6 +285,8 @@ def save_inventory(laptops: list) -> bool:
     for idx, lap in enumerate(laptops, start=1):
         if 'id' not in lap or not lap['id']:
             lap['id'] = idx
+        if 'stock' not in lap or lap.get('stock') is None:
+            lap['stock'] = 3
         if 'price' in lap and isinstance(lap['price'], (int, float)):
             lap['priceFormatted'] = f"Rs {int(lap['price']):,}"
             if 'priceUsd' not in lap or not lap['priceUsd']:
@@ -555,9 +563,17 @@ class LaptopHubHandler(BaseHTTPRequestHandler):
             if not user:
                 self._send(401, {'error': 'Not authenticated'}, no_cache=True)
                 return
-            self._send(200, {
+            u_info = {
                 'id': user['id'], 'name': user['name'],
-                'email': user['email'], 'role': user['role']
+                'email': user['email'], 'role': user['role'],
+                'phone': user.get('phone') or '',
+                'city': user.get('city') or '',
+                'address': user.get('address') or ''
+            }
+            self._send(200, {
+                'ok': True,
+                'user': u_info,
+                **u_info
             }, no_cache=True)
             return
 
@@ -585,7 +601,7 @@ class LaptopHubHandler(BaseHTTPRequestHandler):
                 o = dict(r)
                 o['items'] = json.loads(o['items'])
                 orders.append(o)
-            self._send(200, orders, no_cache=True)
+            self._send(200, {'ok': True, 'orders': orders}, no_cache=True)
             return
 
 
@@ -669,8 +685,8 @@ class LaptopHubHandler(BaseHTTPRequestHandler):
             return
         payload = self._json or {}
 
-        # ── customer signup ───────────────────────────────────
-        if path == '/api/auth/signup':
+        # ── customer signup / registration ─────────────────────
+        if path in ('/api/auth/signup', '/api/auth/register'):
             email    = str(payload.get('email', '')).strip().lower()
             password = str(payload.get('password', ''))
             name     = str(payload.get('name', '')).strip()[:120]
@@ -695,7 +711,7 @@ class LaptopHubHandler(BaseHTTPRequestHandler):
             ua = self.headers.get('User-Agent', '')
             token = create_session(uid, ip, ua)
             cookie = self._cookie_header(CUST_COOKIE, token, CUST_TTL)
-            self._send(201, {'id': uid, 'email': email, 'name': name, 'role': 'user'},
+            self._send(201, {'ok': True, 'id': uid, 'email': email, 'name': name, 'role': 'user'},
                        set_cookie=cookie)
             return
 
@@ -718,17 +734,18 @@ class LaptopHubHandler(BaseHTTPRequestHandler):
                 record_attempt(ip, email)
                 return self._send(401, {'error': 'Invalid credentials'})
 
-            # Customers cannot log in via customer endpoint if they're admin
+            # Admins must use dedicated admin portal
             if row['role'] == 'admin':
-                record_attempt(ip, email)
-                return self._send(401, {'error': 'Invalid credentials'})
+                return self._send(403, {'error': 'Admin accounts must use the admin portal (/admin/login)'})
 
             ua    = self.headers.get('User-Agent', '')
             token = create_session(row['id'], ip, ua)
             cookie = self._cookie_header(CUST_COOKIE, token, CUST_TTL)
             self._send(200, {
+                'ok': True,
                 'id': row['id'], 'email': row['email'],
-                'name': row['name'], 'role': row['role']
+                'name': row['name'], 'role': row['role'],
+                'user': {'id': row['id'], 'email': row['email'], 'name': row['name'], 'role': row['role']}
             }, set_cookie=cookie)
             return
 
@@ -740,6 +757,58 @@ class LaptopHubHandler(BaseHTTPRequestHandler):
                 delete_session(token)
             cookie = self._cookie_header(CUST_COOKIE, '', 0)
             self._send(200, {'ok': True}, set_cookie=cookie, no_cache=True)
+            return
+
+        # ── customer update profile ───────────────────────────
+        if path == '/api/auth/profile':
+            user = self._require_customer()
+            if not user: return
+
+            name = str(payload.get('name', '')).strip()[:120]
+            phone = str(payload.get('phone', '')).strip()
+            city = str(payload.get('city', '')).strip()[:60]
+            address = str(payload.get('address', '')).strip()[:300]
+
+            if phone and not validate_pk_phone(phone):
+                return self._send(400, {'error': 'Invalid Pakistani phone number (format: 03XX-XXXXXXX)'})
+
+            with get_db() as conn:
+                conn.execute(
+                    "UPDATE users SET name=?, phone=?, city=?, address=?, updated_at=datetime('now','utc') "
+                    "WHERE id=?",
+                    (name or user['name'], phone, city, address, user['id']))
+
+            self._send(200, {
+                'ok': True,
+                'success': True,
+                'name': name or user['name'],
+                'phone': phone,
+                'city': city,
+                'address': address
+            }, no_cache=True)
+            return
+
+        # ── customer change password ──────────────────────────
+        if path == '/api/auth/change-password':
+            user = self._require_customer()
+            if not user: return
+
+            curr_pw = str(payload.get('current_password', ''))
+            new_pw = str(payload.get('new_password', ''))
+
+            if len(new_pw) < 8:
+                return self._send(400, {'error': 'New password must be at least 8 characters'})
+
+            with get_db() as conn:
+                row = conn.execute("SELECT pass_hash FROM users WHERE id=?", (user['id'],)).fetchone()
+                if not row or not verify_password(curr_pw, row['pass_hash']):
+                    return self._send(401, {'error': 'Current password is incorrect'})
+
+                conn.execute(
+                    "UPDATE users SET pass_hash=?, updated_at=datetime('now','utc') WHERE id=?",
+                    (hash_password(new_pw), user['id']))
+
+            self._send(200, {'ok': True, 'success': True, 'message': 'Password changed successfully'}, no_cache=True)
             return
 
         # ── admin login ───────────────────────────────────────
@@ -782,10 +851,9 @@ class LaptopHubHandler(BaseHTTPRequestHandler):
             self._send(200, {'ok': True}, set_cookie=cookie, no_cache=True)
             return
 
-        # ── place order (customer, requires sign-in) ──────────
+        # ── place order (customer or guest) ──────────
         if path == '/api/orders':
-            user = self._require_customer()
-            if not user: return
+            user = self._get_cust_user()
 
             items    = payload.get('items', [])
             cust_name = str(payload.get('name', '')).strip()[:120]
@@ -804,15 +872,62 @@ class LaptopHubHandler(BaseHTTPRequestHandler):
             if not cust_addr:
                 return self._send(400, {'error': 'Delivery address is required'})
 
+            # Stock validation against inventory
+            laptops = load_inventory()
+            for item in items:
+                lid = item.get('id') or item.get('laptop_id')
+                qty = item.get('qty', 1)
+                for lap in laptops:
+                    if lap.get('id') == lid:
+                        cur_stock = lap.get('stock', 1)
+                        if cur_stock <= 0:
+                            return self._send(400, {'error': f"'{lap.get('name', 'Laptop')}' is currently out of stock."})
+                        if qty > cur_stock:
+                            return self._send(400, {'error': f"Only {cur_stock} units available for '{lap.get('name', 'Laptop')}'."})
+                        break
+
             total = sum((i.get('price', 0) * i.get('qty', 1)) for i in items)
             items_json = json.dumps(items)
 
             with get_db() as conn:
+                if user:
+                    user_id = user['id']
+                else:
+                    g = conn.execute("SELECT id FROM users WHERE email='guest@laptophub.pk'").fetchone()
+                    if g:
+                        user_id = g[0]
+                    else:
+                        conn.execute("INSERT INTO users(email,pass_hash,name,role) VALUES('guest@laptophub.pk','GUEST','Guest Customer','user')")
+                        user_id = conn.execute("SELECT last_insert_rowid()").fetchone()[0]
+
                 conn.execute(
                     "INSERT INTO orders(user_id,items,total_pkr,cust_name,cust_phone,cust_city,cust_address) "
                     "VALUES(?,?,?,?,?,?,?)",
-                    (user['id'], items_json, total, cust_name, cust_phone, cust_city, cust_addr))
+                    (user_id, items_json, total, cust_name, cust_phone, cust_city, cust_addr))
                 oid = conn.execute("SELECT last_insert_rowid()").fetchone()[0]
+
+                if user:
+                    # Update customer profile defaults in users table
+                    conn.execute(
+                        "UPDATE users SET name=COALESCE(NULLIF(name,''), ?), "
+                        "phone=COALESCE(NULLIF(phone,''), ?), "
+                        "city=COALESCE(NULLIF(city,''), ?), "
+                        "address=COALESCE(NULLIF(address,''), ?), "
+                        "updated_at=datetime('now','utc') WHERE id=?",
+                        (cust_name, cust_phone, cust_city, cust_addr, user['id']))
+
+            # Automatically decrement inventory stock
+            inv_changed = False
+            for item in items:
+                lid = item.get('id') or item.get('laptop_id')
+                qty = item.get('qty', 1)
+                for lap in laptops:
+                    if lap.get('id') == lid:
+                        lap['stock'] = max(0, lap.get('stock', 1) - qty)
+                        inv_changed = True
+                        break
+            if inv_changed:
+                save_inventory(laptops)
 
             self._send(201, {'orderId': oid, 'status': 'new', 'total': total})
             return
@@ -880,6 +995,58 @@ class LaptopHubHandler(BaseHTTPRequestHandler):
                 'tiers': current,
                 'ddr4': current.get('DDR4', {}),
                 'ddr5': current.get('DDR5', {})
+            }, no_cache=True)
+            return
+
+        # ── admin: upload image ───────────────────────────────
+        if path == '/api/admin/upload-image':
+            admin = self._require_admin()
+            if not admin: return
+
+            filename = payload.get('filename', '')
+            image_b64 = payload.get('data', '')
+
+            if not filename or not image_b64:
+                return self._send(400, {'error': 'filename and base64 data required'})
+
+            clean_name = re.sub(r'[^a-zA-Z0-9_\-\.]', '', os.path.basename(filename)).lower()
+            ext = os.path.splitext(clean_name)[1]
+            if ext not in ('.jpg', '.jpeg', '.png', '.webp'):
+                return self._send(400, {'error': 'Invalid file type. Allowed: jpg, jpeg, png, webp'})
+
+            if ',' in image_b64:
+                image_b64 = image_b64.split(',', 1)[1]
+
+            try:
+                raw_bytes = base64.b64decode(image_b64)
+            except Exception:
+                return self._send(400, {'error': 'Invalid base64 payload'})
+
+            if len(raw_bytes) > MAX_UPLOAD_BYTES:
+                return self._send(400, {'error': f'Image exceeds {MAX_UPLOAD_BYTES // (1024*1024)}MB limit'})
+
+            dest_filename = f"{os.path.splitext(clean_name)[0]}_{int(time.time())}{ext}"
+            dest_rel_path = f"images/{dest_filename}"
+            dest_abs_path = os.path.join(BASE_DIR, 'images', dest_filename)
+
+            with open(dest_abs_path, 'wb') as f:
+                f.write(raw_bytes)
+
+            bg_meta = {'bgTone': 'white', 'tintColor': 'rgba(76, 124, 255, 0.04)', 'processedImg': None}
+            try:
+                from scripts.process_image_blending import analyze_image_background
+                analysis = analyze_image_background(dest_rel_path)
+                bg_meta['bgTone'] = analysis.get('tone', 'white')
+                bg_meta['tintColor'] = analysis.get('tint_color', '')
+            except Exception as ex:
+                log.warning("Image background analysis exception: %s", ex)
+
+            log_admin_action(admin['id'], 'upload_image', None, dest_rel_path)
+            self._send(200, {
+                'success': True,
+                'path': dest_rel_path,
+                'bgTone': bg_meta['bgTone'],
+                'tintColor': bg_meta['tintColor']
             }, no_cache=True)
             return
 
