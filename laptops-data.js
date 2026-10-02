@@ -105,7 +105,7 @@ const LAPTOPS_INVENTORY = [
     "bgColor": "rgb(255, 255, 255)",
     "tintColor": "rgba(76, 124, 255, 0.04)",
     "processedImg": "images/processed/laptop-1-cutout.webp",
-    "stock": 3
+    "stock": 1
   },
   {
     "id": 2,

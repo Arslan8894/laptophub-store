@@ -465,7 +465,12 @@ class LaptopHubHandler(BaseHTTPRequestHandler):
     def _get_cust_user(self):
         self._parse_cookies()
         token = self._cookies.get(CUST_COOKIE, '')
-        return get_session_user(token, is_admin=False)
+        user = get_session_user(token, is_admin=False)
+        if not user:
+            admin_tok = self._cookies.get(ADMIN_COOKIE, '')
+            if admin_tok:
+                user = get_session_user(admin_tok, is_admin=True)
+        return user
 
     def _get_admin_user(self):
         self._parse_cookies()
@@ -482,13 +487,13 @@ class LaptopHubHandler(BaseHTTPRequestHandler):
     def _require_customer(self):
         user = self._get_cust_user()
         if not user:
-            self._send(401, {'error': 'Please sign in to continue'})
+            self._send(401, {'error': 'Please sign in to place your order'})
             return None
         return user
 
     # ── response helpers ──────────────────────────────────────
     def _send(self, code: int, body=None, extra_headers: dict = None,
-              no_cache: bool = False, set_cookie: str = None):
+              no_cache: bool = False, set_cookie = None):
         self.send_response(code)
         self.send_header('Content-Type', 'application/json')
         self.send_header('Access-Control-Allow-Origin', self.headers.get('Origin', '*'))
@@ -498,8 +503,13 @@ class LaptopHubHandler(BaseHTTPRequestHandler):
         if no_cache:
             self.send_header('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0')
             self.send_header('Pragma', 'no-cache')
+            self.send_header('Expires', '0')
         if set_cookie:
-            self.send_header('Set-Cookie', set_cookie)
+            if isinstance(set_cookie, (list, tuple)):
+                for ck in set_cookie:
+                    self.send_header('Set-Cookie', ck)
+            else:
+                self.send_header('Set-Cookie', set_cookie)
         if extra_headers:
             for k, v in extra_headers.items():
                 self.send_header(k, v)
@@ -690,6 +700,9 @@ class LaptopHubHandler(BaseHTTPRequestHandler):
             email    = str(payload.get('email', '')).strip().lower()
             password = str(payload.get('password', ''))
             name     = str(payload.get('name', '')).strip()[:120]
+            phone    = str(payload.get('phone', '')).strip()
+            city     = str(payload.get('city', '')).strip()[:60]
+            address  = str(payload.get('address', '')).strip()[:300]
 
             if not validate_email(email):
                 return self._send(400, {'error': 'Invalid email address'})
@@ -697,22 +710,32 @@ class LaptopHubHandler(BaseHTTPRequestHandler):
                 return self._send(400, {'error': 'Password must be at least 8 characters'})
             if not name:
                 return self._send(400, {'error': 'Name is required'})
+            if phone and not validate_pk_phone(phone):
+                return self._send(400, {'error': 'Please enter a valid Pakistani phone number (format: 03XX-XXXXXXX)'})
 
             with get_db() as conn:
                 existing = conn.execute("SELECT id FROM users WHERE email=?", (email,)).fetchone()
                 if existing:
                     return self._send(409, {'error': 'An account with this email already exists'})
                 conn.execute(
-                    "INSERT INTO users(email,name,pass_hash,role) VALUES(?,?,?,'user')",
-                    (email, name, hash_password(password)))
+                    "INSERT INTO users(email,name,phone,city,address,pass_hash,role) VALUES(?,?,?,?,?,?,'user')",
+                    (email, name, phone, city, address, hash_password(password)))
                 uid = conn.execute("SELECT last_insert_rowid()").fetchone()[0]
 
             ip = self.client_address[0]
             ua = self.headers.get('User-Agent', '')
             token = create_session(uid, ip, ua)
-            cookie = self._cookie_header(CUST_COOKIE, token, CUST_TTL)
-            self._send(201, {'ok': True, 'id': uid, 'email': email, 'name': name, 'role': 'user'},
-                       set_cookie=cookie)
+            cust_cookie = self._cookie_header(CUST_COOKIE, token, CUST_TTL)
+            clear_admin = self._cookie_header(ADMIN_COOKIE, '', 0, path='/')
+            u_info = {
+                'id': uid, 'email': email, 'name': name,
+                'phone': phone, 'city': city, 'address': address, 'role': 'user'
+            }
+            self._send(201, {
+                'ok': True, 'id': uid, 'email': email, 'name': name,
+                'phone': phone, 'city': city, 'address': address, 'role': 'user',
+                'user': u_info
+            }, set_cookie=[cust_cookie, clear_admin])
             return
 
         # ── customer login ────────────────────────────────────
@@ -726,7 +749,7 @@ class LaptopHubHandler(BaseHTTPRequestHandler):
 
             with get_db() as conn:
                 row = conn.execute(
-                    "SELECT id,email,name,role,pass_hash,is_active FROM users WHERE email=?",
+                    "SELECT id,email,name,role,pass_hash,is_active,phone,city,address FROM users WHERE email=?",
                     (email,)).fetchone()
 
             valid = row and verify_password(password, row['pass_hash'])
@@ -734,29 +757,52 @@ class LaptopHubHandler(BaseHTTPRequestHandler):
                 record_attempt(ip, email)
                 return self._send(401, {'error': 'Invalid credentials'})
 
-            # Admins must use dedicated admin portal
-            if row['role'] == 'admin':
-                return self._send(403, {'error': 'Admin accounts must use the admin portal (/admin/login)'})
-
             ua    = self.headers.get('User-Agent', '')
             token = create_session(row['id'], ip, ua)
-            cookie = self._cookie_header(CUST_COOKIE, token, CUST_TTL)
+
+            if row['role'] == 'admin':
+                admin_cookie = self._cookie_header(ADMIN_COOKIE, token, ADMIN_TTL)
+                cust_cookie  = self._cookie_header(CUST_COOKIE, token, ADMIN_TTL)
+                u_info = {
+                    'id': row['id'], 'email': row['email'], 'name': row['name'],
+                    'role': 'admin', 'phone': row['phone'] or '',
+                    'city': row['city'] or '', 'address': row['address'] or ''
+                }
+                self._send(200, {
+                    'ok': True, 'id': row['id'], 'email': row['email'],
+                    'name': row['name'], 'role': 'admin', 'redirect': '/admin/',
+                    'user': u_info
+                }, set_cookie=[admin_cookie, cust_cookie])
+                return
+
+            cust_cookie = self._cookie_header(CUST_COOKIE, token, CUST_TTL)
+            clear_admin = self._cookie_header(ADMIN_COOKIE, '', 0, path='/')
+            u_info = {
+                'id': row['id'], 'email': row['email'], 'name': row['name'],
+                'role': 'user', 'phone': row['phone'] or '',
+                'city': row['city'] or '', 'address': row['address'] or ''
+            }
             self._send(200, {
-                'ok': True,
-                'id': row['id'], 'email': row['email'],
-                'name': row['name'], 'role': row['role'],
-                'user': {'id': row['id'], 'email': row['email'], 'name': row['name'], 'role': row['role']}
-            }, set_cookie=cookie)
+                'ok': True, 'id': row['id'], 'email': row['email'],
+                'name': row['name'], 'role': 'user',
+                'user': u_info
+            }, set_cookie=[cust_cookie, clear_admin])
             return
 
         # ── customer logout ───────────────────────────────────
         if path == '/api/auth/logout':
             self._parse_cookies()
-            token = self._cookies.get(CUST_COOKIE, '')
-            if token:
-                delete_session(token)
-            cookie = self._cookie_header(CUST_COOKIE, '', 0)
-            self._send(200, {'ok': True}, set_cookie=cookie, no_cache=True)
+            ctoken = self._cookies.get(CUST_COOKIE, '')
+            atoken = self._cookies.get(ADMIN_COOKIE, '')
+            if ctoken:
+                delete_session(ctoken)
+            if atoken:
+                delete_session(atoken)
+            cookies = [
+                self._cookie_header(CUST_COOKIE, '', 0, path='/'),
+                self._cookie_header(ADMIN_COOKIE, '', 0, path='/')
+            ]
+            self._send(200, {'ok': True}, set_cookie=cookies, no_cache=True)
             return
 
         # ── customer update profile ───────────────────────────
@@ -844,16 +890,24 @@ class LaptopHubHandler(BaseHTTPRequestHandler):
         # ── admin logout ──────────────────────────────────────
         if path == '/api/admin/logout':
             self._parse_cookies()
-            token = self._cookies.get(ADMIN_COOKIE, '')
-            if token:
-                delete_session(token)
-            cookie = self._cookie_header(ADMIN_COOKIE, '', 0, path='/')
-            self._send(200, {'ok': True}, set_cookie=cookie, no_cache=True)
+            ctoken = self._cookies.get(CUST_COOKIE, '')
+            atoken = self._cookies.get(ADMIN_COOKIE, '')
+            if ctoken:
+                delete_session(ctoken)
+            if atoken:
+                delete_session(atoken)
+            cookies = [
+                self._cookie_header(ADMIN_COOKIE, '', 0, path='/'),
+                self._cookie_header(CUST_COOKIE, '', 0, path='/')
+            ]
+            self._send(200, {'ok': True}, set_cookie=cookies, no_cache=True)
             return
 
-        # ── place order (customer or guest) ──────────
+        # ── place order (signed-in customer only) ──────────
         if path == '/api/orders':
-            user = self._get_cust_user()
+            user = self._require_customer()
+            if not user:
+                return
 
             items    = payload.get('items', [])
             cust_name = str(payload.get('name', '')).strip()[:120]
@@ -890,31 +944,21 @@ class LaptopHubHandler(BaseHTTPRequestHandler):
             items_json = json.dumps(items)
 
             with get_db() as conn:
-                if user:
-                    user_id = user['id']
-                else:
-                    g = conn.execute("SELECT id FROM users WHERE email='guest@laptophub.pk'").fetchone()
-                    if g:
-                        user_id = g[0]
-                    else:
-                        conn.execute("INSERT INTO users(email,pass_hash,name,role) VALUES('guest@laptophub.pk','GUEST','Guest Customer','user')")
-                        user_id = conn.execute("SELECT last_insert_rowid()").fetchone()[0]
-
+                user_id = user['id']
                 conn.execute(
                     "INSERT INTO orders(user_id,items,total_pkr,cust_name,cust_phone,cust_city,cust_address) "
                     "VALUES(?,?,?,?,?,?,?)",
                     (user_id, items_json, total, cust_name, cust_phone, cust_city, cust_addr))
                 oid = conn.execute("SELECT last_insert_rowid()").fetchone()[0]
 
-                if user:
-                    # Update customer profile defaults in users table
-                    conn.execute(
-                        "UPDATE users SET name=COALESCE(NULLIF(name,''), ?), "
-                        "phone=COALESCE(NULLIF(phone,''), ?), "
-                        "city=COALESCE(NULLIF(city,''), ?), "
-                        "address=COALESCE(NULLIF(address,''), ?), "
-                        "updated_at=datetime('now','utc') WHERE id=?",
-                        (cust_name, cust_phone, cust_city, cust_addr, user['id']))
+                # Update customer profile defaults in users table
+                conn.execute(
+                    "UPDATE users SET name=COALESCE(NULLIF(name,''), ?), "
+                    "phone=COALESCE(NULLIF(phone,''), ?), "
+                    "city=COALESCE(NULLIF(city,''), ?), "
+                    "address=COALESCE(NULLIF(address,''), ?), "
+                    "updated_at=datetime('now','utc') WHERE id=?",
+                    (cust_name, cust_phone, cust_city, cust_addr, user['id']))
 
             # Automatically decrement inventory stock
             inv_changed = False
@@ -1287,6 +1331,8 @@ class LaptopHubHandler(BaseHTTPRequestHandler):
         self.send_header('Content-Length', str(size))
         if no_cache:
             self.send_header('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0')
+            self.send_header('Pragma', 'no-cache')
+            self.send_header('Expires', '0')
         else:
             self.send_header('Cache-Control', 'max-age=300')
         self.end_headers()

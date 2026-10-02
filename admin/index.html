@@ -450,8 +450,8 @@ html[data-theme="light"] {
     <button class="btn-nav-out" onclick="toggleAdminTheme()" id="adminThemeBtn">
       <span id="adminThemeIcon">☀️</span> <span id="adminThemeLabel">Light Mode</span>
     </button>
-    <a href="../laptophub.html" target="_blank" class="btn-nav-out">
-      <span>Storefront ↗</span>
+    <a href="../laptophub.html" class="btn-nav-out">
+      <span>View Store</span>
     </a>
     <button class="btn-nav-out btn-danger" onclick="adminSignOut()">
       <span>Sign Out</span>
@@ -1499,6 +1499,13 @@ async function adminSignOut() {
   await fetch('/api/admin/logout', { method: 'POST', credentials: 'include' });
   window.location.replace('/admin/login');
 }
+
+// Prevent back-button viewing after signout via bfcache
+window.addEventListener('pageshow', function(e) {
+  if (e.persisted) {
+    window.location.reload();
+  }
+});
 
 // Start
 initAdminTheme();

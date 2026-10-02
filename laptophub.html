@@ -1733,24 +1733,6 @@
     </button>
     <div id="userAccountSection" style="position:relative">
       <button class="nav-btn" id="btnSignIn" onclick="openLoginModal()">Sign In</button>
-      <div class="user-dropdown" id="userDropdown">
-        <div class="user-dropdown-header">
-          <div class="user-dropdown-name" id="dropdownUserName">User</div>
-          <div class="user-dropdown-email" id="dropdownUserPhone">+92 326 1398594</div>
-        </div>
-        <button class="user-dropdown-item" onclick="openMyOrdersModal(); toggleUserDropdown(false)">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
-          My Orders
-        </button>
-        <button class="user-dropdown-item" onclick="openProfileModal(); toggleUserDropdown(false)">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="7" r="4"/><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/></svg>
-          Profile & Settings
-        </button>
-        <button class="user-dropdown-item danger" onclick="signOutUser()">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" x2="9" y1="12" y2="12"/></svg>
-          Sign Out
-        </button>
-      </div>
     </div>
     <button class="mobile-nav-toggle" id="mobileNavBtn" onclick="toggleMobileNav()" aria-label="Open mobile navigation menu">☰</button>
   </div>
@@ -3246,6 +3228,19 @@
 
   function orderModalViaWhatsApp() {
     if (!activeModalLaptop) return;
+
+    if (!currentUser || !currentUser.loggedIn) {
+      pendingBuyAction = {
+        type: 'modal_whatsapp',
+        laptopId: activeModalLaptop.id,
+        ram: modalSelectedRam,
+        storage: modalSelectedStorage,
+        comment: document.getElementById('lmodalComment') ? document.getElementById('lmodalComment').value.trim() : ''
+      };
+      openLoginModal('Please sign in to place your order');
+      return;
+    }
+
     const comment = document.getElementById('lmodalComment').value.trim();
     const storText = modalSelectedStorage >= 1000 ? '1 TB NVMe SSD' : `${modalSelectedStorage} GB NVMe SSD`;
     const ramText = `${modalSelectedRam} GB ${activeModalLaptop.fullSpecs?.memoryStorage?.ramType || 'RAM'}`;
@@ -3291,6 +3286,7 @@
       if (document.getElementById('custName') && currentUser.name) document.getElementById('custName').value = currentUser.name;
       if (document.getElementById('custPhone') && currentUser.phone) document.getElementById('custPhone').value = currentUser.phone;
       if (document.getElementById('custCity') && currentUser.city) document.getElementById('custCity').value = currentUser.city;
+      if (document.getElementById('custAddress') && currentUser.address) document.getElementById('custAddress').value = currentUser.address;
     }
     document.getElementById('checkoutModal').classList.add('open');
   }
@@ -3301,6 +3297,13 @@
 
   async function handlePlaceOrder(e) {
     e.preventDefault();
+    if (!currentUser || !currentUser.loggedIn) {
+      closeCheckoutModal();
+      pendingBuyAction = { type: 'cod_checkout' };
+      openLoginModal('Please sign in to place your order');
+      return;
+    }
+
     const name = document.getElementById('custName').value.trim();
     const phone = document.getElementById('custPhone').value.trim();
     const city = document.getElementById('custCity').value;
@@ -3310,10 +3313,20 @@
       const res = await fetch('/api/orders', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
         body: JSON.stringify({ items: cart, name, phone, city, address })
       });
       const data = await res.json();
       if (!res.ok) {
+        if (res.status === 401) {
+          closeCheckoutModal();
+          currentUser = null;
+          localStorage.removeItem('lh_user');
+          renderUserNav();
+          pendingBuyAction = { type: 'cod_checkout' };
+          openLoginModal('Please sign in to place your order');
+          return;
+        }
         showToast(data.error || 'Failed to place order.');
         return;
       }
@@ -3321,6 +3334,15 @@
       const orderId = '#LH-' + data.orderId;
       document.getElementById('confirmOrderId').textContent = orderId;
       document.getElementById('confirmCustomer').textContent = `${name} (${city})`;
+
+      // Update current user profile delivery memory
+      if (currentUser) {
+        currentUser.name = name;
+        currentUser.phone = phone;
+        currentUser.city = city;
+        currentUser.address = address;
+        localStorage.setItem('lh_user', JSON.stringify(currentUser));
+      }
 
       cart = [];
       saveCart();
@@ -3345,8 +3367,9 @@
       const res = await fetch('/api/auth/me', { credentials: 'include' });
       if (res.ok) {
         const data = await res.json();
-        if (data.user && data.user.role === 'user') {
-          currentUser = { ...data.user, loggedIn: true };
+        const u = data.user || data;
+        if (u && (u.role === 'user' || u.role === 'admin')) {
+          currentUser = { ...u, loggedIn: true };
           localStorage.setItem('lh_user', JSON.stringify(currentUser));
         } else {
           currentUser = null;
@@ -3366,8 +3389,22 @@
     const section = document.getElementById('userAccountSection');
     if (!section) return;
 
+    // Mobile nav drawer admin item synchronization
+    const mobileLinks = document.querySelector('.mobile-nav-links');
+    const existingMobileAdmin = document.getElementById('mobileAdminLink');
+
     if (currentUser && currentUser.loggedIn) {
       const displayName = currentUser.name || (currentUser.email ? currentUser.email.split('@')[0] : 'Customer');
+      const isAdmin = currentUser.role === 'admin';
+
+      // Admin panel entry in dropdown only when role === 'admin'
+      const adminDropdownItem = isAdmin ? `
+        <a href="/admin/" class="user-dropdown-item" style="color:var(--blue);font-weight:700;border-bottom:1px solid var(--border)">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+          <span>Admin Panel</span>
+        </a>
+      ` : '';
+
       section.innerHTML = `
         <button class="nav-user-btn" onclick="toggleUserDropdown()" aria-label="Account menu">
           <span class="user-avatar-badge" style="display:inline-flex;align-items:center;justify-content:center;">
@@ -3378,9 +3415,10 @@
         </button>
         <div class="user-dropdown" id="userDropdown">
           <div class="user-dropdown-header">
-            <div class="user-dropdown-name">${escapeHtml(currentUser.name || 'Valued Customer')}</div>
+            <div class="user-dropdown-name">${escapeHtml(currentUser.name || (isAdmin ? 'Administrator' : 'Valued Customer'))}</div>
             <div class="user-dropdown-email">${escapeHtml(currentUser.phone || currentUser.email || '')}</div>
           </div>
+          ${adminDropdownItem}
           <button class="user-dropdown-item" onclick="openMyOrdersModal(); toggleUserDropdown(false)">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
             <span>My Orders</span>
@@ -3395,10 +3433,25 @@
           </button>
         </div>
       `;
+
+      // Mobile drawer sync
+      if (isAdmin) {
+        if (mobileLinks && !existingMobileAdmin) {
+          const li = document.createElement('li');
+          li.id = 'mobileAdminLink';
+          li.innerHTML = '<a href="/admin/" onclick="toggleMobileNav(false)" style="color:var(--blue);font-weight:700">⚙️ Admin Panel</a>';
+          mobileLinks.appendChild(li);
+        }
+      } else if (existingMobileAdmin) {
+        existingMobileAdmin.remove();
+      }
     } else {
       section.innerHTML = `
         <button class="nav-btn" onclick="openLoginModal()">Sign In</button>
       `;
+      if (existingMobileAdmin) {
+        existingMobileAdmin.remove();
+      }
     }
   }
 
@@ -3428,7 +3481,11 @@
     authMode = mode;
     document.getElementById('tabSignIn').classList.toggle('active', mode === 'signin');
     document.getElementById('tabRegister').classList.toggle('active', mode === 'register');
-    document.getElementById('groupFullName').style.display = mode === 'register' ? 'flex' : 'none';
+    const regDisplay = mode === 'register' ? 'flex' : 'none';
+    ['groupFullName', 'groupPhone', 'groupCity', 'groupAddress'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.style.display = regDisplay;
+    });
     document.getElementById('btnAuthSubmit').textContent = mode === 'register' ? 'Create Account & Sign In' : 'Sign In to LaptopHUB';
   }
 
@@ -3460,13 +3517,33 @@
     const pass = document.getElementById('authPass').value;
     const name = (authMode === 'register' && document.getElementById('authName')) 
       ? document.getElementById('authName').value.trim() : '';
+    const phone = (authMode === 'register' && document.getElementById('authPhone'))
+      ? document.getElementById('authPhone').value.trim() : '';
+    const city = (authMode === 'register' && document.getElementById('authCity'))
+      ? document.getElementById('authCity').value : 'Lahore';
+    const address = (authMode === 'register' && document.getElementById('authAddress'))
+      ? document.getElementById('authAddress').value.trim() : '';
 
     if (authMode === 'register') {
+      if (!name) {
+        showToast('Please enter your full name');
+        return;
+      }
+      const pkPhoneRe = /^(?:\+92|0092|0)?3[0-9]{2}[-\s]?[0-9]{7}$/;
+      if (!phone || !pkPhoneRe.test(phone)) {
+        showToast('Please enter a valid Pakistani phone number (e.g., 0326-1398594)');
+        return;
+      }
+      if (!address) {
+        showToast('Please enter your delivery address');
+        return;
+      }
       try {
         const res = await fetch('/api/auth/register', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email, password: pass, name })
+          credentials: 'include',
+          body: JSON.stringify({ email, password: pass, name, phone, city, address })
         });
         const data = await res.json();
         if (!res.ok) {
@@ -3477,11 +3554,13 @@
         const loginRes = await fetch('/api/auth/login', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
+          credentials: 'include',
           body: JSON.stringify({ email, password: pass })
         });
         const loginData = await loginRes.json();
         if (loginRes.ok) {
-          currentUser = { ...loginData.user, loggedIn: true };
+          const userObj = loginData.user || loginData;
+          currentUser = { ...userObj, loggedIn: true };
           localStorage.setItem('lh_user', JSON.stringify(currentUser));
           const action = pendingBuyAction;
           closeLoginModal();
@@ -3499,23 +3578,31 @@
         const res = await fetch('/api/auth/login', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
+          credentials: 'include',
           body: JSON.stringify({ email, password: pass })
         });
         const data = await res.json();
         if (!res.ok) {
-          if (res.status === 403 || (data.error && data.error.includes('admin portal'))) {
-            showToast('Admin account detected. Redirecting to admin portal...');
-            setTimeout(() => { window.location.href = '/admin/login'; }, 1000);
-            return;
-          }
           showToast(data.error || 'Invalid credentials');
           return;
         }
-        currentUser = { ...data.user, loggedIn: true };
+
+        const userObj = data.user || data;
+        const isAdmin = data.role === 'admin' || userObj.role === 'admin';
+
+        currentUser = { ...userObj, loggedIn: true, role: isAdmin ? 'admin' : 'user' };
         localStorage.setItem('lh_user', JSON.stringify(currentUser));
+        renderUserNav();
+
+        if (isAdmin) {
+          closeLoginModal();
+          showToast('Admin account authenticated! Redirecting to Admin Dashboard...');
+          setTimeout(() => { window.location.href = '/admin/'; }, 600);
+          return;
+        }
+
         const action = pendingBuyAction;
         closeLoginModal();
-        renderUserNav();
         showToast(`Welcome back, ${currentUser.name || 'Customer'}!`);
         resumePendingBuyAction(action);
       } catch (err) {
@@ -3533,6 +3620,8 @@
       orderCardViaWhatsApp(action.lapId);
     } else if (action.type === 'cod_checkout') {
       openCheckoutModal();
+    } else if (action.type === 'modal_whatsapp') {
+      orderModalViaWhatsApp();
     }
   }
 
@@ -3541,6 +3630,7 @@
       const res = await fetch('/api/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
         body: JSON.stringify({ email: 'arslan@laptophub.pk', password: 'Password123!' })
       });
       if (res.ok) {
@@ -3569,7 +3659,7 @@
 
   async function signOutUser() {
     try {
-      await fetch('/api/auth/logout', { method: 'POST' });
+      await fetch('/api/auth/logout', { method: 'POST', credentials: 'include' });
     } catch(e) {}
     currentUser = null;
     localStorage.removeItem('lh_user');
