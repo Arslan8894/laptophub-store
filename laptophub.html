@@ -173,12 +173,15 @@
 
   /* HERO */
   .hero {
-    min-height: 85vh;
+    min-height: 80vh;
     display: flex;
-    align-items: center; justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
     position: relative;
     overflow: hidden;
-    padding: 6rem 2rem 4rem;
+    padding: 8.5rem 2rem 4.5rem;
   }
 
   .hero-noise {
@@ -223,10 +226,11 @@
   h1.hero-h {
     font-family: var(--font-display);
     font-size: clamp(2.8rem, 6.5vw, 5.2rem);
-    font-weight: 700; line-height: 1.04;
+    font-weight: 700; line-height: 1.08;
     letter-spacing: -0.03em;
     margin-bottom: 1.5rem;
     color: var(--heading);
+    text-align: center;
     animation: up 0.7s 0.08s ease both;
     transition: color 0.3s;
   }
@@ -234,14 +238,17 @@
 
   .hero-p {
     font-size: 1.05rem; color: var(--subtle);
-    max-width: 520px; line-height: 1.75;
-    margin-bottom: 2.5rem; font-weight: 400;
+    max-width: 540px; line-height: 1.75;
+    margin: 0 auto 2.5rem; font-weight: 400;
+    text-align: center;
     animation: up 0.7s 0.16s ease both;
     transition: color 0.3s;
   }
 
   .hero-actions {
     display: flex; gap: 0.85rem;
+    justify-content: center;
+    align-items: center;
     animation: up 0.7s 0.24s ease both;
   }
   .btn-p {
@@ -984,7 +991,7 @@
     .sec, .catalog-toolbar { padding: 2rem 1rem; }
     .pgrid { grid-template-columns: 1fr; gap: 1.2rem; }
     .pcard { padding: 1.2rem; }
-    .hero { padding: 3rem 1rem 2rem; }
+    .hero { padding: 6.5rem 1rem 3rem; }
     .hero-h { font-size: clamp(2.1rem, 9vw, 2.8rem); }
     .cta-band { margin: 2rem 0; padding: 2rem 1rem; border-radius: 0; }
   }
@@ -1263,7 +1270,7 @@
 <script src="store-config.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="js/animations/glass-nav.js" defer></script>
-<script src="js/animations/tab-switcher.js" defer></script>
+<script src="js/animations/consult-matcher.js" defer></script>
 <script src="js/animations/glass-effects.js" defer></script>
 </head>
 <body>
@@ -1279,7 +1286,7 @@
       <div class="glass-lens-highlight"></div>
       <li><a href="#inventory" class="active">All Laptops</a></li>
       <li>
-        <a href="consult.html">
+        <a href="#consult">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
           Consult Me
         </a>
@@ -1317,7 +1324,7 @@
   </div>
   <ul class="mobile-nav-links">
     <li><a href="#inventory" onclick="toggleMobileNav(false)">All Laptops</a></li>
-    <li><a href="consult.html" onclick="toggleMobileNav(false)">Consult Me</a></li>
+    <li><a href="#consult" onclick="toggleMobileNav(false)">Consult Me</a></li>
     <li><a href="#reviews" onclick="toggleMobileNav(false)">Customer Reviews</a></li>
     <li><a href="https://wa.me/923261398594" target="_blank" rel="noopener" onclick="toggleMobileNav(false)" style="color:#25d366">WhatsApp Support</a></li>
   </ul>
@@ -1357,32 +1364,7 @@
   </div>
 </div>
 
-<!-- STEP 4: LIQUID GLASS VIEW TAB SWITCHER -->
-<div class="glass-tab-switcher-wrap" id="mainViewSwitcherWrap">
-  <div class="glass-tab-switcher" role="tablist" aria-label="Store View Selection">
-    <div class="glass-sliding-indicator" id="glassTabIndicator"></div>
-    <button class="glass-tab-btn active" role="tab" id="tab-inventory" aria-selected="true" aria-controls="tabpanel-inventory" data-tab="inventory">
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="3" rx="2"/><line x1="8" x2="16" y1="21" y2="21"/><line x1="12" x2="12" y1="17" y2="21"/></svg>
-      <span>All Laptops</span>
-      <span class="tab-badge">69</span>
-    </button>
-    <button class="glass-tab-btn" role="tab" id="tab-consult" aria-selected="false" aria-controls="tabpanel-consult" data-tab="consult">
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/><path d="m11 8v6"/><path d="m8 11h6"/></svg>
-      <span>Consult Me</span>
-      <span class="tab-badge-pulse">AI</span>
-    </button>
-    <button class="glass-tab-btn" role="tab" id="tab-reviews" aria-selected="false" aria-controls="tabpanel-reviews" data-tab="reviews">
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-      <span>Reviews</span>
-      <span class="tab-badge">★ 4.9</span>
-    </button>
-  </div>
-</div>
-
-<div class="store-tab-panels" id="storeTabPanels">
-  <!-- TAB PANEL 1: ALL LAPTOPS CATALOG -->
-  <div class="main-tab-panel active-tab" id="tabpanel-inventory" role="tabpanel" aria-labelledby="tab-inventory">
-    <!-- CATALOG TOOLBAR -->
+<!-- CATALOG TOOLBAR -->
     <div class="catalog-toolbar" id="inventory">
       <div class="filter-tabs">
         <button class="filter-btn active" onclick="filterBrand('all', this)">All Laptops (69)</button>
@@ -1437,10 +1419,9 @@
       <div class="stat-cell"><div class="stat-num">3yr</div><div class="stat-label">Official Warranty</div></div>
       <div class="stat-cell"><div class="stat-num">12K+</div><div class="stat-label">Verified Pakistani Buyers</div></div>
     </div>
-  </div>
 
-  <!-- TAB PANEL 2: EMBEDDED LIQUID GLASS CONSULT ME -->
-  <div class="main-tab-panel hidden-tab" id="tabpanel-consult" role="tabpanel" aria-labelledby="tab-consult">
+<!-- HARDWARE MATCHER / QUICK CONSULTATION -->
+<section class="sec rev" id="consult" style="padding-top:1.5rem; padding-bottom:3rem;">
     <div class="consult-panel-container">
       <div class="consult-glass-card glass-specular">
         <div class="consult-panel-header">
@@ -1463,7 +1444,7 @@
 
         <!-- Live Matches Grid -->
         <div class="consult-matches-grid" id="consultMatchesGrid">
-          <!-- Populated dynamically by tab-switcher.js from LAPTOPS_INVENTORY -->
+          <!-- Populated dynamically by consult-matcher.js from LAPTOPS_INVENTORY -->
         </div>
 
         <!-- Bottom Action Bar -->
@@ -1480,46 +1461,43 @@
       </div>
     </div>
   </div>
+</section>
 
-  <!-- TAB PANEL 3: REVIEWS -->
-  <div class="main-tab-panel hidden-tab" id="tabpanel-reviews" role="tabpanel" aria-labelledby="tab-reviews">
-    <!-- REVIEWS -->
-    <section class="sec rev" id="reviews" style="padding-top:1.5rem">
-      <div class="sec-head">
-        <div>
-          <p class="sec-pre">Customer Feedback</p>
-          <h2 class="sec-title">What Buyers Say</h2>
-        </div>
-      </div>
-      <div class="tgrid">
-        <div class="tcard">
-          <div class="tcard-stars"><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span></div>
-          <p class="tcard-text">"Ordered the Dell Latitude 7430 for our dev team in Lahore. Pristine condition, thermal paste was fresh, and the battery gives 8+ hours easily."</p>
-          <div class="tcard-author">
-            <div class="tauthor-av av-b">AK</div>
-            <div><div class="tauthor-name">Ahmed K.</div><div class="tauthor-role">Software Engineer, Lahore</div></div>
-          </div>
-        </div>
-        <div class="tcard">
-          <div class="tcard-stars"><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span></div>
-          <p class="tcard-text">"Got the MacBook Pro M2 delivered via insured courier in Karachi. Verified serial number on Apple's coverage site immediately. 100% authentic."</p>
-          <div class="tcard-author">
-            <div class="tauthor-av av-g">SB</div>
-            <div><div class="tauthor-name">Sara B.</div><div class="tauthor-role">Senior Designer, Karachi</div></div>
-          </div>
-        </div>
-        <div class="tcard">
-          <div class="tcard-stars"><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span></div>
-          <p class="tcard-text">"The HP Spectre x360 OLED screen is unbelievable for client presentations. Arrived bubble-wrapped in original packaging within 24 hours."</p>
-          <div class="tcard-author">
-            <div class="tauthor-av av-r">UR</div>
-            <div><div class="tauthor-name">Usman R.</div><div class="tauthor-role">CS Student, Islamabad</div></div>
-          </div>
-        </div>
-      </div>
-    </section>
+<!-- REVIEWS -->
+<section class="sec rev" id="reviews" style="padding-top:1.5rem">
+  <div class="sec-head">
+    <div>
+      <p class="sec-pre">Customer Feedback</p>
+      <h2 class="sec-title">What Buyers Say</h2>
+    </div>
   </div>
-</div>
+  <div class="tgrid">
+    <div class="tcard">
+      <div class="tcard-stars"><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span></div>
+      <p class="tcard-text">"Ordered the Dell Latitude 7430 for our dev team in Lahore. Pristine condition, thermal paste was fresh, and the battery gives 8+ hours easily."</p>
+      <div class="tcard-author">
+        <div class="tauthor-av av-b">AK</div>
+        <div><div class="tauthor-name">Ahmed K.</div><div class="tauthor-role">Software Engineer, Lahore</div></div>
+      </div>
+    </div>
+    <div class="tcard">
+      <div class="tcard-stars"><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span></div>
+      <p class="tcard-text">"Got the MacBook Pro M2 delivered via insured courier in Karachi. Verified serial number on Apple's coverage site immediately. 100% authentic."</p>
+      <div class="tcard-author">
+        <div class="tauthor-av av-g">SB</div>
+        <div><div class="tauthor-name">Sara B.</div><div class="tauthor-role">Senior Designer, Karachi</div></div>
+      </div>
+    </div>
+    <div class="tcard">
+      <div class="tcard-stars"><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span></div>
+      <p class="tcard-text">"The HP Spectre x360 OLED screen is unbelievable for client presentations. Arrived bubble-wrapped in original packaging within 24 hours."</p>
+      <div class="tcard-author">
+        <div class="tauthor-av av-r">UR</div>
+        <div><div class="tauthor-name">Usman R.</div><div class="tauthor-role">CS Student, Islamabad</div></div>
+      </div>
+    </div>
+  </div>
+</section>
 
 <!-- FAQ -->
 <section class="sec rev" id="faq" style="padding-top:0">

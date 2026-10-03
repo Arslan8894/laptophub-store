@@ -88,15 +88,18 @@
 
     // Cache offsets to avoid layout thrashing
     let cachedReviewsOffset = 0;
+    let cachedConsultOffset = 0;
     let cachedInventoryOffset = 0;
 
     function updateOffsets() {
       const reviewsSec = document.getElementById('reviews');
+      const consultSec = document.getElementById('consult');
       const inventorySec = document.getElementById('inventory');
       if (reviewsSec) cachedReviewsOffset = reviewsSec.offsetTop;
+      if (consultSec) cachedConsultOffset = consultSec.offsetTop;
       if (inventorySec) cachedInventoryOffset = inventorySec.offsetTop;
     }
-    setTimeout(updateOffsets, 200);
+    setTimeout(updateOffsets, 300);
 
     // Update active tab on scroll throttled via requestAnimationFrame
     let scrollRafId = null;
@@ -104,12 +107,14 @@
       if (scrollRafId) return;
       scrollRafId = requestAnimationFrame(() => {
         scrollRafId = null;
-        const scrollPos = window.scrollY + 120;
+        const scrollPos = window.scrollY + 140;
 
         let currentSec = null;
-        if (cachedReviewsOffset && scrollPos >= cachedReviewsOffset) {
+        if (cachedReviewsOffset && scrollPos >= cachedReviewsOffset - 80) {
           currentSec = '#reviews';
-        } else if (cachedInventoryOffset && scrollPos >= cachedInventoryOffset - 80) {
+        } else if (cachedConsultOffset && scrollPos >= cachedConsultOffset - 80) {
+          currentSec = '#consult';
+        } else if (cachedInventoryOffset && scrollPos >= cachedInventoryOffset - 100) {
           currentSec = '#inventory';
         }
 

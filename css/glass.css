@@ -101,7 +101,6 @@
 
 /* Dynamic Radial Specular Glare Follower */
 .liquid-glass-nav::before,
-.glass-tab-switcher::before,
 .consult-glass-card::after {
   content: '';
   position: absolute;
@@ -120,7 +119,6 @@
 }
 
 [data-theme="light"] .liquid-glass-nav::before,
-[data-theme="light"] .glass-tab-switcher::before,
 [data-theme="light"] .consult-glass-card::after {
   background: radial-gradient(
     circle 220px at var(--glass-glare-x, 50%) var(--glass-glare-y, 20%),
@@ -408,194 +406,8 @@ nav.liquid-glass-nav .nav-user-btn {
 }
 
 /* ==========================================================================
-   STEP 4: LIQUID GLASS TAB SWITCHER & CROSS-FADE PANELS
+   STEP 4: HARDWARE MATCHER & CONSULTATION GLASS PANEL
    ========================================================================== */
-
-/* Outer Centered Wrapper */
-.glass-tab-switcher-wrap {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  padding: 1.5rem 1rem 1rem;
-  position: relative;
-  z-index: 25;
-}
-
-/* Glass Pill Tab Switcher */
-.glass-tab-switcher {
-  display: inline-flex;
-  align-items: center;
-  position: relative;
-  background: var(--glass-bg);
-  backdrop-filter: var(--glass-blur);
-  -webkit-backdrop-filter: var(--glass-blur);
-  border: 1px solid var(--glass-border);
-  box-shadow: var(--glass-inner-shadow), var(--glass-outer-shadow);
-  padding: 5px;
-  border-radius: 9999px;
-  gap: 4px;
-  max-width: 95vw;
-  box-sizing: border-box;
-}
-
-/* Specular light line across the tab switcher top */
-.glass-tab-switcher::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 20px;
-  right: 20px;
-  height: 1px;
-  background: linear-gradient(90deg, transparent 0%, var(--glass-border-highlight) 30%, var(--glass-border-highlight) 70%, transparent 100%);
-  pointer-events: none;
-  border-radius: 9999px;
-}
-
-/* Dynamic Morphing & Sliding Liquid Glass Indicator */
-.glass-sliding-indicator {
-  position: absolute;
-  top: 5px;
-  left: 0;
-  height: calc(100% - 10px);
-  width: 0;
-  border-radius: 9999px;
-  background: var(--glass-lens-bg);
-  border: 1px solid var(--glass-lens-border);
-  box-shadow: inset 0 1px 1.5px rgba(255, 255, 255, 0.4), var(--glass-lens-glow);
-  pointer-events: none;
-  z-index: 1;
-  opacity: 0;
-  transform: translateX(0);
-  will-change: transform, width, border-radius;
-  transform-origin: center center;
-}
-
-.glass-sliding-indicator::before {
-  content: '';
-  position: absolute;
-  top: 1px;
-  left: 12%;
-  right: 12%;
-  height: 40%;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.38) 0%, transparent 100%);
-  border-radius: 9999px;
-}
-
-/* Individual Tab Button */
-.glass-tab-btn {
-  position: relative;
-  z-index: 2;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 10px 22px;
-  border-radius: 9999px;
-  border: none;
-  background: transparent;
-  color: var(--muted);
-  font-family: inherit;
-  font-size: 0.92rem;
-  font-weight: 600;
-  cursor: pointer;
-  white-space: nowrap;
-  transition: color 0.22s ease, transform 0.18s cubic-bezier(0.34, 1.56, 0.64, 1);
-  outline: none;
-  user-select: none;
-}
-
-.glass-tab-btn svg {
-  flex-shrink: 0;
-  transition: transform 0.2s ease, color 0.2s ease;
-}
-
-.glass-tab-btn:hover {
-  color: var(--heading);
-  transform: translateY(-1px);
-}
-
-.glass-tab-btn:hover svg {
-  transform: scale(1.1);
-  color: var(--blue);
-}
-
-.glass-tab-btn.active {
-  color: var(--heading);
-  font-weight: 700;
-}
-
-.glass-tab-btn.active svg {
-  color: var(--blue);
-}
-
-.glass-tab-btn:active {
-  transform: scale(0.96);
-}
-
-/* Tab Badges */
-.glass-tab-btn .tab-badge {
-  display: inline-flex;
-  align-items: center;
-  padding: 2px 8px;
-  border-radius: 9999px;
-  font-size: 0.72rem;
-  font-weight: 700;
-  background: var(--blue-dim);
-  color: var(--blue);
-  border: 1px solid var(--glass-border);
-  line-height: 1.2;
-}
-
-.glass-tab-btn .tab-badge-pulse {
-  display: inline-flex;
-  align-items: center;
-  padding: 2px 8px;
-  border-radius: 9999px;
-  font-size: 0.72rem;
-  font-weight: 700;
-  background: rgba(16, 185, 129, 0.14);
-  color: var(--green);
-  border: 1px solid rgba(16, 185, 129, 0.3);
-  line-height: 1.2;
-  position: relative;
-}
-
-.glass-tab-btn .tab-badge-pulse::before {
-  content: '';
-  width: 5px;
-  height: 5px;
-  border-radius: 50%;
-  background: var(--green);
-  margin-right: 4px;
-  box-shadow: 0 0 6px var(--green);
-}
-
-/* Store Tab Panels Container */
-.store-tab-panels {
-  position: relative;
-  width: 100%;
-}
-
-/* Tab Panels */
-.main-tab-panel {
-  width: 100%;
-  opacity: 1;
-  transform: translateY(0);
-}
-
-.main-tab-panel.hidden-tab {
-  display: none !important;
-  opacity: 0 !important;
-  transform: translateY(14px) !important;
-  pointer-events: none !important;
-}
-
-.main-tab-panel.active-tab {
-  display: block !important;
-  opacity: 1 !important;
-  transform: translateY(0) !important;
-  pointer-events: auto !important;
-}
 
 /* Embedded Consult Me Glass Panel Styling */
 .consult-panel-container {

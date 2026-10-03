@@ -14,7 +14,7 @@
 
     // Specular radial light follower on glass elements
     const glassTargets = document.querySelectorAll(
-      '.liquid-glass-nav, .glass-tab-switcher, .consult-glass-card, .glass-pill, .glass-circle-btn, .pcard'
+      '.liquid-glass-nav, .consult-glass-card, .glass-pill, .glass-circle-btn, .pcard'
     );
 
     glassTargets.forEach(el => {
@@ -34,7 +34,7 @@
 
     // Subtle press squish micro-interactions for buttons
     const interactiveButtons = document.querySelectorAll(
-      '.btn-p, .btn-s, .glass-tab-btn, .glass-circle-btn, .btn-launch-wizard, .consult-chip, .filter-btn, .pill-filter'
+      '.btn-p, .btn-s, .glass-circle-btn, .btn-launch-wizard, .consult-chip, .filter-btn, .pill-filter'
     );
 
     interactiveButtons.forEach(btn => {
