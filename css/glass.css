@@ -431,6 +431,20 @@ nav.liquid-glass-nav .nav-user-btn {
   max-width: 1200px;
   margin: 0 auto;
   padding: 1.5rem 1.5rem 3.5rem;
+  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+}
+
+.consult-panel-container *,
+.consult-chip,
+.consult-title,
+.consult-subtitle,
+.consult-badge,
+.consult-match-card,
+.consult-match-card *,
+.btn-launch-wizard,
+.glass-pill,
+.glass-circle-btn {
+  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
 }
 
 .consult-glass-card {
@@ -505,6 +519,7 @@ nav.liquid-glass-nav .nav-user-btn {
   background: var(--glass-circle-bg);
   border: 1px solid var(--glass-border);
   color: var(--text);
+  font-family: inherit;
   font-size: 0.86rem;
   font-weight: 600;
   cursor: pointer;

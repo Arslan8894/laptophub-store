@@ -65,7 +65,7 @@
           <div style="font-size:0.82rem;color:var(--muted);margin-bottom:12px;">${l.cpu} • ${l.ram}GB RAM • ${l.storage}</div>
           <div style="margin-top:auto;display:flex;align-items:center;justify-content:space-between;border-top:1px solid var(--border);padding-top:10px;">
             <div style="font-size:1.15rem;font-weight:800;color:var(--heading);">${priceStr}</div>
-            <button class="glass-pill" style="padding:5px 14px;font-size:0.8rem;font-weight:600;background:var(--blue-dim);color:var(--blue);border:1px solid var(--border2);cursor:pointer;" onclick="event.stopPropagation();openProductPage(${l.id})">
+            <button class="glass-pill" style="padding:5px 14px;font-size:0.8rem;font-weight:600;font-family:inherit;background:var(--blue-dim);color:var(--blue);border:1px solid var(--border2);cursor:pointer;" onclick="event.stopPropagation();openProductPage(${l.id})">
               Details →
             </button>
           </div>
