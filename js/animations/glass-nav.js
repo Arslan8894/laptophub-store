@@ -1,6 +1,7 @@
 /**
- * LaptopHUB - Liquid Glass Navbar Interactive Lens
- * Handles the springy sliding glass highlight between navigation items.
+ * LaptopHUB - Liquid Glass Navbar Interactive Lens (js/animations/glass-nav.js)
+ * Smooth sliding glass highlight with locked navigation transitions to prevent
+ * jitter and flickering while smooth scrolling across page sections.
  */
 
 (function () {
@@ -20,18 +21,16 @@
     const links = Array.from(track.querySelectorAll('a'));
     if (!links.length) return;
 
-    let activeLink = links[0]; // Default to first (All Laptops)
+    let activeLink = links[0]; // Default to All Laptops
+    let isNavigating = false;
+    let navTimeout = null;
 
-    // Check URL or hash to select active item
+    // Determine initial active link based on URL hash
     const currentHash = window.location.hash;
-    const currentPath = window.location.pathname;
-
-    links.forEach(link => {
-      const href = link.getAttribute('href');
-      if (href && (href === currentHash || currentPath.endsWith(href))) {
-        activeLink = link;
-      }
-    });
+    if (currentHash) {
+      const match = links.find(l => l.getAttribute('href') === currentHash);
+      if (match) activeLink = match;
+    }
 
     function positionLens(targetEl, animate = true) {
       if (!targetEl || !lens) return;
@@ -51,8 +50,8 @@
           x: leftOffset,
           width: targetWidth,
           opacity: 1,
-          duration: 0.42,
-          ease: 'elastic.out(1, 0.75)',
+          duration: 0.38,
+          ease: 'elastic.out(1, 0.82)',
           overwrite: 'auto'
         });
       }
@@ -61,7 +60,7 @@
     // Set initial active state
     links.forEach(l => l.classList.remove('active'));
     activeLink.classList.add('active');
-    setTimeout(() => positionLens(activeLink, false), 50);
+    setTimeout(() => positionLens(activeLink, false), 60);
 
     // Hover interactions
     links.forEach(link => {
@@ -69,11 +68,37 @@
         positionLens(link, true);
       });
 
-      link.addEventListener('click', () => {
-        links.forEach(l => l.classList.remove('active'));
-        link.classList.add('active');
-        activeLink = link;
-        positionLens(activeLink, true);
+      link.addEventListener('click', (e) => {
+        const href = link.getAttribute('href');
+        if (href && href.startsWith('#')) {
+          const targetEl = document.querySelector(href);
+          if (targetEl) {
+            e.preventDefault();
+
+            // Lock navigation to prevent scroll spy from jittering between tabs
+            isNavigating = true;
+            clearTimeout(navTimeout);
+
+            links.forEach(l => l.classList.remove('active'));
+            link.classList.add('active');
+            activeLink = link;
+
+            // Immediately animate lens to clicked link
+            positionLens(activeLink, true);
+
+            // Calculate precise destination scroll offset (accounting for floating header)
+            const targetY = targetEl.getBoundingClientRect().top + window.scrollY - 80;
+            window.scrollTo({
+              top: Math.max(0, targetY),
+              behavior: 'smooth'
+            });
+
+            // Unlock scroll spy once smooth scroll has settled
+            navTimeout = setTimeout(() => {
+              isNavigating = false;
+            }, 850);
+          }
+        }
       });
     });
 
@@ -83,49 +108,53 @@
 
     window.addEventListener('resize', () => {
       positionLens(activeLink, false);
-      updateOffsets();
     });
 
-    // Cache offsets to avoid layout thrashing
-    let cachedReviewsOffset = 0;
-    let cachedConsultOffset = 0;
-    let cachedInventoryOffset = 0;
-
-    function updateOffsets() {
-      const reviewsSec = document.getElementById('reviews');
-      const consultSec = document.getElementById('consult');
-      const inventorySec = document.getElementById('inventory');
-      if (reviewsSec) cachedReviewsOffset = reviewsSec.offsetTop;
-      if (consultSec) cachedConsultOffset = consultSec.offsetTop;
-      if (inventorySec) cachedInventoryOffset = inventorySec.offsetTop;
+    // Listen for modern scrollend if supported to promptly release lock
+    if ('onscrollend' in window) {
+      window.addEventListener('scrollend', () => {
+        clearTimeout(navTimeout);
+        isNavigating = false;
+      }, { passive: true });
     }
-    setTimeout(updateOffsets, 300);
 
-    // Update active tab on scroll throttled via requestAnimationFrame
+    // Throttled Scroll-Spy for manual scrolling only
     let scrollRafId = null;
     window.addEventListener('scroll', () => {
+      // If user just clicked a tab and the page is auto-scrolling, ignore scroll spy!
+      if (isNavigating) return;
+
       if (scrollRafId) return;
       scrollRafId = requestAnimationFrame(() => {
         scrollRafId = null;
-        const scrollPos = window.scrollY + 140;
+        if (isNavigating) return;
 
-        let currentSec = null;
-        if (cachedReviewsOffset && scrollPos >= cachedReviewsOffset - 80) {
-          currentSec = '#reviews';
-        } else if (cachedConsultOffset && scrollPos >= cachedConsultOffset - 80) {
-          currentSec = '#consult';
-        } else if (cachedInventoryOffset && scrollPos >= cachedInventoryOffset - 100) {
+        const inventorySec = document.getElementById('inventory');
+        const consultSec = document.getElementById('consult');
+        const reviewsSec = document.getElementById('reviews');
+
+        let currentSec = '#inventory';
+
+        // When near the very top of the page, always stay on inventory
+        if (window.scrollY < 260) {
           currentSec = '#inventory';
+        } else {
+          // Check from bottom to top
+          if (reviewsSec && reviewsSec.getBoundingClientRect().top <= 200) {
+            currentSec = '#reviews';
+          } else if (consultSec && consultSec.getBoundingClientRect().top <= 200) {
+            currentSec = '#consult';
+          } else if (inventorySec && inventorySec.getBoundingClientRect().top <= 200) {
+            currentSec = '#inventory';
+          }
         }
 
-        if (currentSec) {
-          const matchingLink = links.find(l => l.getAttribute('href') === currentSec);
-          if (matchingLink && matchingLink !== activeLink) {
-            links.forEach(l => l.classList.remove('active'));
-            matchingLink.classList.add('active');
-            activeLink = matchingLink;
-            positionLens(activeLink, true);
-          }
+        const matchingLink = links.find(l => l.getAttribute('href') === currentSec);
+        if (matchingLink && matchingLink !== activeLink) {
+          links.forEach(l => l.classList.remove('active'));
+          matchingLink.classList.add('active');
+          activeLink = matchingLink;
+          positionLens(activeLink, true);
         }
       });
     }, { passive: true });

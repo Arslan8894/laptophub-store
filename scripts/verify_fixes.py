@@ -13,10 +13,10 @@ def verify():
         print("[PASS] Duplicate tab switcher completely eliminated.")
 
     # 2. Verify hero styling
-    if 'flex-direction: column' not in html or 'padding: 8.5rem 2rem 4.5rem' not in html:
-        errors.append("Hero CSS is missing flex-direction: column or 8.5rem top padding!")
+    if 'flex-direction: column' not in html or 'padding: 5.6rem 2rem 3.5rem' not in html:
+        errors.append("Hero CSS is missing flex-direction: column or 5.6rem top padding!")
     else:
-        print("[PASS] Hero layout is vertically stacked with 8.5rem top padding.")
+        print("[PASS] Hero layout is vertically stacked with balanced 5.6rem top padding.")
 
     # 3. Verify obsolete script is not referenced
     if 'tab-switcher.js' in html:
