@@ -8,6 +8,8 @@
 <meta property="og:description" content="Certified enterprise laptops with verified specs, nationwide delivery, and custom RAM & SSD configurations.">
 <meta property="og:type" content="website">
 <title>LaptopHUB — Pakistan's Premium Laptop Store</title>
+<link rel="icon" type="image/png" href="images/favicon.png">
+<link rel="apple-touch-icon" href="images/logo-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -1427,8 +1429,10 @@
 <!-- FLOATING LIQUID GLASS NAVBAR -->
 <header class="floating-nav-container">
   <nav class="liquid-glass-nav">
-    <a href="laptophub.html" class="logo-mark">
-      <div class="logo-icon">LH</div>
+    <a href="laptophub.html" class="logo-mark" aria-label="LaptopHUB Homepage">
+      <div class="logo-icon has-logo-img">
+        <img src="images/logo-icon.png" alt="LaptopHUB Logo" class="brand-logo-img">
+      </div>
       <span class="logo-text">Laptop<span>HUB</span></span>
     </a>
     <ul class="nav-pill-track">
@@ -1468,7 +1472,10 @@
 <div class="mobile-drawer-overlay" id="mobileNavOverlay" onclick="toggleMobileNav(false)"></div>
 <div class="mobile-nav-drawer" id="mobileNavDrawer" role="dialog" aria-modal="true" aria-label="Mobile Navigation">
   <div class="mobile-nav-header">
-    <div class="mobile-nav-title">Laptop<span style="color:var(--blue)">HUB</span></div>
+    <div style="display:flex;align-items:center;gap:10px;">
+      <img src="images/logo-icon.png" alt="LaptopHUB Logo" class="brand-logo-img" style="width:30px;height:30px;">
+      <div class="mobile-nav-title">Laptop<span style="color:var(--blue)">HUB</span></div>
+    </div>
     <button class="mobile-nav-close" onclick="toggleMobileNav(false)" aria-label="Close menu">✕</button>
   </div>
   <ul class="mobile-nav-links">
@@ -1742,7 +1749,10 @@
   <div class="footer-inner">
     <div class="footer-top">
       <div class="footer-brand">
-        <span class="logo-text">Laptop<span>HUB</span></span>
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:0.75rem;">
+          <img src="images/logo-icon.png" alt="LaptopHUB Logo" class="brand-logo-img" style="width:34px;height:34px;">
+          <span class="logo-text">Laptop<span>HUB</span></span>
+        </div>
         <p>Pakistan's most trusted online store for high-performance laptops and workstations. Authentic stock, guaranteed warranties.</p>
       </div>
       <div class="footer-col">
