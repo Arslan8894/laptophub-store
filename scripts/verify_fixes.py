@@ -30,15 +30,26 @@ def verify():
     else:
         print("[PASS] consult-matcher.js is properly linked.")
 
-    # 5. Verify document sections exist in flow
+    # 5. Verify unneeded heavy scripts and dead calls are purged
+    if 'glass-effects.js' in html:
+        errors.append("glass-effects.js is still referenced in HTML!")
+    else:
+        print("[PASS] Heavy glass-effects.js cleanly removed in favor of pure CSS.")
+
+    if 'refreshScrollTriggers' in html:
+        errors.append("Dead refreshScrollTriggers call still present in HTML!")
+    else:
+        print("[PASS] Dead refreshScrollTriggers cleanly purged.")
+
+    # 6. Verify document sections exist in flow
     for sec in ['id="inventory"', 'id="consult"', 'id="reviews"', 'id="faq"', 'id="support"']:
         if sec not in html:
             errors.append(f"Section {sec} is missing from page flow!")
         else:
             print(f"[PASS] Section {sec} is present in continuous document flow.")
 
-    # 6. Check JS files
-    for js_file in ['js/animations/glass-nav.js', 'js/animations/consult-matcher.js', 'js/animations/glass-effects.js']:
+    # 7. Check active JS files
+    for js_file in ['js/animations/glass-nav.js', 'js/animations/consult-matcher.js']:
         try:
             with open(js_file, 'r', encoding='utf-8') as jf:
                 content = jf.read()

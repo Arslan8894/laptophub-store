@@ -93,13 +93,13 @@
   transform: scale(0.94) !important;
 }
 
-/* Interactive Dynamic Specular Light Glare */
+/* Pure CSS Specular Light Glare */
 .glass-specular {
   position: relative;
   overflow: hidden;
 }
 
-/* Dynamic Radial Specular Glare Follower */
+/* Static Pure-CSS Specular Sheen (Zero JS / Zero forced reflows) */
 .liquid-glass-nav::before,
 .consult-glass-card::after {
   content: '';
@@ -107,37 +107,54 @@
   top: 0; left: 0; right: 0; bottom: 0;
   border-radius: inherit;
   background: radial-gradient(
-    circle 220px at var(--glass-glare-x, 50%) var(--glass-glare-y, 20%),
-    rgba(255, 255, 255, 0.14) 0%,
-    rgba(255, 255, 255, 0.03) 45%,
-    transparent 70%
+    circle 320px at 50% 0%,
+    rgba(255, 255, 255, 0.12) 0%,
+    rgba(255, 255, 255, 0.02) 50%,
+    transparent 75%
   );
   pointer-events: none;
   z-index: 1;
   opacity: 0.85;
-  transition: opacity 0.3s ease;
 }
 
 [data-theme="light"] .liquid-glass-nav::before,
 [data-theme="light"] .consult-glass-card::after {
   background: radial-gradient(
-    circle 220px at var(--glass-glare-x, 50%) var(--glass-glare-y, 20%),
-    rgba(255, 255, 255, 0.6) 0%,
-    rgba(255, 255, 255, 0.12) 45%,
-    transparent 70%
+    circle 320px at 50% 0%,
+    rgba(255, 255, 255, 0.5) 0%,
+    rgba(255, 255, 255, 0.08) 50%,
+    transparent 75%
   );
 }
 
-/* Button Press / Hover Squish */
-.glass-squish {
-  transition: transform 0.18s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.18s ease !important;
-  will-change: transform;
+/* Pure CSS Button Press / Hover Squish (Zero JS required) */
+.glass-squish,
+.btn-p,
+.btn-s,
+.glass-circle-btn,
+.btn-launch-wizard,
+.consult-chip,
+.filter-btn,
+.pill-filter {
+  transition: transform 0.18s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.18s ease;
 }
-.glass-squish:hover {
-  transform: translateY(-2px) scale(1.02) !important;
+.glass-squish:hover,
+.btn-p:hover,
+.btn-s:hover,
+.glass-circle-btn:hover,
+.btn-launch-wizard:hover,
+.consult-chip:hover {
+  transform: translateY(-2px);
 }
-.glass-squish:active {
-  transform: translateY(1px) scale(0.96) !important;
+.glass-squish:active,
+.btn-p:active,
+.btn-s:active,
+.glass-circle-btn:active,
+.btn-launch-wizard:active,
+.consult-chip:active,
+.filter-btn:active,
+.pill-filter:active {
+  transform: translateY(1px) scale(0.97);
 }
 
 /* ==========================================================================
@@ -588,32 +605,13 @@ nav.liquid-glass-nav .nav-user-btn {
 
 /* Reduced motion support */
 @media (prefers-reduced-motion: reduce) {
-  .glass-sliding-indicator {
-    transition: none !important;
-    animation: none !important;
-  }
-  .main-tab-panel {
-    transition: none !important;
-  }
-  .glass-tab-btn {
+  .glass-lens-highlight {
     transition: none !important;
   }
 }
 
 /* Mobile adjustments */
 @media (max-width: 680px) {
-  .glass-tab-switcher-wrap {
-    padding: 1rem 0.5rem 0.75rem;
-  }
-  .glass-tab-btn {
-    padding: 8px 14px;
-    font-size: 0.84rem;
-    gap: 5px;
-  }
-  .glass-tab-btn .tab-badge,
-  .glass-tab-btn .tab-badge-pulse {
-    display: none;
-  }
   .consult-glass-card {
     padding: 1.5rem 1rem;
   }

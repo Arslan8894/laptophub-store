@@ -41,19 +41,17 @@
       const leftOffset = targetRect.left - trackRect.left;
       const targetWidth = targetRect.width;
 
-      if (!animate || typeof gsap === 'undefined') {
+      if (!animate) {
+        lens.style.transition = 'none';
         lens.style.transform = `translateX(${leftOffset}px)`;
         lens.style.width = `${targetWidth}px`;
         lens.style.opacity = '1';
+        void lens.offsetWidth;
+        lens.style.transition = '';
       } else {
-        gsap.to(lens, {
-          x: leftOffset,
-          width: targetWidth,
-          opacity: 1,
-          duration: 0.38,
-          ease: 'elastic.out(1, 0.82)',
-          overwrite: 'auto'
-        });
+        lens.style.transform = `translateX(${leftOffset}px)`;
+        lens.style.width = `${targetWidth}px`;
+        lens.style.opacity = '1';
       }
     }
 

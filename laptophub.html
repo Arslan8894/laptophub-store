@@ -42,11 +42,12 @@
       border-radius: 50%;
       pointer-events: none !important;
       z-index: 99999;
-      transform: translate(-50%, -50%);
+      transform: translate3d(-100px, -100px, 0);
+      margin: -4px 0 0 -4px;
       opacity: 0;
-      transition: width 0.15s ease, height 0.15s ease, background 0.15s ease, opacity 0.2s ease;
+      transition: width 0.15s ease, height 0.15s ease, background 0.15s ease, opacity 0.2s ease, margin 0.15s ease;
       mix-blend-mode: normal;
-      will-change: transform, left, top;
+      will-change: transform;
     }
 
     #cursor-ring {
@@ -57,10 +58,11 @@
       border-radius: 50%;
       pointer-events: none !important;
       z-index: 99998;
-      transform: translate(-50%, -50%);
+      transform: translate3d(-100px, -100px, 0);
+      margin: -17px 0 0 -17px;
       opacity: 0;
-      transition: width 0.2s ease, height 0.2s ease, border-color 0.2s ease, opacity 0.2s ease;
-      will-change: transform, left, top;
+      transition: width 0.2s ease, height 0.2s ease, border-color 0.2s ease, opacity 0.2s ease, margin 0.2s ease;
+      will-change: transform;
     }
 
     #cursor-dot.hovering {
@@ -184,8 +186,8 @@
 
   .hero-noise {
     position: absolute; inset: 0;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
-    pointer-events: none; opacity: var(--hero-noise-op);
+    background: radial-gradient(ellipse 80% 60% at 50% 25%, rgba(76, 124, 255, 0.08) 0%, transparent 70%);
+    pointer-events: none;
   }
   .hero-grid {
     position: absolute; inset: 0;
@@ -1266,10 +1268,8 @@
 </style>
 <script src="laptops-data.js"></script>
 <script src="store-config.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="js/animations/glass-nav.js" defer></script>
 <script src="js/animations/consult-matcher.js" defer></script>
-<script src="js/animations/glass-effects.js" defer></script>
 </head>
 <body>
 
@@ -2131,10 +2131,6 @@
           </div>
         </div>`;
     }).join('');
-
-    if (typeof window.refreshScrollTriggers === 'function') {
-      window.refreshScrollTriggers();
-    }
   }
 
   // Filter actions
@@ -2998,6 +2994,7 @@
     let ringX  = -100, ringY  = -100;
     let hasMoved = false;
     let isVisible = false;
+    let ringRaf = null;
 
     function showCursor() {
       if (!hasMoved) return;
@@ -3012,6 +3009,26 @@
       isVisible = false;
     }
 
+    function stepRing() {
+      if (!hasMoved) {
+        ringRaf = null;
+        return;
+      }
+      const dx = mouseX - ringX;
+      const dy = mouseY - ringY;
+      if (Math.abs(dx) > 0.2 || Math.abs(dy) > 0.2) {
+        ringX += dx * 0.45;
+        ringY += dy * 0.45;
+        ring.style.transform = `translate3d(${ringX.toFixed(1)}px, ${ringY.toFixed(1)}px, 0)`;
+        ringRaf = requestAnimationFrame(stepRing);
+      } else {
+        ringX = mouseX;
+        ringY = mouseY;
+        ring.style.transform = `translate3d(${ringX}px, ${ringY}px, 0)`;
+        ringRaf = null; // Sleep when stationary! Zero CPU/GPU drain
+      }
+    }
+
     document.addEventListener('mousemove', e => {
       mouseX = e.clientX;
       mouseY = e.clientY;
@@ -3022,46 +3039,34 @@
         document.body.classList.add('custom-cursor-active');
         showCursor();
       }
-      dot.style.left = mouseX + 'px';
-      dot.style.top  = mouseY + 'px';
+      dot.style.transform = `translate3d(${mouseX}px, ${mouseY}px, 0)`;
       if (!isVisible) showCursor();
-    }, { passive: true });
-
-    function animateRing() {
-      if (hasMoved) {
-        // Tight, responsive lerp (0.42 instead of 0.12) so ring and dot remain unified without lagging behind
-        ringX += (mouseX - ringX) * 0.42;
-        ringY += (mouseY - ringY) * 0.42;
-        ring.style.left = ringX + 'px';
-        ring.style.top  = ringY + 'px';
+      if (!ringRaf) {
+        ringRaf = requestAnimationFrame(stepRing);
       }
-      requestAnimationFrame(animateRing);
-    }
-    requestAnimationFrame(animateRing);
+    }, { passive: true });
 
     const hoverTargets = 'a, button, [role="button"], input, select, textarea, label, .filter-btn, .pcard, .cart-item, .faq-item, .nav-link, .support-btn, .theme-toggle-btn';
-
-    let isScrolling = false;
-    let isScrollTimeout = null;
-    window.addEventListener('scroll', () => {
-      isScrolling = true;
-      clearTimeout(isScrollTimeout);
-      isScrollTimeout = setTimeout(() => { isScrolling = false; }, 120);
-    }, { passive: true });
+    let isHovering = false;
 
     document.addEventListener('mouseover', e => {
-      if (isScrolling) return;
       if (e.target && e.target.closest && e.target.closest(hoverTargets)) {
-        dot.classList.add('hovering');
-        ring.classList.add('hovering');
+        if (!isHovering) {
+          isHovering = true;
+          dot.classList.add('hovering');
+          ring.classList.add('hovering');
+        }
       }
     }, { passive: true });
 
     document.addEventListener('mouseout', e => {
-      if (isScrolling) return;
       if (e.target && e.target.closest && e.target.closest(hoverTargets)) {
-        dot.classList.remove('hovering');
-        ring.classList.remove('hovering');
+        if (e.relatedTarget && e.relatedTarget.closest && e.relatedTarget.closest(hoverTargets)) return;
+        if (isHovering) {
+          isHovering = false;
+          dot.classList.remove('hovering');
+          ring.classList.remove('hovering');
+        }
       }
     }, { passive: true });
 
