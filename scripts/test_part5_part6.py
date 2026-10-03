@@ -84,14 +84,12 @@ class TestSuite:
         with open("laptophub.html", "r", encoding="utf-8") as f:
             html = f.read()
 
-        self.assert_true("pendingBuyAction = { type: 'cod_checkout' }" in html,
-                         "COD checkout saves pendingBuyAction and prompts login")
+        self.assert_true("pendingBuyAction = { type: 'checkout' }" in html or "pendingBuyAction = { type: 'cod_checkout' }" in html,
+                         "Checkout saves pendingBuyAction and prompts login")
         self.assert_true("pendingBuyAction = { type: 'card_whatsapp'" in html,
                          "Card WhatsApp order saves pendingBuyAction and prompts login")
         self.assert_true("pendingBuyAction = { type: 'cart_whatsapp' }" in html,
                          "Cart WhatsApp checkout saves pendingBuyAction and prompts login")
-        self.assert_true("pendingBuyAction = {" in html and "modal_whatsapp" in html,
-                         "Modal specs WhatsApp order saves pendingBuyAction and prompts login")
         self.assert_true("resumePendingBuyAction" in html,
                          "resumePendingBuyAction executes after successful sign-in")
 

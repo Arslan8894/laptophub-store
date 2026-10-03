@@ -35,6 +35,7 @@ from http.server import HTTPServer, BaseHTTPRequestHandler
 from http.cookies import SimpleCookie
 from datetime import datetime, timezone
 import base64
+import html
 
 # ─────────────────────────────────────────────────────────────
 # PATHS & CONSTANTS
@@ -535,7 +536,9 @@ class LaptopHubHandler(BaseHTTPRequestHandler):
         self._send(200)
 
     def do_GET(self):
-        path = self.path.split('?')[0].rstrip('/')
+        parsed_url = urllib.parse.urlparse(self.path)
+        path = parsed_url.path.rstrip('/')
+        qs_params = urllib.parse.parse_qs(parsed_url.query)
         self._parse_cookies()
 
         # ── legacy redirects ─────────────────────────────────
@@ -614,7 +617,35 @@ class LaptopHubHandler(BaseHTTPRequestHandler):
             self._send(200, {'ok': True, 'orders': orders}, no_cache=True)
             return
 
-
+        # ── public: product reviews ──────────────────────────
+        if path == '/api/reviews':
+            laptop_id_vals = qs_params.get('laptop_id', [])
+            laptop_id = laptop_id_vals[0] if laptop_id_vals else None
+            with get_db() as conn:
+                if laptop_id:
+                    rows = conn.execute(
+                        "SELECT id, user_id, laptop_id, reviewer, rating, body, created_at "
+                        "FROM reviews WHERE laptop_id=? AND approved=1 ORDER BY id DESC",
+                        (laptop_id,)).fetchall()
+                    agg = conn.execute(
+                        "SELECT COUNT(*), AVG(rating) FROM reviews WHERE laptop_id=? AND approved=1",
+                        (laptop_id,)).fetchone()
+                else:
+                    rows = conn.execute(
+                        "SELECT id, user_id, laptop_id, reviewer, rating, body, created_at "
+                        "FROM reviews WHERE approved=1 ORDER BY id DESC LIMIT 50").fetchall()
+                    agg = conn.execute("SELECT COUNT(*), AVG(rating) FROM reviews WHERE approved=1").fetchone()
+            
+            count = agg[0] if agg else 0
+            avg_rating = round(agg[1], 1) if (agg and agg[1]) else 5.0
+            reviews_list = [dict(r) for r in rows]
+            self._send(200, {
+                'ok': True,
+                'count': count,
+                'average': avg_rating,
+                'reviews': reviews_list
+            }, no_cache=True)
+            return
 
         # ── admin: full inventory ─────────────────────────────
         if path == '/api/admin/inventory':
@@ -974,6 +1005,77 @@ class LaptopHubHandler(BaseHTTPRequestHandler):
                 save_inventory(laptops)
 
             self._send(201, {'orderId': oid, 'status': 'new', 'total': total})
+            return
+
+        # ── customer: post product review ─────────────────────
+        if path == '/api/reviews':
+            user = self._require_customer()
+            if not user:
+                return
+
+            try:
+                laptop_id = int(payload.get('laptop_id'))
+            except (ValueError, TypeError):
+                return self._send(400, {'error': 'Valid laptop_id is required'})
+
+            try:
+                rating = int(payload.get('rating', 5))
+                if rating < 1 or rating > 5:
+                    return self._send(400, {'error': 'Rating must be between 1 and 5'})
+            except (ValueError, TypeError):
+                return self._send(400, {'error': 'Rating must be an integer between 1 and 5'})
+
+            raw_body = str(payload.get('body', '')).strip()
+            if len(raw_body) < 3:
+                return self._send(400, {'error': 'Review comment must be at least 3 characters'})
+            if len(raw_body) > 2000:
+                return self._send(400, {'error': 'Review comment cannot exceed 2000 characters'})
+
+            safe_body = html.escape(raw_body)
+            reviewer_name = user.get('name') or user.get('email', 'Verified Customer')
+
+            with get_db() as conn:
+                conn.execute(
+                    "INSERT INTO reviews (user_id, laptop_id, reviewer, rating, body, approved) "
+                    "VALUES (?, ?, ?, ?, ?, 1)",
+                    (user['id'], laptop_id, reviewer_name, rating, safe_body))
+                rid = conn.execute("SELECT last_insert_rowid()").fetchone()[0]
+
+            self._send(201, {
+                'ok': True,
+                'success': True,
+                'review': {
+                    'id': rid,
+                    'user_id': user['id'],
+                    'laptop_id': laptop_id,
+                    'reviewer': reviewer_name,
+                    'rating': rating,
+                    'body': safe_body,
+                    'created_at': datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M:%S')
+                }
+            }, no_cache=True)
+            return
+
+        # ── admin or customer: delete review ───────────────────
+        if path == '/api/reviews/delete':
+            admin = self._get_admin_user()
+            cust = self._get_cust_user()
+            if not admin and not cust:
+                return self._send(401, {'error': 'Authentication required'})
+
+            rid = payload.get('id') or payload.get('review_id')
+            if not rid:
+                return self._send(400, {'error': 'Review ID is required'})
+
+            with get_db() as conn:
+                if admin:
+                    conn.execute("DELETE FROM reviews WHERE id=?", (rid,))
+                    self._send(200, {'ok': True, 'message': 'Review deleted by admin'}, no_cache=True)
+                else:
+                    cur = conn.execute("DELETE FROM reviews WHERE id=? AND user_id=?", (rid, cust['id']))
+                    if cur.rowcount == 0:
+                        return self._send(403, {'error': 'You can only delete your own reviews'})
+                    self._send(200, {'ok': True, 'message': 'Review deleted'}, no_cache=True)
             return
 
         # ── admin: add laptop ─────────────────────────────────

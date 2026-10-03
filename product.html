@@ -1,0 +1,1884 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title id="pageTitle">Product Details — LaptopHUB Pakistan</title>
+<meta name="description" id="pageMetaDesc" content="Certified business & creator laptops in Pakistan with warranty, inspection, and express courier dispatch.">
+
+<!-- Modern Google Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400..700;1,9..40,400..700&family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+
+<!-- Modular Stylesheets -->
+<link rel="stylesheet" href="css/theme.css">
+<link rel="stylesheet" href="css/header.css">
+<link rel="stylesheet" href="css/product.css">
+
+<style>
+/* Base Page Reset & Helpers */
+:root {
+  --font-main: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  --font-display: 'Syne', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+  --blue: #4c7cff;
+  --blue-dim: rgba(76, 124, 255, 0.14);
+  --blue-glow: #6390ff;
+  --nav-bg: rgba(9, 10, 15, 0.88);
+}
+
+[data-theme="light"] {
+  --nav-bg: rgba(248, 250, 252, 0.92);
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: var(--bg);
+  color: var(--text);
+  font-family: var(--font-main);
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+main {
+  flex: 1;
+}
+
+/* Toast Notifications */
+#toast {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  background: var(--s1);
+  color: var(--heading);
+  border: 1px solid var(--border2);
+  border-left: 4px solid var(--blue);
+  padding: 12px 20px;
+  border-radius: 10px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+  font-size: 0.88rem;
+  font-weight: 600;
+  z-index: 10005;
+  opacity: 0;
+  transform: translateY(20px);
+  pointer-events: none;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+#toast.show {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+/* Modals & Drawers Shared System */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 10001;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+.modal-overlay.open {
+  display: flex;
+}
+.modal-card {
+  background: var(--s1);
+  border: 1px solid var(--border2);
+  border-radius: 18px;
+  width: 100%;
+  max-width: 480px;
+  padding: 2rem;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+  box-sizing: border-box;
+  animation: modalPop 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+@keyframes modalPop {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+/* Form Styles */
+.form-group {
+  margin-bottom: 1.1rem;
+  text-align: left;
+}
+.form-label {
+  display: block;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-bottom: 6px;
+}
+.form-input, .form-select {
+  width: 100%;
+  background: var(--s2);
+  border: 1px solid var(--border2);
+  color: var(--heading);
+  padding: 10px 14px;
+  border-radius: 10px;
+  font-family: inherit;
+  font-size: 0.88rem;
+  box-sizing: border-box;
+  transition: border-color 0.2s;
+}
+.form-input:focus, .form-select:focus {
+  outline: none;
+  border-color: var(--blue);
+}
+
+/* Cart Drawer */
+.cart-drawer-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 10002;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s;
+}
+.cart-drawer-overlay.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+.cart-drawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: min(420px, 92vw);
+  background: var(--s1);
+  border-left: 1px solid var(--border2);
+  box-shadow: -10px 0 40px rgba(0, 0, 0, 0.4);
+  z-index: 10003;
+  transform: translateX(100%);
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  display: flex;
+  flex-direction: column;
+}
+.cart-drawer.open {
+  transform: translateX(0);
+}
+.drawer-head {
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.drawer-title {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--heading);
+  margin: 0;
+}
+.drawer-close {
+  background: none;
+  border: 1px solid var(--border2);
+  color: var(--muted);
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9rem;
+}
+.drawer-items {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.drawer-item-card {
+  background: var(--s2);
+  border: 1px solid var(--border2);
+  border-radius: 12px;
+  padding: 12px;
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+.drawer-item-img {
+  width: 60px;
+  height: 50px;
+  object-fit: contain;
+}
+.drawer-item-info {
+  flex: 1;
+}
+.drawer-item-name {
+  font-weight: 700;
+  font-size: 0.86rem;
+  color: var(--heading);
+  line-height: 1.2;
+}
+.drawer-item-spec {
+  font-size: 0.74rem;
+  color: var(--muted);
+  margin-top: 2px;
+}
+.drawer-item-price {
+  font-weight: 700;
+  font-size: 0.88rem;
+  color: var(--blue);
+  margin-top: 4px;
+}
+.drawer-qty-controls {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.drawer-qty-btn {
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  background: var(--s3);
+  border: 1px solid var(--border2);
+  color: var(--heading);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.8rem;
+}
+.drawer-foot {
+  padding: 1.25rem 1.5rem;
+  border-top: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.drawer-subtotal-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-size: 0.92rem;
+  font-weight: 700;
+}
+.drawer-btn-wa, .drawer-btn-checkout {
+  height: 44px;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 0.88rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
+  border: none;
+  font-family: inherit;
+  transition: all 0.2s;
+}
+.drawer-btn-wa {
+  background: #25d366;
+  color: #fff;
+}
+.drawer-btn-checkout {
+  background: var(--blue);
+  color: #fff;
+}
+
+/* Site Footer */
+footer {
+  background: var(--s1);
+  border-top: 1px solid var(--border);
+  padding: 3rem 2rem 2rem;
+  margin-top: auto;
+}
+.footer-inner {
+  max-width: 1360px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  font-size: 0.84rem;
+  color: var(--muted);
+}
+</style>
+</head>
+<body>
+
+<!-- ── STICKY MODULAR HEADER ─────────────────────────────────────────────── -->
+<nav>
+  <!-- Left Brand Logo -->
+  <a href="laptophub.html" class="logo-mark">
+    <div class="logo-icon">LH</div>
+    <div class="logo-text">Laptop<span>HUB</span></div>
+  </a>
+
+  <!-- Center Nav Links -->
+  <ul class="nav-links">
+    <li><a href="laptophub.html#inventory">All Laptops</a></li>
+    <li><a href="consult.html">Consult Me</a></li>
+    <li><a href="#productReviews">Reviews</a></li>
+  </ul>
+
+  <!-- Right Actions Group -->
+  <div class="nav-right">
+    <button class="theme-toggle-btn" onclick="toggleTheme()" aria-label="Toggle dark/light mode">
+      <span class="theme-icon" id="themeIcon">☀️</span>
+      <span id="themeLabel">Light</span>
+    </button>
+    <button class="nav-cart" onclick="openCart()" aria-label="Open cart">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+      <span class="cart-text">Cart</span>
+      <span class="cart-badge-count" id="headerCartCount">0</span>
+    </button>
+    <div id="userAccountSection">
+      <button class="nav-btn" onclick="openLoginModal()">Sign In</button>
+    </div>
+    <button class="mobile-nav-toggle" onclick="toggleMobileNav(true)" aria-label="Open mobile menu">☰</button>
+  </div>
+</nav>
+
+<!-- Mobile Navigation Drawer -->
+<div class="mobile-drawer-overlay" id="mobileDrawerOverlay" onclick="toggleMobileNav(false)"></div>
+<div class="mobile-nav-drawer" id="mobileNavDrawer">
+  <div class="mobile-nav-header">
+    <div class="mobile-nav-title">Menu</div>
+    <button class="mobile-nav-close" onclick="toggleMobileNav(false)">✕</button>
+  </div>
+  <ul class="mobile-nav-links">
+    <li><a href="laptophub.html#inventory" onclick="toggleMobileNav(false)">All Laptops</a></li>
+    <li><a href="consult.html" onclick="toggleMobileNav(false)">Consult Me</a></li>
+    <li><a href="#productReviews" onclick="toggleMobileNav(false)">Reviews</a></li>
+  </ul>
+</div>
+
+<!-- ── MAIN PRODUCT PAGE CONTENT ─────────────────────────────────────────── -->
+<main>
+  <div class="product-page-wrap">
+    
+    <!-- Breadcrumb Bar & Back Link -->
+    <div class="product-breadcrumbs">
+      <div class="crumb-nav">
+        <a href="laptophub.html">Home</a>
+        <span class="crumb-sep">/</span>
+        <a href="laptophub.html#inventory">Laptops</a>
+        <span class="crumb-sep">/</span>
+        <span id="crumbBrand">Brand</span>
+        <span class="crumb-sep">/</span>
+        <span class="crumb-current" id="crumbTitle">Model</span>
+      </div>
+      <button class="btn-back-link" onclick="goBackToListing()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>
+        <span>Back to all laptops</span>
+      </button>
+    </div>
+
+    <!-- NOT FOUND STATE CONTAINER -->
+    <div id="productNotFound" style="display:none;">
+      <div class="not-found-card">
+        <div class="not-found-icon">💻</div>
+        <h2 class="not-found-title">Laptop Not Found</h2>
+        <p class="not-found-desc">We couldn't locate the requested laptop in our verified catalog. It may have been sold out or the link is incorrect.</p>
+        <a href="laptophub.html" class="btn-cta-cart" style="text-decoration:none;display:inline-flex;padding:0 24px;">Browse Available Inventory</a>
+      </div>
+    </div>
+
+    <!-- MAIN PRODUCT CONTENT (Populated dynamically) -->
+    <div id="productContent">
+      <div class="product-hero-grid">
+        
+        <!-- Left: Image Gallery & Highlights -->
+        <div class="product-gallery-col">
+          <div class="product-main-card" id="mainCardWrap">
+            <div class="product-badge-overlay" id="badgeOverlay">
+              <span class="badge-pill primary" id="badgeText">Verified</span>
+            </div>
+            <img id="mainProductImg" class="product-main-img" src="" alt="Laptop Image">
+          </div>
+
+          <!-- Thumbnails Strip -->
+          <div class="product-thumbs-strip" id="thumbsStrip">
+            <!-- Dynamically populated -->
+          </div>
+
+          <!-- Quick Specs Badges -->
+          <div class="gallery-highlights">
+            <div class="gh-box">
+              <span class="gh-label">Processor</span>
+              <span class="gh-val" id="ghCpu">-</span>
+            </div>
+            <div class="gh-box">
+              <span class="gh-label">Display</span>
+              <span class="gh-val" id="ghDisplay">-</span>
+            </div>
+            <div class="gh-box">
+              <span class="gh-label">Graphics</span>
+              <span class="gh-val" id="ghGpu">-</span>
+            </div>
+            <div class="gh-box">
+              <span class="gh-label">Condition</span>
+              <span class="gh-val" id="ghCondition">-</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: Details, Variant Pickers & CTA -->
+        <div class="product-details-col">
+          <div class="product-brand-tag" id="productBrand">BRAND</div>
+          <h1 class="product-title" id="productTitle">Laptop Model</h1>
+
+          <!-- Rating Bar -->
+          <div class="product-rating-bar">
+            <div class="rating-stars" id="starIconsRow">★★★★★</div>
+            <span class="rating-score-num" id="ratingScoreText">5.0</span>
+            <a href="#productReviews" class="reviews-anchor-link" id="reviewsCountLink">(0 reviews)</a>
+            <div class="stock-indicator" id="stockStatusBadge">✓ In Stock</div>
+          </div>
+
+          <!-- Live Price Card -->
+          <div class="product-price-box">
+            <div class="price-main-row">
+              <div class="product-price-val" id="productLivePrice">Rs 0</div>
+            </div>
+            <div class="price-breakdown-sub" id="priceBreakdownSub">Base Price: Rs 0</div>
+            <div class="delivery-note">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2"/><path d="M15 18H9"/><path d="M19 18h2a1 1 0 0 0 1-1v-5l-3-4h-5v10"/><circle cx="7" cy="18" r="2"/><circle cx="17" cy="18" r="2"/></svg>
+              <span>FREE Express Courier Dispatch Across Pakistan</span>
+            </div>
+          </div>
+
+          <!-- ── AMAZON-STYLE ABOUT THIS ITEM HIGHLIGHTS ────────────────── -->
+          <div class="product-about-card">
+            <h3 class="about-title">About this item</h3>
+            <ul class="about-bullets" id="aboutBulletsList">
+              <!-- Dynamically populated from specs -->
+            </ul>
+          </div>
+
+          <!-- VARIANT 1: RAM SELECTOR -->
+          <div class="variant-section">
+            <div class="variant-header">
+              <span class="variant-label-title">Select RAM Memory:</span>
+              <span class="variant-selected-badge" id="lblRamSelection">16 GB DDR4</span>
+            </div>
+            <div class="variant-pills-row" id="ramPillsContainer">
+              <!-- Rendered dynamically with live relative deltas -->
+            </div>
+          </div>
+
+          <!-- VARIANT 2: STORAGE SELECTOR -->
+          <div class="variant-section">
+            <div class="variant-header">
+              <span class="variant-label-title">Select Storage Drive:</span>
+              <span class="variant-selected-badge" id="lblStorageSelection">512 GB NVMe SSD</span>
+            </div>
+            <div class="variant-pills-row" id="storagePillsContainer">
+              <!-- Rendered dynamically with live relative deltas -->
+            </div>
+          </div>
+
+          <!-- Custom Order Notes -->
+          <div class="custom-notes-wrap">
+            <label class="notes-label" for="productComment">Special Instructions / Custom Requests (Optional):</label>
+            <textarea id="productComment" class="notes-input" placeholder="e.g. partition SSD into C & D drives, install specific OS or developer tools"></textarea>
+          </div>
+
+          <!-- CTA Buttons -->
+          <div class="product-actions-group">
+            <button type="button" class="btn-cta-cart" id="btnAddToCart" onclick="addProductToCart()">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+              <span>Add to Cart</span>
+            </button>
+            <button type="button" class="btn-cta-whatsapp" onclick="orderProductViaWhatsApp()">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+              <span>Order on WhatsApp</span>
+            </button>
+          </div>
+
+          <!-- Trust Strip -->
+          <div class="product-trust-strip">
+            <div class="trust-item">
+              <span class="trust-icon">🛡️</span>
+              <span class="trust-title">1 Year Warranty</span>
+              <span class="trust-sub">Hardware Covered</span>
+            </div>
+            <div class="trust-item">
+              <span class="trust-icon">🔄</span>
+              <span class="trust-title">7-Day Checking</span>
+              <span class="trust-sub">Replacement Guarantee</span>
+            </div>
+            <div class="trust-item">
+              <span class="trust-icon">💳</span>
+              <span class="trust-title">Direct Payment</span>
+              <span class="trust-sub">Bank Transfer & Raast</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ── FULL SPECIFICATIONS SECTION ─────────────────────────────────── -->
+      <section class="product-specs-section">
+        <h2 class="section-head-title">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+          Technical Specifications
+        </h2>
+        <div class="specs-grid-layout" id="specsGridLayout">
+          <!-- Dynamically populated from laptop.fullSpecs -->
+        </div>
+      </section>
+
+      <!-- ── CUSTOMER REVIEWS & RATINGS SECTION ───────────────────────────── -->
+      <section class="product-reviews-section" id="productReviews">
+        <h2 class="section-head-title">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          Customer Reviews & Ratings
+        </h2>
+
+        <div class="reviews-top-row">
+          <!-- Summary Card -->
+          <div class="reviews-summary-card">
+            <div class="summary-score-large" id="revOverallScore">5.0</div>
+            <div class="summary-stars-row" id="revOverallStars">★★★★★</div>
+            <div class="summary-count-label" id="revOverallCount">Based on 0 verified reviews</div>
+            <div class="rating-breakdown-bars" id="ratingBreakdownBars" style="width:100%;margin-top:14px;display:flex;flex-direction:column;gap:6px;">
+              <!-- 5-star to 1-star percentage bars populated dynamically -->
+            </div>
+          </div>
+
+          <!-- Write Review Form -->
+          <div class="write-review-box">
+            <div class="write-review-title">
+              <span>Write a Review</span>
+              <span class="user-post-badge" id="revUserBadge" style="display:none;">Posting as: User</span>
+            </div>
+
+            <div id="reviewFormContainer">
+              <form id="productReviewForm" onsubmit="handleReviewSubmit(event)">
+                <div class="star-rating-picker" id="starPicker">
+                  <span style="font-size:0.84rem;font-weight:600;color:var(--muted);margin-right:6px">Your Rating:</span>
+                  <button type="button" class="star-pick-btn active" data-rating="1" onclick="setStarRating(1)">★</button>
+                  <button type="button" class="star-pick-btn active" data-rating="2" onclick="setStarRating(2)">★</button>
+                  <button type="button" class="star-pick-btn active" data-rating="3" onclick="setStarRating(3)">★</button>
+                  <button type="button" class="star-pick-btn active" data-rating="4" onclick="setStarRating(4)">★</button>
+                  <button type="button" class="star-pick-btn active" data-rating="5" onclick="setStarRating(5)">★</button>
+                </div>
+
+                <textarea id="reviewBodyText" class="review-textarea" placeholder="Share your experience with this laptop (performance, battery, display, condition, delivery)..." required minlength="3"></textarea>
+
+                <button type="submit" class="btn-submit-review" id="btnSubmitReview">
+                  Submit Review
+                </button>
+              </form>
+            </div>
+
+            <!-- Sign in Prompt for Guests -->
+            <div id="reviewSignInPrompt" style="display:none; text-align:center; padding:1.5rem 0;">
+              <p style="color:var(--muted); font-size:0.9rem; margin-bottom:1rem;">Please sign in with your customer account to post a verified review.</p>
+              <button type="button" class="btn-back-link" onclick="openLoginModal('Please sign in to write a review')">
+                Sign In to Review
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Reviews List -->
+        <div class="reviews-list-container" id="reviewsList">
+          <div class="no-reviews-state">Loading customer reviews...</div>
+        </div>
+      </section>
+
+    </div>
+  </div>
+</main>
+
+<!-- ── STICKY MOBILE BOTTOM BUY BAR ──────────────────────────────────────── -->
+<div class="mobile-sticky-buy-bar" id="mobileStickyBar">
+  <div class="mobile-bar-inner">
+    <div class="mobile-bar-price" id="mobileBarPrice">Rs 0</div>
+    <div class="mobile-bar-actions">
+      <button class="mobile-bar-btn" style="background:var(--blue);color:#fff;" onclick="addProductToCart()">
+        Add to Cart
+      </button>
+      <button class="mobile-bar-btn" style="background:#25d366;color:#fff;" onclick="orderProductViaWhatsApp()">
+        WhatsApp
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ── CART DRAWER ───────────────────────────────────────────────────────── -->
+<div class="cart-drawer-overlay" id="cartOverlay" onclick="closeCart()"></div>
+<aside class="cart-drawer" id="cartDrawer" aria-label="Shopping Cart">
+  <div class="drawer-head">
+    <div style="display:flex;align-items:center;gap:10px">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+      <h3 class="drawer-title">Your Cart (<span id="cartDrawerCount">0</span>)</h3>
+    </div>
+    <button class="drawer-close" onclick="closeCart()">✕</button>
+  </div>
+  <div class="drawer-items" id="drawerItemsList">
+    <!-- Rendered dynamically -->
+  </div>
+  <div class="drawer-foot">
+    <div class="drawer-subtotal-row">
+      <span>Subtotal:</span>
+      <span id="drawerSubtotal" style="color:var(--blue);font-size:1.1rem">Rs 0</span>
+    </div>
+    <button class="drawer-btn-wa" onclick="checkoutCartViaWhatsApp()">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+      <span>Order / Confirm on WhatsApp</span>
+    </button>
+    <button class="drawer-btn-checkout" onclick="openCheckoutModal()">
+      <span>Proceed to Checkout</span>
+    </button>
+  </div>
+</aside>
+
+<!-- ── DIRECT PAYMENT CHECKOUT MODAL ────────────────────────────────────── -->
+<div class="modal-overlay" id="checkoutModal">
+  <div class="modal-card">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem">
+      <h3 style="margin:0;font-size:1.2rem;font-weight:700;color:var(--heading)">Order Checkout</h3>
+      <button class="drawer-close" onclick="closeCheckoutModal()">✕</button>
+    </div>
+    <form onsubmit="handlePlaceOrder(event)">
+      <div class="form-group">
+        <label class="form-label">Full Name *</label>
+        <input class="form-input" id="custName" type="text" placeholder="e.g. Muhammad Ali" required>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Phone / WhatsApp Number *</label>
+        <input class="form-input" id="custPhone" type="tel" placeholder="e.g. 0321-9876543" required>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Delivery City *</label>
+        <select class="form-select" id="custCity" required>
+          <option value="">Select City</option>
+          <option value="Lahore">Lahore (Same Day Dispatch)</option>
+          <option value="Karachi">Karachi (24h Express)</option>
+          <option value="Islamabad">Islamabad (24h Express)</option>
+          <option value="Rawalpindi">Rawalpindi</option>
+          <option value="Faisalabad">Faisalabad</option>
+          <option value="Multan">Multan</option>
+          <option value="Peshawar">Peshawar</option>
+          <option value="Quetta">Quetta</option>
+          <option value="Other">Other City</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Complete Shipping Address *</label>
+        <input class="form-input" id="custAddress" type="text" placeholder="House / Office #, Street, Area" required>
+      </div>
+      <div style="background:var(--s2);padding:12px;border-radius:10px;font-size:0.82rem;color:var(--muted);margin-bottom:1.25rem">
+        <div>Total Payable: <strong id="modalOrderTotal" style="color:var(--blue)">Rs 0</strong></div>
+        <div style="margin-top:4px;font-size:0.75rem;color:var(--text)">Payment Method: <strong>Direct Bank Transfer / Raast (IBFT)</strong></div>
+      </div>
+      <button type="submit" class="btn-cta-cart" style="width:100%;height:46px;">
+        Confirm & Place Order
+      </button>
+    </form>
+  </div>
+</div>
+
+<!-- ── ORDER CONFIRMATION MODAL ───────────────────────────────────────────── -->
+<div class="modal-overlay" id="orderConfirmModal">
+  <div class="modal-card" style="text-align:center">
+    <div style="font-size:2.5rem;margin-bottom:0.75rem">✅</div>
+    <h2 style="font-family:var(--font-display);font-size:1.5rem;font-weight:800;color:var(--heading);margin-bottom:0.5rem">Order Confirmed!</h2>
+    <p style="color:var(--muted);font-size:0.86rem;margin-bottom:1.5rem">Your order has been recorded. Please complete payment via Direct Bank Transfer or Raast.</p>
+    <div style="background:var(--s2);padding:1rem;border-radius:12px;text-align:left;font-size:0.84rem;margin-bottom:1.5rem">
+      <div style="margin-bottom:6px"><strong>Order ID:</strong> <span id="confirmOrderId" style="color:var(--blue)">#LH-100</span></div>
+      <div style="margin-bottom:6px"><strong>Customer:</strong> <span id="confirmCustomer">Customer</span></div>
+      <div style="margin-bottom:6px"><strong>Payment:</strong> Direct Bank Transfer / Raast</div>
+      <div style="font-size:0.78rem;color:var(--muted);margin-top:8px;border-top:1px solid var(--border);padding-top:8px">
+        Bank: <strong>Meezan Bank</strong> · Title: <strong>LaptopHUB</strong><br>
+        WhatsApp Receipt: <strong>+92 326 1398594</strong>
+      </div>
+    </div>
+    <button class="btn-cta-cart" style="width:100%" onclick="closeConfirmModal()">Continue Shopping</button>
+  </div>
+</div>
+
+<!-- ── AUTH / LOGIN & REGISTER MODAL ─────────────────────────────────────── -->
+<div class="modal-overlay" id="loginModal">
+  <div class="modal-card">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem">
+      <h3 style="margin:0;font-size:1.2rem;font-weight:700;color:var(--heading)" id="authModalTitle">Sign In</h3>
+      <button class="drawer-close" onclick="closeLoginModal()">✕</button>
+    </div>
+    <div id="authNoticeBanner" style="display:none;background:var(--blue-dim);border:1px solid var(--blue);color:var(--blue);padding:8px 12px;border-radius:8px;font-size:0.82rem;font-weight:600;margin-bottom:1rem"></div>
+    <div style="display:flex;gap:8px;margin-bottom:1.25rem">
+      <button type="button" id="tabBtnLogin" class="btn-back-link" style="flex:1;justify-content:center" onclick="switchAuthTab('login')">Sign In</button>
+      <button type="button" id="tabBtnRegister" class="btn-back-link" style="flex:1;justify-content:center" onclick="switchAuthTab('register')">Create Account</button>
+    </div>
+    <form onsubmit="handleAuthSubmit(event)">
+      <div class="form-group" id="groupFullName" style="display:none">
+        <label class="form-label">Full Name *</label>
+        <input class="form-input" id="authName" type="text" placeholder="e.g. Arslan Tariq">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Email Address *</label>
+        <input class="form-input" id="authEmail" type="email" placeholder="name@example.com" required>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Password *</label>
+        <input class="form-input" id="authPassword" type="password" placeholder="••••••••" required minlength="8">
+      </div>
+      <div class="form-group" id="groupPhone" style="display:none">
+        <label class="form-label">Mobile Number * (03XX-XXXXXXX)</label>
+        <input class="form-input" id="authPhone" type="tel" placeholder="0321-9876543">
+      </div>
+      <div class="form-group" id="groupCity" style="display:none">
+        <label class="form-label">City *</label>
+        <select class="form-select" id="authCity">
+          <option value="">Select City</option>
+          <option value="Lahore">Lahore</option>
+          <option value="Karachi">Karachi</option>
+          <option value="Islamabad">Islamabad</option>
+          <option value="Rawalpindi">Rawalpindi</option>
+          <option value="Faisalabad">Faisalabad</option>
+          <option value="Multan">Multan</option>
+          <option value="Peshawar">Peshawar</option>
+          <option value="Quetta">Quetta</option>
+          <option value="Other">Other</option>
+        </select>
+      </div>
+      <div class="form-group" id="groupAddress" style="display:none">
+        <label class="form-label">Delivery Address *</label>
+        <input class="form-input" id="authAddress" type="text" placeholder="House / Office #, Street, Area">
+      </div>
+      <button type="submit" class="btn-cta-cart" style="width:100%;height:44px;margin-top:6px" id="authSubmitBtn">
+        Sign In
+      </button>
+    </form>
+  </div>
+</div>
+
+<!-- Toast Container -->
+<div id="toast"></div>
+
+<!-- Footer -->
+<footer>
+  <div class="footer-inner">
+    <div>© 2026 LaptopHUB Pakistan. Certified Refurbished & Creator Workstations.</div>
+    <div>WhatsApp: +92 326 1398594 · Direct Bank Transfer & Raast Accepted</div>
+  </div>
+</footer>
+
+<!-- ── APPLICATION SCRIPTS ────────────────────────────────────────────────── -->
+<script src="store-config.js"></script>
+<script src="laptops-data.js"></script>
+
+<script>
+  // ─────────────────────────────────────────────────────────────
+  // STATE MANAGEMENT
+  // ─────────────────────────────────────────────────────────────
+  let currentProduct = null;
+  let selectedRam = 16;
+  let selectedStorage = 512;
+  let calculatedPrice = 0;
+  let activeStarPickerRating = 5;
+  let currentUser = null;
+  let cart = [];
+  let currentAuthTab = 'login';
+  let pendingAction = null; // e.g. { type: 'whatsapp_buy' } or { type: 'review' }
+
+  // ─────────────────────────────────────────────────────────────
+  // NAVIGATION & ROUTING
+  // ─────────────────────────────────────────────────────────────
+  function goBackToListing() {
+    if (window.history.length > 1 && document.referrer.includes('laptophub.html')) {
+      window.history.back();
+    } else {
+      window.location.href = 'laptophub.html';
+    }
+  }
+
+  function getProductIdFromUrl() {
+    const params = new URLSearchParams(window.location.search);
+    if (params.has('id')) {
+      const parsed = parseInt(params.get('id'), 10);
+      if (!isNaN(parsed) && parsed > 0) return parsed;
+    }
+    const hash = window.location.hash;
+    if (hash.startsWith('#/product/')) {
+      const parsed = parseInt(hash.replace('#/product/', ''), 10);
+      if (!isNaN(parsed) && parsed > 0) return parsed;
+    }
+    return 1; // Default to ID 1 if unspecified
+  }
+
+  // ─────────────────────────────────────────────────────────────
+  // PRODUCT LOADING & RENDERING
+  // ─────────────────────────────────────────────────────────────
+  function initProductPage() {
+    cart = getLocalCart();
+    updateCartUI();
+
+    const productId = getProductIdFromUrl();
+    const inventory = (typeof LAPTOPS_INVENTORY !== 'undefined') ? LAPTOPS_INVENTORY : [];
+    const lap = inventory.find(l => l.id === productId);
+
+    if (!lap) {
+      document.getElementById('productContent').style.display = 'none';
+      document.getElementById('productNotFound').style.display = 'block';
+      document.getElementById('crumbTitle').textContent = 'Not Found';
+      document.getElementById('pageTitle').textContent = 'Laptop Not Found — LaptopHUB';
+      return;
+    }
+
+    currentProduct = lap;
+    document.getElementById('productNotFound').style.display = 'none';
+    document.getElementById('productContent').style.display = 'block';
+
+    // Page title and SEO
+    document.getElementById('pageTitle').textContent = `${lap.name} — LaptopHUB Pakistan`;
+    document.getElementById('pageMetaDesc').setAttribute('content', `${lap.name} with ${lap.cpu}, ${lap.ram}GB RAM, ${lap.storage}GB SSD, ${lap.gpu}. Tested & Certified with 1-Year Warranty.`);
+
+    // Breadcrumbs
+    document.getElementById('crumbBrand').textContent = lap.brandName || lap.brand.toUpperCase();
+    document.getElementById('crumbTitle').textContent = lap.name;
+
+    // Header & Info
+    document.getElementById('productBrand').textContent = `${lap.brandName || lap.brand.toUpperCase()} · ${lap.category}`;
+    document.getElementById('productTitle').textContent = lap.name;
+    document.getElementById('badgeText').textContent = lap.badge || 'Verified Refurbished';
+
+    // Image Setup
+    const mainImg = document.getElementById('mainProductImg');
+    mainImg.src = lap.img;
+    mainImg.alt = lap.name;
+
+    // Thumbnails setup
+    renderThumbnails(lap);
+
+    // Quick Highlights
+    document.getElementById('ghCpu').textContent = lap.cpu;
+    document.getElementById('ghDisplay').textContent = lap.display;
+    document.getElementById('ghGpu').textContent = lap.gpu;
+    document.getElementById('ghCondition').textContent = lap.condition;
+
+    // Stock Status
+    const stockEl = document.getElementById('stockStatusBadge');
+    const stockCount = lap.stock !== undefined ? lap.stock : 1;
+    if (stockCount <= 0) {
+      stockEl.textContent = 'Out of Stock';
+      stockEl.className = 'stock-indicator out';
+      const addBtn = document.getElementById('btnAddToCart');
+      if (addBtn) {
+        addBtn.disabled = true;
+        addBtn.style.opacity = '0.5';
+        addBtn.style.cursor = 'not-allowed';
+        addBtn.textContent = 'Out of Stock';
+      }
+    } else {
+      stockEl.textContent = `✓ In Stock (${stockCount} available)`;
+      stockEl.className = 'stock-indicator';
+    }
+
+    // Default RAM selection
+    const isUpgradable = isLaptopRamUpgradable(lap);
+    if (!isUpgradable) {
+      selectedRam = lap.ram;
+    } else {
+      if (lap.ram <= 8) selectedRam = 8;
+      else if (lap.ram <= 16) selectedRam = 16;
+      else selectedRam = 32;
+    }
+
+    // Default Storage selection
+    if (lap.storage <= 128) selectedStorage = 128;
+    else if (lap.storage <= 256) selectedStorage = 256;
+    else if (lap.storage <= 512) selectedStorage = 512;
+    else selectedStorage = 1000;
+
+    // Render Variant Selectors & Full Specs
+    renderRamPills();
+    renderStoragePills();
+    updateLivePriceAndSpecs();
+
+    // Fetch and render reviews
+    loadProductReviews(lap.id);
+  }
+
+  function renderThumbnails(lap) {
+    const strip = document.getElementById('thumbsStrip');
+    if (!strip) return;
+
+    // Primary photo + auxiliary angle photos
+    const thumbs = [
+      { src: lap.img, label: 'Main View' },
+      { src: lap.img, label: 'Ports & Keyboard' },
+      { src: lap.img, label: 'Profile' }
+    ];
+
+    strip.innerHTML = thumbs.map((t, idx) => `
+      <button type="button" class="thumb-btn ${idx === 0 ? 'active' : ''}" onclick="switchGalleryPhoto('${t.src}', this)" title="${t.label}">
+        <img class="thumb-img" src="${t.src}" alt="${lap.name} angle">
+      </button>
+    `).join('');
+  }
+
+  function switchGalleryPhoto(src, btn) {
+    const mainImg = document.getElementById('mainProductImg');
+    if (mainImg) mainImg.src = src;
+    document.querySelectorAll('.thumb-btn').forEach(b => b.classList.remove('active'));
+    if (btn) btn.classList.add('active');
+  }
+
+  // ─────────────────────────────────────────────────────────────
+  // VARIANT SELECTION & DELTA PRICING
+  // ─────────────────────────────────────────────────────────────
+  function isLaptopRamUpgradable(lap) {
+    if (!lap) return true;
+    if (lap.isRamUpgradable === false) return false;
+    const mem = lap.fullSpecs?.memoryStorage || {};
+    const ramType = String(mem.ramType || '').toUpperCase();
+    const ramSlots = String(mem.ramSlots || '').toLowerCase();
+    if (ramType.includes('UNIFIED MEMORY')) return false;
+    if (ramSlots.includes('non-upgradable') || ramSlots.includes('soldered dual-channel')) return false;
+    if (ramSlots.includes('soldered') && !ramSlots.includes('upgradable')) return false;
+    return true;
+  }
+
+  function renderRamPills() {
+    const container = document.getElementById('ramPillsContainer');
+    if (!container || !currentProduct) return;
+
+    const baseRam = currentProduct.ram;
+    const isUpgradable = isLaptopRamUpgradable(currentProduct);
+    const ramType = (currentProduct.fullSpecs?.memoryStorage?.ramType || 'DDR4').toUpperCase();
+
+    if (!isUpgradable) {
+      container.innerHTML = `
+        <button type="button" class="variant-pill-btn active fixed-pill">
+          <span class="pill-title">${baseRam} GB</span>
+          <span class="pill-delta included">Soldered (Fixed)</span>
+        </button>
+        <div style="font-size:0.75rem; color:var(--muted); margin-top:4px; width:100%;">
+          Factory onboard memory (Non-upgradable).
+        </div>
+      `;
+      return;
+    }
+
+    const ramOptions = [8, 16, 32];
+    if (!ramOptions.includes(baseRam) && baseRam > 0) {
+      ramOptions.push(baseRam);
+      ramOptions.sort((a, b) => a - b);
+    }
+
+    container.innerHTML = ramOptions.map(r => {
+      const d = (typeof getRamDelta === 'function')
+        ? getRamDelta(r, baseRam, ramType, isUpgradable)
+        : (r === baseRam ? 0 : (r > baseRam ? 8000 : -8000));
+
+      let diffText = 'Included';
+      let deltaClass = 'pill-delta included';
+      if (d > 0) {
+        diffText = `+Rs ${d.toLocaleString('en-PK')}`;
+        deltaClass = 'pill-delta';
+      } else if (d < 0) {
+        diffText = `-Rs ${Math.abs(d).toLocaleString('en-PK')}`;
+        deltaClass = 'pill-delta';
+      }
+
+      const activeClass = (r === selectedRam) ? 'active' : '';
+      return `
+        <button type="button" class="variant-pill-btn ${activeClass}" onclick="selectRamVariant(${r})">
+          <span class="pill-title">${r} GB</span>
+          <span class="${deltaClass}">${diffText}</span>
+        </button>
+      `;
+    }).join('');
+  }
+
+  function renderStoragePills() {
+    const container = document.getElementById('storagePillsContainer');
+    if (!container || !currentProduct) return;
+
+    const baseStorage = currentProduct.storage;
+    const storageOptions = [128, 256, 512, 1000];
+
+    container.innerHTML = storageOptions.map(s => {
+      const d = (typeof getStorageDelta === 'function')
+        ? getStorageDelta(s, baseStorage)
+        : (s === baseStorage ? 0 : (s > baseStorage ? 4000 : -4000));
+
+      let diffText = 'Included';
+      let deltaClass = 'pill-delta included';
+      if (d > 0) {
+        diffText = `+Rs ${d.toLocaleString('en-PK')}`;
+        deltaClass = 'pill-delta';
+      } else if (d < 0) {
+        diffText = `-Rs ${Math.abs(d).toLocaleString('en-PK')}`;
+        deltaClass = 'pill-delta';
+      }
+
+      const activeClass = (s === selectedStorage) ? 'active' : '';
+      const displayLabel = s >= 1000 ? '1 TB' : `${s} GB`;
+      return `
+        <button type="button" class="variant-pill-btn ${activeClass}" onclick="selectStorageVariant(${s})">
+          <span class="pill-title">${displayLabel}</span>
+          <span class="${deltaClass}">${diffText}</span>
+        </button>
+      `;
+    }).join('');
+  }
+
+  function selectRamVariant(ram) {
+    selectedRam = ram;
+    renderRamPills();
+    updateLivePriceAndSpecs();
+  }
+
+  function selectStorageVariant(storage) {
+    selectedStorage = storage;
+    renderStoragePills();
+    updateLivePriceAndSpecs();
+  }
+
+  function updateLivePriceAndSpecs() {
+    if (!currentProduct) return;
+    const basePrice = currentProduct.price;
+    const baseRam = currentProduct.ram;
+    const baseStorage = currentProduct.storage;
+    const isUpgradable = isLaptopRamUpgradable(currentProduct);
+    const ramType = (currentProduct.fullSpecs?.memoryStorage?.ramType || 'DDR4').toUpperCase();
+
+    const ramDelta = (typeof getRamDelta === 'function')
+      ? getRamDelta(selectedRam, baseRam, ramType, isUpgradable)
+      : 0;
+
+    const storageDelta = (typeof getStorageDelta === 'function')
+      ? getStorageDelta(selectedStorage, baseStorage)
+      : 0;
+
+    calculatedPrice = Math.max(25000, basePrice + ramDelta + storageDelta);
+
+    // Update Price UI
+    document.getElementById('productLivePrice').textContent = `Rs ${calculatedPrice.toLocaleString('en-PK')}`;
+    document.getElementById('mobileBarPrice').textContent = `Rs ${calculatedPrice.toLocaleString('en-PK')}`;
+
+    const storFormatted = selectedStorage >= 1000 ? '1 TB' : `${selectedStorage} GB`;
+    document.getElementById('lblRamSelection').textContent = `${selectedRam} GB ${ramType}`;
+    document.getElementById('lblStorageSelection').textContent = `${storFormatted} ${currentProduct.fullSpecs?.memoryStorage?.storageType || 'NVMe SSD'}`;
+
+    let breakdown = `Base Spec (${baseRam}GB / ${baseStorage >= 1000 ? '1TB' : baseStorage + 'GB'}): Rs ${basePrice.toLocaleString('en-PK')}`;
+    if (ramDelta !== 0) breakdown += ` · RAM: ${ramDelta > 0 ? '+' : ''}Rs ${ramDelta.toLocaleString('en-PK')}`;
+    if (storageDelta !== 0) breakdown += ` · Storage: ${storageDelta > 0 ? '+' : ''}Rs ${storageDelta.toLocaleString('en-PK')}`;
+    document.getElementById('priceBreakdownSub').textContent = breakdown;
+
+    // Update full specifications section
+    renderFullSpecs(currentProduct, selectedRam, selectedStorage);
+  }
+
+  function renderFullSpecs(lap, curRam, curStorage) {
+    const grid = document.getElementById('specsGridLayout');
+    if (!grid || !lap) return;
+
+    const full = lap.fullSpecs || {};
+    const perf = full.performance || {};
+    const mem = full.memoryStorage || {};
+    const disp = full.display || {};
+    const graph = full.graphics || {};
+    const conn = full.connectivityPorts || {};
+    const build = full.batteryBuild || {};
+    const cond = full.conditionWarranty || {};
+
+    const storFormatted = curStorage >= 1000 ? '1 TB' : `${curStorage} GB`;
+    const ramDisplay = `${curRam} GB ${mem.ramType || 'DDR4'}${mem.ramSpeed ? ' ' + mem.ramSpeed : ''}`;
+    const storDisplay = `${storFormatted} ${mem.storageType || 'NVMe SSD'}`;
+
+    const categories = [
+      {
+        title: "Processor & Performance",
+        icon: `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><path d="M9 1v3M15 1v3M9 20v3M15 20v3M20 9h3M20 14h3M1 9h3M1 14h3"/></svg>`,
+        rows: [
+          { k: "Processor Model", v: perf.processor || lap.cpu },
+          { k: "Cores & Threads", v: perf.coresThreads },
+          { k: "Clock Speeds", v: perf.clocks },
+          { k: "Cache Memory", v: perf.cache }
+        ]
+      },
+      {
+        title: "Memory & Storage",
+        icon: `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="12" x2="2" y2="12"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></svg>`,
+        rows: [
+          { k: "Selected RAM", v: ramDisplay, highlight: true },
+          { k: "RAM Expansion", v: mem.ramSlots || (lap.isRamUpgradable ? 'Upgradable' : 'Soldered (Non-upgradable)') },
+          { k: "Selected Storage", v: storDisplay, highlight: true },
+          { k: "Storage Interface", v: mem.interface || lap.storageType },
+          { k: "Transfer Speeds", v: mem.readSpeed }
+        ]
+      },
+      {
+        title: "Display & Screen",
+        icon: `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>`,
+        rows: [
+          { k: "Screen Size", v: disp.size },
+          { k: "Resolution", v: disp.resolution },
+          { k: "Panel Type", v: disp.panelType },
+          { k: "Refresh Rate", v: disp.refreshRate },
+          { k: "Surface / Touch", v: disp.touchAntiGlare }
+        ]
+      },
+      {
+        title: "Graphics & Visuals",
+        icon: `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg>`,
+        rows: [
+          { k: "GPU Model", v: graph.gpuName || lap.gpu },
+          { k: "Architecture", v: graph.type || (lap.isDedicatedGpu ? 'Dedicated' : 'Integrated') },
+          { k: "VRAM Memory", v: graph.vram }
+        ]
+      },
+      {
+        title: "Ports & Connectivity",
+        icon: `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>`,
+        rows: [
+          { k: "Ports", v: conn.ports },
+          { k: "Wireless / BT", v: conn.wireless }
+        ]
+      },
+      {
+        title: "Battery & Build",
+        icon: `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="6" width="18" height="12" rx="2"/><line x1="23" y1="11" x2="23" y2="13"/></svg>`,
+        rows: [
+          { k: "Battery Capacity", v: build.battery },
+          { k: "Unit Weight", v: build.weight },
+          { k: "Keyboard", v: build.keyboard },
+          { k: "Webcam & Audio", v: build.webcam },
+          { k: "Licensed OS", v: build.os }
+        ]
+      }
+    ];
+
+    grid.innerHTML = categories.map(cat => {
+      const valid = cat.rows.filter(r => r.v && String(r.v).trim() !== '' && String(r.v).trim() !== '-');
+      if (valid.length === 0) return '';
+      return `
+        <div class="spec-category-card">
+          <div class="spec-cat-header">
+            ${cat.icon}
+            <span>${cat.title}</span>
+          </div>
+          <table class="spec-table">
+            <tbody>
+              ${valid.map(r => `
+                <tr>
+                  <td class="key">${escapeHtml(r.k)}</td>
+                  <td class="val ${r.highlight ? 'highlight' : ''}">${escapeHtml(r.v)}</td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+        </div>
+      `;
+    }).join('');
+  }
+
+  // ─────────────────────────────────────────────────────────────
+  // REVIEWS SYSTEM
+  // ─────────────────────────────────────────────────────────────
+  function setStarRating(num) {
+    activeStarPickerRating = num;
+    document.querySelectorAll('.star-pick-btn').forEach(btn => {
+      const r = parseInt(btn.dataset.rating, 10);
+      btn.classList.toggle('active', r <= num);
+    });
+  }
+
+  async function loadProductReviews(laptopId) {
+    const listEl = document.getElementById('reviewsList');
+    try {
+      const res = await fetch(`/api/reviews?laptop_id=${laptopId}`);
+      if (!res.ok) throw new Error('Failed to load reviews');
+      const data = await res.json();
+
+      const count = data.count || 0;
+      const avg = data.average || 5.0;
+
+      // Update Header & Summary
+      document.getElementById('ratingScoreText').textContent = avg.toFixed(1);
+      document.getElementById('revOverallScore').textContent = avg.toFixed(1);
+      document.getElementById('reviewsCountLink').textContent = `(${count} review${count === 1 ? '' : 's'})`;
+      document.getElementById('revOverallCount').textContent = `Based on ${count} verified review${count === 1 ? '' : 's'}`;
+
+      const starStr = '★'.repeat(Math.round(avg)) + '☆'.repeat(5 - Math.round(avg));
+      document.getElementById('starIconsRow').textContent = starStr;
+      document.getElementById('revOverallStars').textContent = starStr;
+
+      const reviews = data.reviews || [];
+      // Compute 5-star to 1-star histogram distribution
+      const breakdownEl = document.getElementById('ratingBreakdownBars');
+      if (breakdownEl) {
+        const counts = { 5: 0, 4: 0, 3: 0, 2: 0, 1: 0 };
+        reviews.forEach(r => { counts[r.rating] = (counts[r.rating] || 0) + 1; });
+        const total = Math.max(1, reviews.length);
+        breakdownEl.innerHTML = [5, 4, 3, 2, 1].map(stars => {
+          const starCount = counts[stars] || 0;
+          const pct = Math.round((starCount / total) * 100);
+          return `
+            <div class="star-bar-row" style="display:flex;align-items:center;gap:8px;font-size:0.75rem;color:var(--muted);">
+              <span style="width:36px;text-align:right;font-weight:600;color:var(--heading)">${stars} star</span>
+              <div style="flex:1;height:8px;background:var(--s3);border-radius:4px;overflow:hidden;">
+                <div style="width:${pct}%;height:100%;background:#f59e0b;border-radius:4px;transition:width 0.4s ease;"></div>
+              </div>
+              <span style="width:30px;text-align:right;font-weight:600">${pct}%</span>
+            </div>
+          `;
+        }).join('');
+      }
+
+      if (reviews.length === 0) {
+        listEl.innerHTML = `<div class="no-reviews-state">No reviews yet for this model. Be the first to share your experience!</div>`;
+        return;
+      }
+
+      listEl.innerHTML = reviews.map(rev => {
+        const initials = rev.reviewer.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2) || 'LH';
+        const dateStr = rev.created_at ? rev.created_at.split(' ')[0] : 'Recent';
+        const stars = '★'.repeat(rev.rating) + '☆'.repeat(5 - rev.rating);
+        const isAdmin = currentUser && currentUser.role === 'admin';
+
+        return `
+          <div class="review-item-card" id="rev-${rev.id}">
+            <div class="review-item-top">
+              <div class="reviewer-meta">
+                <div class="reviewer-avatar">${escapeHtml(initials)}</div>
+                <div>
+                  <div class="reviewer-name">${escapeHtml(rev.reviewer)}</div>
+                  <div class="review-date">${escapeHtml(dateStr)} · Verified Customer</div>
+                </div>
+              </div>
+              <div class="review-item-stars">${stars}</div>
+              ${isAdmin ? `<button class="btn-delete-review" onclick="deleteReview(${rev.id})">Delete</button>` : ''}
+            </div>
+            <p class="review-body-text">${escapeHtml(rev.body)}</p>
+          </div>
+        `;
+      }).join('');
+    } catch (e) {
+      listEl.innerHTML = `<div class="no-reviews-state">Customer reviews are temporarily unavailable.</div>`;
+    }
+  }
+
+  async function handleReviewSubmit(e) {
+    e.preventDefault();
+    if (!currentUser || !currentUser.loggedIn) {
+      pendingAction = { type: 'review' };
+      openLoginModal('Please sign in to write a review');
+      return;
+    }
+
+    const bodyText = document.getElementById('reviewBodyText').value.trim();
+    if (bodyText.length < 3) {
+      showToast('Please enter a longer review comment.');
+      return;
+    }
+
+    const submitBtn = document.getElementById('btnSubmitReview');
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Posting...';
+
+    try {
+      const res = await fetch('/api/reviews', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({
+          laptop_id: currentProduct.id,
+          rating: activeStarPickerRating,
+          body: bodyText
+        })
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        showToast(data.error || 'Failed to submit review.');
+        return;
+      }
+      showToast('Thank you! Your review has been published.');
+      document.getElementById('reviewBodyText').value = '';
+      loadProductReviews(currentProduct.id);
+    } catch (err) {
+      showToast('Network error while posting review.');
+    } finally {
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Submit Review';
+    }
+  }
+
+  async function deleteReview(reviewId) {
+    if (!confirm('Are you sure you want to permanently delete this review?')) return;
+    try {
+      const res = await fetch('/api/reviews/delete', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({ id: reviewId })
+      });
+      if (res.ok) {
+        showToast('Review deleted successfully.');
+        const el = document.getElementById(`rev-${reviewId}`);
+        if (el) el.remove();
+        loadProductReviews(currentProduct.id);
+      } else {
+        showToast('Failed to delete review.');
+      }
+    } catch (_) {
+      showToast('Network error while deleting review.');
+    }
+  }
+
+  // ─────────────────────────────────────────────────────────────
+  // BUYING ACTIONS & CART
+  // ─────────────────────────────────────────────────────────────
+  function addProductToCart() {
+    if (!currentProduct) return;
+    if (currentProduct.stock !== undefined && currentProduct.stock <= 0) {
+      showToast('Sorry, this laptop is currently out of stock.');
+      return;
+    }
+
+    const comment = document.getElementById('productComment').value.trim();
+    const storText = selectedStorage >= 1000 ? '1 TB NVMe SSD' : `${selectedStorage} GB NVMe SSD`;
+    const ramText = `${selectedRam} GB ${currentProduct.fullSpecs?.memoryStorage?.ramType || 'RAM'}`;
+
+    const existing = cart.find(i => i.id === currentProduct.id && i.ram === selectedRam && i.storage === selectedStorage && i.comment === comment);
+    if (existing) {
+      existing.qty++;
+    } else {
+      cart.push({
+        id: currentProduct.id,
+        itemKey: `${currentProduct.id}_${selectedRam}_${selectedStorage}`,
+        name: currentProduct.name,
+        price: calculatedPrice,
+        basePrice: currentProduct.price,
+        cpu: currentProduct.cpu,
+        ram: selectedRam,
+        ramLabel: ramText,
+        storage: selectedStorage,
+        storageLabel: storText,
+        comment: comment,
+        img: currentProduct.img,
+        qty: 1
+      });
+    }
+
+    saveCart();
+    showToast(`Added ${currentProduct.name} to cart!`);
+    openCart();
+  }
+
+  function orderProductViaWhatsApp() {
+    if (!currentProduct) return;
+
+    if (!currentUser || !currentUser.loggedIn) {
+      pendingAction = { type: 'whatsapp_buy' };
+      openLoginModal('Please sign in to place your order');
+      return;
+    }
+
+    const comment = document.getElementById('productComment').value.trim();
+    const storText = selectedStorage >= 1000 ? '1 TB NVMe SSD' : `${selectedStorage} GB NVMe SSD`;
+    const ramText = `${selectedRam} GB ${currentProduct.fullSpecs?.memoryStorage?.ramType || 'RAM'}`;
+
+    let msg = `*🛒 Custom Laptop Order — LaptopHUB Pakistan*%0A`;
+    msg += `------------------------------------------%0A`;
+    msg += `*Model:* ${encodeURIComponent(currentProduct.name)}%0A`;
+    msg += `*Processor:* ${encodeURIComponent(currentProduct.cpu)}%0A`;
+    msg += `*Selected RAM:* ${encodeURIComponent(ramText)}%0A`;
+    msg += `*Selected Storage:* ${encodeURIComponent(storText)}%0A`;
+    msg += `*Configured Price:* Rs ${calculatedPrice.toLocaleString('en-PK')}%0A`;
+    msg += `*Condition:* ${encodeURIComponent(currentProduct.condition)}%0A`;
+    msg += `*Payment:* Direct Bank Transfer / Raast (IBFT)%0A`;
+    if (comment) {
+      msg += `*Special Request:* "${encodeURIComponent(comment)}"%0A`;
+    }
+    msg += `------------------------------------------%0A`;
+    msg += `Please share bank details and dispatch schedule!`;
+
+    window.open(`https://wa.me/923261398594?text=${msg}`, '_blank');
+  }
+
+  function checkoutCartViaWhatsApp() {
+    if (cart.length === 0) {
+      showToast('Your cart is empty!');
+      return;
+    }
+    if (!currentUser || !currentUser.loggedIn) {
+      pendingAction = { type: 'cart_whatsapp' };
+      openLoginModal('Please sign in to place your order');
+      return;
+    }
+
+    let subtotal = 0;
+    const itemsText = cart.map((item, idx) => {
+      const lineTotal = (item.price || 0) * (item.qty || 1);
+      subtotal += lineTotal;
+      return `${idx + 1}. ${item.name} (${item.ramLabel} / ${item.storageLabel}) x${item.qty} — Rs ${lineTotal.toLocaleString('en-PK')}`;
+    }).join('%0A');
+
+    let msg = `*🛒 NEW CART ORDER — LaptopHUB Pakistan*%0A`;
+    msg += `------------------------------------------%0A`;
+    if (currentUser.name) msg += `*Customer:* ${encodeURIComponent(currentUser.name)}%0A`;
+    if (currentUser.phone) msg += `*Contact:* ${encodeURIComponent(currentUser.phone)}%0A`;
+    msg += `------------------------------------------%0A`;
+    msg += `*Items:*%0A${itemsText}%0A`;
+    msg += `------------------------------------------%0A`;
+    msg += `*Total Amount:* Rs ${subtotal.toLocaleString('en-PK')}%0A`;
+    msg += `*Payment Method:* Direct Bank Transfer / Raast (IBFT)%0A`;
+    msg += `*Shipping:* Free Express Insured Dispatch%0A%0A`;
+    msg += `Please confirm availability and bank transfer instructions!`;
+
+    window.open(`https://wa.me/923261398594?text=${msg}`, '_blank');
+  }
+
+  function openCheckoutModal() {
+    if (cart.length === 0) {
+      showToast('Please add items to cart first!');
+      return;
+    }
+    if (!currentUser || !currentUser.loggedIn) {
+      pendingAction = { type: 'checkout' };
+      openLoginModal('Please sign in to place your order');
+      return;
+    }
+    closeCart();
+    if (currentUser) {
+      if (document.getElementById('custName') && currentUser.name) document.getElementById('custName').value = currentUser.name;
+      if (document.getElementById('custPhone') && currentUser.phone) document.getElementById('custPhone').value = currentUser.phone;
+      if (document.getElementById('custCity') && currentUser.city) document.getElementById('custCity').value = currentUser.city;
+      if (document.getElementById('custAddress') && currentUser.address) document.getElementById('custAddress').value = currentUser.address;
+    }
+    document.getElementById('checkoutModal').classList.add('open');
+  }
+
+  function closeCheckoutModal() {
+    document.getElementById('checkoutModal').classList.remove('open');
+  }
+
+  async function handlePlaceOrder(e) {
+    e.preventDefault();
+    if (!currentUser || !currentUser.loggedIn) {
+      closeCheckoutModal();
+      pendingAction = { type: 'checkout' };
+      openLoginModal('Please sign in to place your order');
+      return;
+    }
+
+    const name = document.getElementById('custName').value.trim();
+    const phone = document.getElementById('custPhone').value.trim();
+    const city = document.getElementById('custCity').value;
+    const address = document.getElementById('custAddress').value.trim();
+
+    try {
+      const res = await fetch('/api/orders', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({ items: cart, name, phone, city, address })
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        if (res.status === 401) {
+          closeCheckoutModal();
+          currentUser = null;
+          localStorage.removeItem('lh_user');
+          renderUserNav();
+          pendingAction = { type: 'checkout' };
+          openLoginModal('Please sign in to place your order');
+          return;
+        }
+        showToast(data.error || 'Failed to place order.');
+        return;
+      }
+
+      const orderId = '#LH-' + data.orderId;
+      document.getElementById('confirmOrderId').textContent = orderId;
+      document.getElementById('confirmCustomer').textContent = `${name} (${city})`;
+
+      // Update customer profile delivery memory
+      if (currentUser) {
+        currentUser.name = name;
+        currentUser.phone = phone;
+        currentUser.city = city;
+        currentUser.address = address;
+        localStorage.setItem('lh_user', JSON.stringify(currentUser));
+      }
+
+      cart = [];
+      saveCart();
+      closeCheckoutModal();
+      document.getElementById('orderConfirmModal').classList.add('open');
+    } catch (_) {
+      showToast('Network error while placing order.');
+    }
+  }
+
+  function closeConfirmModal() {
+    document.getElementById('orderConfirmModal').classList.remove('open');
+  }
+
+  // ─────────────────────────────────────────────────────────────
+  // CART STATE & UI
+  // ─────────────────────────────────────────────────────────────
+  function openCart() {
+    document.getElementById('cartOverlay').classList.add('open');
+    document.getElementById('cartDrawer').classList.add('open');
+  }
+
+  function closeCart() {
+    document.getElementById('cartOverlay').classList.remove('open');
+    document.getElementById('cartDrawer').classList.remove('open');
+  }
+
+  function saveCart() {
+    saveLocalCart(cart);
+    updateCartUI();
+  }
+
+  function updateCartUI() {
+    const count = cart.reduce((acc, i) => acc + (i.qty || 1), 0);
+    document.getElementById('headerCartCount').textContent = count;
+    document.getElementById('cartDrawerCount').textContent = count;
+
+    let subtotal = 0;
+    const listEl = document.getElementById('drawerItemsList');
+
+    if (cart.length === 0) {
+      listEl.innerHTML = `<div style="text-align:center;padding:3rem 1rem;color:var(--muted)">Your shopping cart is currently empty.</div>`;
+    } else {
+      listEl.innerHTML = cart.map(item => {
+        const lineTotal = (item.price || 0) * (item.qty || 1);
+        subtotal += lineTotal;
+        return `
+          <div class="drawer-item-card" style="display:flex;align-items:center;gap:12px;padding:12px;background:var(--s2);border-radius:10px;margin-bottom:10px;">
+            <img class="drawer-item-img" src="${item.img || 'images/lenovo-t14-g1.jpg'}" alt="${escapeHtml(item.name)}" style="width:58px;height:58px;object-fit:contain;border-radius:6px;background:var(--s3);padding:4px;">
+            <div class="drawer-item-info" style="flex:1;min-width:0;">
+              <div class="drawer-item-name" style="font-size:0.86rem;font-weight:700;color:var(--heading);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${escapeHtml(item.name)}</div>
+              <div class="drawer-item-spec" style="font-size:0.75rem;color:var(--muted);">${escapeHtml(item.ramLabel || '')} · ${escapeHtml(item.storageLabel || '')}</div>
+              ${item.comment ? `<div style="font-size:0.72rem;color:var(--blue);font-style:italic;">Note: "${escapeHtml(item.comment)}"</div>` : ''}
+              <div class="drawer-item-price" style="font-size:0.86rem;font-weight:700;color:var(--blue);margin-top:2px;">Rs ${lineTotal.toLocaleString('en-PK')}</div>
+            </div>
+            <div class="drawer-qty-controls" style="display:flex;align-items:center;gap:4px;background:var(--s3);border-radius:6px;padding:2px 6px;">
+              <button class="drawer-qty-btn" onclick="changeCartQty('${item.itemKey || item.id}', -1)" aria-label="Decrease quantity" style="min-width:28px;min-height:28px;background:none;border:none;color:var(--heading);font-weight:700;cursor:pointer;">-</button>
+              <span style="font-size:0.84rem;font-weight:700;width:18px;text-align:center">${item.qty}</span>
+              <button class="drawer-qty-btn" onclick="changeCartQty('${item.itemKey || item.id}', 1)" aria-label="Increase quantity" style="min-width:28px;min-height:28px;background:none;border:none;color:var(--heading);font-weight:700;cursor:pointer;">+</button>
+            </div>
+            <button class="drawer-del-btn" onclick="removeFromCart('${item.itemKey || item.id}')" title="Remove item" aria-label="Remove item" style="min-width:34px;min-height:34px;display:flex;align-items:center;justify-content:center;background:none;border:none;color:var(--muted);cursor:pointer;border-radius:6px;">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>
+            </button>
+          </div>
+        `;
+      }).join('');
+    }
+
+    document.getElementById('drawerSubtotal').textContent = `Rs ${subtotal.toLocaleString('en-PK')}`;
+    const modalTotal = document.getElementById('modalOrderTotal');
+    if (modalTotal) modalTotal.textContent = `Rs ${subtotal.toLocaleString('en-PK')}`;
+  }
+
+  function changeCartQty(keyOrId, delta) {
+    const item = cart.find(i => (i.itemKey && i.itemKey === String(keyOrId)) || String(i.id) === String(keyOrId));
+    if (!item) return;
+    item.qty += delta;
+    if (item.qty <= 0) {
+      cart = cart.filter(i => (i.itemKey ? i.itemKey !== String(keyOrId) : String(i.id) !== String(keyOrId)));
+    }
+    saveCart();
+  }
+
+  function removeFromCart(keyOrId) {
+    cart = cart.filter(i => (i.itemKey ? i.itemKey !== String(keyOrId) : String(i.id) !== String(keyOrId)));
+    saveCart();
+    showToast('Item removed from cart');
+  }
+
+  function changeQty(keyOrId, delta) {
+    changeCartQty(keyOrId, delta);
+  }
+
+  // ─────────────────────────────────────────────────────────────
+  // AUTH MODAL & USER NAVIGATION
+  // ─────────────────────────────────────────────────────────────
+  function openLoginModal(noticeText = '') {
+    const banner = document.getElementById('authNoticeBanner');
+    if (banner) {
+      if (noticeText) {
+        banner.textContent = noticeText;
+        banner.style.display = 'block';
+      } else {
+        banner.style.display = 'none';
+      }
+    }
+    document.getElementById('loginModal').classList.add('open');
+  }
+
+  function closeLoginModal() {
+    document.getElementById('loginModal').classList.remove('open');
+  }
+
+  function switchAuthTab(tab) {
+    currentAuthTab = tab;
+    const isReg = tab === 'register';
+    document.getElementById('tabBtnLogin').style.borderColor = isReg ? 'var(--border2)' : 'var(--blue)';
+    document.getElementById('tabBtnRegister').style.borderColor = isReg ? 'var(--blue)' : 'var(--border2)';
+    document.getElementById('authModalTitle').textContent = isReg ? 'Create Customer Account' : 'Sign In';
+    document.getElementById('authSubmitBtn').textContent = isReg ? 'Create Account & Continue' : 'Sign In';
+    document.getElementById('groupFullName').style.display = isReg ? 'block' : 'none';
+    document.getElementById('groupPhone').style.display = isReg ? 'block' : 'none';
+    document.getElementById('groupCity').style.display = isReg ? 'block' : 'none';
+    document.getElementById('groupAddress').style.display = isReg ? 'block' : 'none';
+  }
+
+  async function handleAuthSubmit(e) {
+    e.preventDefault();
+    const email = document.getElementById('authEmail').value.trim();
+    const password = document.getElementById('authPassword').value;
+    const isReg = currentAuthTab === 'register';
+
+    const payload = { email, password };
+    if (isReg) {
+      payload.name = document.getElementById('authName').value.trim();
+      payload.phone = document.getElementById('authPhone').value.trim();
+      payload.city = document.getElementById('authCity').value;
+      payload.address = document.getElementById('authAddress').value.trim();
+
+      if (!payload.name) {
+        showToast('Please enter your full name.');
+        return;
+      }
+      const pkPhoneRegex = /^(?:\+92|0092|0)?3[0-9]{2}[-\s]?[0-9]{7}$/;
+      if (!pkPhoneRegex.test(payload.phone)) {
+        showToast('Please enter a valid Pakistani phone number (e.g. 0321-9876543).');
+        return;
+      }
+      if (!payload.city) {
+        showToast('Please select your delivery city.');
+        return;
+      }
+      if (!payload.address) {
+        showToast('Please enter your delivery address.');
+        return;
+      }
+    }
+
+    const endpoint = isReg ? '/api/auth/register' : '/api/auth/login';
+
+    try {
+      const res = await fetch(endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify(payload)
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        showToast(data.error || 'Authentication failed.');
+        return;
+      }
+
+      currentUser = {
+        loggedIn: true,
+        id: data.id || data.user?.id,
+        email: data.email || data.user?.email,
+        name: data.name || data.user?.name,
+        role: data.role || data.user?.role || 'user',
+        phone: data.phone || data.user?.phone || '',
+        city: data.city || data.user?.city || '',
+        address: data.address || data.user?.address || ''
+      };
+      localStorage.setItem('lh_user', JSON.stringify(currentUser));
+
+      renderUserNav();
+      closeLoginModal();
+      showToast(`Welcome, ${currentUser.name || 'Customer'}!`);
+
+      // Resume pending action
+      if (pendingAction) {
+        const action = pendingAction;
+        pendingAction = null;
+        if (action.type === 'whatsapp_buy') {
+          orderProductViaWhatsApp();
+        } else if (action.type === 'cart_whatsapp') {
+          checkoutCartViaWhatsApp();
+        } else if (action.type === 'checkout') {
+          openCheckoutModal();
+        } else if (action.type === 'review') {
+          document.getElementById('reviewBodyText').focus();
+        }
+      }
+    } catch (_) {
+      showToast('Network error during authentication.');
+    }
+  }
+
+  function renderUserNav() {
+    const sec = document.getElementById('userAccountSection');
+    const reviewForm = document.getElementById('reviewFormContainer');
+    const reviewPrompt = document.getElementById('reviewSignInPrompt');
+    const userBadge = document.getElementById('revUserBadge');
+
+    if (!currentUser || !currentUser.loggedIn) {
+      sec.innerHTML = `<button class="nav-btn" onclick="openLoginModal()">Sign In</button>`;
+      if (reviewForm) reviewForm.style.display = 'none';
+      if (reviewPrompt) reviewPrompt.style.display = 'block';
+      if (userBadge) userBadge.style.display = 'none';
+      return;
+    }
+
+    if (reviewForm) reviewForm.style.display = 'block';
+    if (reviewPrompt) reviewPrompt.style.display = 'none';
+    if (userBadge) {
+      userBadge.textContent = `Posting as: ${currentUser.name || currentUser.email}`;
+      userBadge.style.display = 'inline-block';
+    }
+
+    const isAdmin = currentUser.role === 'admin';
+    const adminItem = isAdmin ? `
+      <a href="/admin/" class="user-dropdown-item" style="color:var(--blue)">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+        <span>Admin Panel</span>
+      </a>
+    ` : '';
+
+    sec.innerHTML = `
+      <div style="position:relative">
+        <button class="nav-user-btn" onclick="toggleUserDropdown(event)">
+          <div class="user-avatar-badge">${escapeHtml((currentUser.name || 'U')[0].toUpperCase())}</div>
+          <span class="user-name-text">${escapeHtml(currentUser.name || currentUser.email)}</span>
+          <span class="user-arrow">▼</span>
+        </button>
+        <div class="user-dropdown" id="userDropdown">
+          <div class="user-dropdown-header">
+            <div class="user-dropdown-name">${escapeHtml(currentUser.name || 'Customer')}</div>
+            <div class="user-dropdown-email">${escapeHtml(currentUser.email)}</div>
+          </div>
+          ${adminItem}
+          <button class="user-dropdown-item danger" onclick="signOutUser()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+            <span>Sign Out</span>
+          </button>
+        </div>
+      </div>
+    `;
+  }
+
+  function toggleUserDropdown(e) {
+    e.stopPropagation();
+    const dd = document.getElementById('userDropdown');
+    if (dd) dd.classList.toggle('open');
+  }
+
+  document.addEventListener('click', () => {
+    const dd = document.getElementById('userDropdown');
+    if (dd) dd.classList.remove('open');
+  });
+
+  async function signOutUser() {
+    try {
+      await fetch('/api/auth/logout', { method: 'POST', credentials: 'include' });
+    } catch (_) {}
+    currentUser = null;
+    localStorage.removeItem('lh_user');
+    renderUserNav();
+    showToast('Signed out successfully.');
+  }
+
+  // Check server session on load
+  async function checkServerSession() {
+    try {
+      const res = await fetch('/api/auth/me', { credentials: 'include' });
+      if (res.ok) {
+        const data = await res.json();
+        currentUser = {
+          loggedIn: true,
+          id: data.id || data.user?.id,
+          name: data.name || data.user?.name,
+          email: data.email || data.user?.email,
+          role: data.role || data.user?.role,
+          phone: data.phone || data.user?.phone || '',
+          city: data.city || data.user?.city || '',
+          address: data.address || data.user?.address || ''
+        };
+        localStorage.setItem('lh_user', JSON.stringify(currentUser));
+      } else {
+        currentUser = null;
+        localStorage.removeItem('lh_user');
+      }
+    } catch (_) {
+      currentUser = getActiveUser();
+    }
+    renderUserNav();
+  }
+
+  // ─────────────────────────────────────────────────────────────
+  // THEME & TOAST UTILITIES
+  // ─────────────────────────────────────────────────────────────
+  function toggleTheme() {
+    const current = document.documentElement.getAttribute('data-theme') || 'dark';
+    const next = current === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', next);
+    localStorage.setItem('laptophub_theme', next);
+    updateThemeBtn();
+  }
+
+  function updateThemeBtn() {
+    const isDark = (document.documentElement.getAttribute('data-theme') || 'dark') === 'dark';
+    const icon = document.getElementById('themeIcon');
+    const label = document.getElementById('themeLabel');
+    if (icon) icon.textContent = isDark ? '☀️' : '🌙';
+    if (label) label.textContent = isDark ? 'Light' : 'Dark';
+  }
+
+  function toggleMobileNav(open) {
+    document.getElementById('mobileDrawerOverlay').classList.toggle('open', open);
+    document.getElementById('mobileNavDrawer').classList.toggle('open', open);
+  }
+
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    if (!t) return;
+    t.textContent = msg;
+    t.classList.add('show');
+    clearTimeout(t._timer);
+    t._timer = setTimeout(() => t.classList.remove('show'), 3500);
+  }
+
+  function escapeHtml(str) {
+    if (!str) return '';
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#039;');
+  }
+
+  // Initialize on load
+  window.addEventListener('DOMContentLoaded', () => {
+    const savedTheme = localStorage.getItem('laptophub_theme') || 'dark';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+    updateThemeBtn();
+    checkServerSession();
+    initProductPage();
+  });
+</script>
+
+</body>
+</html>

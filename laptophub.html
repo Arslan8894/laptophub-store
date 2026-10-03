@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="Pakistan's premier laptop store offering certified business & creator laptops from Dell, HP, Apple, and Lenovo with Cash on Delivery and warranty.">
+<meta name="description" content="Pakistan's premier laptop store offering certified business & creator laptops from Dell, HP, Apple, and Lenovo with verified specs, express insured delivery, and warranty.">
 <meta property="og:title" content="LaptopHUB — Pakistan's Premium Laptop Store">
 <meta property="og:description" content="Certified enterprise laptops with verified specs, nationwide delivery, and custom RAM & SSD configurations.">
 <meta property="og:type" content="website">
@@ -167,30 +167,6 @@
     overflow-x: hidden;
     transition: background-color 0.3s ease, color 0.3s ease;
   }
-
-  /* TOP DEMO SWITCHER BAR */
-  .demo-bar {
-    background: var(--demo-bg);
-    border-bottom: 1px solid var(--border);
-    padding: 0.5rem 2rem;
-    font-size: 0.75rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    position: relative;
-    z-index: 101;
-    transition: background-color 0.3s, border-color 0.3s;
-  }
-  .demo-bar span { color: var(--muted); }
-  .demo-bar a {
-    color: var(--blue);
-    text-decoration: none;
-    font-weight: 600;
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-  }
-  .demo-bar a:hover { text-decoration: underline; }
 
   /* Header styles (nav, logo, centered links, unified 40px action buttons, responsive breakpoints) are modularized in css/header.css */
 
@@ -737,8 +713,8 @@
     color: #25d366;
     border: 1px solid rgba(37, 211, 102, 0.35);
     border-radius: var(--radius-sm);
-    width: 36px;
-    height: 36px;
+    width: 44px;
+    height: 44px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -1057,7 +1033,7 @@
   }
   .drawer-close {
     background: none; border: 1px solid var(--border2);
-    color: var(--muted); width: 34px; height: 34px;
+    color: var(--muted); width: 44px; height: 44px;
     border-radius: 50%; font-size: 1.1rem;
     display: flex; align-items: center; justify-content: center;
     cursor: pointer; transition: all 0.2s;
@@ -1149,419 +1125,8 @@
   }
   .drawer-btn-checkout:hover { background: var(--blue-hover); transform: translateY(-1px); }
 
-  /* LAPTOP QUICK-VIEW & CUSTOM SPEC MODAL (NON-OVERLAPPING STICKY FOOTER) */
-  #laptopModal {
-    position: fixed; inset: 0;
-    background: rgba(0, 0, 0, 0.82);
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
-    z-index: 10005;
-    display: none;
-    align-items: center; justify-content: center;
-    padding: 1.25rem;
-    opacity: 0;
-    transition: opacity 0.22s ease-out;
-  }
-  #laptopModal.open {
-    display: flex;
-    opacity: 1;
-  }
-  .laptop-modal-card {
-    background: var(--s1);
-    border: 1.5px solid var(--border2);
-    border-radius: 18px;
-    width: min(880px, 94vw);
-    max-height: 90vh;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-    position: relative;
-    box-shadow: 0 30px 80px rgba(0, 0, 0, 0.85);
-    transform: scale(0.96);
-    opacity: 0;
-    transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.22s ease-out;
-  }
-  #laptopModal.open .laptop-modal-card {
-    transform: scale(1);
-    opacity: 1;
-  }
-  .laptop-modal-close {
-    position: absolute; top: 1rem; right: 1.1rem;
-    width: 34px; height: 34px; border-radius: 50%;
-    background: var(--s2); border: 1px solid var(--border2);
-    color: var(--muted); font-size: 1.1rem;
-    display: flex; align-items: center; justify-content: center;
-    cursor: pointer; z-index: 20;
-    transition: all 0.2s;
-  }
-  .laptop-modal-close:hover {
-    color: var(--heading);
-    border-color: var(--blue);
-    transform: rotate(90deg);
-  }
+  /* Laptop modal styles migrated to css/product.css for Amazon-style product page */
 
-  /* INDEPENDENT SCROLL BODY */
-  .lmodal-scroll-body {
-    flex: 1;
-    min-height: 0;
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
-    overscroll-behavior: contain;
-  }
-
-  .lmodal-grid {
-    display: grid;
-    grid-template-columns: 350px 1fr;
-    gap: 0;
-  }
-  @media (max-width: 820px) {
-    .lmodal-grid { grid-template-columns: 1fr; }
-  }
-
-  .lmodal-visual {
-    background: var(--s2);
-    border-right: 1px solid var(--border);
-    padding: 1.8rem 1.6rem;
-    display: flex; flex-direction: column;
-  }
-  @media (max-width: 820px) {
-    .lmodal-visual {
-      border-right: none;
-      border-bottom: 1px solid var(--border);
-      padding: 1.4rem 1.2rem;
-    }
-  }
-
-  .lmodal-img-wrap {
-    width: 100%; height: 230px;
-    display: flex; align-items: center; justify-content: center;
-    position: relative;
-    /* --img-tint set inline from lap.tintColor when modal opens */
-    background: var(--img-tint, radial-gradient(circle at center, rgba(76, 124, 255, 0.08) 0%, transparent 70%));
-    border-radius: 10px;
-    overflow: hidden;
-    transition: background 0.3s;
-  }
-  .lmodal-img {
-    max-width: 90%; max-height: 210px;
-    object-fit: contain;
-    transition: transform 0.3s ease;
-  }
-  .lmodal-img.blend-cutout {
-    filter: drop-shadow(0 8px 20px rgba(0,0,0,0.22));
-  }
-  .lmodal-img.blend-original {
-    filter: drop-shadow(0 12px 26px rgba(0,0,0,0.38));
-  }
-  .lmodal-img:hover {
-    transform: scale(1.04);
-  }
-  .lmodal-badge {
-    position: absolute; top: 10px; left: 10px;
-    background: var(--badge-bg);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-    color: var(--blue);
-    border: 1px solid var(--blue);
-    padding: 4px 10px; border-radius: 9999px;
-    font-size: 0.72rem; font-weight: 600; text-transform: uppercase;
-    letter-spacing: 0.05em;
-  }
-
-  /* SPEC CARDS (FULL MULTI-LINE SUPPORT - NO CUTOFFS) */
-  .lmodal-highlights {
-    display: grid; grid-template-columns: 1fr 1fr;
-    gap: 8px; margin-top: 1.2rem;
-  }
-  .lmodal-hl-item {
-    background: var(--s1); border: 1px solid var(--border);
-    border-radius: 8px; padding: 0.65rem 0.8rem;
-    display: flex; flex-direction: column; gap: 3px;
-  }
-  .hl-label {
-    font-size: 0.68rem; color: var(--muted);
-    text-transform: uppercase; font-weight: 600;
-    letter-spacing: 0.04em;
-  }
-  .hl-val {
-    font-size: 0.78rem; font-weight: 500; color: var(--heading);
-    white-space: normal; word-break: break-word; line-height: 1.35;
-  }
-
-  .lmodal-content {
-    padding: 1.8rem 2rem;
-    display: flex; flex-direction: column; gap: 1.1rem;
-  }
-  @media (max-width: 600px) {
-    .lmodal-content { padding: 1.25rem 1rem; }
-  }
-
-  .lmodal-brand-tag {
-    font-size: 0.7rem; font-weight: 600; color: var(--blue);
-    text-transform: uppercase; letter-spacing: 0.08em;
-  }
-  .lmodal-title {
-    font-family: var(--font-display);
-    font-size: 1.45rem; font-weight: 700; color: var(--heading);
-    line-height: 1.25;
-  }
-  .lmodal-cat {
-    font-size: 0.82rem; color: var(--muted); margin-top: -0.5rem;
-  }
-
-  .spec-picker-section {
-    display: flex; flex-direction: column; gap: 8px;
-  }
-  .spec-picker-header {
-    display: flex; justify-content: space-between; align-items: center;
-  }
-  .spec-picker-title {
-    font-size: 0.82rem; font-weight: 600; color: var(--heading);
-    display: inline-flex; align-items: center; gap: 7px;
-  }
-  .spec-selected-label {
-    font-size: 0.76rem; font-weight: 600; color: var(--blue);
-    font-variant-numeric: tabular-nums;
-  }
-
-  .spec-pills-row {
-    display: grid; grid-template-columns: repeat(auto-fit, minmax(78px, 1fr));
-    gap: 8px;
-  }
-  .spec-pill-btn {
-    background: var(--s2); border: 1.5px solid var(--border2);
-    border-radius: 8px; padding: 0.6rem 0.5rem;
-    cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 3px;
-    outline: none;
-    transition: transform 0.16s ease-out, border-color 0.16s ease, background 0.16s ease, box-shadow 0.16s ease;
-    user-select: none;
-  }
-  .spec-pill-btn:hover {
-    border-color: var(--blue); background: var(--s3); transform: translateY(-2px);
-  }
-  .spec-pill-btn:active {
-    transform: scale(0.96);
-  }
-  .spec-pill-btn:focus-visible {
-    outline: 2px solid var(--blue);
-    outline-offset: 2px;
-  }
-  .spec-pill-btn.active {
-    background: var(--blue-dim); border-color: var(--blue);
-    box-shadow: 0 0 0 1px var(--blue), 0 0 12px var(--blue-glow);
-    transform: scale(1.02);
-  }
-  .pill-name {
-    font-size: 0.85rem; font-weight: 600; color: var(--heading);
-  }
-  .pill-diff {
-    font-size: 0.68rem; font-weight: 500; color: var(--muted);
-    font-variant-numeric: tabular-nums;
-  }
-  .pill-diff.base-spec-pill {
-    background: rgba(255, 255, 255, 0.07);
-    color: var(--subtle);
-    padding: 1px 6px;
-    border-radius: 4px;
-    font-size: 0.65rem;
-  }
-  .spec-pill-btn.active .pill-diff {
-    color: var(--blue);
-    font-weight: 600;
-  }
-  .spec-pill-btn.active .pill-diff.base-spec-pill {
-    background: var(--blue);
-    color: #ffffff;
-  }
-
-  .modal-comment-box {
-    background: var(--s2); border: 1px solid var(--border2);
-    border-radius: 8px; padding: 0.65rem 0.85rem;
-    color: var(--heading); font-family: inherit; font-size: 0.82rem;
-    outline: none; resize: vertical; min-height: 54px;
-    transition: border-color 0.2s;
-  }
-  .modal-comment-box:focus { border-color: var(--blue); }
-
-  /* FULL SPECIFICATIONS 7-CATEGORY SECTION */
-  .lmodal-specs-section {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    margin-top: 0.6rem;
-    padding-top: 1.1rem;
-    border-top: 1px solid var(--border);
-  }
-  .lmodal-specs-title {
-    font-size: 0.95rem;
-    font-weight: 700;
-    color: var(--heading);
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    letter-spacing: -0.01em;
-  }
-  .lmodal-specs-title svg {
-    color: var(--blue);
-  }
-  .lmodal-specs-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 10px;
-  }
-  @media (max-width: 768px) {
-    .lmodal-specs-grid {
-      grid-template-columns: 1fr;
-    }
-  }
-  .spec-cat-block {
-    background: var(--s2);
-    border: 1px solid var(--border);
-    border-radius: 9px;
-    padding: 10px 12px;
-    display: flex;
-    flex-direction: column;
-    gap: 7px;
-  }
-  .spec-cat-header {
-    display: flex;
-    align-items: center;
-    gap: 7px;
-    font-size: 0.74rem;
-    font-weight: 700;
-    color: var(--blue);
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    padding-bottom: 5px;
-    border-bottom: 1px solid var(--border2);
-  }
-  .spec-cat-header svg {
-    flex-shrink: 0;
-  }
-  .spec-rows-list {
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-  }
-  .spec-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    font-size: 0.75rem;
-    line-height: 1.35;
-    gap: 10px;
-  }
-  .spec-key {
-    color: var(--muted);
-    font-weight: 500;
-    flex-shrink: 0;
-  }
-  .spec-val {
-    color: var(--heading);
-    font-weight: 600;
-    text-align: right;
-    word-break: break-word;
-  }
-  .spec-val.unverified-val {
-    color: var(--subtle);
-    font-style: italic;
-    font-weight: normal;
-  }
-  .spec-val.highlight-spec {
-    color: var(--blue);
-    font-weight: 700;
-  }
-
-  /* DEDICATED STICKY ACTION FOOTER (NEVER OVERLAPS CONTENT) */
-  .lmodal-sticky-footer {
-    background: var(--s2);
-    border-top: 1px solid var(--border2);
-    padding: 0.9rem 1.6rem;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 14px;
-    flex-shrink: 0;
-    z-index: 10;
-  }
-  @media (max-width: 680px) {
-    .lmodal-sticky-footer {
-      flex-direction: column;
-      align-items: stretch;
-      padding: 0.85rem 1rem;
-      gap: 10px;
-    }
-  }
-
-  .lmodal-footer-price {
-    display: flex;
-    flex-direction: column;
-    min-width: 0;
-  }
-  .lmodal-footer-label {
-    font-size: 0.68rem; color: var(--muted);
-    text-transform: uppercase; font-weight: 600;
-    letter-spacing: 0.04em;
-  }
-  .lmodal-footer-amount {
-    font-size: 1.45rem; font-weight: 700; color: var(--blue);
-    font-family: var(--font-main);
-    font-variant-numeric: tabular-nums;
-    line-height: 1.2;
-  }
-
-  .lmodal-footer-actions {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    flex-wrap: wrap;
-  }
-  @media (max-width: 680px) {
-    .lmodal-footer-actions {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 8px;
-    }
-  }
-
-  .btn-lmodal-add {
-    background: var(--blue); color: #fff;
-    border: none; border-radius: 8px; padding: 0.75rem 1.2rem;
-    font-family: inherit; font-weight: 600; font-size: 0.88rem;
-    cursor: pointer; display: inline-flex; align-items: center; justify-content: center;
-    gap: 7px; box-shadow: 0 4px 16px rgba(76, 124, 255, 0.3);
-    transition: transform 0.18s ease-out, background 0.18s ease;
-    outline: none;
-  }
-  .btn-lmodal-add:hover { background: var(--blue-hover); transform: translateY(-1px); }
-  .btn-lmodal-add:active { transform: scale(0.98); }
-
-  .btn-lmodal-wa {
-    background: #25d366; color: #fff; border: none;
-    border-radius: 8px; padding: 0.75rem 1rem;
-    font-family: inherit; font-weight: 600; font-size: 0.82rem;
-    cursor: pointer; display: inline-flex; align-items: center; justify-content: center;
-    gap: 6px; box-shadow: 0 4px 14px rgba(37, 211, 102, 0.3);
-    transition: transform 0.18s ease-out;
-    outline: none;
-  }
-  .btn-lmodal-wa:hover { transform: translateY(-1px); }
-  .btn-lmodal-wa:active { transform: scale(0.98); }
-
-  .btn-lmodal-cod {
-    background: var(--s1); border: 1px solid var(--border2);
-    color: var(--heading); border-radius: 8px; padding: 0.75rem 1rem;
-    font-family: inherit; font-weight: 600; font-size: 0.82rem;
-    cursor: pointer; display: inline-flex; align-items: center; justify-content: center;
-    gap: 6px; transition: all 0.18s ease-out;
-    outline: none;
-  }
-  .btn-lmodal-cod:hover { border-color: var(--blue); color: var(--blue); }
-  .btn-lmodal-cod:active { transform: scale(0.98); }
-
-  /* SUPPRESS CUSTOM CURSOR ARTIFACTS OVER MODAL */
-  #laptopModal, #laptopModal * { cursor: auto !important; }
-  #laptopModal button, #laptopModal a { cursor: pointer !important; }
   body.modal-open #cursor-dot,
   body.modal-open #cursor-ring {
     opacity: 0 !important;
@@ -1700,11 +1265,6 @@
 </head>
 <body>
 
-<div class="demo-bar">
-  <span>🇵🇰 LaptopHUB Official Store — Available in Light & Dark Mode</span>
-  <a href="consult.html">Find Your Perfect Laptop &#x2192;</a>
-</div>
-
 <!-- NAV -->
 <nav>
   <a href="laptophub.html" class="logo-mark">
@@ -1763,7 +1323,7 @@
   <p class="hero-p">Featuring authentic business laptops, creator machines, and convertibles from Dell, HP, Apple, and Microsoft. Delivered with warranty across Pakistan.</p>
   <div class="hero-actions">
     <a href="#inventory" class="btn-p">Explore All 69 Laptops</a>
-    <a href="#faq" class="btn-s">COD & Warranty Info</a>
+    <a href="#faq" class="btn-s">Payment & Warranty Info</a>
   </div>
 </section>
 
@@ -1862,7 +1422,7 @@
     </div>
     <div class="tcard">
       <div class="tcard-stars"><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span></div>
-      <p class="tcard-text">"Got the MacBook Pro M2 delivered via COD in Karachi. Verified serial number on Apple's coverage site immediately. 100% authentic."</p>
+      <p class="tcard-text">"Got the MacBook Pro M2 delivered via insured courier in Karachi. Verified serial number on Apple's coverage site immediately. 100% authentic."</p>
       <div class="tcard-author">
         <div class="tauthor-av av-g">SB</div>
         <div><div class="tauthor-name">Sara B.</div><div class="tauthor-role">Senior Designer, Karachi</div></div>
@@ -1889,8 +1449,8 @@
   </div>
   <div class="faq-list">
     <div class="faq-item">
-      <button class="faq-q"><span>Do you offer Cash on Delivery (COD)?</span><div class="faq-icon">+</div></button>
-      <div class="faq-ans"><p>Yes — COD is available across all major cities including Lahore, Karachi, Islamabad, Rawalpindi, Faisalabad, and Multan with zero extra handling fees.</p></div>
+      <button class="faq-q"><span>What payment methods do you accept?</span><div class="faq-icon">+</div></button>
+      <div class="faq-ans"><p>We accept Direct Bank Transfer / Raast (IBFT) and advance payment verification. Every shipment is fully insured with express tracking across Lahore, Karachi, Islamabad, Rawalpindi, Faisalabad, Multan, and nationwide destinations.</p></div>
     </div>
     <div class="faq-item">
       <button class="faq-q"><span>Are these laptops genuine with official parts?</span><div class="faq-icon">+</div></button>
@@ -2038,7 +1598,7 @@
   <div class="drawer-footer">
     <div class="shipping-badge">
       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2"/><path d="M15 18H9"/><path d="M19 18h2a1 1 0 0 0 1-1v-5l-3-4h-5v10"/><circle cx="7" cy="18" r="2"/><circle cx="17" cy="18" r="2"/></svg>
-      FREE Express Dispatch across Pakistan · Cash on Delivery
+      FREE Express Insured Dispatch across Pakistan
     </div>
     <div class="subtotal-row">
       <span class="subtotal-label">Subtotal:</span>
@@ -2050,164 +1610,18 @@
     </button>
     <button class="drawer-btn-checkout" onclick="openCheckoutModal()">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m7.5 4.27 9 5.15"/><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/></svg>
-      Cash on Delivery Checkout
+      Proceed to Order Checkout
     </button>
   </div>
 </aside>
 
-<!-- LAPTOP QUICK-VIEW & CUSTOM SPEC MODAL -->
-<div id="laptopModal" onclick="handleModalBackdropClick(event)">
-  <div class="laptop-modal-card" id="laptopModalCard">
-    <button class="laptop-modal-close" onclick="closeLaptopModal()" aria-label="Close modal">✕</button>
-    
-    <!-- SCROLLABLE BODY -->
-    <div class="lmodal-scroll-body">
-      <div class="lmodal-grid">
-        <!-- Left: Image Gallery & Badges -->
-        <div class="lmodal-visual">
-          <div class="lmodal-img-wrap" id="lmodalImgWrap">
-            <img id="lmodalImg" src="" alt="Laptop Image" class="lmodal-img blend-original">
-            <span class="lmodal-badge" id="lmodalBadge">Verified</span>
-          </div>
-          <div class="lmodal-highlights">
-            <div class="lmodal-hl-item">
-              <span class="hl-label">Processor</span>
-              <span class="hl-val" id="lmodalCpu">-</span>
-            </div>
-            <div class="lmodal-hl-item">
-              <span class="hl-label">Display</span>
-              <span class="hl-val" id="lmodalDisplay">-</span>
-            </div>
-            <div class="lmodal-hl-item">
-              <span class="hl-label">Graphics</span>
-              <span class="hl-val" id="lmodalGpu">-</span>
-            </div>
-            <div class="lmodal-hl-item">
-              <span class="hl-label">Condition</span>
-              <span class="hl-val" id="lmodalCondition">-</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Right: Customizer Details -->
-        <div class="lmodal-content">
-          <div class="lmodal-brand-tag" id="lmodalBrand">DELL</div>
-          <h2 class="lmodal-title" id="lmodalTitle">Dell Latitude 7430</h2>
-          <p class="lmodal-cat" id="lmodalCat">Corporate Ultrabook · Grade A+ Like New</p>
-
-          <!-- RAM SELECTOR -->
-          <div class="spec-picker-section">
-            <div class="spec-picker-header">
-              <span class="spec-picker-title">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><path d="M9 1v3M15 1v3M9 20v3M15 20v3M20 9h3M20 14h3M1 9h3M1 14h3"/></svg>
-                Select RAM (Memory)
-              </span>
-              <span class="spec-selected-label" id="lblSelectedRam">16 GB</span>
-            </div>
-            <div class="spec-pills-row" id="ramPillsContainer">
-              <button type="button" class="spec-pill-btn" data-ram="8" onclick="selectModalRam(8, this)">
-                <span class="pill-name">8 GB</span>
-                <span class="pill-diff" id="ramDiff8">-Rs 6,000</span>
-              </button>
-              <button type="button" class="spec-pill-btn" data-ram="16" onclick="selectModalRam(16, this)">
-                <span class="pill-name">16 GB</span>
-                <span class="pill-diff" id="ramDiff16">Base</span>
-              </button>
-              <button type="button" class="spec-pill-btn" data-ram="32" onclick="selectModalRam(32, this)">
-                <span class="pill-name">32 GB</span>
-                <span class="pill-diff" id="ramDiff32">+Rs 14,000</span>
-              </button>
-            </div>
-          </div>
-
-          <!-- STORAGE SELECTOR -->
-          <div class="spec-picker-section">
-            <div class="spec-picker-header">
-              <span class="spec-picker-title">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="12" x2="2" y2="12"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/><line x1="6" y1="16" x2="6.01" y2="16"/><line x1="10" y1="16" x2="10.01" y2="16"/></svg>
-                Select Storage (NVMe SSD)
-              </span>
-              <span class="spec-selected-label" id="lblSelectedStorage">512 GB NVMe</span>
-            </div>
-            <div class="spec-pills-row" id="storagePillsContainer">
-              <button type="button" class="spec-pill-btn" data-storage="128" onclick="selectModalStorage(128, this)">
-                <span class="pill-name">128 GB</span>
-                <span class="pill-diff" id="storDiff128">-Rs 4,000</span>
-              </button>
-              <button type="button" class="spec-pill-btn" data-storage="256" onclick="selectModalStorage(256, this)">
-                <span class="pill-name">256 GB</span>
-                <span class="pill-diff" id="storDiff256">-Rs 2,000</span>
-              </button>
-              <button type="button" class="spec-pill-btn" data-storage="512" onclick="selectModalStorage(512, this)">
-                <span class="pill-name">512 GB</span>
-                <span class="pill-diff" id="storDiff512">Base</span>
-              </button>
-              <button type="button" class="spec-pill-btn" data-storage="1000" onclick="selectModalStorage(1000, this)">
-                <span class="pill-name">1 TB NVMe</span>
-                <span class="pill-diff" id="storDiff1000">+Rs 12,000</span>
-              </button>
-            </div>
-          </div>
-
-          <!-- CLIENT COMMENTS / DESIRED REQUEST SECTION -->
-          <div class="spec-picker-section">
-            <div class="spec-picker-header">
-              <span class="spec-picker-title">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-                Desired Specs / Custom Requests
-              </span>
-              <span style="font-size:0.72rem;color:var(--muted)">Optional</span>
-            </div>
-            <textarea class="modal-comment-box" id="lmodalComment" rows="2" placeholder="Tell us your desired additions (e.g. install Windows 11 Pro, apply fresh Arctic thermal paste, need Type-C hub, deliver on weekend)..."></textarea>
-          </div>
-
-          <!-- FULL 7-CATEGORY SPECIFICATIONS SECTION -->
-          <div class="lmodal-specs-section">
-            <h4 class="lmodal-specs-title">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
-              Full Specifications
-            </h4>
-            <div class="lmodal-specs-grid" id="lmodalSpecsGrid">
-              <!-- Dynamically populated with 7 categories -->
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- DEDICATED STICKY ACTION FOOTER (NEVER OVERLAPS CONTENT) -->
-    <div class="lmodal-sticky-footer">
-      <div class="lmodal-footer-price">
-        <span class="lmodal-footer-label">Configured Cash Price</span>
-        <span class="lmodal-footer-amount" id="lmodalPrice">Rs 154,000</span>
-        <span style="font-size:0.72rem;color:var(--green);margin-top:2px;">Free Delivery · 7-Day Guarantee</span>
-      </div>
-      <div class="lmodal-footer-actions">
-        <button type="button" class="btn-lmodal-add" onclick="addModalItemToCart()">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg>
-          Add to Cart
-        </button>
-        <button type="button" class="btn-lmodal-wa" onclick="orderModalViaWhatsApp()">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-          Order on WhatsApp
-        </button>
-        <button type="button" class="btn-lmodal-cod" onclick="checkoutModalCOD()">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
-          Cash on Delivery
-        </button>
-      </div>
-    </div>
-
-  </div>
-</div>
-
-<!-- QUICK CASH ON DELIVERY CHECKOUT MODAL -->
+<!-- ORDER CHECKOUT MODAL -->
 <div id="checkoutModal">
   <div class="checkout-card">
     <div class="checkout-header">
       <h3 style="font-size:1.1rem;font-weight:700;color:var(--heading);display:flex;align-items:center;gap:8px">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m7.5 4.27 9 5.15"/><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/></svg>
-        Cash on Delivery Order
+        Secure Order Checkout
       </h3>
       <button class="drawer-close" onclick="closeCheckoutModal()">✕</button>
     </div>
@@ -2240,10 +1654,10 @@
         <input class="form-input" id="custAddress" type="text" placeholder="House / Office #, Street, Area" required>
       </div>
       <div style="background:var(--s2);padding:10px;border-radius:8px;font-size:0.8rem;color:var(--muted)">
-        Order Total: <strong id="modalOrderTotal" style="color:var(--blue)">Rs 0</strong> · Payment on delivery via Cash
+        Order Total: <strong id="modalOrderTotal" style="color:var(--blue)">Rs 0</strong> · Payment: Direct Bank Transfer / Raast (IBFT)
       </div>
       <button type="submit" class="drawer-btn-checkout" style="margin-top:4px">
-        Confirm & Place COD Order
+        Confirm & Place Order
       </button>
     </form>
   </div>
@@ -2259,7 +1673,7 @@
       <div style="margin-bottom:6px"><strong>Order ID:</strong> <span id="confirmOrderId" style="color:var(--blue)">#LH-9842</span></div>
       <div style="margin-bottom:6px"><strong>Customer:</strong> <span id="confirmCustomer">Customer</span></div>
       <div style="margin-bottom:6px"><strong>WhatsApp Support:</strong> <span style="color:#25d366">+92 326 1398594</span></div>
-      <div><strong>Payment:</strong> Cash on Delivery</div>
+      <div><strong>Payment:</strong> Direct Bank Transfer / Raast (IBFT)</div>
     </div>
     <button class="drawer-btn-checkout" onclick="closeConfirmModal()">Continue Shopping</button>
   </div>
@@ -2505,7 +1919,7 @@
   function handleCardKey(e, id) {
     if (e.key === 'Enter' || e.key === ' ') {
       e.preventDefault();
-      openLaptopModal(id);
+      openProductPage(id);
     }
   }
 
@@ -2623,7 +2037,7 @@
       // ─────────────────────────────────────────────────────────────────────────
 
       return `
-        <div class="pcard" data-brand="${lap.brand}" onclick="openLaptopModal(${lap.id}, event)" tabindex="0" onkeydown="handleCardKey(event, ${lap.id})" role="button" aria-label="View details for ${escapeHtml(lap.name)}">
+        <div class="pcard" data-brand="${lap.brand}" onclick="openProductPage(${lap.id}, event)" tabindex="0" onkeydown="handleCardKey(event, ${lap.id})" role="button" aria-label="View details for ${escapeHtml(lap.name)}">
           <div class="pcard-photo-wrap"${wrapStyle}>
             <span class="pcard-cond-badge"${badgeStyle}>${escapeHtml(condBadge)}</span>
             <img src="${imgSrc}" alt="${escapeHtml(lap.name)}" class="pcard-photo ${blendClass}" loading="lazy"
@@ -2631,6 +2045,11 @@
           </div>
           <div class="pcard-brand">${escapeHtml(lap.brandName || lap.brand)}</div>
           <h3 class="pcard-title" title="${escapeHtml(lap.name)}">${escapeHtml(lap.name)}</h3>
+          <div class="pcard-rating-row" style="display:flex;align-items:center;gap:5px;font-size:0.78rem;margin:4px 0 6px;">
+            <span style="color:#f59e0b;letter-spacing:1px;font-size:0.82rem">★★★★★</span>
+            <span style="font-weight:700;color:var(--heading);font-size:0.78rem">4.8</span>
+            <span style="color:var(--muted);font-size:0.72rem">(${12 + (lap.id % 19)})</span>
+          </div>
           <div class="pcard-chips">
             <span class="pcard-chip cpu-chip">${escapeHtml(cpuChip)}</span>
             <span class="pcard-chip ram-chip">${ramGb} GB RAM</span>
@@ -2643,7 +2062,7 @@
               <span class="pcard-price">${lap.priceFormatted}</span>
             </div>
             <div class="pcard-actions">
-              <button type="button" class="btn-card-view" onclick="openLaptopModal(${lap.id}, event)" aria-label="View details for ${escapeHtml(lap.name)}">
+              <button type="button" class="btn-card-view" onclick="openProductPage(${lap.id}, event)" aria-label="View details for ${escapeHtml(lap.name)}">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
                 <span>Details</span>
               </button>
@@ -2747,11 +2166,11 @@
             <div class="cart-item-price">Rs ${itemTotal.toLocaleString('en-PK')}</div>
           </div>
           <div class="cart-item-qty">
-            <button class="qty-btn" onclick="changeQty(${item.id}, -1)">−</button>
+            <button class="qty-btn" onclick="changeQty('${item.itemKey || item.id}', -1)" aria-label="Decrease quantity" style="min-width:32px;min-height:32px;display:flex;align-items:center;justify-content:center;">−</button>
             <span class="qty-num">${item.qty}</span>
-            <button class="qty-btn" onclick="changeQty(${item.id}, 1)">+</button>
+            <button class="qty-btn" onclick="changeQty('${item.itemKey || item.id}', 1)" aria-label="Increase quantity" style="min-width:32px;min-height:32px;display:flex;align-items:center;justify-content:center;">+</button>
           </div>
-          <button class="cart-item-del" onclick="removeFromCart(${item.id})" title="Remove item" aria-label="Remove item">
+          <button class="cart-item-del" onclick="removeFromCart('${item.itemKey || item.id}')" title="Remove item" aria-label="Remove item" style="min-width:36px;min-height:36px;display:flex;align-items:center;justify-content:center;">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>
           </button>
         </div>`;
@@ -2763,21 +2182,21 @@
   }
 
   function addToCartById(id) {
-    openLaptopModal(id);
+    openProductPage(id);
   }
 
-  function changeQty(id, delta) {
-    const item = cart.find(i => i.id === id);
+  function changeQty(keyOrId, delta) {
+    const item = cart.find(i => (i.itemKey && i.itemKey === String(keyOrId)) || String(i.id) === String(keyOrId));
     if (!item) return;
     item.qty += delta;
     if (item.qty <= 0) {
-      cart = cart.filter(i => i.id !== id);
+      cart = cart.filter(i => (i.itemKey ? i.itemKey !== String(keyOrId) : String(i.id) !== String(keyOrId)));
     }
     saveCart();
   }
 
-  function removeFromCart(id) {
-    cart = cart.filter(i => i.id !== id);
+  function removeFromCart(keyOrId) {
+    cart = cart.filter(i => (i.itemKey ? i.itemKey !== String(keyOrId) : String(i.id) !== String(keyOrId)));
     saveCart();
     showToast('Item removed from cart');
   }
@@ -2834,442 +2253,33 @@
       return line;
     }).join('%0A');
 
-    const msg = `*New Laptop Order - LaptopHUB Pakistan*%0A%0A*Items:*%0A${itemsText}%0A%0A*Subtotal:* Rs ${subtotal.toLocaleString('en-PK')}%0A*Delivery:* Free Cash on Delivery%0A%0APlease confirm my order!`;
+    const msg = `*New Laptop Order - LaptopHUB Pakistan*%0A%0A*Items:*%0A${itemsText}%0A%0A*Subtotal:* Rs ${subtotal.toLocaleString('en-PK')}%0A*Delivery:* Free Insured Express Dispatch%0A*Payment:* Direct Bank Transfer / Raast (IBFT)%0A%0APlease confirm my order!`;
     window.open(`https://wa.me/923261398594?text=${msg}`, '_blank');
   }
 
   // =========================================================================
-  // LAPTOP MODAL CUSTOMIZER & SPEC SELECTOR
+  // STANDALONE PRODUCT PAGE NAVIGATION & SCROLL RESTORATION
   // =========================================================================
-  let activeModalLaptop = null;
-  let modalSelectedRam = 16;
-  let modalSelectedStorage = 512;
-  let modalCalculatedPrice = 0;
+  function openProductPage(id, e) {
+    if (e && e.target && e.target.closest && e.target.closest('.btn-card-wa')) return;
+    try {
+      sessionStorage.setItem('laptophub_scroll_pos', window.scrollY.toString());
+    } catch (_) {}
+    window.location.href = `product.html?id=${id}`;
+  }
 
-  function openLaptopModal(id, e) {
-    if (e) e.stopPropagation();
-    const lap = inventory.find(l => l.id === id);
-    if (!lap) return;
-    activeModalLaptop = lap;
-
-    // Default to laptop's base RAM (or closest to 8, 16, 32 if upgradable)
-    const isUpgradable = isLaptopRamUpgradable(lap);
-    if (!isUpgradable) {
-      modalSelectedRam = lap.ram;
-    } else {
-      if (lap.ram <= 8) modalSelectedRam = 8;
-      else if (lap.ram <= 16) modalSelectedRam = 16;
-      else modalSelectedRam = 32;
-    }
-
-    // Default to laptop's base storage (or closest to 128, 256, 512, 1000)
-    if (lap.storage <= 128) modalSelectedStorage = 128;
-    else if (lap.storage <= 256) modalSelectedStorage = 256;
-    else if (lap.storage <= 512) modalSelectedStorage = 512;
-    else modalSelectedStorage = 1000;
-
-    // Populate modal fields — apply image blending
-    const modalIsWhite = lap.bgTone === 'white';
-    const modalImgSrc  = (modalIsWhite && lap.processedImg) ? lap.processedImg : lap.img;
-    const modalImgEl   = document.getElementById('lmodalImg');
-    const modalWrapEl  = document.getElementById('lmodalImgWrap');
-    modalImgEl.src = modalImgSrc;
-    modalImgEl.className = 'lmodal-img ' + (modalIsWhite ? 'blend-cutout' : 'blend-original');
-    modalImgEl.onerror = function() {
-      this.src = lap.img;
-      this.classList.remove('blend-cutout');
-      this.classList.add('blend-original');
-    };
-    if (modalWrapEl) {
-      const rawTint = lap.tintColor || '';
-      const modalTint = rawTint
-        ? (modalIsWhite
-            ? rawTint
-            : lap.bgTone === 'colorful'
-              ? rawTint.replace(/,[\s]*[\d.]+\)$/, ', 0.10)')
-              : rawTint.replace(/,[\s]*[\d.]+\)$/, ', 0.05)'))
-        : '';
-      modalWrapEl.style.setProperty('--img-tint', modalTint || '');
-    }
-    document.getElementById('lmodalBadge').textContent = lap.badge || 'Verified';
-    document.getElementById('lmodalBrand').textContent = lap.brandName || lap.brand.toUpperCase();
-    document.getElementById('lmodalTitle').textContent = lap.name;
-    document.getElementById('lmodalCat').textContent = `${lap.category} · ${lap.condition}`;
-    document.getElementById('lmodalCpu').textContent = lap.cpu;
-    document.getElementById('lmodalDisplay').textContent = lap.display;
-    document.getElementById('lmodalGpu').textContent = lap.gpu;
-    document.getElementById('lmodalCondition').textContent = lap.condition;
-    document.getElementById('lmodalComment').value = '';
-
-    updateModalPricingAndUI();
-
-    const isModalOutOfStock = lap.stock !== undefined && lap.stock <= 0;
-    const addBtn = document.querySelector('.btn-lmodal-add');
-    if (addBtn) {
-      if (isModalOutOfStock) {
-        addBtn.disabled = true;
-        addBtn.style.opacity = '0.5';
-        addBtn.style.cursor = 'not-allowed';
-        addBtn.textContent = 'Out of Stock';
-      } else {
-        addBtn.disabled = false;
-        addBtn.style.opacity = '1';
-        addBtn.style.cursor = 'pointer';
-        addBtn.textContent = 'Add to Cart';
+  // Restore scroll position when returning from product page
+  window.addEventListener('DOMContentLoaded', () => {
+    try {
+      const savedScroll = sessionStorage.getItem('laptophub_scroll_pos');
+      if (savedScroll !== null) {
+        sessionStorage.removeItem('laptophub_scroll_pos');
+        requestAnimationFrame(() => {
+          window.scrollTo({ top: parseInt(savedScroll, 10), behavior: 'instant' });
+        });
       }
-    }
-
-    const modal = document.getElementById('laptopModal');
-    modal.classList.add('open');
-    document.body.classList.add('modal-open');
-    document.body.style.overflow = 'hidden';
-  }
-
-  function closeLaptopModal() {
-    const modal = document.getElementById('laptopModal');
-    if (modal) modal.classList.remove('open');
-    document.body.classList.remove('modal-open');
-    document.body.style.overflow = '';
-  }
-
-  function handleModalBackdropClick(e) {
-    if (e.target.id === 'laptopModal') {
-      closeLaptopModal();
-    }
-  }
-
-  function selectModalRam(ram, btn) {
-    modalSelectedRam = ram;
-    updateModalPricingAndUI();
-  }
-
-  function selectModalStorage(storage, btn) {
-    modalSelectedStorage = storage;
-    updateModalPricingAndUI();
-  }
-
-  function isLaptopRamUpgradable(lap) {
-    if (!lap) return true;
-    if (lap.isRamUpgradable === false) return false;
-    const mem = lap.fullSpecs?.memoryStorage || {};
-    const ramType = String(mem.ramType || '').toUpperCase();
-    const ramSlots = String(mem.ramSlots || '').toLowerCase();
-    
-    if (ramType.includes('UNIFIED MEMORY')) return false;
-    if (ramSlots.includes('non-upgradable') || ramSlots.includes('soldered dual-channel')) return false;
-    if (ramSlots.includes('soldered') && !ramSlots.includes('upgradable')) return false;
-    return true;
-  }
-
-  function getLaptopRamDelta(targetRam, baseRam, ramType = 'DDR4', isUpgradable = true) {
-    if (typeof getRamDelta === 'function') {
-      return getRamDelta(targetRam, baseRam, ramType, isUpgradable);
-    }
-    if (!isUpgradable || targetRam === baseRam) return 0;
-    const table = { 8: 0, 16: 8000, 32: 23000 };
-    return (table[targetRam] ?? 0) - (table[baseRam] ?? 0);
-  }
-
-  function getLaptopStorageDelta(targetStorage, baseStorage) {
-    if (typeof getStorageDelta === 'function') {
-      return getStorageDelta(targetStorage, baseStorage);
-    }
-    if (targetStorage === baseStorage) return 0;
-    const table = { 128: 0, 256: 4000, 512: 9000, 1000: 21000 };
-    return (table[targetStorage] ?? 9000) - (table[baseStorage] ?? 9000);
-  }
-
-  function renderModalFullSpecs(lap, selectedRam, selectedStorage) {
-    const container = document.getElementById('lmodalSpecsGrid');
-    if (!container || !lap) return;
-
-    const full = lap.fullSpecs || {};
-    const perf = full.performance || {};
-    const mem = full.memoryStorage || {};
-    const disp = full.display || {};
-    const graph = full.graphics || {};
-    const conn = full.connectivityPorts || {};
-    const build = full.batteryBuild || {};
-    const cond = full.conditionWarranty || {};
-
-    const curRam = selectedRam || lap.ram;
-    const curStorage = selectedStorage || lap.storage;
-    const storFormatted = curStorage >= 1000 ? '1 TB' : `${curStorage} GB`;
-
-    const ramDisplay = `${curRam} GB ${mem.ramType || 'DDR4'}${mem.ramSpeed ? ' ' + mem.ramSpeed : ''}`;
-    const storDisplay = `${storFormatted} ${mem.storageType || 'NVMe SSD'}`;
-
-    const categories = [
-      {
-        title: "Performance",
-        icon: `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><path d="M9 1v3M15 1v3M9 20v3M15 20v3M20 9h3M20 14h3M1 9h3M1 14h3"/></svg>`,
-        rows: [
-          { key: "Processor", val: perf.processor || lap.cpu },
-          { key: "Cores & Threads", val: perf.coresThreads },
-          { key: "Clock Speeds", val: perf.clocks },
-          { key: "Cache", val: perf.cache }
-        ]
-      },
-      {
-        title: "Memory & Storage",
-        icon: `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="12" x2="2" y2="12"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/><line x1="6" y1="16" x2="6.01" y2="16"/><line x1="10" y1="16" x2="10.01" y2="16"/></svg>`,
-        rows: [
-          { key: "RAM (Selected)", val: ramDisplay, highlight: true },
-          { key: "RAM Expansion", val: mem.ramSlots || (lap.isRamUpgradable ? 'Upgradable' : 'Soldered (Non-upgradable)') },
-          { key: "Storage (Selected)", val: storDisplay, highlight: true },
-          { key: "Drive Interface", val: mem.interface || lap.storageType },
-          { key: "Transfer Speed", val: mem.readSpeed }
-        ]
-      },
-      {
-        title: "Display",
-        icon: `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>`,
-        rows: [
-          { key: "Screen Size", val: disp.size },
-          { key: "Resolution", val: disp.resolution },
-          { key: "Panel Technology", val: disp.panelType },
-          { key: "Refresh Rate", val: disp.refreshRate },
-          { key: "Touch / Surface", val: disp.touchAntiGlare }
-        ]
-      },
-      {
-        title: "Graphics",
-        icon: `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg>`,
-        rows: [
-          { key: "Graphics Model", val: graph.gpuName || lap.gpu },
-          { key: "Architecture", val: graph.type || (lap.isDedicatedGpu ? 'Dedicated' : 'Integrated') },
-          { key: "Dedicated VRAM", val: graph.vram }
-        ]
-      },
-      {
-        title: "Connectivity & Ports",
-        icon: `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>`,
-        rows: [
-          { key: "External Ports", val: conn.ports },
-          { key: "Wireless", val: conn.wireless }
-        ]
-      },
-      {
-        title: "Battery & Build",
-        icon: `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="6" width="18" height="12" rx="2"/><line x1="23" y1="11" x2="23" y2="13"/></svg>`,
-        rows: [
-          { key: "Battery", val: build.battery },
-          { key: "Weight", val: build.weight },
-          { key: "Keyboard", val: build.keyboard },
-          { key: "Webcam & Mics", val: build.webcam },
-          { key: "Operating System", val: build.os }
-        ]
-      },
-      {
-        title: "Condition & Warranty",
-        icon: `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>`,
-        rows: [
-          { key: "Condition Grade", val: cond.condition || lap.condition },
-          { key: "Store Warranty", val: cond.warranty || lap.warranty }
-        ]
-      }
-    ];
-
-    container.innerHTML = categories.map(cat => {
-      const validRows = cat.rows.filter(r => r.val && String(r.val).trim() !== '' && String(r.val).trim() !== '-');
-      if (validRows.length === 0) return '';
-      
-      const rowsHtml = validRows.map(r => {
-        const isUnverified = String(r.val).toLowerCase().includes('unverified');
-        let valClass = isUnverified ? 'spec-val unverified-val' : 'spec-val';
-        if (r.highlight) valClass += ' highlight-spec';
-        return `
-          <div class="spec-row">
-            <span class="spec-key">${escapeHtml(r.key)}</span>
-            <span class="${valClass}">${escapeHtml(r.val)}</span>
-          </div>`;
-      }).join('');
-
-      return `
-        <div class="spec-cat-block">
-          <div class="spec-cat-header">
-            ${cat.icon}
-            <span>${escapeHtml(cat.title)}</span>
-          </div>
-          <div class="spec-rows-list">
-            ${rowsHtml}
-          </div>
-        </div>`;
-    }).join('');
-  }
-
-  function updateModalPricingAndUI() {
-    if (!activeModalLaptop) return;
-    const basePrice = activeModalLaptop.price;
-    const baseRam = activeModalLaptop.ram;
-    const baseStorage = activeModalLaptop.storage;
-    const isUpgradable = isLaptopRamUpgradable(activeModalLaptop);
-    const ramType = (activeModalLaptop.fullSpecs?.memoryStorage?.ramType || 'DDR4').toUpperCase();
-
-    const ramDelta = getLaptopRamDelta(modalSelectedRam, baseRam, ramType, isUpgradable);
-    const storageDelta = getLaptopStorageDelta(modalSelectedStorage, baseStorage);
-
-    modalCalculatedPrice = Math.max(25000, basePrice + ramDelta + storageDelta);
-
-    document.getElementById('lmodalPrice').textContent = `Rs ${modalCalculatedPrice.toLocaleString('en-PK')}`;
-    document.getElementById('lblSelectedRam').textContent = `${modalSelectedRam} GB ${ramType}`;
-    const storType = activeModalLaptop.fullSpecs?.memoryStorage?.storageType || 'NVMe';
-    const storText = modalSelectedStorage >= 1000 ? `1 TB ${storType}` : `${modalSelectedStorage} GB ${storType}`;
-    document.getElementById('lblSelectedStorage').textContent = storText;
-
-    // Dynamically update full specifications section to reflect selected upgrades
-    renderModalFullSpecs(activeModalLaptop, modalSelectedRam, modalSelectedStorage);
-
-    // RAM Options Rendering
-    const ramContainer = document.getElementById('ramPillsContainer');
-    if (ramContainer) {
-      if (!isUpgradable) {
-        // Soldered / Non-upgradable RAM: Show fixed badge
-        ramContainer.innerHTML = `
-          <button type="button" class="spec-pill-btn active fixed-spec-pill" style="cursor:default" data-ram="${baseRam}">
-            <span class="pill-name">${baseRam} GB</span>
-            <span class="pill-diff base-spec-pill">Soldered (Fixed)</span>
-          </button>
-          <div style="font-size:0.75rem; color:var(--muted); margin-top:6px; display:inline-flex; align-items:center; gap:5px; width:100%;">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-            <span>Factory onboard memory (Non-upgradable).</span>
-          </div>
-        `;
-      } else {
-        // Upgradable RAM: Render options relative to baseRam
-        const ramOptions = [8, 16, 32];
-        if (!ramOptions.includes(baseRam) && baseRam > 0) {
-          ramOptions.push(baseRam);
-          ramOptions.sort((a,b) => a - b);
-        }
-        ramContainer.innerHTML = ramOptions.map(r => {
-          const d = getLaptopRamDelta(r, baseRam, ramType, isUpgradable);
-          let diffText = 'Included';
-          let diffClass = 'pill-diff base-spec-pill';
-          if (d > 0) {
-            diffText = `+Rs ${d.toLocaleString('en-PK')}`;
-            diffClass = 'pill-diff';
-          } else if (d < 0) {
-            diffText = `-Rs ${Math.abs(d).toLocaleString('en-PK')}`;
-            diffClass = 'pill-diff';
-          }
-          const activeClass = (r === modalSelectedRam) ? 'active' : '';
-          return `
-            <button type="button" class="spec-pill-btn ${activeClass}" data-ram="${r}" onclick="selectModalRam(${r}, this)">
-              <span class="pill-name">${r} GB</span>
-              <span class="${diffClass}" id="ramDiff${r}">${diffText}</span>
-            </button>
-          `;
-        }).join('');
-      }
-    }
-
-    // Storage Options Rendering
-    [128, 256, 512, 1000].forEach(s => {
-      const d = getLaptopStorageDelta(s, baseStorage);
-      const tag = document.getElementById(`storDiff${s}`);
-      if (tag) {
-        if (d === 0) {
-          tag.textContent = 'Included';
-          tag.className = 'pill-diff base-spec-pill';
-        } else if (d > 0) {
-          tag.textContent = `+Rs ${d.toLocaleString('en-PK')}`;
-          tag.className = 'pill-diff';
-        } else {
-          tag.textContent = `-Rs ${Math.abs(d).toLocaleString('en-PK')}`;
-          tag.className = 'pill-diff';
-        }
-      }
-    });
-
-    // Sync active classes on storage pills
-    document.querySelectorAll('#storagePillsContainer .spec-pill-btn').forEach(btn => {
-      btn.classList.toggle('active', parseInt(btn.dataset.storage, 10) === modalSelectedStorage);
-    });
-  }
-
-  function addModalItemToCart() {
-    if (!activeModalLaptop) return;
-    if (activeModalLaptop.stock !== undefined && activeModalLaptop.stock <= 0) {
-      showToast('Sorry, this laptop is currently out of stock.');
-      return;
-    }
-    const comment = document.getElementById('lmodalComment').value.trim();
-    const storText = modalSelectedStorage >= 1000 ? '1 TB NVMe SSD' : `${modalSelectedStorage} GB NVMe SSD`;
-    const ramText = `${modalSelectedRam} GB ${activeModalLaptop.fullSpecs?.memoryStorage?.ramType || 'RAM'}`;
-    const cpuName = activeModalLaptop.fullSpecs?.performance?.processor || activeModalLaptop.cpu;
-
-    // Add unique item entry or increment if identical specs exist
-    const existing = cart.find(i => i.id === activeModalLaptop.id && i.ram === modalSelectedRam && i.storage === modalSelectedStorage && i.comment === comment);
-    if (existing) {
-      existing.qty++;
-    } else {
-      cart.push({
-        id: activeModalLaptop.id,
-        name: activeModalLaptop.name,
-        price: modalCalculatedPrice,
-        basePrice: activeModalLaptop.price,
-        cpu: cpuName,
-        ram: modalSelectedRam,
-        ramLabel: ramText,
-        storage: modalSelectedStorage,
-        storageLabel: storText,
-        comment: comment,
-        img: activeModalLaptop.img,
-        qty: 1
-      });
-    }
-
-    saveCart();
-    closeLaptopModal();
-    showToast(`Added ${activeModalLaptop.name} (${ramText} / ${storText}) to cart!`);
-    openCart();
-  }
-
-  function orderModalViaWhatsApp() {
-    if (!activeModalLaptop) return;
-
-    if (!currentUser || !currentUser.loggedIn) {
-      pendingBuyAction = {
-        type: 'modal_whatsapp',
-        laptopId: activeModalLaptop.id,
-        ram: modalSelectedRam,
-        storage: modalSelectedStorage,
-        comment: document.getElementById('lmodalComment') ? document.getElementById('lmodalComment').value.trim() : ''
-      };
-      openLoginModal('Please sign in to place your order');
-      return;
-    }
-
-    const comment = document.getElementById('lmodalComment').value.trim();
-    const storText = modalSelectedStorage >= 1000 ? '1 TB NVMe SSD' : `${modalSelectedStorage} GB NVMe SSD`;
-    const ramText = `${modalSelectedRam} GB ${activeModalLaptop.fullSpecs?.memoryStorage?.ramType || 'RAM'}`;
-    const cpuName = activeModalLaptop.fullSpecs?.performance?.processor || activeModalLaptop.cpu;
-
-    let msg = `*Custom Laptop Order — LaptopHUB Pakistan*%0A`;
-    msg += `------------------------------------------%0A`;
-    msg += `*Model:* ${encodeURIComponent(activeModalLaptop.name)}%0A`;
-    msg += `*Processor:* ${encodeURIComponent(cpuName)}%0A`;
-    msg += `*Selected RAM:* ${encodeURIComponent(ramText)}%0A`;
-    msg += `*Selected Storage:* ${encodeURIComponent(storText)}%0A`;
-    msg += `*Display:* ${encodeURIComponent(activeModalLaptop.display)}%0A`;
-    msg += `*Graphics:* ${encodeURIComponent(activeModalLaptop.gpu)}%0A`;
-    msg += `*Configured Cash Price:* Rs ${modalCalculatedPrice.toLocaleString('en-PK')}%0A`;
-    msg += `*Condition:* ${encodeURIComponent(activeModalLaptop.condition)}%0A`;
-    if (comment) {
-      msg += `*Special Request / Note:* "${encodeURIComponent(comment)}"%0A`;
-    }
-    msg += `------------------------------------------%0A`;
-    msg += `Please confirm availability and dispatch schedule!`;
-
-    window.open(`https://wa.me/923261398594?text=${msg}`, '_blank');
-  }
-
-  function checkoutModalCOD() {
-    addModalItemToCart();
-    closeCart();
-    openCheckoutModal();
-  }
+    } catch (_) {}
+  });
 
   function openCheckoutModal() {
     if (cart.length === 0) {
@@ -3277,7 +2287,7 @@
       return;
     }
     if (!currentUser || !currentUser.loggedIn) {
-      pendingBuyAction = { type: 'cod_checkout' };
+      pendingBuyAction = { type: 'checkout' };
       openLoginModal('Please sign in to place your order');
       return;
     }
@@ -3299,7 +2309,7 @@
     e.preventDefault();
     if (!currentUser || !currentUser.loggedIn) {
       closeCheckoutModal();
-      pendingBuyAction = { type: 'cod_checkout' };
+      pendingBuyAction = { type: 'checkout' };
       openLoginModal('Please sign in to place your order');
       return;
     }
@@ -3323,7 +2333,7 @@
           currentUser = null;
           localStorage.removeItem('lh_user');
           renderUserNav();
-          pendingBuyAction = { type: 'cod_checkout' };
+          pendingBuyAction = { type: 'checkout' };
           openLoginModal('Please sign in to place your order');
           return;
         }
@@ -3618,10 +2628,9 @@
       checkoutWhatsApp();
     } else if (action.type === 'card_whatsapp' && action.lapId) {
       orderCardViaWhatsApp(action.lapId);
-    } else if (action.type === 'cod_checkout') {
+    } else if (action.type === 'checkout' || action.type === 'cod_checkout') {
       openCheckoutModal();
-    } else if (action.type === 'modal_whatsapp') {
-      orderModalViaWhatsApp();
+
     }
   }
 
@@ -3874,7 +2883,6 @@
   // Global Keyboard Accessibility: ESC closes all open modals and drawers
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') {
-      closeLaptopModal();
       closeCart();
       closeCheckoutModal();
       closeLoginModal();

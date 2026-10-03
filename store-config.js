@@ -26,7 +26,7 @@ const STORE_CONFIG = {
   // SHIPPING & GUARANTEE
   delivery: {
     freeShipping: true,
-    policy: "Free Express Cash on Delivery Across Pakistan",
+    policy: "Free Express Insured Dispatch Across Pakistan",
     timelines: {
       lahore: "Same Day / 24 Hours",
       karachi: "24 to 48 Hours via Express Courier",
@@ -246,7 +246,7 @@ function formatCartWhatsAppMessage(cart, customer = {}) {
   msg += `*Order Items:*\n${itemsText}\n`;
   msg += `------------------------------------------\n`;
   msg += `*Subtotal:* Rs ${subtotal.toLocaleString('en-PK')}\n`;
-  msg += `*Payment:* Cash on Delivery (COD)\n`;
+  msg += `*Payment:* Direct Bank Transfer / Raast (IBFT)\n`;
   msg += `*Shipping:* Free Express Dispatch\n\n`;
   msg += `Please confirm availability and dispatch time!`;
 
