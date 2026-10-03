@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LaptopHUB — One-Time Firestore Migration Tool</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/theme.css">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
+  background: #090a0f;
+  color: #e6e9f5;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1rem;
+}
+.card {
+  background: #12141e;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 18px;
+  max-width: 620px;
+  width: 100%;
+  padding: 2.25rem;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+}
+h1 {
+  font-size: 1.5rem;
+  font-weight: 800;
+  margin-bottom: 0.5rem;
+  color: #fff;
+}
+h1 span { color: #4c7cff; }
+p {
+  color: #8b93ad;
+  font-size: 0.88rem;
+  line-height: 1.5;
+  margin-bottom: 1.5rem;
+}
+.input-group {
+  margin-bottom: 1.25rem;
+}
+label {
+  display: block;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #8b93ad;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 6px;
+}
+input, textarea {
+  width: 100%;
+  padding: 11px 14px;
+  background: #090a0f;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 9px;
+  color: #fff;
+  font-family: inherit;
+  font-size: 0.9rem;
+}
+input:focus, textarea:focus {
+  outline: none;
+  border-color: #4c7cff;
+}
+.btn {
+  width: 100%;
+  padding: 12px 20px;
+  border-radius: 9px;
+  background: #4c7cff;
+  color: #fff;
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 0.92rem;
+  transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+.btn:hover { background: #3b6bef; transform: translateY(-1px); }
+.btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+.log-box {
+  background: #040508;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  padding: 1rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.8rem;
+  color: #9cb1ff;
+  max-height: 240px;
+  overflow-y: auto;
+  margin-top: 1.25rem;
+  display: none;
+}
+.progress-bar-wrap {
+  background: rgba(255, 255, 255, 0.08);
+  height: 8px;
+  border-radius: 999px;
+  margin-top: 1rem;
+  overflow: hidden;
+  display: none;
+}
+.progress-bar-fill {
+  background: #4c7cff;
+  height: 100%;
+  width: 0%;
+  transition: width 0.2s ease;
+}
+.alert {
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 0.82rem;
+  margin-bottom: 1.25rem;
+}
+.alert-info {
+  background: rgba(76, 124, 255, 0.12);
+  border: 1px solid rgba(76, 124, 255, 0.25);
+  color: #bfd4ff;
+}
+</style>
+
+<!-- Firebase SDKs (Compat for standalone client execution) -->
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+
+<script src="../laptops-data.js"></script>
+<script src="../js/firebase-config.js"></script>
+</head>
+<body>
+
+<div class="card">
+  <h1>Laptop<span>HUB</span> Firestore Importer</h1>
+  <p>One-time automated migration tool to import all 69 verified laptop models from <code>laptops-data.js</code> into your Cloud Firestore database.</p>
+
+  <div class="alert alert-info">
+    ℹ️ <strong>Admin Authentication Required:</strong> Because Firestore Security Rules protect your catalog from unauthorized modifications, sign in with your Firebase Admin account to execute the import.
+  </div>
+
+  <form id="importForm" onsubmit="startMigration(event)">
+    <div class="input-group">
+      <label>Admin Email</label>
+      <input type="email" id="adminEmail" placeholder="admin@laptophub.pk" required autocomplete="username">
+    </div>
+    <div class="input-group">
+      <label>Admin Password</label>
+      <input type="password" id="adminPassword" placeholder="••••••••" required autocomplete="current-password">
+    </div>
+    <button type="submit" class="btn" id="btnStart">
+      <span>🚀 Sign In & Import 69 Laptops</span>
+    </button>
+  </form>
+
+  <div class="progress-bar-wrap" id="progWrap">
+    <div class="progress-bar-fill" id="progFill"></div>
+  </div>
+
+  <div class="log-box" id="logBox"></div>
+</div>
+
+<script>
+function log(msg, color) {
+  const box = document.getElementById('logBox');
+  box.style.display = 'block';
+  const line = document.createElement('div');
+  line.textContent = `[${new Date().toLocaleTimeString()}] ${msg}`;
+  if (color) line.style.color = color;
+  box.appendChild(line);
+  box.scrollTop = box.scrollHeight;
+}
+
+async function startMigration(e) {
+  e.preventDefault();
+  const btn = document.getElementById('btnStart');
+  const email = document.getElementById('adminEmail').value.trim();
+  const pass = document.getElementById('adminPassword').value;
+  const progWrap = document.getElementById('progWrap');
+  const progFill = document.getElementById('progFill');
+
+  btn.disabled = true;
+  btn.textContent = 'Initializing...';
+  progWrap.style.display = 'block';
+
+  // 1. Initialize Firebase
+  const { isConfigured, auth, db } = initFirebase();
+  if (!isConfigured || !auth || !db) {
+    log('ERROR: Firebase is not configured! Please open js/firebase-config.js and paste your Firebase Project credentials first.', '#ef4444');
+    btn.disabled = false;
+    btn.textContent = 'Retry Migration';
+    return;
+  }
+
+  try {
+    log('Signing in with admin account...');
+    const userCred = await auth.signInWithEmailAndPassword(email, pass);
+    log(`Authenticated successfully! UID: ${userCred.user.uid}`, '#10b981');
+
+    const laptops = (typeof LAPTOPS_INVENTORY !== 'undefined') ? LAPTOPS_INVENTORY : [];
+    if (!laptops.length) {
+      log('ERROR: LAPTOPS_INVENTORY not found in laptops-data.js.', '#ef4444');
+      btn.disabled = false;
+      return;
+    }
+
+    log(`Found ${laptops.length} laptops to import. Starting batch operations...`);
+
+    let imported = 0;
+    const batchSize = 25; // Firestore batch max is 500
+    
+    for (let i = 0; i < laptops.length; i += batchSize) {
+      const chunk = laptops.slice(i, i + batchSize);
+      const batch = db.batch();
+
+      for (const lap of chunk) {
+        const docRef = db.collection('laptops').doc(String(lap.id));
+        const payload = {
+          ...lap,
+          stock: lap.stock ?? 3, // Default verified stock if unset
+          featured: !!lap.badge,
+          updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+        };
+        batch.set(docRef, payload, { merge: true });
+      }
+
+      await batch.commit();
+      imported += chunk.length;
+      const pct = Math.round((imported / laptops.length) * 100);
+      progFill.style.width = `${pct}%`;
+      log(`Imported ${imported} / ${laptops.length} laptops (${pct}%)...`);
+    }
+
+    log('SUCCESS! All 69 laptops successfully imported into Cloud Firestore!', '#10b981');
+    btn.textContent = '✓ Migration Complete';
+    btn.style.background = '#10b981';
+
+  } catch (err) {
+    log(`Migration failed: ${err.message}`, '#ef4444');
+    btn.disabled = false;
+    btn.textContent = 'Retry Migration';
+  }
+}
+</script>
+
+</body>
+</html>

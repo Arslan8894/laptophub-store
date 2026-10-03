@@ -1,0 +1,21 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Laptops Inventory: Publicly readable by all visitors.
+    // Strictly restricted so ONLY the verified Admin account can create, edit, or delete laptops.
+    match /laptops/{laptopId} {
+      allow read: if true;
+      // Replace YOUR_ADMIN_UID with your Firebase Auth User UID from the Firebase Console
+      allow create, update, delete: if request.auth != null && (
+        request.auth.uid == "YOUR_ADMIN_UID" ||
+        request.auth.token.admin == true
+      );
+    }
+    
+    // Default deny for all other collections
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
