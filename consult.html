@@ -230,14 +230,15 @@
   .slider-label { font-size: 0.85rem; color: var(--muted); margin-bottom: 1.5rem; font-weight: 500; }
   input[type="range"] {
     width: 100%; -webkit-appearance: none; appearance: none;
-    height: 7px; border-radius: 999px;
+    height: 10px; border-radius: 999px;
     background: linear-gradient(90deg, var(--blue) var(--pct, 40%), var(--s3) var(--pct, 40%));
-    outline: none; cursor: pointer; margin-bottom: 0.75rem;
+    outline: none; cursor: pointer; margin: 12px 0;
     transition: background 0.1s;
+    touch-action: pan-y;
   }
   input[type="range"]::-webkit-slider-thumb {
     -webkit-appearance: none; appearance: none;
-    width: 22px; height: 22px; border-radius: 50%;
+    width: 28px; height: 28px; border-radius: 50%;
     background: var(--blue); border: 3px solid var(--card-bg);
     box-shadow: 0 2px 10px rgba(76,124,255,0.45);
     cursor: pointer;
@@ -659,17 +660,65 @@
   }
 
   @media (max-width: 640px) {
-    .wizard-card { padding: 1.5rem; }
-    .hero-title { font-size: 1.85rem; }
-    .option-grid { grid-template-columns: 1fr 1fr; }
-    .progress-labels { display: none; }
+    .hero {
+      padding: calc(4.8rem + var(--safe-top, 0px)) 1rem 2rem;
+    }
+    .hero-title {
+      font-size: 1.85rem;
+    }
+    .wizard-wrap {
+      margin: 1.5rem auto 3rem;
+      padding: 0 0.85rem;
+    }
+    .wizard-card {
+      padding: 1.35rem 1.15rem;
+      border-radius: 18px;
+      min-height: auto;
+    }
+    .step-title {
+      font-size: 1.35rem;
+    }
+    .option-grid {
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem;
+    }
+    .progress-labels {
+      display: none;
+    }
+    .btn-prev, .btn-next, .btn-restart, .btn-edit-answers {
+      min-height: 48px;
+      padding: 0.75rem 1.2rem;
+    }
+    .wa-fab {
+      bottom: calc(1.25rem + var(--safe-bottom, 0px));
+      right: calc(1rem + var(--safe-right, 0px));
+      width: 48px;
+      height: 48px;
+    }
   }
 
-  @media (prefers-reduced-motion: reduce) {
-    *, *::before, *::after {
-      animation-duration: 0.01ms !important;
-      animation-iteration-count: 1 !important;
-      transition-duration: 0.01ms !important;
+  @media (max-width: 420px) {
+    .option-grid {
+      grid-template-columns: 1fr;
+      gap: 0.65rem;
+    }
+    .option-tile {
+      flex-direction: row;
+      align-items: center;
+      gap: 0.85rem;
+      padding: 0.85rem 1rem;
+      min-height: 52px;
+    }
+    .tile-icon-wrap {
+      flex-shrink: 0;
+    }
+    .wizard-nav {
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .btn-prev, .btn-next {
+      flex: 1;
+      text-align: center;
     }
   }
 </style>
