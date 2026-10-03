@@ -1,0 +1,3 @@
+# LaptopHUB - Python stdlib only, no external packages required.
+# server.py uses: sqlite3, hashlib, hmac, secrets, json,
+# http.server, urllib, re, argparse, os, sys, time, logging, base64, html

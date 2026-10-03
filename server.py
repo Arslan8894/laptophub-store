@@ -1500,7 +1500,8 @@ if __name__ == '__main__':
     parser.add_argument('action', nargs='?', default='serve',
                         choices=['serve', 'list'],
                         help="'serve' to start web server, 'list' to print inventory")
-    parser.add_argument('--port', type=int, default=8080)
+    parser.add_argument('--port', type=int,
+                        default=int(os.environ.get('PORT', 8080)))
     args = parser.parse_args()
 
     if args.action == 'list':

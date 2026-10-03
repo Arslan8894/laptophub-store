@@ -1,0 +1,28 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.venv/
+venv/
+env/
+
+# IDE
+.vscode/
+.antigravity-ide/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Temp
+*.tmp
+*.bak
+
+# Keep db/ in repo (SQLite for sessions/orders/reviews)
+# Keep images/ in repo (product photos)
+# Keep desktop_copies/ in repo (reference designs)

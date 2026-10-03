@@ -18,7 +18,7 @@ const STORE_CONFIG = {
     whatsapp: "923261398594",
     phoneDisplay: "+92 326 1398594",
     phoneTel: "+923261398594",
-    email: "support@laptophub.pk",
+    email: "contact.laptophubofficial@gmail.com",
     businessHours: "Mon – Sat (10:00 AM – 8:00 PM PKT)",
     address: "Lahore / Karachi / Islamabad Dispatch Centers, Pakistan"
   },
