@@ -37,11 +37,11 @@
       powerPreference: 'high-performance'
     });
     renderer.setSize(width, height);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
     renderer.toneMappingExposure = 1.15;
     renderer.shadowMap.enabled = true;
-    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    renderer.shadowMap.type = THREE.PCFShadowMap;
 
     renderer.domElement.id = 'heroLaptopCanvas';
     renderer.domElement.style.width = '100%';
@@ -57,8 +57,8 @@
     const dirLight = new THREE.DirectionalLight(0xffffff, 1.3);
     dirLight.position.set(4, 6, 4);
     dirLight.castShadow = true;
-    dirLight.shadow.mapSize.width = 1024;
-    dirLight.shadow.mapSize.height = 1024;
+    dirLight.shadow.mapSize.width = 512;
+    dirLight.shadow.mapSize.height = 512;
     dirLight.shadow.camera.near = 0.5;
     dirLight.shadow.camera.far = 15;
     dirLight.shadow.bias = -0.0005;
@@ -461,15 +461,25 @@
     let dragRotX = 0;
     let isVisible = true;
 
+    // Cached layout values to avoid layout thrashing
+    let cachedHeroHeight = 600;
+    let cachedCenterX = window.innerWidth * 0.5;
+    let cachedCenterY = 300;
+
+    function updateCachedLayout() {
+      const heroEl = container.closest('.hero');
+      if (heroEl) cachedHeroHeight = heroEl.offsetHeight || 600;
+      const rect = container.getBoundingClientRect();
+      cachedCenterX = rect.left + rect.width / 2;
+      cachedCenterY = rect.top + rect.height / 2;
+    }
+    updateCachedLayout();
+
     // Track mouse over hero section and window
     function onMouseMove(e) {
-      if (prefersReducedMotion) return;
-      const rect = container.getBoundingClientRect();
-      // Normalized between -1 and 1
-      const cx = rect.left + rect.width / 2;
-      const cy = rect.top + rect.height / 2;
-      mouse.targetX = (e.clientX - cx) / (window.innerWidth * 0.5);
-      mouse.targetY = (e.clientY - cy) / (window.innerHeight * 0.5);
+      if (prefersReducedMotion || !isVisible) return;
+      mouse.targetX = (e.clientX - cachedCenterX) / (window.innerWidth * 0.5);
+      mouse.targetY = (e.clientY - cachedCenterY) / (window.innerHeight * 0.5);
     }
     window.addEventListener('mousemove', onMouseMove, { passive: true });
 
@@ -519,12 +529,12 @@
       }
     }, { passive: true });
 
-    // Scroll Tilt calculation
+    // Scroll Tilt calculation (using cached height, no DOM layout queries)
     function onScroll() {
+      if (!isVisible) return;
       const scrollY = window.scrollY || window.pageYOffset;
-      const heroHeight = container.closest('.hero') ? container.closest('.hero').offsetHeight : 600;
-      const progress = Math.min(scrollY / heroHeight, 1.5);
-      scrollTilt = progress * 0.35; // Tilt upwards smoothly
+      const progress = Math.min(scrollY / cachedHeroHeight, 1.5);
+      scrollTilt = progress * 0.35;
     }
     window.addEventListener('scroll', onScroll, { passive: true });
     onScroll();
@@ -536,6 +546,7 @@
       camera.aspect = w / h;
       camera.updateProjectionMatrix();
       renderer.setSize(w, h);
+      updateCachedLayout();
     }
     window.addEventListener('resize', onResize);
 

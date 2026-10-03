@@ -83,30 +83,46 @@
 
     window.addEventListener('resize', () => {
       positionLens(activeLink, false);
+      updateOffsets();
     });
 
-    // Update active tab on scroll
-    window.addEventListener('scroll', () => {
-      const scrollPos = window.scrollY + 120;
+    // Cache offsets to avoid layout thrashing
+    let cachedReviewsOffset = 0;
+    let cachedInventoryOffset = 0;
+
+    function updateOffsets() {
       const reviewsSec = document.getElementById('reviews');
       const inventorySec = document.getElementById('inventory');
+      if (reviewsSec) cachedReviewsOffset = reviewsSec.offsetTop;
+      if (inventorySec) cachedInventoryOffset = inventorySec.offsetTop;
+    }
+    setTimeout(updateOffsets, 200);
 
-      let currentSec = null;
-      if (reviewsSec && scrollPos >= reviewsSec.offsetTop) {
-        currentSec = '#reviews';
-      } else if (inventorySec && scrollPos >= inventorySec.offsetTop - 80) {
-        currentSec = '#inventory';
-      }
+    // Update active tab on scroll throttled via requestAnimationFrame
+    let scrollRafId = null;
+    window.addEventListener('scroll', () => {
+      if (scrollRafId) return;
+      scrollRafId = requestAnimationFrame(() => {
+        scrollRafId = null;
+        const scrollPos = window.scrollY + 120;
 
-      if (currentSec) {
-        const matchingLink = links.find(l => l.getAttribute('href') === currentSec);
-        if (matchingLink && matchingLink !== activeLink) {
-          links.forEach(l => l.classList.remove('active'));
-          matchingLink.classList.add('active');
-          activeLink = matchingLink;
-          positionLens(activeLink, true);
+        let currentSec = null;
+        if (cachedReviewsOffset && scrollPos >= cachedReviewsOffset) {
+          currentSec = '#reviews';
+        } else if (cachedInventoryOffset && scrollPos >= cachedInventoryOffset - 80) {
+          currentSec = '#inventory';
         }
-      }
+
+        if (currentSec) {
+          const matchingLink = links.find(l => l.getAttribute('href') === currentSec);
+          if (matchingLink && matchingLink !== activeLink) {
+            links.forEach(l => l.classList.remove('active'));
+            matchingLink.classList.add('active');
+            activeLink = matchingLink;
+            positionLens(activeLink, true);
+          }
+        }
+      });
     }, { passive: true });
   }
 

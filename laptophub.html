@@ -3168,7 +3168,16 @@
 
     const hoverTargets = 'a, button, [role="button"], input, select, textarea, label, .filter-btn, .pcard, .cart-item, .faq-item, .nav-link, .support-btn, .theme-toggle-btn';
 
+    let isScrolling = false;
+    let isScrollTimeout = null;
+    window.addEventListener('scroll', () => {
+      isScrolling = true;
+      clearTimeout(isScrollTimeout);
+      isScrollTimeout = setTimeout(() => { isScrolling = false; }, 120);
+    }, { passive: true });
+
     document.addEventListener('mouseover', e => {
+      if (isScrolling) return;
       if (e.target && e.target.closest && e.target.closest(hoverTargets)) {
         dot.classList.add('hovering');
         ring.classList.add('hovering');
@@ -3176,6 +3185,7 @@
     }, { passive: true });
 
     document.addEventListener('mouseout', e => {
+      if (isScrolling) return;
       if (e.target && e.target.closest && e.target.closest(hoverTargets)) {
         dot.classList.remove('hovering');
         ring.classList.remove('hovering');

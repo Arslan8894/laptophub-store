@@ -1,6 +1,6 @@
 /**
  * LaptopHUB - Lenis Smooth Scroll & GSAP ScrollTrigger Orchestrator
- * Keeps all smooth scrolling and scroll reveals modularized in /js/animations/
+ * High-performance, zero-stutter configuration.
  */
 
 (function () {
@@ -12,23 +12,22 @@
   function initScrollAnimations() {
     // Ensure GSAP and ScrollTrigger are loaded
     if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') {
-      console.warn('LaptopHUB: GSAP or ScrollTrigger not loaded yet.');
       return;
     }
 
     gsap.registerPlugin(ScrollTrigger);
 
-    // 1. Initialize Lenis Smooth Scroll if available and motion allowed
+    // 1. Initialize Lenis with lightweight, snappy configuration
     if (typeof Lenis !== 'undefined' && !prefersReducedMotion) {
       try {
         lenisInstance = new Lenis({
-          duration: 1.15,
+          duration: 0.8,
           easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-          direction: 'vertical',
-          gestureDirection: 'vertical',
-          smooth: true,
-          smoothTouch: false,
-          touchMultiplier: 1.5
+          orientation: 'vertical',
+          gestureOrientation: 'vertical',
+          smoothWheel: true,
+          syncTouch: false,
+          touchMultiplier: 1.0
         });
 
         window.lenis = lenisInstance;
@@ -40,19 +39,22 @@
           lenisInstance.raf(time * 1000);
         });
 
-        gsap.ticker.lagSmoothing(0);
+        // Healthy lag smoothing prevents scroll freezing on frame drops
+        gsap.ticker.lagSmoothing(500, 33);
 
-        // Prevent Lenis smooth scrolling inside modals, cart drawer, and select lists
-        const stopScrollElements = document.querySelectorAll('#cartDrawer, #loginModal, #myOrdersModal, #profileModal, .modal-overlay, #modalOverlay');
+        // Prevent Lenis smooth scrolling inside modals, drawers, and form dialogs
+        const stopScrollElements = document.querySelectorAll(
+          '#cartDrawer, #loginModal, #myOrdersModal, #profileModal, .modal-overlay, #modalOverlay'
+        );
         stopScrollElements.forEach(el => {
           el.setAttribute('data-lenis-prevent', 'true');
         });
       } catch (err) {
-        console.warn('LaptopHUB Lenis init notice:', err);
+        console.warn('LaptopHUB Lenis notice:', err);
       }
     }
 
-    // 2. Headings & Section Reveals
+    // 2. Headings & Section Reveals (pure opacity and transform, NO expensive filter:blur)
     initSectionReveals();
 
     // 3. Product Cards Batch Reveal
@@ -62,24 +64,23 @@
   function initSectionReveals() {
     if (prefersReducedMotion) return;
 
-    // Headings and section headers
+    // Headings and section headers - animate only opacity and translateY (GPU-composited)
     const sectionHeaders = document.querySelectorAll('.sec-head, .sec-pre, .sec-title, .faq-head, .cta-band, .stats-row');
     sectionHeaders.forEach((el) => {
       gsap.fromTo(el,
         {
           opacity: 0,
-          y: 35,
-          filter: 'blur(4px)'
+          y: 24
         },
         {
           opacity: 1,
           y: 0,
-          filter: 'blur(0px)',
-          duration: 0.8,
+          duration: 0.55,
           ease: 'power2.out',
+          clearProps: 'transform,opacity',
           scrollTrigger: {
             trigger: el,
-            start: 'top 88%',
+            start: 'top 92%',
             toggleActions: 'play none none none',
             once: true
           }
@@ -91,15 +92,16 @@
     const catalogToolbar = document.querySelector('.catalog-toolbar');
     if (catalogToolbar) {
       gsap.fromTo(catalogToolbar,
-        { opacity: 0, y: 25 },
+        { opacity: 0, y: 16 },
         {
           opacity: 1,
           y: 0,
-          duration: 0.65,
+          duration: 0.5,
           ease: 'power2.out',
+          clearProps: 'transform,opacity',
           scrollTrigger: {
             trigger: catalogToolbar,
-            start: 'top 90%',
+            start: 'top 94%',
             once: true
           }
         }
@@ -110,25 +112,24 @@
   function initCardReveals() {
     if (prefersReducedMotion) return;
 
-    // Batch reveal for product cards
+    // Fast, lightweight batch reveal for visible product cards
     if (typeof ScrollTrigger.batch === 'function') {
       ScrollTrigger.batch('.pcard', {
-        interval: 0.06,
+        interval: 0.04,
         batchMax: 6,
         onEnter: (batch) => {
           gsap.fromTo(batch,
             {
               opacity: 0,
-              y: 40,
-              scale: 0.98
+              y: 20
             },
             {
               opacity: 1,
               y: 0,
-              scale: 1,
-              duration: 0.6,
+              duration: 0.4,
               ease: 'power2.out',
-              stagger: 0.05,
+              stagger: 0.04,
+              clearProps: 'opacity,transform',
               overwrite: 'auto'
             }
           );
@@ -141,10 +142,9 @@
   // Global helper to refresh ScrollTrigger when inventory filters or tab switcher update
   window.refreshScrollTriggers = function () {
     if (typeof ScrollTrigger !== 'undefined') {
-      setTimeout(() => {
+      requestAnimationFrame(() => {
         ScrollTrigger.refresh();
-        initCardReveals();
-      }, 50);
+      });
     }
   };
 
