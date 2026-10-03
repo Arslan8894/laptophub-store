@@ -209,17 +209,17 @@
   }
 
   .badge {
-    display: inline-flex; align-items: center; gap: 7px;
+    display: inline-flex; align-items: center; gap: var(--space-xs);
     background: var(--s2); border: 1px solid var(--border2);
-    border-radius: 100px; padding: 0.4rem 1.1rem;
-    font-size: 0.74rem; font-weight: 600; color: var(--subtle);
-    letter-spacing: 0.04em; text-transform: uppercase;
-    margin-bottom: 1.25rem;
+    border-radius: var(--radius-full); padding: 0.45rem 1.25rem;
+    font-size: var(--fs-xs); font-weight: 600; color: var(--subtle);
+    letter-spacing: 0.08em; text-transform: uppercase;
+    margin-bottom: var(--space-md);
     animation: up 0.7s ease both;
     transition: background-color 0.3s, border-color 0.3s;
   }
   .badge-dot {
-    width: 6px; height: 6px; border-radius: 50%;
+    width: 7px; height: 7px; border-radius: 50%;
     background: var(--blue);
     box-shadow: 0 0 8px var(--blue);
     animation: blink 2s infinite;
@@ -228,10 +228,10 @@
 
   h1.hero-h {
     font-family: var(--font-display);
-    font-size: clamp(2.8rem, 6.5vw, 5.2rem);
-    font-weight: 700; line-height: 1.08;
-    letter-spacing: -0.03em;
-    margin-bottom: 1.5rem;
+    font-size: var(--fs-hero);
+    font-weight: 700; line-height: 1.15;
+    letter-spacing: -0.015em;
+    margin-bottom: var(--space-md);
     color: var(--heading);
     text-align: center;
     animation: up 0.7s 0.08s ease both;
@@ -240,38 +240,46 @@
   .hero-h em { font-style: italic; color: var(--blue); font-weight: 700; }
 
   .hero-p {
-    font-size: 1.05rem; color: var(--subtle);
-    max-width: 540px; line-height: 1.75;
-    margin: 0 auto 2.5rem; font-weight: 400;
+    font-size: var(--fs-body); color: var(--subtle);
+    max-width: 560px; line-height: 1.6;
+    margin: 0 auto var(--space-xl); font-weight: 400;
     text-align: center;
     animation: up 0.7s 0.16s ease both;
     transition: color 0.3s;
   }
 
   .hero-actions {
-    display: flex; gap: 0.85rem;
+    display: flex; gap: var(--space-md);
     justify-content: center;
     align-items: center;
     animation: up 0.7s 0.24s ease both;
   }
   .btn-p {
     background: var(--blue); color: #fff;
-    border: none; padding: 0.9rem 2.2rem;
-    font-family: inherit; font-weight: 700; font-size: 0.88rem;
-    cursor: pointer; border-radius: 7px;
+    border: none; padding: 0.75rem 2rem;
+    min-height: 48px;
+    display: inline-flex; align-items: center; justify-content: center;
+    font-family: inherit; font-weight: 600; font-size: var(--fs-base);
+    cursor: pointer; border-radius: var(--radius-md);
     text-decoration: none;
     box-shadow: 0 8px 25px rgba(76,124,255,0.25);
     transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
+    white-space: normal;
+    text-align: center;
   }
   .btn-p:hover { transform: translateY(-2px); box-shadow: 0 12px 35px rgba(76,124,255,0.35); }
   .btn-s {
     background: var(--s2); color: var(--heading);
     border: 1px solid var(--border2);
-    padding: 0.9rem 2rem;
-    font-family: inherit; font-weight: 600; font-size: 0.88rem;
-    cursor: pointer; border-radius: 7px;
+    padding: 0.75rem 2rem;
+    min-height: 48px;
+    display: inline-flex; align-items: center; justify-content: center;
+    font-family: inherit; font-weight: 600; font-size: var(--fs-base);
+    cursor: pointer; border-radius: var(--radius-md);
     text-decoration: none;
     transition: background 0.2s, border-color 0.2s, color 0.2s;
+    white-space: normal;
+    text-align: center;
   }
   .btn-s:hover { background: var(--s3); border-color: var(--blue); }
 
@@ -1058,17 +1066,18 @@
     
     /* Uncongested Mobile Hero */
     .hero {
-      padding: 5.6rem 1.25rem 2.8rem !important;
+      padding: calc(5.4rem + var(--safe-top)) var(--space-md) var(--space-xl) !important;
     }
     .hero-h {
       font-size: clamp(2.1rem, 7.8vw, 2.7rem) !important;
       line-height: 1.15 !important;
-      margin-bottom: 1.2rem !important;
+      letter-spacing: -0.015em !important;
+      margin-bottom: var(--space-md) !important;
     }
     .hero-p {
-      font-size: 0.96rem !important;
-      line-height: 1.65 !important;
-      margin-bottom: 2rem !important;
+      font-size: var(--fs-body) !important;
+      line-height: 1.6 !important;
+      margin-bottom: var(--space-xl) !important;
       padding: 0 0.5rem !important;
       max-width: 480px !important;
     }
@@ -1077,13 +1086,14 @@
       width: 100% !important;
       max-width: 320px !important;
       margin: 0 auto !important;
-      gap: 0.8rem !important;
+      gap: var(--space-sm) !important;
     }
     .hero-actions .btn-p,
     .hero-actions .btn-s {
       width: 100% !important;
+      min-height: 48px !important;
       text-align: center !important;
-      padding: 0.88rem 1.5rem !important;
+      padding: 0.85rem 1.5rem !important;
       box-sizing: border-box !important;
     }
     .pgrid {
