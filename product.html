@@ -97,9 +97,11 @@ main {
   background: var(--s1);
   border: 1px solid var(--border2);
   border-radius: 18px;
-  width: 100%;
-  max-width: 480px;
-  padding: 2rem;
+  width: min(480px, calc(100vw - 1.5rem));
+  max-height: calc(100dvh - 32px);
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  padding: 1.75rem 1.5rem;
   box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
   box-sizing: border-box;
   animation: modalPop 0.25s cubic-bezier(0.16, 1, 0.3, 1);
@@ -131,7 +133,8 @@ main {
   padding: 10px 14px;
   border-radius: 10px;
   font-family: inherit;
-  font-size: 0.88rem;
+  font-size: 16px !important;
+  min-height: 46px;
   box-sizing: border-box;
   transition: border-color 0.2s;
 }
@@ -263,7 +266,7 @@ main {
   font-size: 0.8rem;
 }
 .drawer-foot {
-  padding: 1.25rem 1.5rem;
+  padding: 1.25rem 1.5rem calc(1.25rem + var(--safe-bottom, 0px));
   border-top: 1px solid var(--border);
   display: flex;
   flex-direction: column;
@@ -277,7 +280,8 @@ main {
   font-weight: 700;
 }
 .drawer-btn-wa, .drawer-btn-checkout {
-  height: 44px;
+  height: 48px;
+  min-height: 48px;
   border-radius: 10px;
   font-weight: 700;
   font-size: 0.88rem;
