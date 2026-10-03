@@ -12,9 +12,10 @@
 .product-page-wrap {
   max-width: 1360px;
   margin: 0 auto;
-  padding: 1.5rem 2rem 4rem;
+  padding: calc(76px + 1.5rem) 2rem 4rem;
   box-sizing: border-box;
 }
+
 
 .product-breadcrumbs {
   display: flex;
@@ -995,9 +996,13 @@
     display: block;
   }
   .product-page-wrap {
+    padding-top: calc(60px + 1rem);
+    padding-left: 1rem;
+    padding-right: 1rem;
     padding-bottom: 5.5rem;
   }
 }
+
 
 @media (max-width: 540px) {
   .product-title {
