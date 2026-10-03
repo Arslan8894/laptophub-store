@@ -724,6 +724,10 @@
 </style>
 <script src="laptops-data.js"></script>
 <script src="store-config.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+<script src="js/firebase-config.js"></script>
 <script src="consult-matcher.js"></script>
 <script src="js/animations/glass-nav.js" defer></script>
 </head>
@@ -1298,9 +1302,16 @@
   }
 
   // ── LAPTOP DATABASE & PURE MATCHING INTEGRATION ────────────────────────────
-  let inventory = [];
-  if (typeof LAPTOPS_INVENTORY !== 'undefined') {
-    inventory = LAPTOPS_INVENTORY;
+  let inventory = (typeof LAPTOPS_INVENTORY !== 'undefined') ? [...LAPTOPS_INVENTORY] : [];
+  if (typeof fetchStoreLaptops === 'function') {
+    fetchStoreLaptops().then(live => {
+      if (live && live.length > 0) {
+        inventory = live.filter(l => !l.hidden);
+        if (typeof window.ConsultMatcher !== 'undefined' && typeof window.ConsultMatcher.setInventory === 'function') {
+          window.ConsultMatcher.setInventory(inventory);
+        }
+      }
+    }).catch(() => {});
   }
 
   // ── CARD RENDERER ──────────────────────────────────────────────────────────

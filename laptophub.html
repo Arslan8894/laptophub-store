@@ -1574,6 +1574,10 @@
 </style>
 <script src="laptops-data.js"></script>
 <script src="store-config.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+<script src="js/firebase-config.js"></script>
 <script src="js/animations/glass-nav.js" defer></script>
 <script src="js/animations/consult-matcher.js" defer></script>
 </head>
@@ -2228,8 +2232,26 @@
   let currentSort = 'default';
   let cart = JSON.parse(localStorage.getItem('lh_cart_items') || '[]');
 
-  // Check if LAPTOPS_INVENTORY loaded
-  const inventory = (typeof LAPTOPS_INVENTORY !== 'undefined') ? LAPTOPS_INVENTORY : [];
+  // Inventory state with Firestore sync
+  let inventory = (typeof LAPTOPS_INVENTORY !== 'undefined') ? [...LAPTOPS_INVENTORY] : [];
+
+  function initInventorySync() {
+    if (typeof subscribeStoreLaptops === 'function') {
+      try {
+        subscribeStoreLaptops((liveLaptops) => {
+          if (liveLaptops && liveLaptops.length > 0) {
+            inventory = liveLaptops.filter(l => !l.hidden);
+            renderProducts();
+            if (window.ConsultMatcher && typeof window.ConsultMatcher.setInventory === 'function') {
+              window.ConsultMatcher.setInventory(inventory);
+            }
+          }
+        });
+      } catch (err) {
+        console.warn('[Storefront] Firestore sync notice:', err);
+      }
+    }
+  }
 
   // Theme
   function initTheme() {
@@ -3328,6 +3350,7 @@
   }
 
   // Init
+  initInventorySync();
   renderProducts();
   updateCartUI();
   initUserSession();
