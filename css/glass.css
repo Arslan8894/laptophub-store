@@ -451,17 +451,17 @@ nav.liquid-glass-nav .nav-user-btn {
 }
 
 /* Responsive collapse for header */
-@media (max-width: 900px) {
+@media (max-width: 860px) {
   .nav-pill-track {
     display: none !important;
   }
   .floating-nav-container {
-    padding: 0 0.85rem;
+    padding: 0 0.65rem;
     top: 8px;
   }
   nav.liquid-glass-nav {
     height: 52px;
-    padding: 0 0.85rem;
+    padding: 0 0.5rem 0 0.75rem;
   }
 }
 
