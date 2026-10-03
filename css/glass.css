@@ -392,3 +392,407 @@ nav.liquid-glass-nav .nav-user-btn {
     padding: 0 0.85rem;
   }
 }
+
+/* ==========================================================================
+   STEP 4: LIQUID GLASS TAB SWITCHER & CROSS-FADE PANELS
+   ========================================================================== */
+
+/* Outer Centered Wrapper */
+.glass-tab-switcher-wrap {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  padding: 1.5rem 1rem 1rem;
+  position: relative;
+  z-index: 25;
+}
+
+/* Glass Pill Tab Switcher */
+.glass-tab-switcher {
+  display: inline-flex;
+  align-items: center;
+  position: relative;
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-inner-shadow), var(--glass-outer-shadow);
+  padding: 5px;
+  border-radius: 9999px;
+  gap: 4px;
+  max-width: 95vw;
+  box-sizing: border-box;
+}
+
+/* Specular light line across the tab switcher top */
+.glass-tab-switcher::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 20px;
+  right: 20px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent 0%, var(--glass-border-highlight) 30%, var(--glass-border-highlight) 70%, transparent 100%);
+  pointer-events: none;
+  border-radius: 9999px;
+}
+
+/* Dynamic Morphing & Sliding Liquid Glass Indicator */
+.glass-sliding-indicator {
+  position: absolute;
+  top: 5px;
+  left: 0;
+  height: calc(100% - 10px);
+  width: 0;
+  border-radius: 9999px;
+  background: var(--glass-lens-bg);
+  border: 1px solid var(--glass-lens-border);
+  box-shadow: inset 0 1px 1.5px rgba(255, 255, 255, 0.4), var(--glass-lens-glow);
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0;
+  transform: translateX(0);
+  will-change: transform, width, border-radius;
+  transform-origin: center center;
+}
+
+.glass-sliding-indicator::before {
+  content: '';
+  position: absolute;
+  top: 1px;
+  left: 12%;
+  right: 12%;
+  height: 40%;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.38) 0%, transparent 100%);
+  border-radius: 9999px;
+}
+
+/* Individual Tab Button */
+.glass-tab-btn {
+  position: relative;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 22px;
+  border-radius: 9999px;
+  border: none;
+  background: transparent;
+  color: var(--muted);
+  font-family: inherit;
+  font-size: 0.92rem;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: color 0.22s ease, transform 0.18s cubic-bezier(0.34, 1.56, 0.64, 1);
+  outline: none;
+  user-select: none;
+}
+
+.glass-tab-btn svg {
+  flex-shrink: 0;
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.glass-tab-btn:hover {
+  color: var(--heading);
+  transform: translateY(-1px);
+}
+
+.glass-tab-btn:hover svg {
+  transform: scale(1.1);
+  color: var(--blue);
+}
+
+.glass-tab-btn.active {
+  color: var(--heading);
+  font-weight: 700;
+}
+
+.glass-tab-btn.active svg {
+  color: var(--blue);
+}
+
+.glass-tab-btn:active {
+  transform: scale(0.96);
+}
+
+/* Tab Badges */
+.glass-tab-btn .tab-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: 9999px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  background: var(--blue-dim);
+  color: var(--blue);
+  border: 1px solid var(--glass-border);
+  line-height: 1.2;
+}
+
+.glass-tab-btn .tab-badge-pulse {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: 9999px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  background: rgba(16, 185, 129, 0.14);
+  color: var(--green);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  line-height: 1.2;
+  position: relative;
+}
+
+.glass-tab-btn .tab-badge-pulse::before {
+  content: '';
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--green);
+  margin-right: 4px;
+  box-shadow: 0 0 6px var(--green);
+}
+
+/* Store Tab Panels Container */
+.store-tab-panels {
+  position: relative;
+  width: 100%;
+}
+
+/* Tab Panels */
+.main-tab-panel {
+  width: 100%;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.main-tab-panel.hidden-tab {
+  display: none !important;
+  opacity: 0 !important;
+  transform: translateY(14px) !important;
+  pointer-events: none !important;
+}
+
+.main-tab-panel.active-tab {
+  display: block !important;
+  opacity: 1 !important;
+  transform: translateY(0) !important;
+  pointer-events: auto !important;
+}
+
+/* Embedded Consult Me Glass Panel Styling */
+.consult-panel-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1.5rem 1.5rem 3.5rem;
+}
+
+.consult-glass-card {
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-inner-shadow), var(--glass-outer-shadow);
+  border-radius: 24px;
+  padding: 2.5rem 2rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.consult-glass-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--glass-border-highlight), transparent);
+}
+
+.consult-panel-header {
+  text-align: center;
+  max-width: 700px;
+  margin: 0 auto 2rem;
+}
+
+.consult-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 14px;
+  border-radius: 9999px;
+  background: var(--blue-dim);
+  border: 1px solid var(--blue-glow);
+  color: var(--blue);
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.8rem;
+}
+
+.consult-title {
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--heading);
+  letter-spacing: -0.02em;
+  margin-bottom: 0.6rem;
+}
+
+.consult-subtitle {
+  color: var(--muted);
+  font-size: 0.96rem;
+  line-height: 1.5;
+}
+
+.consult-chips-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 2rem;
+}
+
+.consult-chip {
+  padding: 8px 18px;
+  border-radius: 9999px;
+  background: var(--glass-circle-bg);
+  border: 1px solid var(--glass-border);
+  color: var(--text);
+  font-size: 0.86rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.consult-chip:hover, .consult-chip.active {
+  background: var(--blue-dim);
+  border-color: var(--blue);
+  color: var(--heading);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 14px var(--blue-glow);
+}
+
+.consult-chip.active {
+  background: var(--blue);
+  color: #fff;
+  border-color: var(--blue-hover);
+}
+
+.consult-matches-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2.5rem;
+}
+
+.consult-match-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.22s ease, border-color 0.22s ease, box-shadow 0.22s ease;
+  position: relative;
+}
+
+.consult-match-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--blue);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+}
+
+.consult-match-img-wrap {
+  width: 100%;
+  height: 160px;
+  background: var(--photo-bg);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1rem;
+  overflow: hidden;
+}
+
+.consult-match-img-wrap img {
+  max-width: 85%;
+  max-height: 85%;
+  object-fit: contain;
+  transition: transform 0.3s ease;
+}
+
+.consult-match-card:hover .consult-match-img-wrap img {
+  transform: scale(1.06);
+}
+
+.consult-actions-bar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.btn-launch-wizard {
+  padding: 12px 28px;
+  border-radius: 9999px;
+  background: var(--blue);
+  color: #fff;
+  font-weight: 700;
+  font-size: 0.95rem;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: inset 0 1px 1.5px rgba(255, 255, 255, 0.4), 0 6px 20px var(--blue-glow);
+  transition: transform 0.2s cubic-bezier(0.18, 0.89, 0.32, 1.28), box-shadow 0.2s ease;
+}
+
+.btn-launch-wizard:hover {
+  transform: translateY(-2px) scale(1.03);
+  box-shadow: inset 0 1px 1.5px rgba(255, 255, 255, 0.6), 0 8px 24px var(--blue-glow);
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .glass-sliding-indicator {
+    transition: none !important;
+    animation: none !important;
+  }
+  .main-tab-panel {
+    transition: none !important;
+  }
+  .glass-tab-btn {
+    transition: none !important;
+  }
+}
+
+/* Mobile adjustments */
+@media (max-width: 680px) {
+  .glass-tab-switcher-wrap {
+    padding: 1rem 0.5rem 0.75rem;
+  }
+  .glass-tab-btn {
+    padding: 8px 14px;
+    font-size: 0.84rem;
+    gap: 5px;
+  }
+  .glass-tab-btn .tab-badge,
+  .glass-tab-btn .tab-badge-pulse {
+    display: none;
+  }
+  .consult-glass-card {
+    padding: 1.5rem 1rem;
+  }
+  .consult-title {
+    font-size: 1.5rem;
+  }
+}
+

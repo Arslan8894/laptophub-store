@@ -1346,6 +1346,7 @@
 <script src="js/3d/hero-laptop.js" defer></script>
 <script src="js/animations/scroll-animations.js" defer></script>
 <script src="js/animations/glass-nav.js" defer></script>
+<script src="js/animations/tab-switcher.js" defer></script>
 </head>
 <body>
 
@@ -1459,97 +1460,169 @@
   </div>
 </div>
 
-<!-- CATALOG TOOLBAR -->
-<div class="catalog-toolbar" id="inventory">
-  <div class="filter-tabs">
-    <button class="filter-btn active" onclick="filterBrand('all', this)">All Laptops (69)</button>
-    <button class="filter-btn" onclick="filterBrand('lenovo', this)">Lenovo (15)</button>
-    <button class="filter-btn" onclick="filterBrand('dell', this)">Dell (19)</button>
-    <button class="filter-btn" onclick="filterBrand('hp', this)">HP (22)</button>
-    <button class="filter-btn" onclick="filterBrand('apple', this)">Apple (3)</button>
-    <button class="filter-btn" onclick="filterBrand('microsoft', this)">Microsoft (7)</button>
-    <button class="filter-btn" onclick="filterBrand('gaming', this)">Gaming / RTX (4)</button>
-  </div>
-  <div class="search-box">
-    <span class="search-icon">
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
-    </span>
-    <input type="text" class="search-input" id="laptopSearch" placeholder="Search 69 models: T14, XPS, Alienware, i7..." oninput="handleSearch()">
-  </div>
-</div>
-
-<!-- SUB-FILTER ROW (Price & Category Filters) -->
-<div class="toolbar-row2">
-  <div class="filter-pills">
-    <button class="pill-filter active" onclick="filterPill('all', this)">All Specs</button>
-    <button class="pill-filter" onclick="filterPill('under-100k', this)">Under Rs 100k</button>
-    <button class="pill-filter" onclick="filterPill('100k-200k', this)">Rs 100k – 200k</button>
-    <button class="pill-filter" onclick="filterPill('200k-plus', this)">Rs 200k+ Flagship</button>
-    <button class="pill-filter" onclick="filterPill('touch', this)">Touch / 360°</button>
-    <button class="pill-filter" onclick="filterPill('core-i7', this)">Core i7 / i9 / Ryzen 7</button>
-  </div>
-
-  <div style="display:flex; align-items:center; gap:12px;">
-    <span class="count-indicator">Showing <strong id="visibleCount">69</strong> of <strong>69</strong> laptops</span>
-    <select class="sort-select" id="sortSelect" onchange="handleSort(this.value)">
-      <option value="default">Sort: Most Popular</option>
-      <option value="price-asc">Price: Low to High</option>
-      <option value="price-desc">Price: High to Low</option>
-      <option value="name-asc">Model Name (A-Z)</option>
-    </select>
+<!-- STEP 4: LIQUID GLASS VIEW TAB SWITCHER -->
+<div class="glass-tab-switcher-wrap" id="mainViewSwitcherWrap">
+  <div class="glass-tab-switcher" role="tablist" aria-label="Store View Selection">
+    <div class="glass-sliding-indicator" id="glassTabIndicator"></div>
+    <button class="glass-tab-btn active" role="tab" id="tab-inventory" aria-selected="true" aria-controls="tabpanel-inventory" data-tab="inventory">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="3" rx="2"/><line x1="8" x2="16" y1="21" y2="21"/><line x1="12" x2="12" y1="17" y2="21"/></svg>
+      <span>All Laptops</span>
+      <span class="tab-badge">69</span>
+    </button>
+    <button class="glass-tab-btn" role="tab" id="tab-consult" aria-selected="false" aria-controls="tabpanel-consult" data-tab="consult">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/><path d="m11 8v6"/><path d="m8 11h6"/></svg>
+      <span>Consult Me</span>
+      <span class="tab-badge-pulse">AI</span>
+    </button>
+    <button class="glass-tab-btn" role="tab" id="tab-reviews" aria-selected="false" aria-controls="tabpanel-reviews" data-tab="reviews">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+      <span>Reviews</span>
+      <span class="tab-badge">★ 4.9</span>
+    </button>
   </div>
 </div>
 
-<!-- DYNAMIC LAPTOP PRODUCTS GRID -->
-<section class="sec" style="padding-top:0; padding-bottom:3.5rem;">
-  <div class="pgrid" id="productGrid">
-    <!-- Rendered dynamically by JavaScript with all 69 models -->
-  </div>
-</section>
+<div class="store-tab-panels" id="storeTabPanels">
+  <!-- TAB PANEL 1: ALL LAPTOPS CATALOG -->
+  <div class="main-tab-panel active-tab" id="tabpanel-inventory" role="tabpanel" aria-labelledby="tab-inventory">
+    <!-- CATALOG TOOLBAR -->
+    <div class="catalog-toolbar" id="inventory">
+      <div class="filter-tabs">
+        <button class="filter-btn active" onclick="filterBrand('all', this)">All Laptops (69)</button>
+        <button class="filter-btn" onclick="filterBrand('lenovo', this)">Lenovo (15)</button>
+        <button class="filter-btn" onclick="filterBrand('dell', this)">Dell (19)</button>
+        <button class="filter-btn" onclick="filterBrand('hp', this)">HP (22)</button>
+        <button class="filter-btn" onclick="filterBrand('apple', this)">Apple (3)</button>
+        <button class="filter-btn" onclick="filterBrand('microsoft', this)">Microsoft (7)</button>
+        <button class="filter-btn" onclick="filterBrand('gaming', this)">Gaming / RTX (4)</button>
+      </div>
+      <div class="search-box">
+        <span class="search-icon">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+        </span>
+        <input type="text" class="search-input" id="laptopSearch" placeholder="Search 69 models: T14, XPS, Alienware, i7..." oninput="handleSearch()">
+      </div>
+    </div>
 
-<!-- STATS & GUARANTEE -->
-<div class="stats-row rev" id="guarantee">
-  <div class="stat-cell"><div class="stat-num">69</div><div class="stat-label">Verified Models Ready</div></div>
-  <div class="stat-cell"><div class="stat-num">24h</div><div class="stat-label">Fast Express Dispatch</div></div>
-  <div class="stat-cell"><div class="stat-num">3yr</div><div class="stat-label">Official Warranty</div></div>
-  <div class="stat-cell"><div class="stat-num">12K+</div><div class="stat-label">Verified Pakistani Buyers</div></div>
+    <!-- SUB-FILTER ROW (Price & Category Filters) -->
+    <div class="toolbar-row2">
+      <div class="filter-pills">
+        <button class="pill-filter active" onclick="filterPill('all', this)">All Specs</button>
+        <button class="pill-filter" onclick="filterPill('under-100k', this)">Under Rs 100k</button>
+        <button class="pill-filter" onclick="filterPill('100k-200k', this)">Rs 100k – 200k</button>
+        <button class="pill-filter" onclick="filterPill('200k-plus', this)">Rs 200k+ Flagship</button>
+        <button class="pill-filter" onclick="filterPill('touch', this)">Touch / 360°</button>
+        <button class="pill-filter" onclick="filterPill('core-i7', this)">Core i7 / i9 / Ryzen 7</button>
+      </div>
+
+      <div style="display:flex; align-items:center; gap:12px;">
+        <span class="count-indicator">Showing <strong id="visibleCount">69</strong> of <strong>69</strong> laptops</span>
+        <select class="sort-select" id="sortSelect" onchange="handleSort(this.value)">
+          <option value="default">Sort: Most Popular</option>
+          <option value="price-asc">Price: Low to High</option>
+          <option value="price-desc">Price: High to Low</option>
+          <option value="name-asc">Model Name (A-Z)</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- DYNAMIC LAPTOP PRODUCTS GRID -->
+    <section class="sec" style="padding-top:0; padding-bottom:3.5rem;">
+      <div class="pgrid" id="productGrid">
+        <!-- Rendered dynamically by JavaScript with all 69 models -->
+      </div>
+    </section>
+
+    <!-- STATS & GUARANTEE -->
+    <div class="stats-row rev" id="guarantee">
+      <div class="stat-cell"><div class="stat-num">69</div><div class="stat-label">Verified Models Ready</div></div>
+      <div class="stat-cell"><div class="stat-num">24h</div><div class="stat-label">Fast Express Dispatch</div></div>
+      <div class="stat-cell"><div class="stat-num">3yr</div><div class="stat-label">Official Warranty</div></div>
+      <div class="stat-cell"><div class="stat-num">12K+</div><div class="stat-label">Verified Pakistani Buyers</div></div>
+    </div>
+  </div>
+
+  <!-- TAB PANEL 2: EMBEDDED LIQUID GLASS CONSULT ME -->
+  <div class="main-tab-panel hidden-tab" id="tabpanel-consult" role="tabpanel" aria-labelledby="tab-consult">
+    <div class="consult-panel-container">
+      <div class="consult-glass-card glass-specular">
+        <div class="consult-panel-header">
+          <div class="consult-badge">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+            Smart Hardware Matcher
+          </div>
+          <h2 class="consult-title">Instant Laptop Consultation</h2>
+          <p class="consult-subtitle">Select your primary workflow profile below to discover curated high-performance models verified in stock with express dispatch across Pakistan.</p>
+        </div>
+
+        <!-- Workflow Chips -->
+        <div class="consult-chips-row" id="consultChips">
+          <button class="consult-chip active" data-filter="coding">💻 Coding & Dev</button>
+          <button class="consult-chip" data-filter="design">🎨 Creative & Design</button>
+          <button class="consult-chip" data-filter="executive">💼 Executive & Ultrabook</button>
+          <button class="consult-chip" data-filter="budget">⚡ Value / Under 120k</button>
+          <button class="consult-chip" data-filter="gaming">🎮 Gaming & High GPU</button>
+        </div>
+
+        <!-- Live Matches Grid -->
+        <div class="consult-matches-grid" id="consultMatchesGrid">
+          <!-- Populated dynamically by tab-switcher.js from LAPTOPS_INVENTORY -->
+        </div>
+
+        <!-- Bottom Action Bar -->
+        <div class="consult-actions-bar">
+          <a href="consult.html" class="btn-launch-wizard">
+            <span>Launch Complete 6-Step Consultation Quiz</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+          <a href="https://wa.me/923261398594?text=Hi%2C%20I%20need%20a%20laptop%20consultation" target="_blank" class="glass-pill" style="display:inline-flex;align-items:center;gap:8px;padding:12px 24px;color:var(--heading);text-decoration:none;font-weight:600;font-size:0.95rem;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="#25D366"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            <span>Live Advisor on WhatsApp</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB PANEL 3: REVIEWS -->
+  <div class="main-tab-panel hidden-tab" id="tabpanel-reviews" role="tabpanel" aria-labelledby="tab-reviews">
+    <!-- REVIEWS -->
+    <section class="sec rev" id="reviews" style="padding-top:1.5rem">
+      <div class="sec-head">
+        <div>
+          <p class="sec-pre">Customer Feedback</p>
+          <h2 class="sec-title">What Buyers Say</h2>
+        </div>
+      </div>
+      <div class="tgrid">
+        <div class="tcard">
+          <div class="tcard-stars"><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span></div>
+          <p class="tcard-text">"Ordered the Dell Latitude 7430 for our dev team in Lahore. Pristine condition, thermal paste was fresh, and the battery gives 8+ hours easily."</p>
+          <div class="tcard-author">
+            <div class="tauthor-av av-b">AK</div>
+            <div><div class="tauthor-name">Ahmed K.</div><div class="tauthor-role">Software Engineer, Lahore</div></div>
+          </div>
+        </div>
+        <div class="tcard">
+          <div class="tcard-stars"><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span></div>
+          <p class="tcard-text">"Got the MacBook Pro M2 delivered via insured courier in Karachi. Verified serial number on Apple's coverage site immediately. 100% authentic."</p>
+          <div class="tcard-author">
+            <div class="tauthor-av av-g">SB</div>
+            <div><div class="tauthor-name">Sara B.</div><div class="tauthor-role">Senior Designer, Karachi</div></div>
+          </div>
+        </div>
+        <div class="tcard">
+          <div class="tcard-stars"><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span></div>
+          <p class="tcard-text">"The HP Spectre x360 OLED screen is unbelievable for client presentations. Arrived bubble-wrapped in original packaging within 24 hours."</p>
+          <div class="tcard-author">
+            <div class="tauthor-av av-r">UR</div>
+            <div><div class="tauthor-name">Usman R.</div><div class="tauthor-role">CS Student, Islamabad</div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
 </div>
-
-<!-- REVIEWS -->
-<section class="sec rev" id="reviews">
-  <div class="sec-head">
-    <div>
-      <p class="sec-pre">Customer Feedback</p>
-      <h2 class="sec-title">What Buyers Say</h2>
-    </div>
-  </div>
-  <div class="tgrid">
-    <div class="tcard">
-      <div class="tcard-stars"><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span></div>
-      <p class="tcard-text">"Ordered the Dell Latitude 7430 for our dev team in Lahore. Pristine condition, thermal paste was fresh, and the battery gives 8+ hours easily."</p>
-      <div class="tcard-author">
-        <div class="tauthor-av av-b">AK</div>
-        <div><div class="tauthor-name">Ahmed K.</div><div class="tauthor-role">Software Engineer, Lahore</div></div>
-      </div>
-    </div>
-    <div class="tcard">
-      <div class="tcard-stars"><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span></div>
-      <p class="tcard-text">"Got the MacBook Pro M2 delivered via insured courier in Karachi. Verified serial number on Apple's coverage site immediately. 100% authentic."</p>
-      <div class="tcard-author">
-        <div class="tauthor-av av-g">SB</div>
-        <div><div class="tauthor-name">Sara B.</div><div class="tauthor-role">Senior Designer, Karachi</div></div>
-      </div>
-    </div>
-    <div class="tcard">
-      <div class="tcard-stars"><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span></div>
-      <p class="tcard-text">"The HP Spectre x360 OLED screen is unbelievable for client presentations. Arrived bubble-wrapped in original packaging within 24 hours."</p>
-      <div class="tcard-author">
-        <div class="tauthor-av av-r">UR</div>
-        <div><div class="tauthor-name">Usman R.</div><div class="tauthor-role">CS Student, Islamabad</div></div>
-      </div>
-    </div>
-  </div>
-</section>
 
 <!-- FAQ -->
 <section class="sec rev" id="faq" style="padding-top:0">
