@@ -23,8 +23,8 @@
 
     let activeLink = track.querySelector('a.active') || links[0];
     let isNavigating = false;
-    let navLockTimeout = null;
-    let scrollDebounceTimeout = null;
+    let navLockTimer = null;
+    let scrollMonitorInterval = null;
 
     // Check if initial hash or current page matches a link
     const currentHash = window.location.hash;
@@ -35,6 +35,13 @@
     } else if (currentPath.includes('consult.html')) {
       const match = links.find(l => (l.getAttribute('href') || '').includes('consult.html'));
       if (match) activeLink = match;
+    }
+
+    function setActive(link, animate = true) {
+      if (!link) return;
+      activeLink = link;
+      links.forEach(l => l.classList.toggle('active', l === activeLink));
+      positionLens(activeLink, animate);
     }
 
     function positionLens(targetEl, animate = true) {
@@ -64,8 +71,7 @@
     }
 
     // Set initial active state
-    links.forEach(l => l.classList.remove('active'));
-    activeLink.classList.add('active');
+    setActive(activeLink, false);
 
     // Run positioning once fonts / layout are ready
     setTimeout(() => positionLens(activeLink, false), 50);
@@ -73,9 +79,9 @@
       document.fonts.ready.then(() => positionLens(activeLink, false));
     }
 
-    // CLICK HANDLER
+    // CLICK HANDLER WITH BULLETPROOF SMOOTH TRANSITION LOCK
     links.forEach(link => {
-      // Hover preview - ONLY when NOT navigating
+      // Hover preview - only when NOT actively programmatically scrolling
       link.addEventListener('mouseenter', () => {
         if (!isNavigating) {
           positionLens(link, true);
@@ -89,34 +95,60 @@
           if (targetEl) {
             e.preventDefault();
 
-            // Set programmatic navigation lock
+            // 1. Immediately engage navigation lock and clear any pending timers
             isNavigating = true;
-            clearTimeout(navLockTimeout);
-            clearTimeout(scrollDebounceTimeout);
+            if (navLockTimer) clearTimeout(navLockTimer);
+            if (scrollMonitorInterval) clearInterval(scrollMonitorInterval);
 
-            // Update active link immediately
-            links.forEach(l => l.classList.remove('active'));
-            link.classList.add('active');
-            activeLink = link;
+            // 2. Set active link immediately & smoothly glide lens to destination
+            setActive(link, true);
 
-            // Slide lens to the clicked link immediately and lock it there
-            positionLens(activeLink, true);
+            // 3. Compute exact target scroll coordinate (80px header clearance)
+            const navOffset = 80;
+            const targetScrollY = Math.max(0, targetEl.getBoundingClientRect().top + window.scrollY - navOffset);
 
-            // Calculate exact target scroll position using live document coordinates
-            const targetY = href === '#inventory'
-              ? Math.max(0, targetEl.getBoundingClientRect().top + window.scrollY - 75)
-              : Math.max(0, targetEl.getBoundingClientRect().top + window.scrollY - 75);
-
+            // 4. Smooth scroll to target section
             window.scrollTo({
-              top: targetY,
+              top: targetScrollY,
               behavior: 'smooth'
             });
 
-            // Keep navigation lock engaged for the full duration of smooth scroll
-            navLockTimeout = setTimeout(() => {
+            // 5. Active arrival monitor: check scroll arrival and movement cessation
+            let lastY = window.scrollY;
+            let stillFrames = 0;
+            const startTime = Date.now();
+
+            scrollMonitorInterval = setInterval(() => {
+              const currentY = window.scrollY;
+              const elapsed = Date.now() - startTime;
+              const dist = Math.abs(currentY - targetScrollY);
+
+              if (Math.abs(currentY - lastY) < 2) {
+                stillFrames++;
+              } else {
+                stillFrames = 0;
+              }
+              lastY = currentY;
+
+              // Arrived within 6px OR stopped moving after at least 150ms
+              if (dist <= 6 || (stillFrames >= 3 && elapsed > 150)) {
+                clearInterval(scrollMonitorInterval);
+                scrollMonitorInterval = null;
+                // Generous settle delay prevents any trailing scroll inertia from glitching
+                setTimeout(() => {
+                  isNavigating = false;
+                  positionLens(activeLink, false);
+                }, 140);
+              }
+            }, 40);
+
+            // 6. Absolute failsafe timeout (2000ms max)
+            navLockTimer = setTimeout(() => {
+              if (scrollMonitorInterval) clearInterval(scrollMonitorInterval);
+              scrollMonitorInterval = null;
               isNavigating = false;
-              positionLens(activeLink, true);
-            }, 1200);
+              positionLens(activeLink, false);
+            }, 2000);
           }
         }
       });
@@ -132,31 +164,13 @@
       positionLens(activeLink, false);
     });
 
-    // When scroll finishes natively, release navigation lock safely
-    window.addEventListener('scrollend', () => {
-      if (isNavigating) {
-        clearTimeout(navLockTimeout);
-        isNavigating = false;
-        positionLens(activeLink, true);
-      }
-    });
-
-    // SCROLL SPY - Runs ONLY during genuine manual scrolling
+    // SCROLL SPY - Runs ONLY during genuine manual user scrolling
     let scrollRafId = null;
     window.addEventListener('scroll', () => {
-      // If page doesn't have inventory section (e.g. consult.html), do not run scroll spy
       if (!document.getElementById('inventory')) return;
 
-      // If user clicked a tab and smooth scroll is ongoing, do NOT let scroll spy run!
-      if (isNavigating) {
-        clearTimeout(scrollDebounceTimeout);
-        scrollDebounceTimeout = setTimeout(() => {
-          // If no scroll events fired for 200ms, smooth scroll has finished
-          isNavigating = false;
-          positionLens(activeLink, true);
-        }, 200);
-        return;
-      }
+      // ABSOLUTELY DO NOT RUN SCROLL SPY WHILE PROGRAMMATICALLY SCROLLING!
+      if (isNavigating) return;
 
       if (scrollRafId) return;
       scrollRafId = requestAnimationFrame(() => {
@@ -166,15 +180,14 @@
         const consultSec = document.getElementById('consult');
         const reviewsSec = document.getElementById('reviews');
 
-        const scrollY = window.scrollY;
-        // Compute real-time element tops in document coordinates
-        const consultTop = consultSec ? (consultSec.getBoundingClientRect().top + scrollY - 200) : 999999;
-        const reviewsTop = reviewsSec ? (reviewsSec.getBoundingClientRect().top + scrollY - 200) : 999999;
+        // Reading probe zone: 35% of viewport height (max 220px)
+        const probeY = Math.min(220, window.innerHeight * 0.35);
 
         let currentSec = '#inventory';
-        if (scrollY >= reviewsTop) {
+
+        if (reviewsSec && reviewsSec.getBoundingClientRect().top <= probeY) {
           currentSec = '#reviews';
-        } else if (scrollY >= consultTop) {
+        } else if (consultSec && consultSec.getBoundingClientRect().top <= probeY) {
           currentSec = '#consult';
         } else {
           currentSec = '#inventory';
@@ -182,10 +195,7 @@
 
         const matchingLink = links.find(l => l.getAttribute('href') === currentSec);
         if (matchingLink && matchingLink !== activeLink) {
-          links.forEach(l => l.classList.remove('active'));
-          matchingLink.classList.add('active');
-          activeLink = matchingLink;
-          positionLens(activeLink, true);
+          setActive(matchingLink, true);
         }
       });
     }, { passive: true });
