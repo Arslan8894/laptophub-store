@@ -113,46 +113,65 @@
               behavior: 'smooth'
             });
 
-            // 5. Active arrival monitor: check scroll arrival and movement cessation
+            // 5. Release lock ONLY when scroll truly finishes (scrollend or verified arrival)
+            const releaseLock = () => {
+              if (scrollMonitorInterval) clearInterval(scrollMonitorInterval);
+              scrollMonitorInterval = null;
+              if (navLockTimer) clearTimeout(navLockTimer);
+              navLockTimer = null;
+              window.removeEventListener('scrollend', onScrollEnd);
+
+              setTimeout(() => {
+                isNavigating = false;
+                positionLens(activeLink, false);
+              }, 120);
+            };
+
+            const onScrollEnd = () => {
+              releaseLock();
+            };
+
+            window.addEventListener('scrollend', onScrollEnd, { once: true });
+
+            // Fallback monitor: never prematurely release midway through smooth scroll
+            const startTime = Date.now();
             let lastY = window.scrollY;
             let stillFrames = 0;
-            const startTime = Date.now();
 
             scrollMonitorInterval = setInterval(() => {
               const currentY = window.scrollY;
               const elapsed = Date.now() - startTime;
               const dist = Math.abs(currentY - targetScrollY);
 
-              if (Math.abs(currentY - lastY) < 2) {
+              if (Math.abs(currentY - lastY) < 1.5) {
                 stillFrames++;
               } else {
                 stillFrames = 0;
               }
               lastY = currentY;
 
-              // Arrived within 6px OR stopped moving after at least 150ms
-              if (dist <= 6 || (stillFrames >= 3 && elapsed > 150)) {
-                clearInterval(scrollMonitorInterval);
-                scrollMonitorInterval = null;
-                // Generous settle delay prevents any trailing scroll inertia from glitching
-                setTimeout(() => {
-                  isNavigating = false;
-                  positionLens(activeLink, false);
-                }, 140);
+              if ((dist <= 12 && stillFrames >= 4) || (stillFrames >= 6 && elapsed > 700)) {
+                releaseLock();
               }
-            }, 40);
+            }, 50);
 
-            // 6. Absolute failsafe timeout (2000ms max)
+            // 6. Absolute failsafe timeout (1500ms max)
             navLockTimer = setTimeout(() => {
-              if (scrollMonitorInterval) clearInterval(scrollMonitorInterval);
-              scrollMonitorInterval = null;
-              isNavigating = false;
-              positionLens(activeLink, false);
-            }, 2000);
+              releaseLock();
+            }, 1500);
           }
         }
       });
     });
+
+    // If user manually interrupts with wheel, release programmatic lock
+    window.addEventListener('wheel', () => {
+      if (isNavigating) {
+        if (scrollMonitorInterval) clearInterval(scrollMonitorInterval);
+        if (navLockTimer) clearTimeout(navLockTimer);
+        isNavigating = false;
+      }
+    }, { passive: true });
 
     // When mouse leaves the track, always return lens to activeLink
     track.addEventListener('mouseleave', () => {

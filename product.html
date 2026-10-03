@@ -322,9 +322,26 @@ footer {
   font-size: 0.84rem;
   color: var(--muted);
 }
+/* Ambient Top Lighting for Liquid Glass refraction */
+.top-ambient-glow {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(900px, 95vw);
+  height: 280px;
+  background: radial-gradient(ellipse at 50% 0%, rgba(76, 124, 255, 0.28) 0%, rgba(99, 144, 255, 0.1) 45%, transparent 75%);
+  pointer-events: none;
+  z-index: 0;
+  filter: blur(45px);
+}
+[data-theme="light"] .top-ambient-glow {
+  background: radial-gradient(ellipse at 50% 0%, rgba(37, 99, 235, 0.14) 0%, rgba(37, 99, 235, 0.04) 50%, transparent 75%);
+}
 </style>
 </head>
 <body>
+<div class="top-ambient-glow"></div>
 
 <!-- FLOATING LIQUID GLASS NAVBAR -->
 <header class="floating-nav-container">
