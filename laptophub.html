@@ -13,6 +13,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/theme.css">
 <link rel="stylesheet" href="css/header.css">
+<link rel="stylesheet" href="css/glass.css">
 <style>
   *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -1344,41 +1345,59 @@
 <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.18/dist/lenis.min.js"></script>
 <script src="js/3d/hero-laptop.js" defer></script>
 <script src="js/animations/scroll-animations.js" defer></script>
+<script src="js/animations/glass-nav.js" defer></script>
 </head>
 <body>
 
-<!-- NAV -->
-<nav>
-  <a href="laptophub.html" class="logo-mark">
-    <div class="logo-icon">LH</div>
-    <span class="logo-text">Laptop<span>HUB</span></span>
-  </a>
-  <ul class="nav-links">
-    <li><a href="#inventory">All Laptops</a></li>
-    <li>
-      <a href="consult.html" style="display:inline-flex;align-items:center;gap:6px">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
-        Consult Me
-      </a>
-    </li>
-    <li><a href="#reviews">Reviews</a></li>
-  </ul>
-  <div class="nav-right">
-    <!-- THEME TOGGLE BUTTON -->
-    <button class="theme-toggle-btn" id="themeBtn" onclick="toggleTheme()" aria-label="Toggle theme">
-      <span class="theme-icon" id="themeIcon">☀️</span>
-      <span id="themeLabel">Light</span>
-    </button>
-    <button class="nav-cart" onclick="openCart()">
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg>
-      <span class="cart-text">Cart</span> <span class="cart-badge-count" id="cartCount">0</span>
-    </button>
-    <div id="userAccountSection" style="position:relative">
-      <button class="nav-btn" id="btnSignIn" onclick="openLoginModal()">Sign In</button>
+<!-- SVG Refraction Filter (Fallback to standard backdrop-filter blur when unsupported) -->
+<svg class="glass-svg-refraction" style="position: absolute; width: 0; height: 0; pointer-events: none; overflow: hidden;" aria-hidden="true">
+  <defs>
+    <filter id="glass-refraction" x="0%" y="0%" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.04" numOctaves="3" result="noise" />
+      <feDisplacementMap in="SourceGraphic" in2="noise" scale="5" xChannelSelector="R" yChannelSelector="G" />
+    </filter>
+  </defs>
+</svg>
+
+<!-- FLOATING LIQUID GLASS NAVBAR -->
+<header class="floating-nav-container">
+  <nav class="liquid-glass-nav">
+    <a href="laptophub.html" class="logo-mark">
+      <div class="logo-icon">LH</div>
+      <span class="logo-text">Laptop<span>HUB</span></span>
+    </a>
+    <ul class="nav-pill-track">
+      <div class="glass-lens-highlight"></div>
+      <li><a href="#inventory" class="active">All Laptops</a></li>
+      <li>
+        <a href="consult.html">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+          Consult Me
+        </a>
+      </li>
+      <li><a href="#reviews">Reviews</a></li>
+    </ul>
+    <div class="nav-right">
+      <!-- THEME TOGGLE BUTTON -->
+      <button class="theme-toggle-btn glass-circle-btn" id="themeBtn" onclick="toggleTheme()" aria-label="Toggle theme" title="Toggle theme">
+        <span class="theme-icon" id="themeIcon">☀️</span>
+        <span id="themeLabel" style="display:none">Light</span>
+      </button>
+      <!-- CART BUTTON -->
+      <button class="nav-cart glass-circle-btn" onclick="openCart()" aria-label="Open cart" title="Shopping Cart">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg>
+        <span class="cart-text" style="display:none">Cart</span>
+        <span class="cart-badge-count" id="cartCount">0</span>
+      </button>
+      <!-- ACCOUNT SECTION -->
+      <div id="userAccountSection" style="position:relative">
+        <button class="nav-btn glass-pill" id="btnSignIn" onclick="openLoginModal()">Sign In</button>
+      </div>
+      <!-- MOBILE MENU TOGGLE -->
+      <button class="mobile-nav-toggle glass-circle-btn" id="mobileNavBtn" onclick="toggleMobileNav()" aria-label="Open mobile navigation menu">☰</button>
     </div>
-    <button class="mobile-nav-toggle" id="mobileNavBtn" onclick="toggleMobileNav()" aria-label="Open mobile navigation menu">☰</button>
-  </div>
-</nav>
+  </nav>
+</header>
 
 <!-- MOBILE NAV DRAWER -->
 <div class="mobile-drawer-overlay" id="mobileNavOverlay" onclick="toggleMobileNav(false)"></div>
