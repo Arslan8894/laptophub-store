@@ -1,7 +1,7 @@
 /**
  * LaptopHUB - Liquid Glass Navbar Interactive Lens (js/animations/glass-nav.js)
- * Smooth sliding glass highlight with locked navigation transitions to prevent
- * jitter and flickering while smooth scrolling across page sections.
+ * High-performance sliding glass highlight with locked navigation transitions to prevent
+ * jitter, flickering, and bouncing between tabs while scrolling across page sections.
  */
 
 (function () {
@@ -23,9 +23,10 @@
 
     let activeLink = links[0]; // Default to All Laptops
     let isNavigating = false;
-    let navTimeout = null;
+    let navLockTimeout = null;
+    let scrollDebounceTimeout = null;
 
-    // Determine initial active link based on URL hash
+    // Check if initial hash matches a link
     const currentHash = window.location.hash;
     if (currentHash) {
       const match = links.find(l => l.getAttribute('href') === currentHash);
@@ -37,6 +38,9 @@
 
       const trackRect = track.getBoundingClientRect();
       const targetRect = targetEl.getBoundingClientRect();
+
+      // Ensure dimensions are valid (avoid zero-width before layout)
+      if (targetRect.width === 0) return;
 
       const leftOffset = targetRect.left - trackRect.left;
       const targetWidth = targetRect.width;
@@ -58,12 +62,20 @@
     // Set initial active state
     links.forEach(l => l.classList.remove('active'));
     activeLink.classList.add('active');
-    setTimeout(() => positionLens(activeLink, false), 60);
 
-    // Hover interactions
+    // Run positioning once fonts / layout are ready
+    setTimeout(() => positionLens(activeLink, false), 50);
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(() => positionLens(activeLink, false));
+    }
+
+    // CLICK HANDLER
     links.forEach(link => {
+      // Hover preview - ONLY when NOT navigating
       link.addEventListener('mouseenter', () => {
-        positionLens(link, true);
+        if (!isNavigating) {
+          positionLens(link, true);
+        }
       });
 
       link.addEventListener('click', (e) => {
@@ -73,78 +85,92 @@
           if (targetEl) {
             e.preventDefault();
 
-            // Lock navigation to prevent scroll spy from jittering between tabs
+            // Set programmatic navigation lock
             isNavigating = true;
-            clearTimeout(navTimeout);
+            clearTimeout(navLockTimeout);
+            clearTimeout(scrollDebounceTimeout);
 
+            // Update active link immediately
             links.forEach(l => l.classList.remove('active'));
             link.classList.add('active');
             activeLink = link;
 
-            // Immediately animate lens to clicked link
+            // Slide lens to the clicked link immediately and lock it there
             positionLens(activeLink, true);
 
-            // Calculate precise destination scroll offset (accounting for floating header)
-            const targetY = targetEl.getBoundingClientRect().top + window.scrollY - 80;
+            // Calculate exact target scroll position using live document coordinates
+            const targetY = href === '#inventory'
+              ? Math.max(0, targetEl.getBoundingClientRect().top + window.scrollY - 75)
+              : Math.max(0, targetEl.getBoundingClientRect().top + window.scrollY - 75);
+
             window.scrollTo({
-              top: Math.max(0, targetY),
+              top: targetY,
               behavior: 'smooth'
             });
 
-            // Unlock scroll spy once smooth scroll has settled
-            navTimeout = setTimeout(() => {
+            // Keep navigation lock engaged for the full duration of smooth scroll
+            navLockTimeout = setTimeout(() => {
               isNavigating = false;
-            }, 850);
+              positionLens(activeLink, true);
+            }, 1200);
           }
         }
       });
     });
 
+    // When mouse leaves the track, always return lens to activeLink
     track.addEventListener('mouseleave', () => {
       positionLens(activeLink, true);
     });
 
+    // Reposition without transition on window resize
     window.addEventListener('resize', () => {
       positionLens(activeLink, false);
     });
 
-    // Listen for modern scrollend if supported to promptly release lock
-    if ('onscrollend' in window) {
-      window.addEventListener('scrollend', () => {
-        clearTimeout(navTimeout);
+    // When scroll finishes natively, release navigation lock safely
+    window.addEventListener('scrollend', () => {
+      if (isNavigating) {
+        clearTimeout(navLockTimeout);
         isNavigating = false;
-      }, { passive: true });
-    }
+        positionLens(activeLink, true);
+      }
+    });
 
-    // Throttled Scroll-Spy for manual scrolling only
+    // SCROLL SPY - Runs ONLY during genuine manual scrolling
     let scrollRafId = null;
     window.addEventListener('scroll', () => {
-      // If user just clicked a tab and the page is auto-scrolling, ignore scroll spy!
-      if (isNavigating) return;
+      // If user clicked a tab and smooth scroll is ongoing, do NOT let scroll spy run!
+      if (isNavigating) {
+        clearTimeout(scrollDebounceTimeout);
+        scrollDebounceTimeout = setTimeout(() => {
+          // If no scroll events fired for 200ms, smooth scroll has finished
+          isNavigating = false;
+          positionLens(activeLink, true);
+        }, 200);
+        return;
+      }
 
       if (scrollRafId) return;
       scrollRafId = requestAnimationFrame(() => {
         scrollRafId = null;
         if (isNavigating) return;
 
-        const inventorySec = document.getElementById('inventory');
         const consultSec = document.getElementById('consult');
         const reviewsSec = document.getElementById('reviews');
 
-        let currentSec = '#inventory';
+        const scrollY = window.scrollY;
+        // Compute real-time element tops in document coordinates
+        const consultTop = consultSec ? (consultSec.getBoundingClientRect().top + scrollY - 200) : 999999;
+        const reviewsTop = reviewsSec ? (reviewsSec.getBoundingClientRect().top + scrollY - 200) : 999999;
 
-        // When near the very top of the page, always stay on inventory
-        if (window.scrollY < 260) {
-          currentSec = '#inventory';
+        let currentSec = '#inventory';
+        if (scrollY >= reviewsTop) {
+          currentSec = '#reviews';
+        } else if (scrollY >= consultTop) {
+          currentSec = '#consult';
         } else {
-          // Check from bottom to top
-          if (reviewsSec && reviewsSec.getBoundingClientRect().top <= 200) {
-            currentSec = '#reviews';
-          } else if (consultSec && consultSec.getBoundingClientRect().top <= 200) {
-            currentSec = '#consult';
-          } else if (inventorySec && inventorySec.getBoundingClientRect().top <= 200) {
-            currentSec = '#inventory';
-          }
+          currentSec = '#inventory';
         }
 
         const matchingLink = links.find(l => l.getAttribute('href') === currentSec);
