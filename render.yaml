@@ -8,7 +8,4 @@ services:
     envVars:
       - key: PORT
         generateValue: false
-    disk:
-      name: laptophub-data
-      mountPath: /opt/render/project/src/db
-      sizeGB: 1
+
