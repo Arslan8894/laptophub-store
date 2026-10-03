@@ -172,13 +172,12 @@
 
   /* HERO */
   .hero {
-    min-height: 80vh;
-    display: flex; flex-direction: column;
+    min-height: 85vh;
+    display: flex;
     align-items: center; justify-content: center;
-    text-align: center;
     position: relative;
     overflow: hidden;
-    padding: 5rem 2rem 4rem;
+    padding: 6rem 2rem 4rem;
   }
 
   .hero-noise {
@@ -202,6 +201,60 @@
     pointer-events: none;
   }
 
+  .hero-inner {
+    display: grid;
+    grid-template-columns: 1.15fr 0.85fr;
+    align-items: center;
+    max-width: 1360px;
+    width: 100%;
+    margin: 0 auto;
+    gap: 3rem;
+    position: relative;
+    z-index: 2;
+    text-align: left;
+  }
+  .hero-text-col {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .hero-3d-col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    width: 100%;
+  }
+  .hero-3d-wrap {
+    width: 100%;
+    height: 480px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: grab;
+  }
+  .hero-3d-wrap:active {
+    cursor: grabbing;
+  }
+  .hero-3d-hint {
+    font-size: 0.74rem;
+    color: var(--subtle);
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    margin-top: 0.5rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    font-weight: 600;
+    opacity: 0.85;
+    user-select: none;
+  }
+  .hero-3d-hint svg {
+    color: var(--blue);
+  }
+
   .badge {
     display: inline-flex; align-items: center; gap: 7px;
     background: var(--s2); border: 1px solid var(--border2);
@@ -222,8 +275,8 @@
 
   h1.hero-h {
     font-family: var(--font-display);
-    font-size: clamp(2.8rem, 8vw, 5.8rem);
-    font-weight: 700; line-height: 1.02;
+    font-size: clamp(2.8rem, 6.5vw, 5.2rem);
+    font-weight: 700; line-height: 1.04;
     letter-spacing: -0.03em;
     margin-bottom: 1.5rem;
     color: var(--heading);
@@ -242,7 +295,6 @@
 
   .hero-actions {
     display: flex; gap: 0.85rem;
-    justify-content: center;
     animation: up 0.7s 0.24s ease both;
   }
   .btn-p {
@@ -265,6 +317,30 @@
     transition: background 0.2s, border-color 0.2s, color 0.2s;
   }
   .btn-s:hover { background: var(--s3); border-color: var(--blue); }
+
+  @media (max-width: 992px) {
+    .hero { padding: 4.5rem 1.5rem 3rem; }
+    .hero-inner {
+      grid-template-columns: 1fr;
+      text-align: center;
+      gap: 2rem;
+    }
+    .hero-text-col {
+      align-items: center;
+    }
+    .hero-actions {
+      justify-content: center;
+    }
+    .hero-3d-wrap {
+      height: 380px;
+      max-width: 520px;
+    }
+  }
+  @media (max-width: 480px) {
+    .hero-3d-wrap {
+      height: 290px;
+    }
+  }
 
   @keyframes up {
     from { opacity: 0; transform: translateY(20px); }
@@ -1262,6 +1338,8 @@
 </style>
 <script src="laptops-data.js"></script>
 <script src="store-config.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="js/3d/hero-laptop.js" defer></script>
 </head>
 <body>
 
@@ -1318,12 +1396,23 @@
   <div class="hero-noise"></div>
   <div class="hero-grid"></div>
   <div class="hero-glow"></div>
-  <div class="badge"><span class="badge-dot"></span>Official Inventory & Real Photos</div>
-  <h1 class="hero-h">Premium Laptops.<br>Every Spec.<br><em>Honest Prices.</em></h1>
-  <p class="hero-p">Featuring authentic business laptops, creator machines, and convertibles from Dell, HP, Apple, and Microsoft. Delivered with warranty across Pakistan.</p>
-  <div class="hero-actions">
-    <a href="#inventory" class="btn-p">Explore All 69 Laptops</a>
-    <a href="#faq" class="btn-s">Payment & Warranty Info</a>
+  <div class="hero-inner">
+    <div class="hero-text-col">
+      <div class="badge"><span class="badge-dot"></span>Official Inventory & Real Photos</div>
+      <h1 class="hero-h">Premium Laptops.<br>Every Spec.<br><em>Honest Prices.</em></h1>
+      <p class="hero-p">Featuring authentic business laptops, creator machines, and convertibles from Dell, HP, Apple, and Microsoft. Delivered with warranty across Pakistan.</p>
+      <div class="hero-actions">
+        <a href="#inventory" class="btn-p">Explore All 69 Laptops</a>
+        <a href="#faq" class="btn-s">Payment & Warranty Info</a>
+      </div>
+    </div>
+    <div class="hero-3d-col">
+      <div class="hero-3d-wrap" id="hero3dContainer" title="Drag to inspect 3D laptop"></div>
+      <div class="hero-3d-hint">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
+        <span>Interactive 3D Hardware • Drag to Rotate</span>
+      </div>
+    </div>
   </div>
 </section>
 
