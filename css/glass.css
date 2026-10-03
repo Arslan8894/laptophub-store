@@ -23,19 +23,19 @@
 }
 
 [data-theme="light"] {
-  /* LIGHT THEME GLASS TOKENS */
-  --glass-bg: rgba(255, 255, 255, 0.75);
-  --glass-bg-subtle: rgba(241, 245, 249, 0.7);
+  /* LIGHT THEME GLASS TOKENS - Harmonious with Top Bar */
+  --glass-bg: rgba(255, 255, 255, 0.82);
+  --glass-bg-subtle: rgba(241, 245, 249, 0.75);
   --glass-border: rgba(0, 0, 0, 0.08);
   --glass-border-subtle: rgba(0, 0, 0, 0.04);
-  --glass-border-highlight: rgba(255, 255, 255, 0.85);
-  --glass-inner-shadow: inset 0 1px 1.5px 0 rgba(255, 255, 255, 0.9), inset 0 -1px 2px 0 rgba(0, 0, 0, 0.04);
-  --glass-outer-shadow: 0 12px 32px -6px rgba(0, 0, 0, 0.08), 0 0 0 1px rgba(0, 0, 0, 0.04);
+  --glass-border-highlight: rgba(255, 255, 255, 0.95);
+  --glass-inner-shadow: inset 0 1px 1px 0 rgba(255, 255, 255, 0.9), inset 0 -1px 1px 0 rgba(0, 0, 0, 0.03);
+  --glass-outer-shadow: 0 8px 24px -4px rgba(0, 0, 0, 0.06), 0 0 0 1px rgba(0, 0, 0, 0.04);
   --glass-blur: blur(14px) saturate(140%);
-  --glass-circle-bg: rgba(255, 255, 255, 0.85);
-  --glass-lens-bg: linear-gradient(135deg, rgba(37, 99, 235, 0.16) 0%, rgba(37, 99, 235, 0.06) 100%);
-  --glass-lens-border: rgba(37, 99, 235, 0.4);
-  --glass-lens-glow: 0 0 16px rgba(37, 99, 235, 0.2);
+  --glass-circle-bg: rgba(255, 255, 255, 0.9);
+  --glass-lens-bg: linear-gradient(135deg, rgba(37, 99, 235, 0.12) 0%, rgba(37, 99, 235, 0.05) 100%);
+  --glass-lens-border: rgba(37, 99, 235, 0.32);
+  --glass-lens-glow: 0 2px 10px rgba(37, 99, 235, 0.12);
 }
 
 /* ==========================================================================
@@ -250,6 +250,10 @@ nav.liquid-glass-nav .logo-text span {
   border: 1px solid var(--glass-border-subtle);
   list-style: none;
   margin: 0;
+}
+[data-theme="light"] .nav-pill-track {
+  background: rgba(0, 0, 0, 0.03);
+  border: 1px solid var(--glass-border-subtle);
 }
 
 /* The Sliding Liquid Glass "Lens" Highlight */
