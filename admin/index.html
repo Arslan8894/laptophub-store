@@ -8,6 +8,13 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../css/theme.css">
+
+<!-- Firebase Cloud Authentication & Firestore SDKs -->
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script src="../laptops-data.js"></script>
+<script src="../js/firebase-config.js"></script>
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 :root {
@@ -756,28 +763,48 @@ html[data-theme="light"] {
 let currentAdmin = null;
 let inventoryData = [];
 
-// INIT AUTH & DATA
+// INIT AUTH & DATA (Firebase Cloud Auth with Strict Homepage Redirect)
 async function initAdmin() {
+  const { isConfigured, auth } = initFirebase();
+  if (isConfigured && auth) {
+    auth.onAuthStateChanged(user => {
+      if (!user) {
+        // Strict requirement: redirect unauthenticated visitor to homepage
+        window.location.replace('../laptophub.html');
+        return;
+      }
+      currentAdmin = { email: user.email, uid: user.uid };
+      document.getElementById('adminInfoText').innerHTML = `Admin: <strong>${escapeHtml(user.email)}</strong> <span style="font-size:0.7rem;color:#10b981;font-weight:700">● Cloud</span>`;
+      loadInventory();
+      loadRamTiers();
+      loadOrders();
+      loadReviews();
+      loadUsers();
+      loadAuditLog();
+    });
+    return;
+  }
+
+  // Fallback check for local development session or server
   try {
     const res = await fetch('/api/admin/me', { credentials: 'include' });
     if (!res.ok) {
-      window.location.replace('/admin/login');
+      window.location.replace('../laptophub.html');
       return;
     }
     currentAdmin = await res.json();
     document.getElementById('adminInfoText').innerHTML = `Logged in as: <strong>${escapeHtml(currentAdmin.email)}</strong>`;
-    
-    // Load initial data
-    loadRamTiers();
     loadInventory();
+    loadRamTiers();
     loadOrders();
     loadReviews();
     loadUsers();
     loadAuditLog();
   } catch (e) {
-    window.location.replace('/admin/login');
+    window.location.replace('../laptophub.html');
   }
 }
+
 
 // TAB SWITCHER
 function switchAdminTab(tabName) {
@@ -900,15 +927,39 @@ async function saveRamTiers() {
 let pendingDeleteId = null;
 
 async function loadInventory() {
+  const { isConfigured, db } = initFirebase();
+  if (isConfigured && db) {
+    try {
+      const snap = await db.collection('laptops').get();
+      if (!snap.empty) {
+        inventoryData = [];
+        snap.forEach(doc => {
+          inventoryData.push({ firestoreId: doc.id, ...doc.data() });
+        });
+        inventoryData.sort((a,b) => (Number(a.id) || 0) - (Number(b.id) || 0));
+        document.getElementById('countInventory').textContent = inventoryData.length;
+        filterInventoryTable();
+        return;
+      }
+    } catch (err) {
+      console.warn('[Admin] Firestore load warning:', err);
+    }
+  }
+
   try {
     const res = await fetch('/api/admin/inventory', { credentials: 'include' });
     if (res.ok) {
       inventoryData = await res.json();
       document.getElementById('countInventory').textContent = inventoryData.length;
       filterInventoryTable();
+      return;
     }
-  } catch (e) {
-    console.error(e);
+  } catch (e) {}
+
+  if (typeof LAPTOPS_INVENTORY !== 'undefined') {
+    inventoryData = [...LAPTOPS_INVENTORY];
+    document.getElementById('countInventory').textContent = inventoryData.length;
+    filterInventoryTable();
   }
 }
 
@@ -1006,17 +1057,32 @@ function filterInventoryTable() {
 }
 
 async function updateStock(id, newStock) {
+  const stockNum = parseInt(newStock, 10);
+  const fb = window.initFirebase ? window.initFirebase() : null;
+  if (fb && fb.isConfigured && fb.auth && fb.auth.currentUser) {
+    try {
+      await window.adminUpdateStock(id, stockNum);
+      showToast(`Stock updated for laptop #${id}`);
+      const item = inventoryData.find(l => l.id == id);
+      if (item) item.stock = stockNum;
+      filterInventoryTable();
+      return;
+    } catch (fbErr) {
+      console.warn('[Admin] Firestore stock update error, falling back to local server:', fbErr);
+    }
+  }
+
   try {
     const res = await fetch('/api/admin/inventory/stock', {
       method: 'POST',
       credentials: 'include',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ id, stock: parseInt(newStock, 10) })
+      body: JSON.stringify({ id, stock: stockNum })
     });
     if (res.ok) {
       showToast(`Stock updated for laptop #${id}`);
-      const item = inventoryData.find(l => l.id === id);
-      if (item) item.stock = parseInt(newStock, 10);
+      const item = inventoryData.find(l => l.id == id);
+      if (item) item.stock = stockNum;
       filterInventoryTable();
       loadAuditLog();
     }
@@ -1026,6 +1092,23 @@ async function updateStock(id, newStock) {
 }
 
 async function toggleArchive(id, currentlyHidden) {
+  const fb = window.initFirebase ? window.initFirebase() : null;
+  if (fb && fb.isConfigured && fb.auth && fb.auth.currentUser) {
+    try {
+      await fb.db.collection('laptops').doc(String(id)).update({
+        hidden: !currentlyHidden,
+        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+      });
+      showToast(currentlyHidden ? `Laptop #${id} made live` : `Laptop #${id} archived`);
+      const item = inventoryData.find(l => l.id == id);
+      if (item) item.hidden = !currentlyHidden;
+      filterInventoryTable();
+      return;
+    } catch (fbErr) {
+      console.warn('[Admin] Firestore archive update error:', fbErr);
+    }
+  }
+
   const endpoint = currentlyHidden ? '/api/admin/inventory/unarchive' : '/api/admin/inventory/archive';
   try {
     const res = await fetch(endpoint, {
@@ -1036,7 +1119,7 @@ async function toggleArchive(id, currentlyHidden) {
     });
     if (res.ok) {
       showToast(currentlyHidden ? `Laptop #${id} made live` : `Laptop #${id} archived`);
-      const item = inventoryData.find(l => l.id === id);
+      const item = inventoryData.find(l => l.id == id);
       if (item) item.hidden = !currentlyHidden;
       filterInventoryTable();
       loadAuditLog();
@@ -1055,6 +1138,7 @@ function openAddLaptopModal() {
   document.getElementById('lapBrand').value = 'lenovo';
   document.getElementById('lapName').value = '';
   document.getElementById('lapCpu').value = '';
+  if (document.getElementById('lapExactCpu')) document.getElementById('lapExactCpu').value = '';
   document.getElementById('lapGen').value = '';
   document.getElementById('lapRam').value = '16';
   document.getElementById('lapRamType').value = 'DDR4';
@@ -1069,6 +1153,7 @@ function openAddLaptopModal() {
   document.getElementById('lapCategory').value = 'Ultrabook';
   document.getElementById('lapImgPath').value = 'images/laptop-1-lenovo-thinkpad-t14-gen-1-1.jpg';
   document.getElementById('lapVisible').checked = true;
+  if (document.getElementById('lapFeatured')) document.getElementById('lapFeatured').checked = false;
   document.getElementById('lapDescription').value = '';
   document.getElementById('imgUploadStatus').textContent = 'Upload an image file or keep existing path.';
 
@@ -1077,7 +1162,7 @@ function openAddLaptopModal() {
 }
 
 function openEditLaptopModal(id) {
-  const lap = inventoryData.find(l => l.id === id);
+  const lap = inventoryData.find(l => l.id == id);
   if (!lap) return;
 
   document.getElementById('laptopModalHeading').textContent = `Edit Laptop #${lap.id}: ${lap.name}`;
@@ -1085,9 +1170,10 @@ function openEditLaptopModal(id) {
   document.getElementById('lapBrand').value = (lap.brand || 'lenovo').toLowerCase();
   document.getElementById('lapName').value = lap.name || '';
   document.getElementById('lapCpu').value = lap.cpu || '';
+  if (document.getElementById('lapExactCpu')) document.getElementById('lapExactCpu').value = lap.exactCpu || lap.cpu || '';
   document.getElementById('lapGen').value = lap.gen || '';
   document.getElementById('lapRam').value = lap.ram || 16;
-  document.getElementById('lapRamType').value = lap.fullSpecs?.memoryStorage?.ramType || 'DDR4';
+  document.getElementById('lapRamType').value = lap.fullSpecs?.memoryStorage?.ramType || lap.ramType || 'DDR4';
   document.getElementById('lapStorage').value = String(lap.storage || 512);
   document.getElementById('lapStorageType').value = lap.fullSpecs?.memoryStorage?.storageType || lap.storageType || 'NVMe SSD';
   document.getElementById('lapGpu').value = lap.gpu || '';
@@ -1099,6 +1185,7 @@ function openEditLaptopModal(id) {
   document.getElementById('lapCategory').value = lap.category || 'Ultrabook';
   document.getElementById('lapImgPath').value = lap.img || '';
   document.getElementById('lapVisible').checked = !lap.hidden;
+  if (document.getElementById('lapFeatured')) document.getElementById('lapFeatured').checked = Boolean(lap.featured);
   document.getElementById('lapDescription').value = lap.description || '';
   document.getElementById('imgUploadStatus').textContent = 'Current image loaded.';
 
@@ -1185,24 +1272,45 @@ async function handleSaveLaptop(e) {
   const editId = document.getElementById('editLaptopId').value;
   const isEditing = Boolean(editId);
 
+  const priceNum = parseInt(document.getElementById('lapPrice').value, 10) || 0;
+  const stockNum = parseInt(document.getElementById('lapStock').value, 10) || 0;
+  const ramNum = parseInt(document.getElementById('lapRam').value, 10) || 16;
+  const storageNum = parseInt(document.getElementById('lapStorage').value, 10) || 512;
+  const brandVal = document.getElementById('lapBrand').value;
+  const brandCapitalized = brandVal.charAt(0).toUpperCase() + brandVal.slice(1);
+  const isFeatured = document.getElementById('lapFeatured') ? document.getElementById('lapFeatured').checked : false;
+
+  let assignedId;
+  if (isEditing) {
+    assignedId = parseInt(editId, 10) || editId;
+  } else {
+    const maxId = inventoryData.reduce((max, item) => Math.max(max, Number(item.id) || 0), 0);
+    assignedId = maxId + 1;
+  }
+
   const payload = {
-    brand: document.getElementById('lapBrand').value,
-    brandName: document.getElementById('lapBrand').value.charAt(0).toUpperCase() + document.getElementById('lapBrand').value.slice(1),
+    id: assignedId,
+    brand: brandVal,
+    brandName: brandCapitalized,
     name: document.getElementById('lapName').value.trim(),
     cpu: document.getElementById('lapCpu').value.trim(),
+    exactCpu: document.getElementById('lapExactCpu') ? document.getElementById('lapExactCpu').value.trim() : document.getElementById('lapCpu').value.trim(),
     gen: document.getElementById('lapGen').value.trim() || '-',
-    ram: parseInt(document.getElementById('lapRam').value, 10),
-    storage: parseInt(document.getElementById('lapStorage').value, 10),
-    storageType: document.getElementById('lapStorageType').value.trim(),
+    ram: ramNum,
+    ramType: document.getElementById('lapRamType').value,
+    storage: storageNum,
+    storageType: document.getElementById('lapStorageType').value.trim() || 'NVMe SSD',
     gpu: document.getElementById('lapGpu').value.trim(),
     display: document.getElementById('lapDisplay').value.trim(),
-    price: parseInt(document.getElementById('lapPrice').value, 10),
-    stock: parseInt(document.getElementById('lapStock').value, 10),
+    price: priceNum,
+    priceFormatted: 'Rs. ' + priceNum.toLocaleString('en-PK'),
+    stock: stockNum,
     condition: document.getElementById('lapCondition').value,
-    badge: document.getElementById('lapBadge').value.trim() || 'Verified',
+    badge: document.getElementById('lapBadge').value.trim() || (stockNum === 0 ? 'Out of Stock' : 'Verified'),
     category: document.getElementById('lapCategory').value,
     img: document.getElementById('lapImgPath').value.trim(),
     hidden: !document.getElementById('lapVisible').checked,
+    featured: isFeatured,
     description: document.getElementById('lapDescription').value.trim(),
     fullSpecs: {
       performance: {
@@ -1211,14 +1319,27 @@ async function handleSaveLaptop(e) {
       },
       memoryStorage: {
         ramType: document.getElementById('lapRamType').value,
-        storageType: document.getElementById('lapStorageType').value.trim()
+        storageType: document.getElementById('lapStorageType').value.trim() || 'NVMe SSD'
       }
     }
   };
 
-  const endpoint = isEditing ? '/api/admin/inventory/update' : '/api/admin/inventory/add';
-  if (isEditing) payload.id = parseInt(editId, 10);
+  // 1. Try Firestore if configured
+  const fb = window.initFirebase ? window.initFirebase() : null;
+  if (fb && fb.isConfigured && fb.auth && fb.auth.currentUser) {
+    try {
+      await window.adminSaveLaptop(payload);
+      showToast(isEditing ? 'Laptop updated in Firestore!' : 'New laptop saved to Firestore!');
+      closeLaptopEditModal();
+      await loadInventory();
+      return;
+    } catch (fbErr) {
+      console.warn('[Admin] Firestore save failed, attempting local server:', fbErr);
+    }
+  }
 
+  // 2. Fallback to local server API
+  const endpoint = isEditing ? '/api/admin/inventory/update' : '/api/admin/inventory/add';
   try {
     const res = await fetch(endpoint, {
       method: 'POST',
@@ -1245,7 +1366,7 @@ async function handleSaveLaptop(e) {
 // ─────────────────────────────────────────────────────────────
 function confirmDeleteLaptop(id) {
   pendingDeleteId = id;
-  const lap = inventoryData.find(l => l.id === id);
+  const lap = inventoryData.find(l => l.id == id);
   document.getElementById('deleteLapName').textContent = lap ? `#${lap.id} (${lap.name})` : `#${id}`;
   document.getElementById('deleteConfirmModal').classList.add('open');
 }
@@ -1267,6 +1388,20 @@ async function executePermanentDelete() {
   const id = pendingDeleteId;
   closeDeleteConfirmModal();
 
+  // 1. Try Firestore if configured
+  const fb = window.initFirebase ? window.initFirebase() : null;
+  if (fb && fb.isConfigured && fb.auth && fb.auth.currentUser) {
+    try {
+      await window.adminDeleteLaptop(id);
+      showToast(`Laptop #${id} deleted from Firestore.`);
+      await loadInventory();
+      return;
+    } catch (fbErr) {
+      console.warn('[Admin] Firestore delete failed, falling back to server API:', fbErr);
+    }
+  }
+
+  // 2. Fallback to local server API
   try {
     const res = await fetch('/api/admin/inventory/delete', {
       method: 'POST',
@@ -1532,8 +1667,15 @@ async function publishLiveToWebsite() {
 
 // SIGNOUT
 async function adminSignOut() {
-  await fetch('/api/admin/logout', { method: 'POST', credentials: 'include' });
-  window.location.replace('/admin/login');
+  try {
+    if (window.firebase && firebase.auth) {
+      await firebase.auth().signOut();
+    }
+  } catch (e) {}
+  try {
+    await fetch('/api/admin/logout', { method: 'POST', credentials: 'include' });
+  } catch (e) {}
+  window.location.replace('../laptophub.html');
 }
 
 // Prevent back-button viewing after signout via bfcache
@@ -1578,10 +1720,14 @@ initAdmin();
             </div>
           </div>
 
-          <div style="display:grid;grid-template-columns:1.5fr 1fr;gap:12px;">
+          <div style="display:grid;grid-template-columns:1.2fr 1fr 0.8fr;gap:12px;">
             <div class="form-group">
               <label>Processor (CPU) *</label>
-              <input type="text" id="lapCpu" class="form-control" placeholder="e.g. Intel Core i7-1265U (10 Cores, up to 4.80 GHz)" required oninput="onModalFormChange()">
+              <input type="text" id="lapCpu" class="form-control" placeholder="e.g. Core i7 12th Gen" required oninput="onModalFormChange()">
+            </div>
+            <div class="form-group">
+              <label>Exact CPU Model</label>
+              <input type="text" id="lapExactCpu" class="form-control" placeholder="e.g. i7-1265U (10 Cores, 4.80 GHz)" oninput="onModalFormChange()">
             </div>
             <div class="form-group">
               <label>Generation</label>
@@ -1680,9 +1826,15 @@ initAdmin();
             <div id="imgUploadStatus" style="font-size:0.75rem;color:var(--text-muted);margin-top:4px">Background blending analysis automatically applied on upload.</div>
           </div>
 
-          <div class="form-group" style="display:flex;align-items:center;gap:10px;background:var(--surface2);padding:10px 14px;border-radius:8px">
-            <input type="checkbox" id="lapVisible" checked onchange="onModalFormChange()">
-            <label for="lapVisible" style="margin:0;cursor:pointer;color:var(--text);font-weight:600">Visible on Storefront (Uncheck to Archive / Hide)</label>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+            <div class="form-group" style="display:flex;align-items:center;gap:10px;background:var(--surface2);padding:10px 14px;border-radius:8px">
+              <input type="checkbox" id="lapVisible" checked onchange="onModalFormChange()">
+              <label for="lapVisible" style="margin:0;cursor:pointer;color:var(--text);font-weight:600">Visible on Storefront</label>
+            </div>
+            <div class="form-group" style="display:flex;align-items:center;gap:10px;background:var(--surface2);padding:10px 14px;border-radius:8px">
+              <input type="checkbox" id="lapFeatured" onchange="onModalFormChange()">
+              <label for="lapFeatured" style="margin:0;cursor:pointer;color:var(--text);font-weight:600">⭐ Featured Product</label>
+            </div>
           </div>
 
           <div class="form-group">
