@@ -541,17 +541,20 @@
   .pgrid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    max-width: var(--grid-max-width, 1240px);
+    max-width: var(--grid-max-width, 1440px);
     margin: 0 auto;
     gap: var(--card-gap, 1.35rem);
   }
-  @media (min-width: 1200px) {
+  @media (min-width: 1400px) {
+    .pgrid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  }
+  @media (min-width: 1024px) and (max-width: 1399px) {
     .pgrid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   }
-  @media (min-width: 680px) and (max-width: 1199px) {
+  @media (min-width: 640px) and (max-width: 1023px) {
     .pgrid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   }
-  @media (max-width: 679px) {
+  @media (max-width: 639px) {
     .pgrid { grid-template-columns: 1fr; }
   }
 
@@ -708,6 +711,7 @@
     align-items: center;
     justify-content: space-between;
     gap: 10px;
+    flex-wrap: wrap;
     transition: border-color 0.3s;
   }
   .pcard-price-col {
@@ -747,6 +751,8 @@
     border: none;
     border-radius: var(--radius-sm);
     padding: 0.55rem 0.95rem;
+    min-height: 44px;
+    box-sizing: border-box;
     font-family: inherit;
     font-size: 0.82rem;
     font-weight: var(--fw-semibold);
