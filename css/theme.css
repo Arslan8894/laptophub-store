@@ -20,6 +20,31 @@
   --fw-bold: 700;        /* Main section titles, hero headings (Max weight) */
   --fw-extrabold: 800;   /* Key badges / numbers */
 
+  /* =========================================================================
+     STANDARDIZED SPACING SYSTEM (4 / 8 / 12 / 16 / 24 / 32 / 48 / 64 px)
+     ========================================================================= */
+  --space-2xs: 4px;
+  --space-xs:  8px;
+  --space-sm:  12px;
+  --space-md:  16px;
+  --space-lg:  24px;
+  --space-xl:  32px;
+  --space-2xl: 48px;
+  --space-3xl: 64px;
+
+  /* Viewport Safe Areas */
+  --safe-top:    env(safe-area-inset-top, 0px);
+  --safe-right:  env(safe-area-inset-right, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-left:   env(safe-area-inset-left, 0px);
+
+  /* Fluid Typography with clamp() */
+  --fs-hero:  clamp(2.1rem, 5.2vw + 0.8rem, 4.4rem);
+  --fs-h2:    clamp(1.6rem, 3.2vw + 0.5rem, 2.5rem);
+  --fs-h3:    clamp(1.15rem, 1.8vw + 0.3rem, 1.55rem);
+  --fs-body:  clamp(0.92rem, 0.4vw + 0.82rem, 1.05rem);
+  --fs-small: clamp(0.78rem, 0.3vw + 0.72rem, 0.86rem);
+
   /* Type Scale */
   --fs-xs: 0.72rem;      /* 11.5px: Badges, spec pills, metadata */
   --fs-sm: 0.82rem;      /* 13px: Secondary text, descriptions, table cells */
@@ -27,7 +52,7 @@
   --fs-md: 1.05rem;      /* 16.8px: Card titles, drawer headers */
   --fs-lg: 1.35rem;      /* 21.6px: Sub-headers, modal titles */
   --fs-xl: 1.75rem;      /* 28px: Section headings */
-  --fs-2xl: clamp(2.2rem, 5vw, 3.2rem); /* Hero headings */
+  --fs-2xl: var(--fs-hero); /* Hero headings */
 
   /* =========================================================================
      DARK THEME (Default)
