@@ -11,63 +11,16 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/theme.css">
+<link rel="stylesheet" href="css/header.css">
+<link rel="stylesheet" href="css/glass.css">
 <style>
   *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-
-  :root {
-    --font-display: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    --font-body: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    --bg: #07080d;
-    --s1: #0c0e15;
-    --s2: #12141e;
-    --s3: #181b28;
-    --text: #dde0ed;
-    --heading: #ffffff;
-    --muted: #8e93ad;
-    --subtle: #6b7088;
-    --blue: #4c7cff;
-    --blue-hover: #3a6bf5;
-    --blue-dim: rgba(76,124,255,0.12);
-    --blue-glow: rgba(76,124,255,0.25);
-    --border: rgba(255,255,255,0.08);
-    --border2: rgba(255,255,255,0.14);
-    --green: #10b981;
-    --green-dim: rgba(16,185,129,0.12);
-    --gold: #f59e0b;
-    --gold-dim: rgba(245,158,11,0.12);
-    --card-bg: #0c0e15;
-    --card-shadow: 0 15px 35px rgba(0,0,0,0.5);
-    --nav-bg: rgba(7,8,13,0.92);
-  }
-
-  [data-theme="light"] {
-    --bg: #f8fafc;
-    --s1: #ffffff;
-    --s2: #f1f5f9;
-    --s3: #e2e8f0;
-    --text: #334155;
-    --heading: #0f172a;
-    --muted: #64748b;
-    --subtle: #94a3b8;
-    --blue: #2563eb;
-    --blue-hover: #1d4ed8;
-    --blue-dim: rgba(37,99,235,0.08);
-    --blue-glow: rgba(37,99,235,0.18);
-    --border: rgba(0,0,0,0.08);
-    --border2: rgba(0,0,0,0.14);
-    --green: #059669;
-    --green-dim: rgba(5,150,105,0.1);
-    --gold: #d97706;
-    --gold-dim: rgba(217,119,6,0.1);
-    --card-bg: #ffffff;
-    --card-shadow: 0 8px 25px rgba(0,0,0,0.07);
-    --nav-bg: rgba(255,255,255,0.94);
-  }
+  button, input, select, textarea { font-family: inherit; }
 
   html { scroll-behavior: smooth; }
 
   body {
-    font-family: var(--font-body);
+    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     background: var(--bg);
     color: var(--text);
     min-height: 100vh;
@@ -76,54 +29,10 @@
     -webkit-font-smoothing: antialiased;
   }
 
-  /* NAV */
-  nav {
-    position: sticky; top: 0;
-    background: var(--nav-bg);
-    backdrop-filter: blur(20px);
-    border-bottom: 1px solid var(--border);
-    padding: 0.9rem 2rem;
-    display: flex; align-items: center; justify-content: space-between;
-    z-index: 100;
-    transition: background 0.3s, border-color 0.3s;
-  }
-  .nav-logo {
-    font-family: var(--font-display);
-    font-size: 1.35rem; font-weight: 800;
-    color: var(--heading);
-    text-decoration: none;
-    letter-spacing: -0.03em;
-    display: flex; align-items: center; gap: 4px;
-  }
-  .nav-logo span { color: var(--blue); }
-  .nav-actions { display: flex; gap: 10px; align-items: center; }
-  .btn-nav {
-    background: var(--s2);
-    border: 1px solid var(--border2);
-    color: var(--heading);
-    padding: 0.45rem 0.95rem;
-    border-radius: 8px;
-    font-family: inherit; font-size: 0.82rem; font-weight: 600;
-    cursor: pointer; text-decoration: none;
-    display: inline-flex; align-items: center; gap: 6px;
-    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-  }
-  .btn-nav:hover { border-color: var(--blue); transform: translateY(-1px); }
-  .btn-nav:active { transform: scale(0.98); }
-  .theme-btn {
-    background: var(--s2); border: 1px solid var(--border2);
-    color: var(--heading); padding: 0.45rem 0.85rem;
-    border-radius: 20px; font-family: inherit; font-size: 0.78rem; font-weight: 600;
-    cursor: pointer; display: flex; align-items: center; gap: 6px;
-    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-  }
-  .theme-btn:hover { border-color: var(--blue); transform: translateY(-1px); }
-  .theme-btn:active { transform: scale(0.98); }
-
-  /* HERO */
+  /* HERO - shifted down to clear floating nav */
   .hero {
     text-align: center;
-    padding: 3.5rem 1.5rem 2.5rem;
+    padding: 5.5rem 1.5rem 2.5rem;
     background: linear-gradient(180deg, var(--s1) 0%, var(--bg) 100%);
     border-bottom: 1px solid var(--border);
   }
@@ -162,11 +71,12 @@
     font-size: 0.72rem; color: var(--muted);
   }
   .progress-bar-outer {
-    background: var(--s2);
+    background: var(--glass-bg-subtle);
     border-radius: 999px; height: 7px;
     margin-bottom: 0.75rem;
     overflow: hidden;
-    border: 1px solid var(--border);
+    border: 1px solid var(--glass-border);
+    backdrop-filter: var(--glass-blur);
     transition: background 0.3s;
   }
   .progress-bar-inner {
@@ -205,14 +115,28 @@
 
   /* WIZARD CARD */
   .wizard-card {
-    background: var(--card-bg);
-    border: 1px solid var(--border2);
-    border-radius: 20px;
+    background: var(--glass-bg);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    border: 1px solid var(--glass-border);
+    border-radius: 24px;
     padding: 2.25rem;
-    box-shadow: var(--card-shadow);
-    transition: background 0.3s, border-color 0.3s;
+    box-shadow: var(--glass-inner-shadow), var(--glass-outer-shadow);
+    transition: background 0.3s, border-color 0.3s, box-shadow 0.3s;
     min-height: 420px;
     display: flex; flex-direction: column;
+    position: relative;
+    overflow: hidden;
+  }
+  /* Specular top-edge highlight on wizard card */
+  .wizard-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 30px; right: 30px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--glass-border-highlight), transparent);
+    pointer-events: none;
+    z-index: 1;
   }
 
   .step-panel { display: none; flex-direction: column; flex: 1; }
@@ -242,46 +166,52 @@
     flex: 1;
   }
   .option-tile {
-    background: var(--s2);
-    border: 1.5px solid var(--border);
-    border-radius: 12px;
+    background: var(--glass-bg-subtle);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    border: 1px solid var(--glass-border);
+    border-radius: 14px;
     padding: 1.15rem;
     cursor: pointer;
-    transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1),
+    transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1),
                 border-color 0.2s ease,
                 background 0.2s ease,
                 box-shadow 0.2s ease;
     display: flex; flex-direction: column; gap: 0.55rem;
     text-align: left;
     user-select: none;
+    box-shadow: var(--glass-inner-shadow);
   }
   .option-tile:hover {
-    border-color: var(--blue);
-    background: var(--blue-dim);
-    transform: translateY(-2px);
+    border-color: var(--glass-lens-border);
+    background: var(--glass-lens-bg);
+    transform: translateY(-3px);
+    box-shadow: var(--glass-inner-shadow), var(--glass-lens-glow);
   }
   .option-tile:active {
-    transform: scale(0.98);
+    transform: scale(0.97);
   }
   .option-tile.selected {
-    border-color: var(--blue);
-    background: var(--blue-dim);
-    box-shadow: 0 0 0 3px var(--blue-glow);
+    border-color: var(--glass-lens-border);
+    background: var(--glass-lens-bg);
+    box-shadow: var(--glass-inner-shadow), var(--glass-lens-glow), 0 0 0 2px var(--blue-glow);
     transform: translateY(-1px);
   }
   .tile-icon-wrap {
     width: 38px; height: 38px;
     border-radius: 9px;
-    background: var(--s1);
+    background: var(--glass-circle-bg);
     display: flex; align-items: center; justify-content: center;
     color: var(--blue);
-    border: 1px solid var(--border);
+    border: 1px solid var(--glass-border);
+    backdrop-filter: var(--glass-blur);
     transition: all 0.2s;
   }
   .option-tile.selected .tile-icon-wrap {
     background: var(--blue);
     color: #fff;
     border-color: var(--blue);
+    box-shadow: 0 4px 12px var(--blue-glow);
   }
   .tile-label { font-size: 0.92rem; font-weight: 600; color: var(--heading); }
   .tile-desc { font-size: 0.76rem; color: var(--muted); line-height: 1.45; font-weight: 400; }
@@ -324,33 +254,40 @@
   .wizard-nav {
     display: flex; justify-content: space-between; align-items: center;
     margin-top: 2rem; padding-top: 1.25rem;
-    border-top: 1px solid var(--border);
+    border-top: 1px solid var(--glass-border);
     gap: 12px;
   }
   .btn-prev, .btn-next, .btn-restart, .btn-edit-answers {
     padding: 0.65rem 1.4rem;
-    border-radius: 9px;
+    border-radius: 9999px;
     font-family: inherit; font-size: 0.88rem; font-weight: 600;
     cursor: pointer; border: none;
     display: inline-flex; align-items: center; justify-content: center; gap: 7px;
-    transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1),
+    transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1),
                 background 0.2s ease,
                 border-color 0.2s ease,
                 box-shadow 0.2s ease;
   }
   .btn-prev {
-    background: var(--s2); color: var(--heading);
-    border: 1px solid var(--border2);
+    background: var(--glass-bg-subtle);
+    backdrop-filter: var(--glass-blur);
+    color: var(--heading);
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--glass-inner-shadow);
   }
-  .btn-prev:hover:not(:disabled) { border-color: var(--blue); transform: translateY(-1px); }
-  .btn-prev:active:not(:disabled) { transform: scale(0.98); }
+  .btn-prev:hover:not(:disabled) {
+    border-color: var(--glass-lens-border);
+    transform: translateY(-2px);
+    box-shadow: var(--glass-inner-shadow), var(--glass-lens-glow);
+  }
+  .btn-prev:active:not(:disabled) { transform: scale(0.96); }
   .btn-prev:disabled { opacity: 0.35; cursor: not-allowed; }
   .btn-next {
     background: var(--blue); color: #fff;
-    box-shadow: 0 4px 14px rgba(76,124,255,0.3);
+    box-shadow: inset 0 1px 1px rgba(255,255,255,0.25), 0 4px 14px var(--blue-glow);
   }
-  .btn-next:hover { background: var(--blue-hover); transform: translateY(-1px); box-shadow: 0 6px 20px rgba(76,124,255,0.4); }
-  .btn-next:active { transform: scale(0.98); }
+  .btn-next:hover { transform: translateY(-2px); box-shadow: inset 0 1px 1px rgba(255,255,255,0.25), 0 6px 20px var(--blue-glow); }
+  .btn-next:active { transform: scale(0.96); }
 
   .step-counter {
     font-size: 0.78rem; color: var(--muted); font-weight: 600;
@@ -361,9 +298,12 @@
   #step-result .step-title { margin-bottom: 0.35rem; }
   
   .results-summary-box {
-    background: var(--blue-dim);
-    border: 1px solid var(--blue-glow);
-    border-radius: 14px;
+    background: var(--glass-lens-bg);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    border: 1px solid var(--glass-lens-border);
+    box-shadow: var(--glass-inner-shadow), var(--glass-lens-glow);
+    border-radius: 16px;
     padding: 1.25rem;
     margin-bottom: 2rem;
   }
@@ -429,9 +369,12 @@
     margin-bottom: 2rem;
   }
   .result-card {
-    background: var(--s2);
-    border: 1.5px solid var(--border2);
-    border-radius: 14px;
+    background: var(--glass-bg-subtle);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--glass-inner-shadow);
+    border-radius: 16px;
     padding: 1.25rem;
     display: flex; flex-direction: column;
     justify-content: space-between;
@@ -441,9 +384,9 @@
                 box-shadow 0.25s ease;
   }
   .result-card:hover {
-    border-color: var(--blue);
-    transform: translateY(-3px);
-    box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+    border-color: var(--glass-lens-border);
+    transform: translateY(-4px);
+    box-shadow: var(--glass-inner-shadow), var(--glass-lens-glow), 0 12px 28px rgba(0,0,0,0.2);
   }
   .rc-badge-row {
     display: flex; align-items: center; justify-content: space-between;
@@ -561,9 +504,11 @@
     margin-bottom: 2rem;
   }
   .ai-skeleton-box {
-    background: var(--s2);
-    border: 1.5px solid var(--border2);
-    border-radius: 14px;
+    background: var(--glass-bg-subtle);
+    backdrop-filter: var(--glass-blur);
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--glass-inner-shadow);
+    border-radius: 16px;
     padding: 1.5rem;
     position: relative;
     overflow: hidden;
@@ -621,19 +566,23 @@
   }
   .ai-recom-tradeoffs {
     font-size: 0.82rem; color: var(--muted); line-height: 1.5;
-    background: var(--s2); border-left: 3px solid var(--blue);
+    background: var(--glass-bg-subtle);
+    backdrop-filter: var(--glass-blur);
+    border-left: 3px solid var(--blue);
     padding: 8px 12px; border-radius: 6px;
+    box-shadow: var(--glass-inner-shadow);
   }
 
   /* Empty / Nothing Found State */
   .nothing-found-card {
-    background: var(--s2);
-    border: 1.5px solid rgba(239,68,68,0.3);
-    border-radius: 16px;
+    background: var(--glass-bg-subtle);
+    backdrop-filter: var(--glass-blur);
+    border: 1px solid rgba(239,68,68,0.25);
+    box-shadow: var(--glass-inner-shadow), 0 8px 25px rgba(239,68,68,0.08);
+    border-radius: 18px;
     padding: 2.25rem 1.5rem;
     text-align: center;
     margin-bottom: 2rem;
-    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
   }
   .nothing-found-icon {
     width: 56px; height: 56px; margin: 0 auto 1rem;
@@ -709,30 +658,55 @@
 
   @media (max-width: 640px) {
     .wizard-card { padding: 1.5rem; }
-    nav { padding: 0.75rem 1rem; }
     .hero-title { font-size: 1.85rem; }
     .option-grid { grid-template-columns: 1fr 1fr; }
     .progress-labels { display: none; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
   }
 </style>
 <script src="laptops-data.js"></script>
 <script src="store-config.js"></script>
 <script src="consult-matcher.js"></script>
+<script src="js/animations/glass-nav.js" defer></script>
 </head>
 <body>
 
-<nav>
-  <a class="nav-logo" href="laptophub.html">Laptop<span>HUB</span></a>
-  <div class="nav-actions">
-    <button class="theme-btn" onclick="toggleTheme()" aria-label="Toggle theme">
-      <span id="themeIcon">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
-      </span>
-      <span id="themeLabel">Light</span>
-    </button>
-    <a class="btn-nav" href="laptophub.html">&#8592; Back to Store</a>
-  </div>
-</nav>
+<!-- FLOATING LIQUID GLASS NAVBAR -->
+<header class="floating-nav-container">
+  <nav class="liquid-glass-nav">
+    <a href="laptophub.html" class="logo-mark">
+      <div class="logo-icon">LH</div>
+      <span class="logo-text">Laptop<span>HUB</span></span>
+    </a>
+    <ul class="nav-pill-track">
+      <div class="glass-lens-highlight"></div>
+      <li><a href="laptophub.html#inventory">All Laptops</a></li>
+      <li>
+        <a href="consult.html" class="active">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+          Consult Me
+        </a>
+      </li>
+      <li><a href="laptophub.html#reviews">Reviews</a></li>
+    </ul>
+    <div class="nav-right">
+      <!-- THEME TOGGLE BUTTON -->
+      <button class="theme-toggle-btn glass-circle-btn" id="themeBtn" onclick="toggleTheme()" aria-label="Toggle theme" title="Toggle theme">
+        <span class="theme-icon" id="themeIcon">☀️</span>
+        <span id="themeLabel" style="display:none">Light</span>
+      </button>
+      <!-- BACK TO STORE PILL -->
+      <a href="laptophub.html" class="nav-btn glass-pill" style="font-size:0.82rem;font-weight:600;text-decoration:none;height:40px;display:inline-flex;align-items:center;padding:0 16px;">← Store</a>
+    </div>
+  </nav>
+</header>
 
 <div class="hero">
   <div class="hero-pre">
@@ -1104,21 +1078,16 @@
 <script>
   // ── THEME ──────────────────────────────────────────────────────────────────
   function initTheme() {
-    const t = localStorage.getItem('laptophub_theme') ||
+    const saved = localStorage.getItem('laptophub_theme') ||
       (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
-    applyTheme(t);
+    applyTheme(saved);
   }
   function applyTheme(t) {
     document.documentElement.setAttribute('data-theme', t);
     localStorage.setItem('laptophub_theme', t);
     const icon = document.getElementById('themeIcon');
-    const label = document.getElementById('themeLabel');
-    if (t === 'light') {
-      icon.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>';
-      label.textContent = 'Dark';
-    } else {
-      icon.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>';
-      label.textContent = 'Light';
+    if (icon) {
+      icon.textContent = (t === 'light') ? '🌙' : '☀️';
     }
   }
   function toggleTheme() {

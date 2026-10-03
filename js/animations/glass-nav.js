@@ -21,15 +21,19 @@
     const links = Array.from(track.querySelectorAll('a'));
     if (!links.length) return;
 
-    let activeLink = links[0]; // Default to All Laptops
+    let activeLink = track.querySelector('a.active') || links[0];
     let isNavigating = false;
     let navLockTimeout = null;
     let scrollDebounceTimeout = null;
 
-    // Check if initial hash matches a link
+    // Check if initial hash or current page matches a link
     const currentHash = window.location.hash;
+    const currentPath = window.location.pathname;
     if (currentHash) {
       const match = links.find(l => l.getAttribute('href') === currentHash);
+      if (match) activeLink = match;
+    } else if (currentPath.includes('consult.html')) {
+      const match = links.find(l => (l.getAttribute('href') || '').includes('consult.html'));
       if (match) activeLink = match;
     }
 
@@ -140,6 +144,9 @@
     // SCROLL SPY - Runs ONLY during genuine manual scrolling
     let scrollRafId = null;
     window.addEventListener('scroll', () => {
+      // If page doesn't have inventory section (e.g. consult.html), do not run scroll spy
+      if (!document.getElementById('inventory')) return;
+
       // If user clicked a tab and smooth scroll is ongoing, do NOT let scroll spy run!
       if (isNavigating) {
         clearTimeout(scrollDebounceTimeout);
