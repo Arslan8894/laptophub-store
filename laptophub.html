@@ -1943,7 +1943,7 @@
       </div>
     </div>
     <div class="footer-bottom">
-      <span>© 2025 LaptopHUB Pakistan. All rights reserved.</span>
+      <span onclick="handleSecretCopyrightClick()" style="cursor:default;user-select:none;" title="LaptopHUB Pakistan">© 2026 LaptopHUB Pakistan. All rights reserved.</span>
       <div class="footer-bottom-links">
         <a href="#guarantee">Privacy & Guarantee</a>
         <a href="#faq">Terms & FAQ</a>
@@ -2781,16 +2781,6 @@
 
     if (currentUser && currentUser.loggedIn) {
       const displayName = currentUser.name || (currentUser.email ? currentUser.email.split('@')[0] : 'Customer');
-      const isAdmin = currentUser.role === 'admin';
-
-      // Admin panel entry in dropdown only when role === 'admin'
-      const adminDropdownItem = isAdmin ? `
-        <a href="/admin/" class="user-dropdown-item" style="color:var(--blue);font-weight:700;border-bottom:1px solid var(--border)">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
-          <span>Admin Panel</span>
-        </a>
-      ` : '';
-
       section.innerHTML = `
         <button class="nav-user-btn" onclick="toggleUserDropdown()" aria-label="Account menu">
           <span class="user-avatar-badge" style="display:inline-flex;align-items:center;justify-content:center;">
@@ -2801,10 +2791,9 @@
         </button>
         <div class="user-dropdown" id="userDropdown">
           <div class="user-dropdown-header">
-            <div class="user-dropdown-name">${escapeHtml(currentUser.name || (isAdmin ? 'Administrator' : 'Valued Customer'))}</div>
+            <div class="user-dropdown-name">${escapeHtml(currentUser.name || 'Valued Customer')}</div>
             <div class="user-dropdown-email">${escapeHtml(currentUser.phone || currentUser.email || '')}</div>
           </div>
-          ${adminDropdownItem}
           <button class="user-dropdown-item" onclick="openMyOrdersModal(); toggleUserDropdown(false)">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
             <span>My Orders</span>
@@ -2820,15 +2809,7 @@
         </div>
       `;
 
-      // Mobile drawer sync
-      if (isAdmin) {
-        if (mobileLinks && !existingMobileAdmin) {
-          const li = document.createElement('li');
-          li.id = 'mobileAdminLink';
-          li.innerHTML = '<a href="/admin/" onclick="toggleMobileNav(false)" style="color:var(--blue);font-weight:700">⚙️ Admin Panel</a>';
-          mobileLinks.appendChild(li);
-        }
-      } else if (existingMobileAdmin) {
+      if (existingMobileAdmin) {
         existingMobileAdmin.remove();
       }
     } else {
@@ -3311,6 +3292,39 @@
       });
     }, { threshold: 0.05, rootMargin: '0px 0px 60px 0px' });
     revEls.forEach(el => observer.observe(el));
+  }
+
+  // SECRET OWNER ADMIN ACCESS GATEWAY (Zero public footprint)
+  // Accessible only by the store owner via Ctrl+Shift+A or triple-clicking the footer copyright
+  document.addEventListener('keydown', (e) => {
+    if ((e.ctrlKey || e.metaKey) && e.shiftKey && (e.key === 'A' || e.key === 'a')) {
+      e.preventDefault();
+      openSecretAdminGateway();
+    }
+  });
+
+  let copyrightClickCount = 0;
+  let copyrightClickTimer = null;
+  function handleSecretCopyrightClick() {
+    copyrightClickCount++;
+    clearTimeout(copyrightClickTimer);
+    if (copyrightClickCount >= 3) {
+      copyrightClickCount = 0;
+      openSecretAdminGateway();
+    } else {
+      copyrightClickTimer = setTimeout(() => { copyrightClickCount = 0; }, 1000);
+    }
+  }
+
+  function openSecretAdminGateway() {
+    const adminUrl = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
+      ? '/admin/'
+      : 'admin/login.html';
+    
+    const pass = prompt('🔐 LaptopHUB Master Console\nEnter Admin Security Code or press OK to open Control Center:');
+    if (pass !== null) {
+      window.location.href = adminUrl;
+    }
   }
 
   // Init

@@ -1363,9 +1363,32 @@ class LaptopHubHandler(BaseHTTPRequestHandler):
             if saved:
                 log_admin_action(admin['id'], 'update_ram_pricing', '', json.dumps(payload))
                 self._send(200, {'success': True, 'tiers': payload}, no_cache=True)
-            else:
-                self._send(500, {'error': 'Failed to save RAM pricing tiers'}, no_cache=True)
-            return
+        # ── admin: publish live to GitHub Pages ─────────────
+        if path == '/api/admin/publish-live':
+            admin = self._require_admin()
+            if not admin: return
+            try:
+                import subprocess
+                # 1. Stage inventory data file and images
+                subprocess.run(['git', 'add', 'laptops-data.js', 'images/'], cwd=BASE_DIR, check=True)
+
+                # 2. Check if git status has changes
+                st = subprocess.run(['git', 'status', '--porcelain', 'laptops-data.js'], cwd=BASE_DIR, capture_output=True, text=True)
+                if st.stdout.strip():
+                    subprocess.run(['git', 'commit', '-m', f"feat(inventory): live inventory sync from admin control center ({len(load_inventory())} models)"], cwd=BASE_DIR, check=True)
+
+                # 3. Push to origin main
+                push_res = subprocess.run(['git', 'push', 'origin', 'main'], cwd=BASE_DIR, capture_output=True, text=True)
+                if push_res.returncode != 0:
+                    return self._send(500, {'error': f"Git push failed: {push_res.stderr or push_res.stdout}"}, no_cache=True)
+
+                log_admin_action(admin['id'], 'publish_live', 'github_pages', f"{len(load_inventory())} laptops pushed to main")
+                return self._send(200, {
+                    'success': True,
+                    'message': f"Successfully published live to GitHub Pages! Live store is updating with {len(load_inventory())} products."
+                }, no_cache=True)
+            except Exception as ex:
+                return self._send(500, {'error': f"Failed to publish live: {str(ex)}"}, no_cache=True)
 
         # ── AI consultation ───────────────────────────────────
         if path == '/api/consult/ai-recommend':

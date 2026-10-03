@@ -80,6 +80,19 @@ def cmd_fetch_photos(args):
         manage_script = os.path.join(BASE_DIR, 'manage_inventory.py')
         os.system(f'python "{manage_script}" --fetch-photos')
 
+def cmd_publish(args):
+    print("\n🚀 Publishing inventory & updates to Live Official Website (GitHub Pages)...")
+    import subprocess
+    subprocess.run(['git', 'add', 'laptops-data.js', 'images/'], cwd=BASE_DIR, check=True)
+    st = subprocess.run(['git', 'status', '--porcelain', 'laptops-data.js'], cwd=BASE_DIR, capture_output=True, text=True)
+    if st.stdout.strip():
+        subprocess.run(['git', 'commit', '-m', "feat(inventory): live inventory sync"], cwd=BASE_DIR, check=True)
+    push_res = subprocess.run(['git', 'push', 'origin', 'main'], cwd=BASE_DIR, capture_output=True, text=True)
+    if push_res.returncode == 0:
+        print("✅ SUCCESS: Pushed live to GitHub Pages! Live site updated.\n")
+    else:
+        print(f"❌ ERROR: Push failed: {push_res.stderr or push_res.stdout}\n")
+
 def main():
     parser = argparse.ArgumentParser(
         description="LaptopHUB & VOLTS Master Store Control Center",
@@ -91,6 +104,7 @@ Examples:
   python run.py list            Display formatted inventory table
   python run.py backup          Backup current inventory dataset
   python run.py fetch-photos    Download real product photos from internet
+  python run.py publish         Publish inventory live to GitHub Pages
         """
     )
     subparsers = parser.add_subparsers(dest='command', help='Command to run')
@@ -111,6 +125,10 @@ Examples:
     # fetch-photos
     subparsers.add_parser('fetch-photos', help='Retrieve laptop photos from internet')
 
+    # publish / live
+    subparsers.add_parser('publish', help='Publish inventory live to GitHub Pages')
+    subparsers.add_parser('live', help='Publish inventory live to GitHub Pages')
+
     args = parser.parse_args()
 
     if not args.command:
@@ -123,7 +141,9 @@ Examples:
         'verify': cmd_verify,
         'list': cmd_list,
         'backup': cmd_backup,
-        'fetch-photos': cmd_fetch_photos
+        'fetch-photos': cmd_fetch_photos,
+        'publish': cmd_publish,
+        'live': cmd_publish
     }
 
     if args.command in commands:
