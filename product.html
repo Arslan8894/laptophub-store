@@ -53,26 +53,27 @@ main {
 /* Toast Notifications */
 #toast {
   position: fixed;
-  bottom: 24px;
-  right: 24px;
-  background: var(--s1);
+  top: calc(76px + var(--safe-top));
+  left: 50%;
+  transform: translate(-50%, -20px);
+  background: var(--s2);
   color: var(--heading);
-  border: 1px solid var(--border2);
-  border-left: 4px solid var(--blue);
-  padding: 12px 20px;
-  border-radius: 10px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
-  font-size: 0.88rem;
+  border: 1px solid var(--blue);
+  padding: 10px 22px;
+  border-radius: 9999px;
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.4), 0 0 20px var(--blue-glow);
+  font-size: 0.86rem;
   font-weight: 600;
   z-index: 10005;
   opacity: 0;
-  transform: translateY(20px);
   pointer-events: none;
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  max-width: min(440px, calc(100vw - 2rem));
+  white-space: nowrap;
+  transition: all 0.28s cubic-bezier(0.18, 0.89, 0.32, 1.28);
 }
 #toast.show {
   opacity: 1;
-  transform: translateY(0);
+  transform: translate(-50%, 0);
   pointer-events: auto;
 }
 
