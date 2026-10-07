@@ -64,10 +64,10 @@ def run_suite():
         'ram': 8,
         'storage': 256,
         'gpu': 'no_pref',
-        'budget': 36000
+        'budget': 33000
     }
     matches_2 = [l for l in laptops if matches_preference(l, prefs_single)[0]]
-    print(f"Results for Student, Any CPU, 8GB RAM, 256GB SSD, Budget PKR 36,000:")
+    print(f"Results for Student, Any CPU, 8GB RAM, 256GB SSD, Budget PKR 33,000:")
     print(f"Matched count: {len(matches_2)} laptop")
     assert len(matches_2) == 1, f"Expected exactly 1 match, got {len(matches_2)}"
     print(f"  -> Exact Match: [{matches_2[0]['id']}] {matches_2[0]['name']} (PKR {matches_2[0]['price']:,})")

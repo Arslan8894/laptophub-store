@@ -21,6 +21,11 @@ const LAPTOPS_INVENTORY = [
     "priceFormatted": "Rs 92,000",
     "priceUsd": 331,
     "img": "images/laptop-1-lenovo-thinkpad-t14-1.jpg",
+    "images": [
+      "images/laptop-1-lenovo-thinkpad-t14-1.jpg",
+      "images/processed/laptop-1-cutout.webp",
+      "images/lenovo-t14-g1.jpg"
+    ],
     "condition": "Like New (10/10) \u00b7 Certified Refurbished",
     "warranty": "1 Year Local Warranty + 7 Days Checking",
     "useCases": [
@@ -105,7 +110,7 @@ const LAPTOPS_INVENTORY = [
     "bgColor": "rgb(255, 255, 255)",
     "tintColor": "rgba(76, 124, 255, 0.04)",
     "processedImg": "images/processed/laptop-1-cutout.webp",
-    "stock": 2
+    "stock": 5
   },
   {
     "id": 2,
@@ -128,6 +133,13 @@ const LAPTOPS_INVENTORY = [
     "priceFormatted": "Rs 84,000",
     "priceUsd": 302,
     "img": "images/laptop-2-microsoft-surface-pro-7-2.jpg",
+    "images": [
+      "images/laptop-2-microsoft-surface-pro-7-2.jpg",
+      "images/processed/laptop-2-cutout.webp",
+      "images/surface-laptop.jpg",
+      "images/laptop-20-microsoft-surface-laptop-3-20.jpg",
+      "images/laptop-53-microsoft-surface-laptop-go-1943-53.jpg"
+    ],
     "condition": "Like New (10/10) \u00b7 Certified Refurbished",
     "warranty": "1 Year Local Warranty + 7 Days Checking",
     "useCases": [

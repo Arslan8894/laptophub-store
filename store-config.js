@@ -48,7 +48,7 @@ const STORE_CONFIG = {
   routes: {
     home: "laptophub.html",
     consult: "consult.html",
-    admin: "/admin/"
+    admin: "admin/index.html"
   },
 
   // UPGRADE PRICING TIERS
@@ -124,14 +124,24 @@ function getRamDelta(targetRam, baseRam, ramType = 'DDR4', isUpgradable = true) 
  */
 function getStorageDelta(targetStorage, baseStorage) {
   if (targetStorage === baseStorage) return 0;
-  const table = STORE_CONFIG.storagePricingTiers || { 128: 0, 256: 4000, 512: 9000, 1000: 21000 };
+  let table = null;
+  if (typeof window !== 'undefined' && window.LH_STORAGE_TIERS) {
+    table = window.LH_STORAGE_TIERS;
+  } else {
+    try {
+      table = JSON.parse(localStorage.getItem('lh_storage_pricing') || 'null');
+    } catch (_) {}
+  }
+  if (!table) {
+    table = STORE_CONFIG.storagePricingTiers || { 128: 0, 256: 4000, 512: 9000, 1000: 21000 };
+  }
   const targetVal = Number(table[targetStorage] ?? (table[String(targetStorage)] ?? 9000));
   const baseVal = Number(table[baseStorage] ?? (table[String(baseStorage)] ?? 9000));
   return targetVal - baseVal;
 }
 
 /**
- * Fetch dynamic RAM pricing tiers from server on initialization
+ * Fetch dynamic RAM & Storage pricing tiers from server on initialization
  */
 async function loadDynamicRamPricing() {
   if (typeof fetch === 'undefined') return;
@@ -142,6 +152,16 @@ async function loadDynamicRamPricing() {
       if (typeof window !== 'undefined') {
         window.LH_RAM_TIERS = data;
         localStorage.setItem('lh_ram_pricing', JSON.stringify(data));
+      }
+    }
+  } catch (_) {}
+  try {
+    const resStor = await fetch('/api/config/storage-pricing');
+    if (resStor.ok) {
+      const dataStor = await resStor.json();
+      if (typeof window !== 'undefined') {
+        window.LH_STORAGE_TIERS = dataStor;
+        localStorage.setItem('lh_storage_pricing', JSON.stringify(dataStor));
       }
     }
   } catch (_) {}

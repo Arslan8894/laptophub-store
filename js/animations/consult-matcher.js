@@ -10,19 +10,6 @@
     const chipsContainer = document.getElementById('consultChips');
     if (!chipsContainer) return;
 
-    const chips = chipsContainer.querySelectorAll('.consult-chip');
-    chips.forEach(chip => {
-      chip.addEventListener('click', () => {
-        chips.forEach(c => c.classList.remove('active'));
-        chip.classList.add('active');
-        const filterType = chip.dataset.filter;
-        renderConsultMatches(filterType);
-      });
-    });
-
-    // Initial render
-    renderConsultMatches('coding');
-  }
 
   function renderConsultMatches(filterType) {
     const grid = document.getElementById('consultMatchesGrid');

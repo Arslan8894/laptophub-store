@@ -12,89 +12,15 @@
 <link rel="apple-touch-icon" href="images/logo-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/global.css">
 <link rel="stylesheet" href="css/theme.css">
 <link rel="stylesheet" href="css/header.css">
 <link rel="stylesheet" href="css/glass.css">
 <link rel="stylesheet" href="css/hover-expand.css">
+<script src="js/cursor.js" defer></script>
 <style>
   *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
   button, input, select, textarea { font-family: inherit; }
-
-  /* CUSTOM CURSOR (Desktop fine pointers only) */
-  @media (hover: hover) and (pointer: fine) {
-    body.custom-cursor-active { cursor: none; }
-    body.custom-cursor-active a,
-    body.custom-cursor-active button,
-    body.custom-cursor-active [role="button"],
-    body.custom-cursor-active input,
-    body.custom-cursor-active select,
-    body.custom-cursor-active textarea,
-    body.custom-cursor-active label,
-    body.custom-cursor-active .filter-btn,
-    body.custom-cursor-active .pcard,
-    body.custom-cursor-active .cart-item,
-    body.custom-cursor-active .faq-item {
-      cursor: none;
-    }
-
-    #cursor-dot {
-      position: fixed;
-      top: 0; left: 0;
-      width: 8px; height: 8px;
-      background: var(--blue);
-      border-radius: 50%;
-      pointer-events: none !important;
-      z-index: 99999;
-      transform: translate3d(-100px, -100px, 0);
-      margin: -4px 0 0 -4px;
-      opacity: 0;
-      transition: width 0.15s ease, height 0.15s ease, background 0.15s ease, opacity 0.2s ease, margin 0.15s ease;
-      mix-blend-mode: normal;
-      will-change: transform;
-    }
-
-    #cursor-ring {
-      position: fixed;
-      top: 0; left: 0;
-      width: 34px; height: 34px;
-      border: 1.5px solid var(--blue);
-      border-radius: 50%;
-      pointer-events: none !important;
-      z-index: 99998;
-      transform: translate3d(-100px, -100px, 0);
-      margin: -17px 0 0 -17px;
-      opacity: 0;
-      transition: width 0.2s ease, height 0.2s ease, border-color 0.2s ease, opacity 0.2s ease, margin 0.2s ease;
-      will-change: transform;
-    }
-
-    #cursor-dot.hovering {
-      width: 12px; height: 12px;
-      background: #ffffff;
-      box-shadow: 0 0 12px var(--blue), 0 0 24px var(--blue-glow);
-    }
-
-    #cursor-ring.hovering {
-      width: 48px; height: 48px;
-      border-color: var(--blue);
-      opacity: 0.45;
-    }
-
-    #cursor-dot.clicking {
-      width: 6px; height: 6px;
-      background: var(--blue);
-    }
-
-    #cursor-ring.clicking {
-      width: 26px; height: 26px;
-      opacity: 0.9;
-    }
-  }
-
-  @media (hover: none) or (pointer: coarse) {
-    #cursor-dot, #cursor-ring { display: none !important; }
-  }
 
   /* THEME DEFINITIONS */
   :root {
@@ -607,25 +533,19 @@
     margin-bottom: 2.5rem;
   }
 
-  /* PRODUCT GRID & CARDS */
+  /* PRODUCT GRID & CARDS (STEP 6: 3 per row on desktop, wider, minimal) */
   .pgrid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     max-width: var(--grid-max-width, 1440px);
     margin: 0 auto;
-    gap: var(--card-gap, 1.35rem);
+    gap: 1.75rem;
   }
-  @media (min-width: 1400px) {
-    .pgrid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  @media (max-width: 1024px) {
+    .pgrid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.25rem; }
   }
-  @media (min-width: 1024px) and (max-width: 1399px) {
-    .pgrid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-  }
-  @media (min-width: 640px) and (max-width: 1023px) {
-    .pgrid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  }
-  @media (max-width: 639px) {
-    .pgrid { grid-template-columns: 1fr; }
+  @media (max-width: 640px) {
+    .pgrid { grid-template-columns: 1fr; gap: 1rem; }
   }
 
   .pcard {
@@ -1402,16 +1322,10 @@
 
   /* Laptop modal styles migrated to css/product.css for Amazon-style product page */
 
-  body.modal-open #cursor-dot,
-  body.modal-open #cursor-ring {
-    opacity: 0 !important;
-    pointer-events: none !important;
-  }
-
-  /* CHECKOUT MODAL */
+  /* CHECKOUT MODAL (Z-Index 12000: Always above cart, login, and overlays) */
   #checkoutModal {
-    position: fixed; inset: 0; background: rgba(0,0,0,0.75);
-    backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); z-index: 10002;
+    position: fixed; inset: 0; background: rgba(0,0,0,0.8);
+    backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); z-index: 12000;
     display: none;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
@@ -1457,10 +1371,10 @@
   }
   .form-input:focus, .form-select:focus { border-color: var(--blue); }
   
-  /* ORDER CONFIRMATION MODAL */
+  /* ORDER CONFIRMATION MODAL (Z-Index 13000: Topmost modal) */
   #orderConfirmModal {
-    position: fixed; inset: 0; background: rgba(0,0,0,0.75);
-    backdrop-filter: blur(12px); z-index: 10003;
+    position: fixed; inset: 0; background: rgba(0,0,0,0.85);
+    backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); z-index: 13000;
     display: none; align-items: center; justify-content: center;
     padding: calc(1rem + var(--safe-top, 0px)) 1rem calc(1rem + var(--safe-bottom, 0px));
     box-sizing: border-box;
@@ -1500,10 +1414,10 @@
   .b-game { background: rgba(6,182,212,0.14); color: #06b6d4; border: 1px solid rgba(6,182,212,0.3); }
   .b-touch { background: rgba(236,72,153,0.14); color: #ec4899; border: 1px solid rgba(236,72,153,0.3); }
 
-  /* AUTH & ACCOUNT MODALS */
+  /* AUTH & ACCOUNT MODALS (Z-Index 11000: Above Cart Drawer and overlays) */
   #loginModal, #myOrdersModal, #profileModal {
     position: fixed; inset: 0; background: rgba(0,0,0,0.78);
-    backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); z-index: 10005;
+    backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); z-index: 11000;
     display: none;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
@@ -1579,8 +1493,10 @@
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
 <script src="js/firebase-config.js"></script>
+<script src="js/cart.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/checkout.js"></script>
 <script src="js/animations/glass-nav.js" defer></script>
-<script src="js/animations/consult-matcher.js" defer></script>
 <script src="js/hover-expand.js" defer></script>
 </head>
 <body>
@@ -1598,7 +1514,7 @@
       <div class="glass-lens-highlight"></div>
       <li><a href="#inventory" class="active">All Laptops</a></li>
       <li>
-        <a href="#consult">
+        <a href="consult.html">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
           Consult Me
         </a>
@@ -1644,7 +1560,7 @@
   </div>
   <ul class="mobile-nav-links">
     <li><a href="#inventory" onclick="toggleMobileNav(false)">All Laptops</a></li>
-    <li><a href="#consult" onclick="toggleMobileNav(false)">Consult Me</a></li>
+    <li><a href="consult.html" onclick="toggleMobileNav(false)">Consult Me</a></li>
     <li><a href="#reviews" onclick="toggleMobileNav(false)">Customer Reviews</a></li>
     <li><a href="https://wa.me/923261398594" target="_blank" rel="noopener" onclick="toggleMobileNav(false)" style="color:#25d366">WhatsApp Support</a></li>
   </ul>
@@ -1687,13 +1603,13 @@
 <!-- CATALOG TOOLBAR -->
     <div class="catalog-toolbar" id="inventory">
       <div class="filter-tabs">
-        <button class="filter-btn active" onclick="filterBrand('all', this)">All Laptops (69)</button>
-        <button class="filter-btn" onclick="filterBrand('lenovo', this)">Lenovo (15)</button>
-        <button class="filter-btn" onclick="filterBrand('dell', this)">Dell (19)</button>
-        <button class="filter-btn" onclick="filterBrand('hp', this)">HP (22)</button>
-        <button class="filter-btn" onclick="filterBrand('apple', this)">Apple (3)</button>
-        <button class="filter-btn" onclick="filterBrand('microsoft', this)">Microsoft (7)</button>
-        <button class="filter-btn" onclick="filterBrand('gaming', this)">Gaming / RTX (4)</button>
+        <button class="filter-btn active" onclick="filterBrand('all', this)">All Laptops (<span id="countAll">69</span>)</button>
+        <button class="filter-btn" onclick="filterBrand('lenovo', this)">Lenovo (<span id="countLenovo">14</span>)</button>
+        <button class="filter-btn" onclick="filterBrand('dell', this)">Dell (<span id="countDell">21</span>)</button>
+        <button class="filter-btn" onclick="filterBrand('hp', this)">HP (<span id="countHp">25</span>)</button>
+        <button class="filter-btn" onclick="filterBrand('apple', this)">Apple (<span id="countApple">3</span>)</button>
+        <button class="filter-btn" onclick="filterBrand('microsoft', this)">Microsoft (<span id="countMicrosoft">6</span>)</button>
+        <button class="filter-btn" onclick="filterBrand('gaming', this)">Gaming / RTX (<span id="countGaming">6</span>)</button>
       </div>
       <div class="search-box">
         <span class="search-icon">
@@ -1740,50 +1656,8 @@
       <div class="stat-cell"><div class="stat-num">12K+</div><div class="stat-label">Verified Pakistani Buyers</div></div>
     </div>
 
-<!-- HARDWARE MATCHER / QUICK CONSULTATION -->
-<section class="sec rev" id="consult" style="padding-top:1.5rem; padding-bottom:3rem;">
-    <div class="consult-panel-container">
-      <div class="consult-glass-card glass-specular">
-        <div class="consult-panel-header">
-          <div class="consult-badge">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-            Smart Hardware Matcher
-          </div>
-          <h2 class="consult-title">Instant Laptop Consultation</h2>
-          <p class="consult-subtitle">Select your primary workflow profile below to discover curated high-performance models verified in stock with express dispatch across Pakistan.</p>
-        </div>
-
-        <!-- Workflow Chips -->
-        <div class="consult-chips-row" id="consultChips">
-          <button class="consult-chip active" data-filter="coding">💻 Coding & Dev</button>
-          <button class="consult-chip" data-filter="design">🎨 Creative & Design</button>
-          <button class="consult-chip" data-filter="executive">💼 Executive & Ultrabook</button>
-          <button class="consult-chip" data-filter="budget">⚡ Value / Under 120k</button>
-          <button class="consult-chip" data-filter="gaming">🎮 Gaming & High GPU</button>
-        </div>
-
-        <!-- Live Matches Grid -->
-        <div class="consult-matches-grid" id="consultMatchesGrid">
-          <!-- Populated dynamically by consult-matcher.js from LAPTOPS_INVENTORY -->
-        </div>
-
-        <!-- Bottom Action Bar -->
-        <div class="consult-actions-bar">
-          <a href="consult.html" class="btn-launch-wizard">
-            <span>Launch Complete 6-Step Consultation Quiz</span>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-          </a>
-          <a href="https://wa.me/923261398594?text=Hi%2C%20I%20need%20a%20laptop%20consultation" target="_blank" class="glass-pill" style="display:inline-flex;align-items:center;gap:8px;padding:12px 24px;color:var(--heading);text-decoration:none;font-weight:600;font-size:0.95rem;">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="#25D366"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-            <span>Live Advisor on WhatsApp</span>
-          </a>
-        </div>
-      </div>
-    </div>
-</section>
-
-<!-- REVIEWS -->
-<section class="sec rev" id="reviews" style="padding-top:1.5rem">
+    <!-- REVIEWS -->
+    <section class="sec rev" id="reviews" style="padding-top:1.5rem">
   <div class="sec-head">
     <div>
       <p class="sec-pre">Customer Feedback</p>
@@ -2234,8 +2108,16 @@
   let currentSort = 'default';
   let cart = JSON.parse(localStorage.getItem('lh_cart_items') || '[]');
 
-  // Inventory state with Firestore sync
-  let inventory = (typeof LAPTOPS_INVENTORY !== 'undefined') ? [...LAPTOPS_INVENTORY] : [];
+  // Inventory state with localStorage & Firestore sync
+  let inventory = [];
+  const savedStoreInv = localStorage.getItem('lh_inventory_custom');
+  if (savedStoreInv) {
+    try { inventory = JSON.parse(savedStoreInv); } catch (_) {}
+  }
+  if (!inventory || inventory.length === 0) {
+    inventory = (typeof LAPTOPS_INVENTORY !== 'undefined') ? [...LAPTOPS_INVENTORY] : [];
+  }
+  window.inventory = inventory;
 
   function initInventorySync() {
     if (typeof subscribeStoreLaptops === 'function') {
@@ -2243,6 +2125,7 @@
         subscribeStoreLaptops((liveLaptops) => {
           if (liveLaptops && liveLaptops.length > 0) {
             inventory = liveLaptops.filter(l => !l.hidden);
+            window.inventory = inventory;
             renderProducts();
             if (window.ConsultMatcher && typeof window.ConsultMatcher.setInventory === 'function') {
               window.ConsultMatcher.setInventory(inventory);
@@ -2437,7 +2320,7 @@
       // ─────────────────────────────────────────────────────────────────────────
 
       return `
-        <div class="pcard" data-brand="${lap.brand}" onclick="handleCardClick(${lap.id}, event)" tabindex="0" onkeydown="handleCardKey(event, ${lap.id})" role="button" aria-label="View details for ${escapeHtml(lap.name)}">
+        <div class="pcard" data-laptop-id="${lap.id}" data-brand="${lap.brand}" onclick="handleCardClick(${lap.id}, event)" tabindex="0" onkeydown="handleCardKey(event, ${lap.id})" role="button" aria-label="View details for ${escapeHtml(lap.name)}">
           <div class="pcard-photo-wrap"${wrapStyle}>
             <span class="pcard-cond-badge"${badgeStyle}>${escapeHtml(condBadge)}</span>
             <img src="${imgSrc}" alt="${escapeHtml(lap.name)}" class="pcard-photo ${blendClass}" loading="lazy"
@@ -2473,6 +2356,34 @@
           </div>
         </div>`;
     }).join('');
+    window.inventory = inventory;
+    if (typeof window.initHoverExpand === 'function') {
+      window.initHoverExpand();
+    }
+    updateBrandTabCounts();
+  }
+
+  function updateBrandTabCounts() {
+    if (!inventory || inventory.length === 0) return;
+    const allCount = inventory.length;
+    const lenovoCount = inventory.filter(l => l.brand === 'lenovo').length;
+    const dellCount = inventory.filter(l => l.brand === 'dell').length;
+    const hpCount = inventory.filter(l => l.brand === 'hp').length;
+    const appleCount = inventory.filter(l => l.brand === 'apple').length;
+    const msCount = inventory.filter(l => l.brand === 'microsoft').length;
+    const gamingCount = inventory.filter(l => l.gpuType === 'rtx' || l.gpuType === 'discrete').length;
+
+    const setEl = (id, count) => {
+      const el = document.getElementById(id);
+      if (el) el.textContent = count;
+    };
+    setEl('countAll', allCount);
+    setEl('countLenovo', lenovoCount);
+    setEl('countDell', dellCount);
+    setEl('countHp', hpCount);
+    setEl('countApple', appleCount);
+    setEl('countMicrosoft', msCount);
+    setEl('countGaming', gamingCount);
   }
 
   // Filter actions
@@ -2614,6 +2525,11 @@
     const drawer = document.getElementById('cartDrawer');
     if (overlay) overlay.classList.remove('open');
     if (drawer) drawer.classList.remove('open');
+    const openModals = document.querySelectorAll('#loginModal.open, #checkoutModal.open, #orderConfirmModal.open, #myOrdersModal.open, #profileModal.open, #hoverExpandOverlay.active');
+    if (openModals.length === 0) {
+      document.body.classList.remove('modal-open');
+      document.body.style.overflow = '';
+    }
   }
 
   function orderCardViaWhatsApp(lapId, event) {
@@ -2621,39 +2537,38 @@
     const lap = inventory.find(l => l.id === lapId);
     if (!lap) return;
 
-    if (!currentUser || !currentUser.loggedIn) {
-      pendingBuyAction = { type: 'card_whatsapp', lapId };
-      openLoginModal('Please sign in to place your order');
-      return;
+    let waMsgText = `Hi LaptopHUB! I am interested in purchasing the ${lap.name} (${lap.priceFormatted}). Please confirm availability!`;
+    if (currentUser && currentUser.name) {
+      waMsgText = `Hi LaptopHUB! My name is ${currentUser.name}. I am interested in purchasing the ${lap.name} (${lap.priceFormatted}). Please confirm availability!`;
     }
-
-    const waMsg = encodeURIComponent(`Hi LaptopHUB! I am interested in purchasing the ${lap.name} (${lap.priceFormatted}). Please confirm availability!`);
+    const waMsg = encodeURIComponent(waMsgText);
     window.open(`https://wa.me/923261398594?text=${waMsg}`, '_blank');
   }
 
   function checkoutWhatsApp() {
+    closeCart();
     if (cart.length === 0) {
       showToast('Your cart is empty!');
       return;
     }
 
-    if (!currentUser || !currentUser.loggedIn) {
-      pendingBuyAction = { type: 'cart_whatsapp' };
-      openLoginModal('Please sign in to place your order');
-      return;
-    }
-
     let subtotal = 0;
     let itemsText = cart.map((i, idx) => {
-      const lineTotal = i.price * i.qty;
+      const lineTotal = (i.price || 0) * (i.qty || 1);
       subtotal += lineTotal;
       const storStr = i.storage ? (i.storage >= 1000 ? (i.storage/1000)+'TB' : i.storage+'GB') : '';
-      let line = `${idx+1}. ${i.name} (x${i.qty}) [${i.ram}GB RAM / ${storStr}] - Rs ${lineTotal.toLocaleString('en-PK')}`;
+      let line = `${idx+1}. ${i.name} (x${i.qty || 1}) [${i.ram || ''}GB RAM / ${storStr}] - Rs ${lineTotal.toLocaleString('en-PK')}`;
       if (i.comment) line += `%0A   Note: "${encodeURIComponent(i.comment)}"`;
       return line;
     }).join('%0A');
 
-    const msg = `*New Laptop Order - LaptopHUB Pakistan*%0A%0A*Items:*%0A${itemsText}%0A%0A*Subtotal:* Rs ${subtotal.toLocaleString('en-PK')}%0A*Delivery:* Free Insured Express Dispatch%0A*Payment:* Direct Bank Transfer / Raast (IBFT)%0A%0APlease confirm my order!`;
+    let customerInfo = '';
+    if (currentUser && currentUser.name) {
+      customerInfo = `*Customer:* ${encodeURIComponent(currentUser.name)}%0A`;
+      if (currentUser.phone) customerInfo += `*Contact:* ${encodeURIComponent(currentUser.phone)}%0A`;
+    }
+
+    const msg = `*New Laptop Order - LaptopHUB Pakistan*%0A%0A${customerInfo}*Items:*%0A${itemsText}%0A%0A*Subtotal:* Rs ${subtotal.toLocaleString('en-PK')}%0A*Delivery:* Free Insured Express Dispatch%0A*Payment:* Direct Bank Transfer / Raast (IBFT)%0A%0APlease confirm my order!`;
     window.open(`https://wa.me/923261398594?text=${msg}`, '_blank');
   }
 
@@ -2661,16 +2576,11 @@
   // STANDALONE PRODUCT PAGE NAVIGATION & SCROLL RESTORATION
   // =========================================================================
   function handleCardClick(id, e) {
-    if (e && e.target && e.target.closest && (e.target.closest('.btn-card-wa') || e.target.closest('.btn-card-view'))) {
+    if (e && e.target && e.target.closest && (e.target.closest('.btn-card-wa') || e.target.closest('.btn-card-view') || e.target.closest('button') || e.target.closest('a'))) {
       return;
     }
-    const isTouch = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0) || !window.matchMedia('(hover: hover) and (pointer: fine)').matches;
-    if (isTouch && typeof window.openExpandedCard === 'function') {
-      const card = (e && e.currentTarget) || (e && e.target && e.target.closest('.pcard'));
-      window.openExpandedCard(id, card);
-    } else {
-      openProductPage(id, e);
-    }
+    // STEP 3: On mobile/touch devices & direct clicks, tapping a card opens the product page directly
+    openProductPage(id, e);
   }
 
   function openProductPage(id, e) {
@@ -2695,43 +2605,52 @@
   });
 
   function openCheckoutModal() {
+    // STEP 2 DIRECTIVE: ALWAYS CLOSE CART DRAWER FIRST
+    closeCart();
+
     if (cart.length === 0) {
       showToast('Please add items to cart first!');
       return;
     }
-    if (!currentUser || !currentUser.loggedIn) {
-      pendingBuyAction = { type: 'checkout' };
-      openLoginModal('Please sign in to place your order');
-      return;
-    }
-    closeCart();
     if (currentUser) {
       if (document.getElementById('custName') && currentUser.name) document.getElementById('custName').value = currentUser.name;
       if (document.getElementById('custPhone') && currentUser.phone) document.getElementById('custPhone').value = currentUser.phone;
       if (document.getElementById('custCity') && currentUser.city) document.getElementById('custCity').value = currentUser.city;
       if (document.getElementById('custAddress') && currentUser.address) document.getElementById('custAddress').value = currentUser.address;
     }
+    const subtotal = cart.reduce((sum, item) => sum + (Number(item.price) || 0) * (Number(item.qty) || 1), 0);
+    const totalEl = document.getElementById('modalOrderTotal');
+    if (totalEl) totalEl.textContent = `Rs ${subtotal.toLocaleString('en-PK')}`;
+
     document.getElementById('checkoutModal').classList.add('open');
+    document.body.classList.add('modal-open');
   }
 
   function closeCheckoutModal() {
     document.getElementById('checkoutModal').classList.remove('open');
+    const openModals = document.querySelectorAll('#loginModal.open, #checkoutModal.open, #orderConfirmModal.open, #myOrdersModal.open, #profileModal.open');
+    if (openModals.length === 0) {
+      document.body.classList.remove('modal-open');
+      document.body.style.overflow = '';
+    }
   }
 
   async function handlePlaceOrder(e) {
     e.preventDefault();
-    if (!currentUser || !currentUser.loggedIn) {
-      closeCheckoutModal();
-      pendingBuyAction = { type: 'checkout' };
-      openLoginModal('Please sign in to place your order');
-      return;
-    }
 
     const name = document.getElementById('custName').value.trim();
     const phone = document.getElementById('custPhone').value.trim();
     const city = document.getElementById('custCity').value;
     const address = document.getElementById('custAddress').value.trim();
 
+    if (!name || !phone || !city || !address) {
+      showToast('Please fill all required delivery details.');
+      return;
+    }
+
+    let orderId = Math.floor(1000 + Math.random() * 9000).toString();
+
+    // 1. Try backend server if available
     try {
       const res = await fetch('/api/orders', {
         method: 'POST',
@@ -2739,46 +2658,64 @@
         credentials: 'include',
         body: JSON.stringify({ items: cart, name, phone, city, address })
       });
-      const data = await res.json();
-      if (!res.ok) {
-        if (res.status === 401) {
-          closeCheckoutModal();
-          currentUser = null;
-          localStorage.removeItem('lh_user');
-          renderUserNav();
-          pendingBuyAction = { type: 'checkout' };
-          openLoginModal('Please sign in to place your order');
-          return;
-        }
-        showToast(data.error || 'Failed to place order.');
-        return;
+      if (res.ok) {
+        const data = await res.json();
+        if (data.orderId) orderId = data.orderId;
       }
+    } catch (_) {}
 
-      const orderId = '#LH-' + data.orderId;
-      document.getElementById('confirmOrderId').textContent = orderId;
-      document.getElementById('confirmCustomer').textContent = `${name} (${city})`;
+    // 2. LocalStorage Persistence Fallback (Works on static hosts & offline)
+    try {
+      const existingOrders = JSON.parse(localStorage.getItem('lh_orders') || '[]');
+      existingOrders.unshift({
+        id: orderId,
+        date: new Date().toISOString(),
+        name, phone, city, address,
+        items: [...cart],
+        subtotal: cart.reduce((sum, item) => sum + (Number(item.price) || 0) * (Number(item.qty) || 1), 0)
+      });
+      localStorage.setItem('lh_orders', JSON.stringify(existingOrders));
+    } catch (_) {}
 
-      // Update current user profile delivery memory
-      if (currentUser) {
-        currentUser.name = name;
-        currentUser.phone = phone;
-        currentUser.city = city;
-        currentUser.address = address;
-        localStorage.setItem('lh_user', JSON.stringify(currentUser));
-      }
+    document.getElementById('confirmOrderId').textContent = '#LH-' + orderId;
+    document.getElementById('confirmCustomer').textContent = `${name} (${city})`;
 
-      cart = [];
-      saveCart();
-      closeCheckoutModal();
-      document.getElementById('orderConfirmModal').classList.add('open');
-      showToast('Order confirmed and placed successfully!');
-    } catch (err) {
-      showToast('Network error while placing order. Please check your connection.');
+    // Update current user profile delivery memory
+    if (currentUser) {
+      currentUser.name = name;
+      currentUser.phone = phone;
+      currentUser.city = city;
+      currentUser.address = address;
+      localStorage.setItem('lh_user', JSON.stringify(currentUser));
     }
+
+    // Auto-decrease stock for ordered items
+    cart.forEach(item => {
+      const match = inventory.find(l => l.id === item.id);
+      if (match && match.stock !== undefined) {
+        match.stock = Math.max(0, match.stock - (item.qty || 1));
+      }
+    });
+    try {
+      localStorage.setItem('lh_inventory_custom', JSON.stringify(inventory));
+    } catch (_) {}
+    renderProducts();
+
+    cart = [];
+    saveCart();
+    closeCheckoutModal();
+    document.getElementById('orderConfirmModal').classList.add('open');
+    document.body.classList.add('modal-open');
+    showToast('Order confirmed and placed successfully!');
   }
 
   function closeConfirmModal() {
     document.getElementById('orderConfirmModal').classList.remove('open');
+    const openModals = document.querySelectorAll('#loginModal.open, #checkoutModal.open, #orderConfirmModal.open, #myOrdersModal.open, #profileModal.open');
+    if (openModals.length === 0) {
+      document.body.classList.remove('modal-open');
+      document.body.style.overflow = '';
+    }
   }
 
   // CUSTOMER AUTH & USER SESSION
@@ -2786,6 +2723,11 @@
   let pendingBuyAction = null;   // stores { type, lapId? } while login is required
 
   async function checkUserSession() {
+    if (!localStorage.getItem('lh_user')) {
+      currentUser = null;
+      renderUserNav();
+      return;
+    }
     try {
       const res = await fetch('/api/auth/me', { credentials: 'include' });
       if (res.ok) {
@@ -2808,6 +2750,10 @@
     renderUserNav();
   }
 
+  function openAdminPanel() {
+    window.location.href = (window.STORE_CONFIG && window.STORE_CONFIG.routes && window.STORE_CONFIG.routes.admin) ? window.STORE_CONFIG.routes.admin : 'admin/index.html';
+  }
+
   function renderUserNav() {
     const section = document.getElementById('userAccountSection');
     if (!section) return;
@@ -2818,6 +2764,16 @@
 
     if (currentUser && currentUser.loggedIn) {
       const displayName = currentUser.name || (currentUser.email ? currentUser.email.split('@')[0] : 'Customer');
+      const isAdmin = currentUser.role === 'admin';
+
+      // Admin panel entry in dropdown only when role === 'admin'
+      const adminDropdownItem = isAdmin ? `
+        <button class="user-dropdown-item" onclick="openAdminPanel(); toggleUserDropdown(false)" style="color:var(--blue);font-weight:700;border-bottom:1px solid var(--border)">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+          <span>Admin Panel</span>
+        </button>
+      ` : '';
+
       section.innerHTML = `
         <button class="nav-user-btn" onclick="toggleUserDropdown()" aria-label="Account menu">
           <span class="user-avatar-badge" style="display:inline-flex;align-items:center;justify-content:center;">
@@ -2828,9 +2784,10 @@
         </button>
         <div class="user-dropdown" id="userDropdown">
           <div class="user-dropdown-header">
-            <div class="user-dropdown-name">${escapeHtml(currentUser.name || 'Valued Customer')}</div>
+            <div class="user-dropdown-name">${escapeHtml(currentUser.name || (isAdmin ? 'Administrator' : 'Valued Customer'))}</div>
             <div class="user-dropdown-email">${escapeHtml(currentUser.phone || currentUser.email || '')}</div>
           </div>
+          ${adminDropdownItem}
           <button class="user-dropdown-item" onclick="openMyOrdersModal(); toggleUserDropdown(false)">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
             <span>My Orders</span>
@@ -2846,7 +2803,15 @@
         </div>
       `;
 
-      if (existingMobileAdmin) {
+      // Mobile drawer sync
+      if (isAdmin) {
+        if (mobileLinks && !existingMobileAdmin) {
+          const li = document.createElement('li');
+          li.id = 'mobileAdminLink';
+          li.innerHTML = '<button onclick="openAdminPanel(); toggleMobileNav(false)" class="nav-link" style="color:var(--blue);font-weight:700;background:none;border:none;cursor:pointer;width:100%;text-align:left;font-size:1rem;padding:0.6rem 0;">⚙️ Admin Panel</button>';
+          mobileLinks.appendChild(li);
+        }
+      } else if (existingMobileAdmin) {
         existingMobileAdmin.remove();
       }
     } else {
@@ -2920,6 +2885,9 @@
   }
 
   function openLoginModal(msg) {
+    // STEP 2 DIRECTIVE: ALWAYS CLOSE CART DRAWER FIRST
+    closeCart();
+
     const banner = document.getElementById('authNoticeBanner');
     const noticeText = document.getElementById('authNoticeText');
     if (banner) {
@@ -2931,6 +2899,7 @@
       }
     }
     document.getElementById('loginModal').classList.add('open');
+    document.body.classList.add('modal-open');
   }
 
   function closeLoginModal() {
@@ -2939,6 +2908,11 @@
     if (banner) banner.style.display = 'none';
     pendingBuyAction = null;
     document.getElementById('loginModal').classList.remove('open');
+    const openModals = document.querySelectorAll('#loginModal.open, #checkoutModal.open, #orderConfirmModal.open, #myOrdersModal.open, #profileModal.open');
+    if (openModals.length === 0) {
+      document.body.classList.remove('modal-open');
+      document.body.style.overflow = '';
+    }
   }
 
   async function handleAuthSubmit(e) {
@@ -3001,7 +2975,12 @@
           switchAuthTab('signin');
         }
       } catch (err) {
-        showToast('Error connecting to authentication service.');
+        console.error('Registration error:', err);
+        if (window.location.protocol === 'file:') {
+          showToast('Please open via http://localhost:8080 (backend requires local HTTP server).');
+        } else {
+          showToast('Cannot reach server. Please ensure python server.py is running on port 8080.');
+        }
       }
     } else {
       try {
@@ -3036,7 +3015,12 @@
         showToast(`Welcome back, ${currentUser.name || 'Customer'}!`);
         resumePendingBuyAction(action);
       } catch (err) {
-        showToast('Error connecting to authentication service.');
+        console.error('Login error:', err);
+        if (window.location.protocol === 'file:') {
+          showToast('Please open via http://localhost:8080 (backend requires local HTTP server).');
+        } else {
+          showToast('Cannot reach server. Please ensure python server.py is running on port 8080.');
+        }
       }
     }
   }
@@ -3371,117 +3355,5 @@
   initUserSession();
   initScrollReveal();
 </script>
-
-<!-- CUSTOM CURSOR -->
-<div id="cursor-dot"></div>
-<div id="cursor-ring"></div>
-
-<script>
-  (function() {
-    // Only initialize on desktop devices with fine pointer (not touch)
-    if (!window.matchMedia || !window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
-    if ('ontouchstart' in window || navigator.maxTouchPoints > 0) return;
-
-    const dot  = document.getElementById('cursor-dot');
-    const ring = document.getElementById('cursor-ring');
-    if (!dot || !ring) return;
-
-    let mouseX = -100, mouseY = -100;
-    let ringX  = -100, ringY  = -100;
-    let hasMoved = false;
-    let isVisible = false;
-    let ringRaf = null;
-
-    function showCursor() {
-      if (!hasMoved) return;
-      dot.style.opacity  = '1';
-      ring.style.opacity = '0.6';
-      isVisible = true;
-    }
-
-    function hideCursor() {
-      dot.style.opacity  = '0';
-      ring.style.opacity = '0';
-      isVisible = false;
-    }
-
-    function stepRing() {
-      if (!hasMoved) {
-        ringRaf = null;
-        return;
-      }
-      const dx = mouseX - ringX;
-      const dy = mouseY - ringY;
-      if (Math.abs(dx) > 0.2 || Math.abs(dy) > 0.2) {
-        ringX += dx * 0.45;
-        ringY += dy * 0.45;
-        ring.style.transform = `translate3d(${ringX.toFixed(1)}px, ${ringY.toFixed(1)}px, 0)`;
-        ringRaf = requestAnimationFrame(stepRing);
-      } else {
-        ringX = mouseX;
-        ringY = mouseY;
-        ring.style.transform = `translate3d(${ringX}px, ${ringY}px, 0)`;
-        ringRaf = null; // Sleep when stationary! Zero CPU/GPU drain
-      }
-    }
-
-    document.addEventListener('mousemove', e => {
-      mouseX = e.clientX;
-      mouseY = e.clientY;
-      if (!hasMoved) {
-        hasMoved = true;
-        ringX = mouseX;
-        ringY = mouseY;
-        document.body.classList.add('custom-cursor-active');
-        showCursor();
-      }
-      dot.style.transform = `translate3d(${mouseX}px, ${mouseY}px, 0)`;
-      if (!isVisible) showCursor();
-      if (!ringRaf) {
-        ringRaf = requestAnimationFrame(stepRing);
-      }
-    }, { passive: true });
-
-    const hoverTargets = 'a, button, [role="button"], input, select, textarea, label, .filter-btn, .pcard, .cart-item, .faq-item, .nav-link, .support-btn, .theme-toggle-btn';
-    let isHovering = false;
-
-    document.addEventListener('mouseover', e => {
-      if (e.target && e.target.closest && e.target.closest(hoverTargets)) {
-        if (!isHovering) {
-          isHovering = true;
-          dot.classList.add('hovering');
-          ring.classList.add('hovering');
-        }
-      }
-    }, { passive: true });
-
-    document.addEventListener('mouseout', e => {
-      if (e.target && e.target.closest && e.target.closest(hoverTargets)) {
-        if (e.relatedTarget && e.relatedTarget.closest && e.relatedTarget.closest(hoverTargets)) return;
-        if (isHovering) {
-          isHovering = false;
-          dot.classList.remove('hovering');
-          ring.classList.remove('hovering');
-        }
-      }
-    }, { passive: true });
-
-    document.addEventListener('mousedown', () => {
-      dot.classList.add('clicking');
-      ring.classList.add('clicking');
-    }, { passive: true });
-
-    document.addEventListener('mouseup', () => {
-      dot.classList.remove('clicking');
-      ring.classList.remove('clicking');
-    }, { passive: true });
-
-    // Hide when mouse leaves window or window blurs
-    document.addEventListener('mouseleave', hideCursor);
-    document.addEventListener('mouseenter', showCursor);
-    window.addEventListener('blur', hideCursor);
-  })();
-</script>
-
 </body>
 </html>

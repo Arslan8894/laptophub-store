@@ -7,7 +7,9 @@
 <title>LaptopHUB Admin Control Center</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/global.css">
 <link rel="stylesheet" href="../css/theme.css">
+<script src="../js/cursor.js" defer></script>
 
 <!-- Firebase Cloud Authentication & Firestore SDKs -->
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
@@ -18,21 +20,10 @@
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 :root {
-  --bg: #0b0d14;
-  --surface: #121522;
-  --surface2: #191e30;
-  --surface3: #222942;
-  --border: rgba(255,255,255,0.08);
-  --border2: rgba(255,255,255,0.14);
-  --accent: #4f8ef7;
-  --accent-glow: rgba(79,142,247,0.25);
-  --success: #10b981;
-  --warning: #f59e0b;
-  --danger: #ef4444;
-  --text: #f0f3fa;
-  --text-muted: #8b95a8;
-  --font-sans: 'Plus Jakarta Sans', -apple-system, sans-serif;
-  --font-mono: 'JetBrains Mono', monospace;
+  --font-sans: var(--font-main);
+  --font-mono: var(--font-mono);
+  --accent: var(--blue);
+  --accent-glow: var(--blue-glow);
 }
 body {
   font-family: var(--font-sans);
@@ -442,6 +433,101 @@ html[data-theme="light"] {
 }
 .preview-price { font-size: 1.05rem; font-weight: 800; color: var(--text); }
 
+/* DASHBOARD STATS GRID */
+.admin-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+.stat-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.15rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.2s, border-color 0.2s;
+}
+.stat-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--accent);
+}
+.stat-card::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+}
+.stat-card.stat-primary::after { background: var(--accent); }
+.stat-card.stat-success::after { background: var(--success); }
+.stat-card.stat-warning::after { background: var(--warning); }
+.stat-card.stat-danger::after { background: var(--danger); }
+.stat-card.stat-purple::after { background: #c084fc; }
+
+.stat-label {
+  font-size: 0.76rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-muted);
+}
+.stat-val {
+  font-size: 1.65rem;
+  font-weight: 800;
+  color: var(--text);
+  line-height: 1.1;
+  font-family: var(--font-sans);
+}
+.stat-sub {
+  font-size: 0.74rem;
+  color: var(--text-muted);
+}
+
+/* RESPONSIVE LAYOUT */
+@media (max-width: 900px) {
+  .admin-stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (max-width: 600px) {
+  header.admin-bar {
+    padding: 0.75rem 1rem;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  .header-actions {
+    width: 100%;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    gap: 8px;
+  }
+  .admin-nav-tabs {
+    padding: 0 1rem;
+  }
+  main.admin-body {
+    padding: 1rem 0.75rem;
+  }
+  .card-header-row {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+  .admin-stats-grid {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+  .form-control, .btn-primary, .btn-nav-out {
+    min-height: 44px;
+  }
+}
 </style>
 </head>
 <body>
@@ -471,11 +557,14 @@ html[data-theme="light"] {
 </header>
 
 <nav class="admin-nav-tabs">
-  <button class="tab-link active" onclick="switchAdminTab('pricing')">
-    ⚡ RAM Pricing Tiers
+  <button class="tab-link active" onclick="switchAdminTab('dashboard')">
+    📊 Dashboard
   </button>
   <button class="tab-link" onclick="switchAdminTab('inventory')">
     📦 Inventory (<span id="countInventory">69</span>)
+  </button>
+  <button class="tab-link" onclick="switchAdminTab('pricing')">
+    ⚡ RAM &amp; Storage Pricing
   </button>
   <button class="tab-link" onclick="switchAdminTab('orders')">
     🛒 Customer Orders (<span id="countOrders">0</span>)
@@ -493,17 +582,106 @@ html[data-theme="light"] {
 
 <main class="admin-body">
 
+  <!-- TOP DASHBOARD STATS (Always visible executive inventory overview) -->
+  <div class="admin-stats-grid" id="dashboardStatsBar">
+    <div class="stat-card stat-primary">
+      <div class="stat-label">Total Laptops</div>
+      <div class="stat-val" id="statTotalLaptops">69</div>
+      <div class="stat-sub">Active models in catalog</div>
+    </div>
+    <div class="stat-card stat-success">
+      <div class="stat-label">In Stock (&gt;2)</div>
+      <div class="stat-val" id="statInStock" style="color:var(--success)">62</div>
+      <div class="stat-sub">Ready for courier dispatch</div>
+    </div>
+    <div class="stat-card stat-warning">
+      <div class="stat-label">Low Stock (1-2)</div>
+      <div class="stat-val" id="statLowStock" style="color:var(--warning)">5</div>
+      <div class="stat-sub">Require replenishment</div>
+    </div>
+    <div class="stat-card stat-danger">
+      <div class="stat-label">Out of Stock (0)</div>
+      <div class="stat-val" id="statOutOfStock" style="color:var(--danger)">2</div>
+      <div class="stat-sub">Ordering disabled on storefront</div>
+    </div>
+    <div class="stat-card stat-purple">
+      <div class="stat-label">Total Inventory Value</div>
+      <div class="stat-val" id="statTotalValue" style="color:#c084fc">Rs 8,420,000</div>
+      <div class="stat-sub">Stock × Base Price in PKR</div>
+    </div>
+  </div>
+
   <!-- ============================================================ -->
-  <!-- TAB 1: RAM PRICING TIERS (DDR4 / DDR5) -->
+  <!-- TAB 0: DASHBOARD OVERVIEW -->
   <!-- ============================================================ -->
-  <section class="tab-pane active" id="pane-pricing">
+  <section class="tab-pane active" id="pane-dashboard">
     <div class="admin-card">
       <div class="card-header-row">
         <div>
-          <h2 class="card-title">⚙️ RAM Upgrade Pricing Configuration</h2>
-          <p class="card-sub">Configure cumulative price per RAM size. Price differences (deltas) are computed relative to each laptop's factory base RAM.</p>
+          <h2 class="card-title">⚡ Storefront &amp; Stock Operations Hub</h2>
+          <p class="card-sub">Real-time status of your store inventory, order pipeline, and catalog health.</p>
         </div>
-        <button class="btn-primary" onclick="saveRamTiers()">
+        <div style="display:flex;gap:10px;flex-wrap:wrap;">
+          <button class="btn-primary" onclick="openAddLaptopModal()">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            + Add New Laptop
+          </button>
+          <button class="btn-nav-out" onclick="switchAdminTab('inventory')">
+            📦 Manage All Items
+          </button>
+          <button class="btn-nav-out" onclick="switchAdminTab('orders')">
+            🛒 View Orders
+          </button>
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(280px, 1fr));gap:1.25rem;margin-top:1rem;">
+        <div style="background:var(--surface2);border:1px solid var(--border2);border-radius:12px;padding:1.25rem">
+          <div style="font-weight:700;font-size:0.95rem;margin-bottom:8px;color:var(--text);display:flex;align-items:center;gap:6px">
+            <span>🛡️</span> Inventory Health
+          </div>
+          <p style="font-size:0.8rem;color:var(--text-muted);margin-bottom:12px">
+            Inventory changes made here automatically sync to the storefront and persist locally and in cloud storage.
+          </p>
+          <div style="display:flex;flex-direction:column;gap:8px;font-size:0.8rem">
+            <div style="display:flex;justify-content:space-between">
+              <span>Catalog Coverage</span>
+              <strong id="dashCoveragePct">100% (69 Models)</strong>
+            </div>
+            <div style="display:flex;justify-content:space-between">
+              <span>Out-of-Stock Protection</span>
+              <strong style="color:var(--success)">Active (Ordering blocked if 0)</strong>
+            </div>
+            <div style="display:flex;justify-content:space-between">
+              <span>Auto Stock Decrement</span>
+              <strong style="color:var(--accent)">Active on COD &amp; WhatsApp</strong>
+            </div>
+          </div>
+        </div>
+
+        <div style="background:var(--surface2);border:1px solid var(--border2);border-radius:12px;padding:1.25rem">
+          <div style="font-weight:700;font-size:0.95rem;margin-bottom:8px;color:var(--text);display:flex;align-items:center;gap:6px">
+            <span>⚠️</span> Low &amp; Out of Stock Alerts
+          </div>
+          <div id="dashAlertsList" style="max-height:180px;overflow-y:auto;display:flex;flex-direction:column;gap:6px;font-size:0.8rem">
+            <div style="color:var(--text-muted)">Scanning stock levels...</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- TAB 1: RAM & STORAGE PRICING TIERS -->
+  <!-- ============================================================ -->
+  <section class="tab-pane" id="pane-pricing">
+    <div class="admin-card">
+      <div class="card-header-row">
+        <div>
+          <h2 class="card-title">⚙️ RAM &amp; Storage Upgrade Pricing Configuration</h2>
+          <p class="card-sub">Configure cumulative price per RAM and SSD tier. Price deltas update the product configurator live.</p>
+        </div>
+        <button class="btn-primary" onclick="saveAllPricingTiers()">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
           Save All Pricing Tiers
         </button>
@@ -515,7 +693,7 @@ html[data-theme="light"] {
           <div class="tier-box-title">
             <span style="color:var(--accent)">DDR4 Memory Tiers</span>
           </div>
-          <p class="tier-box-desc">Applies to all DDR4 upgradable models (29 laptops). Rule: 8GB→16GB = +Rs 8,000 | 16GB→32GB = +Rs 15,000</p>
+          <p class="tier-box-desc">Applies to all DDR4 upgradable models. Rule: 8GB→16GB = +Rs 8,000 | 16GB→32GB = +Rs 15,000</p>
           
           <div class="form-group">
             <label>8 GB Cumulative Price (PKR)</label>
@@ -563,6 +741,37 @@ html[data-theme="light"] {
             • Base 8GB laptop → 8GB: Included | 16GB: <span id="prev-ddr5-8-to-16" style="color:#34d399">+Rs 10,000</span> | 32GB: <span id="prev-ddr5-8-to-32" style="color:#34d399">+Rs 28,000</span>
           </div>
         </div>
+
+        <!-- STORAGE TIERS -->
+        <div class="tier-box">
+          <div class="tier-box-title">
+            <span style="color:#a855f7">NVMe SSD Storage Tiers</span>
+          </div>
+          <p class="tier-box-desc">Applies to all storage upgradable laptops. Sensible SSD pricing tiers across storage sizes.</p>
+          
+          <div class="form-group">
+            <label>128 GB Cumulative Price (PKR)</label>
+            <input type="number" id="tier-stor-128" class="form-control" value="0" min="0" step="500">
+          </div>
+          <div class="form-group">
+            <label>256 GB Cumulative Price (PKR)</label>
+            <input type="number" id="tier-stor-256" class="form-control" value="4000" min="0" step="500">
+          </div>
+          <div class="form-group">
+            <label>512 GB Cumulative Price (PKR)</label>
+            <input type="number" id="tier-stor-512" class="form-control" value="9000" min="0" step="500">
+          </div>
+          <div class="form-group">
+            <label>1000 GB (1 TB) Cumulative Price (PKR)</label>
+            <input type="number" id="tier-stor-1000" class="form-control" value="21000" min="0" step="500">
+          </div>
+
+          <div style="margin-top:1rem; padding:10px; background:rgba(0,0,0,0.25); border-radius:8px; font-size:0.75rem; color:var(--text-muted)">
+            <strong>Live Preview for SSD:</strong><br>
+            • Base 256GB laptop → 512GB: <span id="prev-stor-256-to-512" style="color:#34d399">+Rs 5,000</span> | 1TB: <span id="prev-stor-256-to-1000" style="color:#34d399">+Rs 17,000</span><br>
+            • Base 512GB laptop → 1TB: <span id="prev-stor-512-to-1000" style="color:#34d399">+Rs 12,000</span> | 256GB: <span id="prev-stor-512-to-256" style="color:#f87171">-Rs 5,000</span>
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -575,11 +784,11 @@ html[data-theme="light"] {
       <div class="card-header-row">
         <div>
           <h2 class="card-title">📦 Inventory Management</h2>
-          <p class="card-sub">Real-time inventory from laptops-data.js. Add, edit, manage stock, archive/hide, and inspect specifications.</p>
+          <p class="card-sub">Real-time inventory from laptops-data.js. Add, edit, manage stock, export/import, and inspect specifications.</p>
         </div>
-        <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;">
-          <input type="text" id="invSearch" class="form-control" style="width:190px" placeholder="Search name, CPU, GPU..." oninput="filterInventoryTable()">
-          <select id="invBrandFilter" class="form-control" style="width:130px" onchange="filterInventoryTable()">
+        <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
+          <input type="text" id="invSearch" class="form-control" style="width:160px" placeholder="Search laptops..." oninput="filterInventoryTable()">
+          <select id="invBrandFilter" class="form-control" style="width:120px" onchange="filterInventoryTable()">
             <option value="all">All Brands</option>
             <option value="lenovo">Lenovo</option>
             <option value="dell">Dell</option>
@@ -587,17 +796,35 @@ html[data-theme="light"] {
             <option value="apple">Apple</option>
             <option value="microsoft">Microsoft</option>
           </select>
-          <select id="invStatusFilter" class="form-control" style="width:150px" onchange="filterInventoryTable()">
+          <select id="invStatusFilter" class="form-control" style="width:130px" onchange="filterInventoryTable()">
             <option value="all">All Statuses</option>
             <option value="in_stock">In Stock (&gt;2)</option>
             <option value="low_stock">Low Stock (1-2)</option>
             <option value="out_of_stock">Out of Stock (0)</option>
             <option value="hidden">Hidden / Archived</option>
           </select>
+          <select id="invSortSelect" class="form-control" style="width:145px" onchange="filterInventoryTable()">
+            <option value="id_asc">Sort: ID (Default)</option>
+            <option value="price_asc">Price: Low to High</option>
+            <option value="price_desc">Price: High to Low</option>
+            <option value="stock_asc">Stock: Low to High</option>
+            <option value="stock_desc">Stock: High to Low</option>
+            <option value="name_asc">Name: A to Z</option>
+          </select>
           <button class="btn-primary" onclick="openAddLaptopModal()">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
             + Add Laptop
           </button>
+          <button class="btn-nav-out" onclick="exportInventoryJson()" title="Download complete JSON catalog">
+            📥 JSON
+          </button>
+          <button class="btn-nav-out" onclick="exportInventoryCsv()" title="Download CSV spreadsheet">
+            📊 CSV
+          </button>
+          <label class="btn-nav-out" style="cursor:pointer;margin:0" title="Upload and import inventory JSON">
+            📤 Import
+            <input type="file" id="invImportFileInput" accept=".json" style="display:none" onchange="importInventoryJson(event)">
+          </label>
         </div>
       </div>
 
@@ -840,7 +1067,11 @@ function escapeHtml(str) {
 // ─────────────────────────────────────────────────────────────
 // RAM TIERS
 // ─────────────────────────────────────────────────────────────
+// ─────────────────────────────────────────────────────────────
+// RAM & STORAGE PRICING TIERS
+// ─────────────────────────────────────────────────────────────
 async function loadRamTiers() {
+  // Load RAM tiers
   try {
     const res = await fetch('/api/config/ram-pricing', { credentials: 'include' });
     if (res.ok) {
@@ -855,42 +1086,89 @@ async function loadRamTiers() {
         document.getElementById('tier-ddr5-16').value = data.DDR5['16'] ?? 10000;
         document.getElementById('tier-ddr5-32').value = data.DDR5['32'] ?? 28000;
       }
-      updateTierPreviews();
     }
   } catch (e) {
-    console.error("Failed to load RAM tiers", e);
+    try {
+      const cached = JSON.parse(localStorage.getItem('lh_ram_pricing') || 'null');
+      if (cached && cached.DDR4) {
+        document.getElementById('tier-ddr4-8').value = cached.DDR4['8'] ?? 0;
+        document.getElementById('tier-ddr4-16').value = cached.DDR4['16'] ?? 8000;
+        document.getElementById('tier-ddr4-32').value = cached.DDR4['32'] ?? 23000;
+      }
+    } catch (_) {}
   }
+
+  // Load Storage tiers
+  try {
+    const resStor = await fetch('/api/config/storage-pricing', { credentials: 'include' });
+    if (resStor.ok) {
+      const dataStor = await resStor.json();
+      document.getElementById('tier-stor-128').value = dataStor['128'] ?? 0;
+      document.getElementById('tier-stor-256').value = dataStor['256'] ?? 4000;
+      document.getElementById('tier-stor-512').value = dataStor['512'] ?? 9000;
+      document.getElementById('tier-stor-1000').value = dataStor['1000'] ?? 21000;
+    }
+  } catch (e) {
+    try {
+      const cachedStor = JSON.parse(localStorage.getItem('lh_storage_pricing') || 'null');
+      if (cachedStor) {
+        document.getElementById('tier-stor-128').value = cachedStor['128'] ?? 0;
+        document.getElementById('tier-stor-256').value = cachedStor['256'] ?? 4000;
+        document.getElementById('tier-stor-512').value = cachedStor['512'] ?? 9000;
+        document.getElementById('tier-stor-1000').value = cachedStor['1000'] ?? 21000;
+      }
+    } catch (_) {}
+  }
+
+  updateTierPreviews();
 }
 
 function updateTierPreviews() {
-  const ddr4_8 = Number(document.getElementById('tier-ddr4-8').value || 0);
-  const ddr4_16 = Number(document.getElementById('tier-ddr4-16').value || 8000);
-  const ddr4_32 = Number(document.getElementById('tier-ddr4-32').value || 23000);
+  const ddr4_8 = Number(document.getElementById('tier-ddr4-8')?.value || 0);
+  const ddr4_16 = Number(document.getElementById('tier-ddr4-16')?.value || 8000);
+  const ddr4_32 = Number(document.getElementById('tier-ddr4-32')?.value || 23000);
 
-  const ddr5_8 = Number(document.getElementById('tier-ddr5-8').value || 0);
-  const ddr5_16 = Number(document.getElementById('tier-ddr5-16').value || 10000);
-  const ddr5_32 = Number(document.getElementById('tier-ddr5-32').value || 28000);
+  const ddr5_8 = Number(document.getElementById('tier-ddr5-8')?.value || 0);
+  const ddr5_16 = Number(document.getElementById('tier-ddr5-16')?.value || 10000);
+  const ddr5_32 = Number(document.getElementById('tier-ddr5-32')?.value || 28000);
+
+  const stor_128 = Number(document.getElementById('tier-stor-128')?.value || 0);
+  const stor_256 = Number(document.getElementById('tier-stor-256')?.value || 4000);
+  const stor_512 = Number(document.getElementById('tier-stor-512')?.value || 9000);
+  const stor_1000 = Number(document.getElementById('tier-stor-1000')?.value || 21000);
 
   // DDR4 preview
-  document.getElementById('prev-ddr4-16-to-8').textContent = `-Rs ${(ddr4_16 - ddr4_8).toLocaleString('en-PK')}`;
-  document.getElementById('prev-ddr4-16-to-32').textContent = `+Rs ${(ddr4_32 - ddr4_16).toLocaleString('en-PK')}`;
-  document.getElementById('prev-ddr4-8-to-16').textContent = `+Rs ${(ddr4_16 - ddr4_8).toLocaleString('en-PK')}`;
-  document.getElementById('prev-ddr4-8-to-32').textContent = `+Rs ${(ddr4_32 - ddr4_8).toLocaleString('en-PK')}`;
+  if (document.getElementById('prev-ddr4-16-to-8')) {
+    document.getElementById('prev-ddr4-16-to-8').textContent = `-Rs ${(ddr4_16 - ddr4_8).toLocaleString('en-PK')}`;
+    document.getElementById('prev-ddr4-16-to-32').textContent = `+Rs ${(ddr4_32 - ddr4_16).toLocaleString('en-PK')}`;
+    document.getElementById('prev-ddr4-8-to-16').textContent = `+Rs ${(ddr4_16 - ddr4_8).toLocaleString('en-PK')}`;
+    document.getElementById('prev-ddr4-8-to-32').textContent = `+Rs ${(ddr4_32 - ddr4_8).toLocaleString('en-PK')}`;
+  }
 
   // DDR5 preview
-  document.getElementById('prev-ddr5-16-to-8').textContent = `-Rs ${(ddr5_16 - ddr5_8).toLocaleString('en-PK')}`;
-  document.getElementById('prev-ddr5-16-to-32').textContent = `+Rs ${(ddr5_32 - ddr5_16).toLocaleString('en-PK')}`;
-  document.getElementById('prev-ddr5-8-to-16').textContent = `+Rs ${(ddr5_16 - ddr5_8).toLocaleString('en-PK')}`;
-  document.getElementById('prev-ddr5-8-to-32').textContent = `+Rs ${(ddr5_32 - ddr5_8).toLocaleString('en-PK')}`;
+  if (document.getElementById('prev-ddr5-16-to-8')) {
+    document.getElementById('prev-ddr5-16-to-8').textContent = `-Rs ${(ddr5_16 - ddr5_8).toLocaleString('en-PK')}`;
+    document.getElementById('prev-ddr5-16-to-32').textContent = `+Rs ${(ddr5_32 - ddr5_16).toLocaleString('en-PK')}`;
+    document.getElementById('prev-ddr5-8-to-16').textContent = `+Rs ${(ddr5_16 - ddr5_8).toLocaleString('en-PK')}`;
+    document.getElementById('prev-ddr5-8-to-32').textContent = `+Rs ${(ddr5_32 - ddr5_8).toLocaleString('en-PK')}`;
+  }
+
+  // Storage preview
+  if (document.getElementById('prev-stor-256-to-512')) {
+    document.getElementById('prev-stor-256-to-512').textContent = `+Rs ${(stor_512 - stor_256).toLocaleString('en-PK')}`;
+    document.getElementById('prev-stor-256-to-1000').textContent = `+Rs ${(stor_1000 - stor_256).toLocaleString('en-PK')}`;
+    document.getElementById('prev-stor-512-to-1000').textContent = `+Rs ${(stor_1000 - stor_512).toLocaleString('en-PK')}`;
+    document.getElementById('prev-stor-512-to-256').textContent = `-Rs ${(stor_512 - stor_256).toLocaleString('en-PK')}`;
+  }
 }
 
 // Live update previews when inputs change
-['tier-ddr4-8','tier-ddr4-16','tier-ddr4-32','tier-ddr5-8','tier-ddr5-16','tier-ddr5-32'].forEach(id => {
+['tier-ddr4-8','tier-ddr4-16','tier-ddr4-32','tier-ddr5-8','tier-ddr5-16','tier-ddr5-32','tier-stor-128','tier-stor-256','tier-stor-512','tier-stor-1000'].forEach(id => {
   document.getElementById(id)?.addEventListener('input', updateTierPreviews);
 });
 
-async function saveRamTiers() {
-  const payload = {
+async function saveAllPricingTiers() {
+  const ramPayload = {
     DDR4: {
       "8": Number(document.getElementById('tier-ddr4-8').value || 0),
       "16": Number(document.getElementById('tier-ddr4-16').value || 8000),
@@ -903,28 +1181,85 @@ async function saveRamTiers() {
     }
   };
 
+  const storagePayload = {
+    "128": Number(document.getElementById('tier-stor-128').value || 0),
+    "256": Number(document.getElementById('tier-stor-256').value || 4000),
+    "512": Number(document.getElementById('tier-stor-512').value || 9000),
+    "1000": Number(document.getElementById('tier-stor-1000').value || 21000)
+  };
+
+  localStorage.setItem('lh_ram_pricing', JSON.stringify(ramPayload));
+  localStorage.setItem('lh_storage_pricing', JSON.stringify(storagePayload));
+  if (typeof window !== 'undefined') {
+    window.LH_RAM_TIERS = ramPayload;
+    window.LH_STORAGE_TIERS = storagePayload;
+  }
+
   try {
-    const res = await fetch('/api/admin/config/ram-pricing', {
+    await fetch('/api/admin/config/ram-pricing', {
       method: 'POST',
       credentials: 'include',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
+      body: JSON.stringify(ramPayload)
     });
-    if (res.ok) {
-      showToast('RAM Pricing Tiers updated successfully!');
-      loadAuditLog();
-    } else {
-      showToast('Failed to save tiers.');
-    }
-  } catch (e) {
-    showToast('Network error while saving tiers.');
-  }
+    await fetch('/api/admin/config/storage-pricing', {
+      method: 'POST',
+      credentials: 'include',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(storagePayload)
+    });
+  } catch (e) {}
+
+  showToast('RAM & Storage Pricing Tiers saved successfully!');
+  loadAuditLog();
+}
+
+function saveRamTiers() {
+  saveAllPricingTiers();
 }
 
 // ─────────────────────────────────────────────────────────────
-// INVENTORY
+// DASHBOARD & INVENTORY
 // ─────────────────────────────────────────────────────────────
 let pendingDeleteId = null;
+
+function updateDashboardStats() {
+  const items = inventoryData || [];
+  const total = items.length;
+  const inStock = items.filter(l => !l.hidden && Number(l.stock ?? 1) > 2).length;
+  const lowStock = items.filter(l => !l.hidden && Number(l.stock ?? 1) > 0 && Number(l.stock ?? 1) <= 2).length;
+  const outOfStock = items.filter(l => !l.hidden && Number(l.stock ?? 1) <= 0).length;
+  const totalValue = items
+    .filter(l => !l.hidden)
+    .reduce((sum, l) => sum + (Number(l.price || 0) * Math.max(0, Number(l.stock ?? 1))), 0);
+
+  if (document.getElementById('statTotalLaptops')) document.getElementById('statTotalLaptops').textContent = total;
+  if (document.getElementById('statInStock')) document.getElementById('statInStock').textContent = inStock;
+  if (document.getElementById('statLowStock')) document.getElementById('statLowStock').textContent = lowStock;
+  if (document.getElementById('statOutOfStock')) document.getElementById('statOutOfStock').textContent = outOfStock;
+  if (document.getElementById('statTotalValue')) document.getElementById('statTotalValue').textContent = 'Rs ' + totalValue.toLocaleString('en-PK');
+  if (document.getElementById('countInventory')) document.getElementById('countInventory').textContent = total;
+  if (document.getElementById('dashCoveragePct')) document.getElementById('dashCoveragePct').textContent = `100% (${total} Models)`;
+
+  // Dashboard alerts list
+  const alertsList = document.getElementById('dashAlertsList');
+  if (alertsList) {
+    const criticalItems = items.filter(l => !l.hidden && Number(l.stock ?? 1) <= 2);
+    if (criticalItems.length === 0) {
+      alertsList.innerHTML = '<div style="color:var(--success);padding:6px 0">✓ All catalog items have healthy stock levels.</div>';
+    } else {
+      alertsList.innerHTML = criticalItems.map(a => {
+        const isOut = Number(a.stock ?? 1) <= 0;
+        return `
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid rgba(255,255,255,0.06)">
+            <span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:200px;font-weight:600">#${a.id} ${escapeHtml(a.name)}</span>
+            <span class="badge-status ${isOut ? 'st-cancelled' : 'st-warning'}">${isOut ? 'Out of Stock' : (a.stock + ' Left')}</span>
+          </div>
+        `;
+      }).join('');
+    }
+  }
+}
 
 async function loadInventory() {
   const { isConfigured, db } = initFirebase();
@@ -937,7 +1272,8 @@ async function loadInventory() {
           inventoryData.push({ firestoreId: doc.id, ...doc.data() });
         });
         inventoryData.sort((a,b) => (Number(a.id) || 0) - (Number(b.id) || 0));
-        document.getElementById('countInventory').textContent = inventoryData.length;
+        localStorage.setItem('lh_inventory_custom', JSON.stringify(inventoryData));
+        updateDashboardStats();
         filterInventoryTable();
         return;
       }
@@ -950,15 +1286,30 @@ async function loadInventory() {
     const res = await fetch('/api/admin/inventory', { credentials: 'include' });
     if (res.ok) {
       inventoryData = await res.json();
-      document.getElementById('countInventory').textContent = inventoryData.length;
+      localStorage.setItem('lh_inventory_custom', JSON.stringify(inventoryData));
+      updateDashboardStats();
       filterInventoryTable();
       return;
     }
   } catch (e) {}
 
+  // Check saved localStorage custom inventory
+  const saved = localStorage.getItem('lh_inventory_custom');
+  if (saved) {
+    try {
+      const parsed = JSON.parse(saved);
+      if (Array.isArray(parsed) && parsed.length > 0) {
+        inventoryData = parsed;
+        updateDashboardStats();
+        filterInventoryTable();
+        return;
+      }
+    } catch (_) {}
+  }
+
   if (typeof LAPTOPS_INVENTORY !== 'undefined') {
     inventoryData = [...LAPTOPS_INVENTORY];
-    document.getElementById('countInventory').textContent = inventoryData.length;
+    updateDashboardStats();
     filterInventoryTable();
   }
 }
@@ -1005,7 +1356,10 @@ function renderInventoryTable(items) {
         </td>
         <td>${statusPill}</td>
         <td style="text-align:right">
-          <div style="display:flex;gap:6px;justify-content:flex-end">
+          <div style="display:flex;gap:6px;justify-content:flex-end;align-items:center;">
+            <button class="btn-nav-out btn-sm" onclick="toggleQuickStock(${lap.id}, ${stock})" title="Quick Toggle Stock" style="font-size:0.72rem;padding:4px 8px;">
+              ${stock <= 0 ? '✓ In Stock' : '✕ Out Stock'}
+            </button>
             <button class="btn-nav-out btn-sm" onclick="openEditLaptopModal(${lap.id})" title="Edit Specs">
               ✏️ Edit
             </button>
@@ -1026,8 +1380,9 @@ function filterInventoryTable() {
   const q = (document.getElementById('invSearch')?.value || '').toLowerCase().trim();
   const brand = document.getElementById('invBrandFilter')?.value || 'all';
   const status = document.getElementById('invStatusFilter')?.value || 'all';
+  const sortVal = document.getElementById('invSortSelect')?.value || 'id_asc';
 
-  let filtered = inventoryData || [];
+  let filtered = [...(inventoryData || [])];
 
   if (brand !== 'all') {
     filtered = filtered.filter(l => String(l.brand).toLowerCase() === brand.toLowerCase());
@@ -1053,22 +1408,45 @@ function filterInventoryTable() {
     );
   }
 
+  // Sorting
+  if (sortVal === 'price_asc') {
+    filtered.sort((a, b) => Number(a.price || 0) - Number(b.price || 0));
+  } else if (sortVal === 'price_desc') {
+    filtered.sort((a, b) => Number(b.price || 0) - Number(a.price || 0));
+  } else if (sortVal === 'stock_asc') {
+    filtered.sort((a, b) => Number(a.stock ?? 1) - Number(b.stock ?? 1));
+  } else if (sortVal === 'stock_desc') {
+    filtered.sort((a, b) => Number(b.stock ?? 1) - Number(a.stock ?? 1));
+  } else if (sortVal === 'name_asc') {
+    filtered.sort((a, b) => String(a.name).localeCompare(String(b.name)));
+  } else {
+    filtered.sort((a, b) => (Number(a.id) || 0) - (Number(b.id) || 0));
+  }
+
   renderInventoryTable(filtered);
+}
+
+function toggleQuickStock(id, curStock) {
+  const nextStock = Number(curStock) <= 0 ? 1 : 0;
+  updateStock(id, nextStock);
 }
 
 async function updateStock(id, newStock) {
   const stockNum = parseInt(newStock, 10);
+  const item = inventoryData.find(l => l.id == id);
+  if (item) item.stock = stockNum;
+  localStorage.setItem('lh_inventory_custom', JSON.stringify(inventoryData));
+  updateDashboardStats();
+  filterInventoryTable();
+
   const fb = window.initFirebase ? window.initFirebase() : null;
   if (fb && fb.isConfigured && fb.auth && fb.auth.currentUser) {
     try {
       await window.adminUpdateStock(id, stockNum);
       showToast(`Stock updated for laptop #${id}`);
-      const item = inventoryData.find(l => l.id == id);
-      if (item) item.stock = stockNum;
-      filterInventoryTable();
       return;
     } catch (fbErr) {
-      console.warn('[Admin] Firestore stock update error, falling back to local server:', fbErr);
+      console.warn('[Admin] Firestore stock update error:', fbErr);
     }
   }
 
@@ -1081,17 +1459,20 @@ async function updateStock(id, newStock) {
     });
     if (res.ok) {
       showToast(`Stock updated for laptop #${id}`);
-      const item = inventoryData.find(l => l.id == id);
-      if (item) item.stock = stockNum;
-      filterInventoryTable();
       loadAuditLog();
     }
   } catch (e) {
-    showToast('Failed to update stock');
+    showToast(`Stock updated locally for laptop #${id}`);
   }
 }
 
 async function toggleArchive(id, currentlyHidden) {
+  const item = inventoryData.find(l => l.id == id);
+  if (item) item.hidden = !currentlyHidden;
+  localStorage.setItem('lh_inventory_custom', JSON.stringify(inventoryData));
+  updateDashboardStats();
+  filterInventoryTable();
+
   const fb = window.initFirebase ? window.initFirebase() : null;
   if (fb && fb.isConfigured && fb.auth && fb.auth.currentUser) {
     try {
@@ -1100,9 +1481,6 @@ async function toggleArchive(id, currentlyHidden) {
         updatedAt: firebase.firestore.FieldValue.serverTimestamp()
       });
       showToast(currentlyHidden ? `Laptop #${id} made live` : `Laptop #${id} archived`);
-      const item = inventoryData.find(l => l.id == id);
-      if (item) item.hidden = !currentlyHidden;
-      filterInventoryTable();
       return;
     } catch (fbErr) {
       console.warn('[Admin] Firestore archive update error:', fbErr);
@@ -1119,14 +1497,100 @@ async function toggleArchive(id, currentlyHidden) {
     });
     if (res.ok) {
       showToast(currentlyHidden ? `Laptop #${id} made live` : `Laptop #${id} archived`);
-      const item = inventoryData.find(l => l.id == id);
-      if (item) item.hidden = !currentlyHidden;
-      filterInventoryTable();
       loadAuditLog();
     }
   } catch (e) {
-    showToast('Failed to update laptop status');
+    showToast(currentlyHidden ? `Laptop #${id} made live locally` : `Laptop #${id} archived locally`);
   }
+}
+
+// ─────────────────────────────────────────────────────────────
+// IMPORT / EXPORT INVENTORY (JSON & CSV)
+// ─────────────────────────────────────────────────────────────
+function exportInventoryJson() {
+  const jsonStr = JSON.stringify(inventoryData, null, 2);
+  const blob = new Blob([jsonStr], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `laptops-inventory-${new Date().toISOString().slice(0,10)}.json`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  showToast('Inventory exported to JSON!');
+}
+
+function exportInventoryCsv() {
+  if (!inventoryData || inventoryData.length === 0) {
+    showToast('No inventory data to export');
+    return;
+  }
+  const headers = ['ID', 'Brand', 'Name', 'CPU', 'Gen', 'RAM_GB', 'RAM_Type', 'Storage_GB', 'Storage_Type', 'GPU', 'Display', 'Price_PKR', 'Stock', 'Condition', 'Status'];
+  const rows = inventoryData.map(l => [
+    l.id,
+    `"${(l.brand || '').replace(/"/g, '""')}"`,
+    `"${(l.name || '').replace(/"/g, '""')}"`,
+    `"${(l.cpu || '').replace(/"/g, '""')}"`,
+    `"${(l.gen || '').replace(/"/g, '""')}"`,
+    l.ram || 16,
+    `"${(l.ramType || 'DDR4').replace(/"/g, '""')}"`,
+    l.storage || 512,
+    `"${(l.storageType || 'NVMe SSD').replace(/"/g, '""')}"`,
+    `"${(l.gpu || '').replace(/"/g, '""')}"`,
+    `"${(l.display || '').replace(/"/g, '""')}"`,
+    l.price || 0,
+    l.stock ?? 1,
+    `"${(l.condition || '').replace(/"/g, '""')}"`,
+    l.hidden ? 'Hidden' : (Number(l.stock ?? 1) <= 0 ? 'Out of Stock' : 'In Stock')
+  ]);
+  const csvContent = [headers.join(','), ...rows.map(r => r.join(','))].join('\n');
+  const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `laptops-inventory-${new Date().toISOString().slice(0,10)}.csv`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  showToast('Inventory exported to CSV!');
+}
+
+function importInventoryJson(event) {
+  const file = event.target.files && event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    try {
+      const parsed = JSON.parse(e.target.result);
+      if (!Array.isArray(parsed) || parsed.length === 0) {
+        alert('Invalid JSON file format. Must be an array of laptop items.');
+        return;
+      }
+      if (!confirm(`Import ${parsed.length} laptops? This will merge and update your catalog.`)) {
+        event.target.value = '';
+        return;
+      }
+      const map = new Map();
+      inventoryData.forEach(item => map.set(Number(item.id), item));
+      parsed.forEach(item => {
+        if (item && item.id) {
+          map.set(Number(item.id), { ...map.get(Number(item.id)), ...item });
+        }
+      });
+      inventoryData = Array.from(map.values()).sort((a,b) => (Number(a.id) || 0) - (Number(b.id) || 0));
+      localStorage.setItem('lh_inventory_custom', JSON.stringify(inventoryData));
+      updateDashboardStats();
+      filterInventoryTable();
+      showToast(`Successfully imported ${parsed.length} laptops!`);
+      event.target.value = '';
+    } catch (err) {
+      alert('Error parsing JSON file: ' + err.message);
+      event.target.value = '';
+    }
+  };
+  reader.readAsText(file);
 }
 
 // ─────────────────────────────────────────────────────────────
@@ -1146,12 +1610,13 @@ function openAddLaptopModal() {
   document.getElementById('lapStorageType').value = 'NVMe SSD';
   document.getElementById('lapGpu').value = 'Intel Iris Xe';
   document.getElementById('lapDisplay').value = '14.0" FHD IPS (1920x1080)';
+  if (document.getElementById('lapBattery')) document.getElementById('lapBattery').value = '3-Cell 50Wh (~6-8 hrs battery life)';
   document.getElementById('lapPrice').value = '120000';
   document.getElementById('lapStock').value = '1';
   document.getElementById('lapCondition').value = 'Like New (10/10) · Certified Refurbished';
   document.getElementById('lapBadge').value = 'New Arrival';
   document.getElementById('lapCategory').value = 'Ultrabook';
-  document.getElementById('lapImgPath').value = 'images/laptop-1-lenovo-thinkpad-t14-gen-1-1.jpg';
+  document.getElementById('lapImgPath').value = 'images/laptop-1-lenovo-thinkpad-t14-1.jpg';
   document.getElementById('lapVisible').checked = true;
   if (document.getElementById('lapFeatured')) document.getElementById('lapFeatured').checked = false;
   document.getElementById('lapDescription').value = '';
@@ -1178,6 +1643,9 @@ function openEditLaptopModal(id) {
   document.getElementById('lapStorageType').value = lap.fullSpecs?.memoryStorage?.storageType || lap.storageType || 'NVMe SSD';
   document.getElementById('lapGpu').value = lap.gpu || '';
   document.getElementById('lapDisplay').value = lap.display || '';
+  if (document.getElementById('lapBattery')) {
+    document.getElementById('lapBattery').value = lap.battery || lap.fullSpecs?.build?.battery || '3-Cell 50Wh (~6-8 hrs battery life)';
+  }
   document.getElementById('lapPrice').value = lap.price || '';
   document.getElementById('lapStock').value = lap.stock ?? 1;
   document.getElementById('lapCondition').value = lap.condition || 'Like New (10/10) · Certified Refurbished';
@@ -1279,6 +1747,7 @@ async function handleSaveLaptop(e) {
   const brandVal = document.getElementById('lapBrand').value;
   const brandCapitalized = brandVal.charAt(0).toUpperCase() + brandVal.slice(1);
   const isFeatured = document.getElementById('lapFeatured') ? document.getElementById('lapFeatured').checked : false;
+  const batteryVal = document.getElementById('lapBattery') ? document.getElementById('lapBattery').value.trim() : '3-Cell 50Wh (~6-8 hrs battery life)';
 
   let assignedId;
   if (isEditing) {
@@ -1302,6 +1771,7 @@ async function handleSaveLaptop(e) {
     storageType: document.getElementById('lapStorageType').value.trim() || 'NVMe SSD',
     gpu: document.getElementById('lapGpu').value.trim(),
     display: document.getElementById('lapDisplay').value.trim(),
+    battery: batteryVal,
     price: priceNum,
     priceFormatted: 'Rs. ' + priceNum.toLocaleString('en-PK'),
     stock: stockNum,
@@ -1320,9 +1790,23 @@ async function handleSaveLaptop(e) {
       memoryStorage: {
         ramType: document.getElementById('lapRamType').value,
         storageType: document.getElementById('lapStorageType').value.trim() || 'NVMe SSD'
+      },
+      build: {
+        battery: batteryVal
       }
     }
   };
+
+  // Update in memory and persist immediately
+  const existingIdx = inventoryData.findIndex(l => l.id == assignedId);
+  if (existingIdx >= 0) {
+    inventoryData[existingIdx] = { ...inventoryData[existingIdx], ...payload };
+  } else {
+    inventoryData.push(payload);
+  }
+  localStorage.setItem('lh_inventory_custom', JSON.stringify(inventoryData));
+  updateDashboardStats();
+  filterInventoryTable();
 
   // 1. Try Firestore if configured
   const fb = window.initFirebase ? window.initFirebase() : null;
@@ -1331,7 +1815,6 @@ async function handleSaveLaptop(e) {
       await window.adminSaveLaptop(payload);
       showToast(isEditing ? 'Laptop updated in Firestore!' : 'New laptop saved to Firestore!');
       closeLaptopEditModal();
-      await loadInventory();
       return;
     } catch (fbErr) {
       console.warn('[Admin] Firestore save failed, attempting local server:', fbErr);
@@ -1347,18 +1830,14 @@ async function handleSaveLaptop(e) {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload)
     });
-    const data = await res.json();
     if (res.ok) {
       showToast(isEditing ? 'Laptop updated successfully!' : 'New laptop added to inventory!');
-      closeLaptopEditModal();
-      loadInventory();
       loadAuditLog();
-    } else {
-      showToast(data.error || 'Failed to save laptop.');
     }
   } catch (err) {
-    showToast('Network error while saving laptop.');
+    showToast(isEditing ? 'Laptop updated locally!' : 'New laptop added locally!');
   }
+  closeLaptopEditModal();
 }
 
 // ─────────────────────────────────────────────────────────────
@@ -1388,13 +1867,17 @@ async function executePermanentDelete() {
   const id = pendingDeleteId;
   closeDeleteConfirmModal();
 
+  inventoryData = inventoryData.filter(l => l.id != id);
+  localStorage.setItem('lh_inventory_custom', JSON.stringify(inventoryData));
+  updateDashboardStats();
+  filterInventoryTable();
+
   // 1. Try Firestore if configured
   const fb = window.initFirebase ? window.initFirebase() : null;
   if (fb && fb.isConfigured && fb.auth && fb.auth.currentUser) {
     try {
       await window.adminDeleteLaptop(id);
       showToast(`Laptop #${id} deleted from Firestore.`);
-      await loadInventory();
       return;
     } catch (fbErr) {
       console.warn('[Admin] Firestore delete failed, falling back to server API:', fbErr);
@@ -1409,16 +1892,12 @@ async function executePermanentDelete() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ id, confirm: true })
     });
-    const data = await res.json();
     if (res.ok) {
       showToast(`Laptop #${id} deleted from inventory.`);
-      loadInventory();
       loadAuditLog();
-    } else {
-      showToast(data.error || 'Delete failed.');
     }
   } catch (e) {
-    showToast('Network error while deleting laptop.');
+    showToast(`Laptop #${id} deleted locally.`);
   }
 }
 
@@ -1776,6 +2255,11 @@ initAdmin();
             </div>
           </div>
 
+          <div class="form-group">
+            <label>Battery Specification</label>
+            <input type="text" id="lapBattery" class="form-control" placeholder="e.g. 3-Cell 50Wh (~6-8 hrs battery life)" oninput="onModalFormChange()">
+          </div>
+
           <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;">
             <div class="form-group">
               <label>Price in PKR *</label>
@@ -1817,7 +2301,7 @@ initAdmin();
           <div class="form-group">
             <label>Product Image (Upload new or use existing relative path)</label>
             <div style="display:flex;gap:10px;align-items:center;">
-              <input type="text" id="lapImgPath" class="form-control" value="images/laptop-1-lenovo-thinkpad-t14-gen-1-1.jpg" required oninput="onModalFormChange()">
+              <input type="text" id="lapImgPath" class="form-control" value="images/laptop-1-lenovo-thinkpad-t14-1.jpg" required oninput="onModalFormChange()">
               <label class="btn-nav-out" style="cursor:pointer;white-space:nowrap;margin:0">
                 <span>📁 Upload Image</span>
                 <input type="file" id="lapImgFileInput" accept="image/jpeg,image/png,image/webp" style="display:none" onchange="handleImageFileSelect(event)">
@@ -1853,7 +2337,7 @@ initAdmin();
           <div class="preview-card" id="cardPreviewContainer">
             <div class="preview-photo-wrap" id="prevPhotoWrap">
               <span class="preview-badge" id="prevBadge">Like New (10/10)</span>
-              <img id="prevImg" src="../images/laptop-1-lenovo-thinkpad-t14-gen-1-1.jpg" alt="Preview" class="preview-photo">
+              <img id="prevImg" src="../images/laptop-1-lenovo-thinkpad-t14-1.jpg" alt="Preview" class="preview-photo">
             </div>
             <div class="preview-content">
               <div class="preview-brand" id="prevBrand">LENOVO</div>

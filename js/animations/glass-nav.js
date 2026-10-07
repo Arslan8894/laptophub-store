@@ -196,7 +196,6 @@
         scrollRafId = null;
         if (isNavigating) return;
 
-        const consultSec = document.getElementById('consult');
         const reviewsSec = document.getElementById('reviews');
 
         // Reading probe zone: 35% of viewport height (max 220px)
@@ -206,8 +205,6 @@
 
         if (reviewsSec && reviewsSec.getBoundingClientRect().top <= probeY) {
           currentSec = '#reviews';
-        } else if (consultSec && consultSec.getBoundingClientRect().top <= probeY) {
-          currentSec = '#consult';
         } else {
           currentSec = '#inventory';
         }

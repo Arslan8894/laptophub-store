@@ -11,10 +11,11 @@
 <link rel="apple-touch-icon" href="images/logo-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/global.css">
 <link rel="stylesheet" href="css/theme.css">
 <link rel="stylesheet" href="css/header.css">
 <link rel="stylesheet" href="css/glass.css">
+<script src="js/cursor.js" defer></script>
 <style>
   *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
   button, input, select, textarea { font-family: inherit; }
@@ -22,7 +23,7 @@
   html { scroll-behavior: smooth; }
 
   body {
-    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-family: var(--font-main);
     background: var(--bg);
     color: var(--text);
     min-height: 100vh;
@@ -760,10 +761,30 @@
         <span id="themeLabel" style="display:none">Light</span>
       </button>
       <!-- BACK TO STORE PILL -->
-      <a href="laptophub.html" class="nav-btn glass-pill" style="font-size:0.82rem;font-weight:600;text-decoration:none;height:40px;display:inline-flex;align-items:center;padding:0 16px;">← Store</a>
+      <a href="laptophub.html" class="nav-btn glass-pill" id="btnBackToStore" onclick="returnToPreviousTab(event)" style="font-size:0.82rem;font-weight:600;text-decoration:none;height:40px;display:inline-flex;align-items:center;padding:0 16px;">← Store</a>
+      <!-- MOBILE MENU TOGGLE -->
+      <button class="mobile-nav-toggle glass-circle-btn" id="mobileNavBtn" onclick="toggleMobileNav()" aria-label="Open mobile navigation menu">☰</button>
     </div>
   </nav>
 </header>
+
+<!-- MOBILE NAV DRAWER -->
+<div class="mobile-drawer-overlay" id="mobileNavOverlay" onclick="toggleMobileNav(false)"></div>
+<div class="mobile-nav-drawer" id="mobileNavDrawer" role="dialog" aria-modal="true" aria-label="Mobile Navigation">
+  <div class="mobile-nav-header">
+    <div style="display:flex;align-items:center;gap:10px;">
+      <img src="images/logo-icon.png" alt="LaptopHUB Logo" class="brand-logo-img" style="width:30px;height:30px;">
+      <div class="mobile-nav-title">Laptop<span style="color:var(--blue)">HUB</span></div>
+    </div>
+    <button class="mobile-nav-close" onclick="toggleMobileNav(false)" aria-label="Close menu">✕</button>
+  </div>
+  <ul class="mobile-nav-links">
+    <li><a href="laptophub.html#inventory" onclick="toggleMobileNav(false)">All Laptops</a></li>
+    <li><a href="consult.html" class="active" onclick="toggleMobileNav(false)" style="color:var(--blue);font-weight:700;">Consult Me</a></li>
+    <li><a href="laptophub.html#reviews" onclick="toggleMobileNav(false)">Customer Reviews</a></li>
+    <li><a href="https://wa.me/923261398594" target="_blank" rel="noopener" onclick="toggleMobileNav(false)" style="color:#25d366">WhatsApp Support</a></li>
+  </ul>
+</div>
 
 <div class="hero">
   <div class="hero-pre">
@@ -843,7 +864,7 @@
         </div>
       </div>
       <div class="wizard-nav">
-        <button class="btn-prev" disabled>← Back</button>
+        <button class="btn-prev" id="btnStep1Back" onclick="goPrev(1)" aria-label="Return to previous tab">← Back</button>
         <span class="step-counter" id="ctr-1">Step 1 of 6</span>
         <button class="btn-next" onclick="goNext(1)">Next →</button>
       </div>
@@ -1027,10 +1048,14 @@
       <div class="slider-wrap">
         <div class="slider-value" id="budgetVal">PKR 130,000</div>
         <div class="slider-label">Maximum budget limit</div>
-        <input type="range" id="budgetSlider" min="35000" max="800000" value="130000" step="5000"
-          oninput="updateBudgetSlider(this.value)" aria-label="Budget slider">
+        <input type="range" id="budgetSlider" min="0" max="1000" value="300" step="1"
+          oninput="onBudgetSliderInput(this.value)" aria-label="Budget slider">
         <div class="range-ticks">
-          <span>35K</span><span>100K</span><span>250K</span><span>500K</span><span>800K</span>
+          <span onclick="setBudgetValue(35000)" style="cursor:pointer" title="Set budget to 35K">35K</span>
+          <span onclick="setBudgetValue(100000)" style="cursor:pointer" title="Set budget to 100K">100K</span>
+          <span onclick="setBudgetValue(250000)" style="cursor:pointer" title="Set budget to 250K">250K</span>
+          <span onclick="setBudgetValue(500000)" style="cursor:pointer" title="Set budget to 500K">500K</span>
+          <span onclick="setBudgetValue(800000)" style="cursor:pointer" title="Set budget to 800K">800K</span>
         </div>
         <br><br>
         <div style="font-size:0.84rem;color:var(--muted);line-height:1.8;background:var(--s2);padding:1rem;border-radius:10px;border:1px solid var(--border)">
@@ -1186,13 +1211,77 @@
     document.getElementById('ramVal').textContent = RAM_VALS[+idx] + ' GB';
     updateSliderBg(document.getElementById('ramSlider'), +idx / 3);
   }
-  function updateBudgetSlider(val) {
-    answers.budget = +val;
-    document.getElementById('budgetVal').textContent = 'PKR ' + Number(val).toLocaleString('en-PK');
-    const pct = (val - 35000) / (800000 - 35000);
-    updateSliderBg(document.getElementById('budgetSlider'), pct);
+  // ── BUDGET SLIDER CONVERSION (PIECEWISE CURVE MATCHING TICKS) ─────────────
+  // 0%   (pos: 0)    -> 35,000 PKR   (35K tick)
+  // 25%  (pos: 250)  -> 100,000 PKR  (100K tick)
+  // 50%  (pos: 500)  -> 250,000 PKR  (250K tick)
+  // 75%  (pos: 750)  -> 500,000 PKR  (500K tick)
+  // 100% (pos: 1000) -> 800,000 PKR  (800K tick)
+
+  function budgetPosToAmount(pos) {
+    const t = Math.max(0, Math.min(1000, +pos)) / 1000;
+    let amount;
+    if (t <= 0.25) {
+      const frac = t / 0.25;
+      amount = 35000 + frac * (100000 - 35000);
+      amount = Math.round(amount / 5000) * 5000;
+    } else if (t <= 0.50) {
+      const frac = (t - 0.25) / 0.25;
+      amount = 100000 + frac * (250000 - 100000);
+      amount = Math.round(amount / 5000) * 5000;
+    } else if (t <= 0.75) {
+      const frac = (t - 0.50) / 0.25;
+      amount = 250000 + frac * (500000 - 250000);
+      amount = Math.round(amount / 10000) * 10000;
+    } else {
+      const frac = (t - 0.75) / 0.25;
+      amount = 500000 + frac * (800000 - 500000);
+      amount = Math.round(amount / 25000) * 25000;
+    }
+    return Math.min(800000, Math.max(35000, amount));
   }
+
+  function amountToBudgetPos(amount) {
+    const amt = Math.max(35000, Math.min(800000, +amount));
+    let t;
+    if (amt <= 100000) {
+      t = ((amt - 35000) / (100000 - 35000)) * 0.25;
+    } else if (amt <= 250000) {
+      t = 0.25 + ((amt - 100000) / (250000 - 100000)) * 0.25;
+    } else if (amt <= 500000) {
+      t = 0.50 + ((amt - 250000) / (500000 - 250000)) * 0.25;
+    } else {
+      t = 0.75 + ((amt - 500000) / (800000 - 500000)) * 0.25;
+    }
+    return Math.round(t * 1000);
+  }
+
+  function onBudgetSliderInput(pos) {
+    const amount = budgetPosToAmount(pos);
+    answers.budget = amount;
+    document.getElementById('budgetVal').textContent = 'PKR ' + Number(amount).toLocaleString('en-PK');
+    const slider = document.getElementById('budgetSlider');
+    if (slider) updateSliderBg(slider, +pos / 1000);
+  }
+
+  function updateBudgetSlider(amount) {
+    const amt = +amount || 130000;
+    answers.budget = amt;
+    document.getElementById('budgetVal').textContent = 'PKR ' + Number(amt).toLocaleString('en-PK');
+    const pos = amountToBudgetPos(amt);
+    const slider = document.getElementById('budgetSlider');
+    if (slider) {
+      slider.value = pos;
+      updateSliderBg(slider, pos / 1000);
+    }
+  }
+
+  function setBudgetValue(amount) {
+    updateBudgetSlider(amount);
+  }
+
   function updateSliderBg(el, pct) {
+    if (!el) return;
     el.style.setProperty('--pct', (Math.max(0, Math.min(1, pct)) * 100).toFixed(1) + '%');
   }
 
@@ -1259,7 +1348,6 @@
         t.classList.toggle('selected', t.dataset.val === answers.gpu);
       });
     } else if (n === 6) {
-      document.getElementById('budgetSlider').value = answers.budget;
       updateBudgetSlider(answers.budget);
     }
   }
@@ -1286,8 +1374,35 @@
       showStep(6);
     } else if (from > 1) {
       showStep(from - 1);
+    } else if (from === 1) {
+      returnToPreviousTab();
     }
   }
+
+  function returnToPreviousTab(e) {
+    if (e && e.preventDefault) e.preventDefault();
+    if (window.history.length > 1 && document.referrer && (document.referrer.includes('laptophub.html') || document.referrer.includes(window.location.host))) {
+      window.history.back();
+    } else {
+      window.location.href = 'laptophub.html#inventory';
+    }
+  }
+  window.returnToPreviousTab = returnToPreviousTab;
+
+  function toggleMobileNav(force) {
+    const drawer = document.getElementById('mobileNavDrawer');
+    const overlay = document.getElementById('mobileNavOverlay');
+    const btn = document.getElementById('mobileNavBtn');
+    if (!drawer || !overlay) return;
+    const shouldOpen = (typeof force === 'boolean') ? force : (!drawer.classList.contains('open') && !drawer.classList.contains('active'));
+    drawer.classList.toggle('open', shouldOpen);
+    drawer.classList.toggle('active', shouldOpen);
+    overlay.classList.toggle('open', shouldOpen);
+    overlay.classList.toggle('active', shouldOpen);
+    if (btn) btn.setAttribute('aria-expanded', shouldOpen ? 'true' : 'false');
+    document.body.style.overflow = shouldOpen ? 'hidden' : '';
+  }
+  window.toggleMobileNav = toggleMobileNav;
 
   function editAnswers() {
     // Returns to Step 1 without erasing any previously selected answers

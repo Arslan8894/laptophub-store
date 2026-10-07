@@ -48,6 +48,7 @@ SCHEMA_PATH = os.path.join(DB_DIR, 'schema.sql')
 IMAGES_DIR  = os.path.join(BASE_DIR, 'images')
 ADMIN_DIR   = os.path.join(BASE_DIR, 'admin')
 RAM_PRICING_PATH = os.path.join(DB_DIR, 'ram_pricing.json')
+STORAGE_PRICING_PATH = os.path.join(DB_DIR, 'storage_pricing.json')
 
 os.makedirs(DB_DIR, exist_ok=True)
 os.makedirs(IMAGES_DIR, exist_ok=True)
@@ -56,6 +57,13 @@ os.makedirs(ADMIN_DIR, exist_ok=True)
 DEFAULT_RAM_TIERS = {
     "DDR4": { "8": 0, "16": 8000, "32": 23000 },
     "DDR5": { "8": 0, "16": 10000, "32": 28000 }
+}
+
+DEFAULT_STORAGE_TIERS = {
+    "128": 0,
+    "256": 4000,
+    "512": 9000,
+    "1000": 21000
 }
 
 def load_ram_pricing() -> dict:
@@ -74,6 +82,24 @@ def save_ram_pricing(tiers: dict) -> bool:
         return True
     except Exception as e:
         log.error("Failed to save ram_pricing.json: %s", e)
+        return False
+
+def load_storage_pricing() -> dict:
+    if os.path.exists(STORAGE_PRICING_PATH):
+        try:
+            with open(STORAGE_PRICING_PATH, 'r', encoding='utf-8') as f:
+                return json.load(f)
+        except Exception as e:
+            log.warning("Could not read storage_pricing.json: %s", e)
+    return DEFAULT_STORAGE_TIERS
+
+def save_storage_pricing(tiers: dict) -> bool:
+    try:
+        with open(STORAGE_PRICING_PATH, 'w', encoding='utf-8') as f:
+            json.dump(tiers, f, indent=2)
+        return True
+    except Exception as e:
+        log.error("Failed to save storage_pricing.json: %s", e)
         return False
 
 # Cookie names
@@ -233,7 +259,7 @@ def delete_session(token: str):
 # RATE LIMITING (DB-backed for auth, in-memory for AI)
 # ─────────────────────────────────────────────────────────────
 def is_rate_limited(ip: str, email: str, max_attempts: int, window_secs: int) -> bool:
-    cutoff = datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%S') # sqlite utc string
+    cutoff = datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%S') # sqlite utc string
     with get_db() as conn:
         # Clean old records
         conn.execute(
@@ -570,11 +596,17 @@ class LaptopHubHandler(BaseHTTPRequestHandler):
             }, no_cache=True)
             return
 
+        # ── public / admin: Storage pricing tiers ─────────────
+        if path == '/api/config/storage-pricing':
+            tiers = load_storage_pricing()
+            self._send(200, tiers, no_cache=True)
+            return
+
         # ── public: who am I? ────────────────────────────────
         if path == '/api/auth/me':
             user = self._get_cust_user()
             if not user:
-                self._send(401, {'error': 'Not authenticated'}, no_cache=True)
+                self._send(200, {'ok': True, 'authenticated': False, 'user': None}, no_cache=True)
                 return
             u_info = {
                 'id': user['id'], 'name': user['name'],
@@ -792,19 +824,7 @@ class LaptopHubHandler(BaseHTTPRequestHandler):
             token = create_session(row['id'], ip, ua)
 
             if row['role'] == 'admin':
-                admin_cookie = self._cookie_header(ADMIN_COOKIE, token, ADMIN_TTL)
-                cust_cookie  = self._cookie_header(CUST_COOKIE, token, ADMIN_TTL)
-                u_info = {
-                    'id': row['id'], 'email': row['email'], 'name': row['name'],
-                    'role': 'admin', 'phone': row['phone'] or '',
-                    'city': row['city'] or '', 'address': row['address'] or ''
-                }
-                self._send(200, {
-                    'ok': True, 'id': row['id'], 'email': row['email'],
-                    'name': row['name'], 'role': 'admin', 'redirect': '/admin/',
-                    'user': u_info
-                }, set_cookie=[admin_cookie, cust_cookie])
-                return
+                return self._send(403, {'error': 'Administrator accounts must use the admin portal to log in.'})
 
             cust_cookie = self._cookie_header(CUST_COOKIE, token, CUST_TTL)
             clear_admin = self._cookie_header(ADMIN_COOKIE, '', 0, path='/')
@@ -1142,6 +1162,23 @@ class LaptopHubHandler(BaseHTTPRequestHandler):
                 'ddr4': current.get('DDR4', {}),
                 'ddr5': current.get('DDR5', {})
             }, no_cache=True)
+            return
+
+        # ── admin: save storage pricing tiers ─────────────────
+        if path == '/api/admin/config/storage-pricing':
+            admin = self._require_admin()
+            if not admin: return
+            tiers_input = payload.get('tiers', payload)
+            current = load_storage_pricing()
+            if isinstance(tiers_input, dict):
+                for k, v in tiers_input.items():
+                    try:
+                        current[str(k)] = int(v)
+                    except (ValueError, TypeError):
+                        pass
+            save_storage_pricing(current)
+            log_admin_action(admin['id'], 'update_storage_pricing', 'pricing_matrix', json.dumps(current))
+            self._send(200, {'success': True, 'tiers': current}, no_cache=True)
             return
 
         # ── admin: upload image ───────────────────────────────
