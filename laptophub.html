@@ -17,6 +17,7 @@
 <link rel="stylesheet" href="css/header.css">
 <link rel="stylesheet" href="css/glass.css">
 <link rel="stylesheet" href="css/hover-expand.css">
+<link rel="stylesheet" href="css/compare.css">
 <script src="js/cursor.js" defer></script>
 <style>
   *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
@@ -1892,7 +1893,7 @@
       </div>
       <div class="form-group">
         <label class="form-label">City *</label>
-        <select class="form-select" id="custCity" required>
+        <select class="form-select" id="custCity" required onchange="updateCheckoutDeliveryEstimate(this.value)">
           <option value="">Select City</option>
           <option value="Lahore">Lahore (Same Day Dispatch)</option>
           <option value="Karachi">Karachi (24h Express)</option>
@@ -1904,6 +1905,10 @@
           <option value="Quetta">Quetta</option>
           <option value="Other">Other City</option>
         </select>
+        <div id="checkoutDeliveryBadge" style="margin-top:8px;padding:9px 12px;background:rgba(76,124,255,0.08);border:1px solid rgba(76,124,255,0.25);border-radius:8px;font-size:0.8rem;color:var(--text);display:flex;align-items:center;gap:8px;">
+          <span style="font-size:1.1rem">⚡</span>
+          <span id="checkoutDeliveryText">Select city to check delivery timeline. <strong>Free nationwide insured dispatch.</strong></span>
+        </div>
       </div>
       <div class="form-group">
         <label class="form-label">Delivery Address *</label>
@@ -2095,6 +2100,45 @@
 <div id="toast">
   <span class="toast-icon">✓</span>
   <span id="toastMsg">Added to cart!</span>
+</div>
+
+<!-- FLOATING LAPTOP COMPARISON DOCK -->
+<div id="compareDock" class="compare-dock" aria-label="Laptop Comparison Dock">
+  <div class="compare-dock-inner">
+    <div class="compare-dock-info">
+      <span class="compare-dock-badge" id="compareCountBadge">0/3</span>
+      <span class="compare-dock-label">Compare</span>
+    </div>
+    <div class="compare-dock-items" id="compareDockItems">
+      <!-- Selected chips populated dynamically -->
+    </div>
+    <div class="compare-dock-actions">
+      <button type="button" class="btn-compare-launch" onclick="openCompareModal()">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M16 3h5v5"/><path d="M4 20L21 3"/><path d="M21 16v5h-5"/><path d="M15 15l6 6"/><path d="M4 4l5 5"/></svg>
+        <span>Compare Now</span>
+      </button>
+      <button type="button" class="btn-compare-clear" onclick="clearCompare()" title="Clear comparison">✕</button>
+    </div>
+  </div>
+</div>
+
+<!-- SIDE-BY-SIDE LAPTOP COMPARISON MODAL -->
+<div id="compareModal" role="dialog" aria-modal="true" aria-labelledby="compareModalTitle">
+  <div class="compare-modal-dialog">
+    <div class="compare-modal-header">
+      <div class="compare-modal-title-group">
+        <h3 id="compareModalTitle">
+          <span>⚖️</span>
+          <span>Side-by-Side Laptop Comparison</span>
+        </h3>
+        <p>Comprehensive spec differences, hardware upgradability, and pricing delta</p>
+      </div>
+      <button type="button" class="compare-modal-close" onclick="closeCompareModal()" aria-label="Close comparison modal">✕</button>
+    </div>
+    <div class="compare-modal-body" id="compareTableContainer">
+      <!-- Dynamic matrix table -->
+    </div>
+  </div>
 </div>
 
 
@@ -2349,6 +2393,9 @@
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
                 <span>Details</span>
               </button>
+              <button type="button" class="btn-card-compare" title="Compare laptop" onclick="toggleCompare(${lap.id}, event)" aria-label="Compare ${escapeHtml(lap.name)}">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 3h5v5"/><path d="M4 20L21 3"/><path d="M21 16v5h-5"/><path d="M15 15l6 6"/><path d="M4 4l5 5"/></svg>
+              </button>
               <button type="button" class="btn-card-wa" title="Order on WhatsApp" onclick="orderCardViaWhatsApp(${lap.id}, event)" aria-label="Order on WhatsApp">
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
               </button>
@@ -2361,6 +2408,9 @@
       window.initHoverExpand();
     }
     updateBrandTabCounts();
+    if (typeof window.updateCompareUI === 'function') {
+      window.updateCompareUI();
+    }
   }
 
   function updateBrandTabCounts() {
@@ -2618,12 +2668,39 @@
       if (document.getElementById('custCity') && currentUser.city) document.getElementById('custCity').value = currentUser.city;
       if (document.getElementById('custAddress') && currentUser.address) document.getElementById('custAddress').value = currentUser.address;
     }
+    const curCity = document.getElementById('custCity') ? document.getElementById('custCity').value : '';
+    updateCheckoutDeliveryEstimate(curCity);
+
     const subtotal = cart.reduce((sum, item) => sum + (Number(item.price) || 0) * (Number(item.qty) || 1), 0);
     const totalEl = document.getElementById('modalOrderTotal');
     if (totalEl) totalEl.textContent = `Rs ${subtotal.toLocaleString('en-PK')}`;
 
     document.getElementById('checkoutModal').classList.add('open');
     document.body.classList.add('modal-open');
+  }
+
+  const CHECKOUT_CITY_DELIVERY = {
+    'Lahore': { time: 'Same-Day / 24 Hours', courier: 'Direct Courier / Trax Express' },
+    'Karachi': { time: '24–48 Hours', courier: 'TCS Air Cargo / Trax' },
+    'Islamabad': { time: '24 Hours Guaranteed', courier: 'TCS / Trax Overnight' },
+    'Rawalpindi': { time: '24 Hours Guaranteed', courier: 'TCS / Trax Overnight' },
+    'Faisalabad': { time: '24 Hours', courier: 'Trax / Leopards Overnight' },
+    'Multan': { time: '24–48 Hours', courier: 'Trax / TCS Express' },
+    'Peshawar': { time: '24–48 Hours', courier: 'Trax / TCS Overnight' },
+    'Sialkot': { time: '24 Hours', courier: 'Trax / Leopards Overnight' },
+    'Quetta': { time: '48 Hours Air Cargo', courier: 'TCS Insured Air Cargo' },
+    'Other': { time: '48–72 Hours', courier: 'TCS / Leopards Nationwide' }
+  };
+
+  function updateCheckoutDeliveryEstimate(cityName) {
+    const textEl = document.getElementById('checkoutDeliveryText');
+    if (!textEl) return;
+    if (!cityName) {
+      textEl.innerHTML = 'Select city to check delivery timeline. <strong>Free nationwide insured dispatch.</strong>';
+      return;
+    }
+    const info = CHECKOUT_CITY_DELIVERY[cityName] || CHECKOUT_CITY_DELIVERY['Other'];
+    textEl.innerHTML = `Estimated transit: <strong style="color:var(--blue)">${info.time}</strong> via <strong>${info.courier}</strong>. Free nationwide insured shipping included.`;
   }
 
   function closeCheckoutModal() {
@@ -3355,5 +3432,6 @@
   initUserSession();
   initScrollReveal();
 </script>
+<script src="js/compare.js"></script>
 </body>
 </html>

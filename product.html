@@ -583,6 +583,35 @@ footer {
             </div>
           </div>
 
+          <!-- Interactive Pakistan Delivery & Transit Estimator -->
+          <div class="delivery-estimator-card">
+            <div class="delivery-estimator-header">
+              <div class="delivery-est-title-wrap">
+                <span class="delivery-est-icon">🚚</span>
+                <div>
+                  <h4 class="delivery-est-title">Pakistan Transit & Dispatch Estimator</h4>
+                  <p class="delivery-est-sub">Check guaranteed courier timeframe for your city</p>
+                </div>
+              </div>
+              <div class="city-selector-wrap">
+                <select id="estCitySelect" class="city-select-input" onchange="updateDeliveryEstimate(this.value)" aria-label="Select Destination City">
+                  <option value="lahore">Lahore (Same-Day / 24 Hours)</option>
+                  <option value="islamabad">Islamabad / Rawalpindi (24 Hours)</option>
+                  <option value="karachi">Karachi (24-48 Hours Air Express)</option>
+                  <option value="faisalabad">Faisalabad (24 Hours)</option>
+                  <option value="multan">Multan (24-48 Hours)</option>
+                  <option value="peshawar">Peshawar (24-48 Hours)</option>
+                  <option value="sialkot">Sialkot / Gujranwala (24 Hours)</option>
+                  <option value="quetta">Quetta (48 Hours Air Cargo)</option>
+                  <option value="other">All Other Cities (Nationwide)</option>
+                </select>
+              </div>
+            </div>
+            <div class="delivery-timeline-display" id="deliveryTimelineDisplay">
+              <!-- Dynamically populated -->
+            </div>
+          </div>
+
         </div>
       </div>
 
@@ -1477,14 +1506,100 @@ footer {
     openCart();
   }
 
+  // ── PAKISTAN TRANSIT & DISPATCH ESTIMATOR ─────────────────────────────────
+  const PAKISTAN_CITY_DELIVERY = {
+    lahore: {
+      time: "Same-Day / Next-Day",
+      speed: "Express Within 24h",
+      courier: "Direct Courier / Trax Express",
+      insurance: "100% Free Transit Coverage",
+      payment: "Cash on Delivery / Raast / IBFT"
+    },
+    islamabad: {
+      time: "Guaranteed Next-Day (24h)",
+      speed: "Overnight Insured Air",
+      courier: "TCS Express / Trax Overnight",
+      insurance: "100% Free Transit Coverage",
+      payment: "Cash on Delivery / Raast / IBFT"
+    },
+    karachi: {
+      time: "24–48 Hours",
+      speed: "Aviation Cargo Air Express",
+      courier: "TCS Air Cargo / Trax Aviation",
+      insurance: "100% Free Transit Coverage",
+      payment: "Cash on Delivery / Raast / IBFT"
+    },
+    faisalabad: {
+      time: "Next-Day Delivery (24h)",
+      speed: "Direct Dispatch",
+      courier: "Trax Express Overnight",
+      insurance: "100% Free Transit Coverage",
+      payment: "Cash on Delivery / Raast / IBFT"
+    },
+    multan: {
+      time: "24–48 Hours",
+      speed: "Express Transit",
+      courier: "Trax / TCS Express",
+      insurance: "100% Free Transit Coverage",
+      payment: "Cash on Delivery / Raast / IBFT"
+    },
+    peshawar: {
+      time: "24–48 Hours",
+      speed: "Express Transit",
+      courier: "Trax / TCS Overnight",
+      insurance: "100% Free Transit Coverage",
+      payment: "Cash on Delivery / Raast / IBFT"
+    },
+    sialkot: {
+      time: "Next-Day Delivery (24h)",
+      speed: "Express Transit",
+      courier: "Trax / Leopards Overnight",
+      insurance: "100% Free Transit Coverage",
+      payment: "Cash on Delivery / Raast / IBFT"
+    },
+    quetta: {
+      time: "48 Hours",
+      speed: "Aviation Cargo Dispatch",
+      courier: "TCS Insured Air Cargo",
+      insurance: "100% Free Transit Coverage",
+      payment: "Cash on Delivery / Raast / IBFT"
+    },
+    other: {
+      time: "48–72 Hours",
+      speed: "Nationwide Insured Delivery",
+      courier: "TCS / Trax Courier Network",
+      insurance: "100% Free Transit Coverage",
+      payment: "Cash on Delivery / Raast / IBFT"
+    }
+  };
+
+  function updateDeliveryEstimate(cityKey = 'lahore') {
+    const el = document.getElementById('deliveryTimelineDisplay');
+    if (!el) return;
+    const info = PAKISTAN_CITY_DELIVERY[cityKey] || PAKISTAN_CITY_DELIVERY['other'];
+    el.innerHTML = `
+      <div class="est-stat-box">
+        <span class="est-stat-label">Estimated Transit</span>
+        <span class="est-stat-val highlight">⚡ ${info.time}</span>
+      </div>
+      <div class="est-stat-box">
+        <span class="est-stat-label">Courier Logistics</span>
+        <span class="est-stat-val">📦 ${info.courier}</span>
+      </div>
+      <div class="est-stat-box">
+        <span class="est-stat-label">Transit Protection</span>
+        <span class="est-stat-val">🛡️ ${info.insurance}</span>
+      </div>
+      <div class="est-stat-box">
+        <span class="est-stat-label">Payment Terms</span>
+        <span class="est-stat-val">💳 ${info.payment}</span>
+      </div>
+    `;
+  }
+  window.updateDeliveryEstimate = updateDeliveryEstimate;
+
   function orderProductViaWhatsApp() {
     if (!currentProduct) return;
-
-    if (!currentUser || !currentUser.loggedIn) {
-      pendingAction = { type: 'whatsapp_buy' };
-      openLoginModal('Please sign in to place your order');
-      return;
-    }
 
     const comment = document.getElementById('productComment').value.trim();
     const storText = selectedStorage >= 1000 ? '1 TB NVMe SSD' : `${selectedStorage} GB NVMe SSD`;
@@ -1492,6 +1607,10 @@ footer {
 
     let msg = `*🛒 Custom Laptop Order — LaptopHUB Pakistan*%0A`;
     msg += `------------------------------------------%0A`;
+    if (currentUser && currentUser.name) {
+      msg += `*Customer:* ${encodeURIComponent(currentUser.name)}%0A`;
+      if (currentUser.phone) msg += `*Contact:* ${encodeURIComponent(currentUser.phone)}%0A`;
+    }
     msg += `*Model:* ${encodeURIComponent(currentProduct.name)}%0A`;
     msg += `*Processor:* ${encodeURIComponent(currentProduct.cpu)}%0A`;
     msg += `*Selected RAM:* ${encodeURIComponent(ramText)}%0A`;
@@ -1635,6 +1754,7 @@ footer {
     saveCart();
     closeCheckoutModal();
     document.getElementById('orderConfirmModal').classList.add('open');
+  }
 
   function closeConfirmModal() {
     document.getElementById('orderConfirmModal').classList.remove('open');
@@ -2035,6 +2155,7 @@ footer {
     updateThemeBtn();
     checkServerSession();
     initProductPage();
+    updateDeliveryEstimate('lahore');
   });
 </script>
 

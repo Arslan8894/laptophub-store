@@ -1,0 +1,435 @@
+/* =========================================================================
+   LAPTOPHUB SIDE-BY-SIDE LAPTOP COMPARISON DOCK & MODAL
+   ========================================================================= */
+
+/* ── 1. Floating Bottom Dock ── */
+.compare-dock {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%) translateY(120%);
+  z-index: 9998;
+  width: min(880px, calc(100vw - 32px));
+  background: rgba(12, 14, 21, 0.88);
+  backdrop-filter: blur(18px) saturate(180%);
+  -webkit-backdrop-filter: blur(18px) saturate(180%);
+  border: 1px solid var(--border2);
+  border-radius: var(--radius-lg, 16px);
+  padding: 10px 16px;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.55), 0 0 25px var(--blue-glow);
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.compare-dock.visible {
+  transform: translateX(-50%) translateY(0);
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.compare-dock-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.compare-dock-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.compare-dock-badge {
+  background: var(--blue);
+  color: #ffffff;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 999px;
+  letter-spacing: 0.04em;
+}
+
+.compare-dock-label {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--heading);
+  white-space: nowrap;
+}
+
+.compare-dock-items {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  padding: 4px 0;
+  flex: 1;
+}
+
+.compare-dock-items::-webkit-scrollbar {
+  display: none;
+}
+
+.compare-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--s2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md, 10px);
+  padding: 4px 10px 4px 6px;
+  flex-shrink: 0;
+  animation: compareChipIn 0.25s ease-out;
+}
+
+@keyframes compareChipIn {
+  from { opacity: 0; transform: scale(0.9); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.compare-chip-img {
+  width: 32px;
+  height: 24px;
+  object-fit: contain;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.compare-chip-name {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--heading);
+  max-width: 140px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.compare-chip-price {
+  font-size: 0.74rem;
+  color: var(--blue);
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.compare-chip-remove {
+  background: none;
+  border: none;
+  color: var(--muted);
+  font-size: 0.9rem;
+  cursor: pointer;
+  padding: 0 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.15s;
+}
+
+.compare-chip-remove:hover {
+  color: #ef4444;
+}
+
+.compare-dock-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.btn-compare-launch {
+  background: var(--blue);
+  color: #ffffff;
+  border: none;
+  border-radius: var(--radius-md, 10px);
+  padding: 0.55rem 1.1rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: background 0.18s, transform 0.18s, box-shadow 0.18s;
+  box-shadow: 0 4px 16px var(--blue-glow);
+  white-space: nowrap;
+}
+
+.btn-compare-launch:hover {
+  background: var(--blue-hover);
+  transform: translateY(-1px);
+}
+
+.btn-compare-clear {
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--muted);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md, 10px);
+  width: 34px;
+  height: 34px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 0.85rem;
+  transition: background 0.18s, color 0.18s;
+}
+
+.btn-compare-clear:hover {
+  background: rgba(239, 68, 68, 0.15);
+  color: #ef4444;
+  border-color: rgba(239, 68, 68, 0.35);
+}
+
+/* ── 2. Card Compare Action Button ── */
+.btn-card-compare {
+  background: var(--blue-dim);
+  color: var(--blue);
+  border: 1px solid var(--border2);
+  border-radius: var(--radius-sm, 8px);
+  width: 36px;
+  height: 36px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.18s ease-out, background 0.18s ease, border-color 0.18s ease, color 0.18s ease;
+  outline: none;
+  flex-shrink: 0;
+}
+
+.btn-card-compare:hover {
+  background: var(--blue);
+  color: #ffffff;
+  border-color: var(--blue);
+  transform: translateY(-1px);
+}
+
+.btn-card-compare.active {
+  background: var(--blue);
+  color: #ffffff;
+  border-color: var(--blue);
+  box-shadow: 0 0 12px var(--blue-glow);
+}
+
+/* ── 3. Full Comparison Modal ── */
+#compareModal {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.78);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+  padding: 1.5rem;
+}
+
+#compareModal.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.compare-modal-dialog {
+  background: var(--s1);
+  border: 1px solid var(--border2);
+  border-radius: var(--radius-xl, 20px);
+  width: min(1180px, 96vw);
+  max-height: 92vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.65), 0 0 40px rgba(76, 124, 255, 0.18);
+  transform: translateY(24px) scale(0.98);
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  overflow: hidden;
+}
+
+#compareModal.open .compare-modal-dialog {
+  transform: translateY(0) scale(1);
+}
+
+.compare-modal-header {
+  padding: 1.25rem 1.75rem;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--s2);
+}
+
+.compare-modal-title-group h3 {
+  font-family: var(--font-display, inherit);
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--heading);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.compare-modal-title-group p {
+  font-size: 0.84rem;
+  color: var(--muted);
+  margin-top: 2px;
+}
+
+.compare-modal-close {
+  background: var(--s3);
+  border: 1px solid var(--border);
+  color: var(--text);
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background 0.18s, color 0.18s, transform 0.18s;
+}
+
+.compare-modal-close:hover {
+  background: #ef4444;
+  color: #ffffff;
+  border-color: #ef4444;
+  transform: rotate(90deg);
+}
+
+.compare-modal-body {
+  padding: 1.5rem;
+  overflow-y: auto;
+  overflow-x: auto;
+  flex: 1;
+}
+
+/* ── Comparison Table ── */
+.compare-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 640px;
+}
+
+.compare-table th,
+.compare-table td {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+  vertical-align: middle;
+}
+
+.compare-table th.feature-label {
+  width: 190px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--subtle);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  background: var(--s2);
+  position: sticky;
+  left: 0;
+  z-index: 2;
+  border-right: 1px solid var(--border);
+}
+
+.compare-table td.feature-val {
+  font-size: 0.88rem;
+  color: var(--text);
+  background: var(--s1);
+  width: calc((100% - 190px) / 3);
+  min-width: 220px;
+}
+
+.compare-table tr:hover td.feature-val {
+  background: rgba(76, 124, 255, 0.03);
+}
+
+.compare-hero-col {
+  text-align: center;
+  padding: 1.25rem 1rem !important;
+  background: var(--s2) !important;
+}
+
+.compare-hero-img-wrap {
+  width: 100%;
+  height: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 0.75rem;
+}
+
+.compare-hero-img {
+  max-width: 100%;
+  max-height: 120px;
+  object-fit: contain;
+  filter: drop-shadow(0 8px 16px rgba(0,0,0,0.3));
+}
+
+.compare-hero-name {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--heading);
+  margin-bottom: 4px;
+}
+
+.compare-hero-price {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--blue);
+  margin-bottom: 0.75rem;
+}
+
+.compare-hero-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.compare-spec-highlight {
+  color: var(--blue);
+  font-weight: 700;
+}
+
+.compare-badge-pill {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  background: var(--blue-dim);
+  color: var(--blue);
+  border: 1px solid var(--border2);
+}
+
+.compare-badge-green {
+  background: rgba(16, 185, 129, 0.12);
+  color: var(--green);
+  border-color: rgba(16, 185, 129, 0.3);
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+  .compare-dock {
+    bottom: 16px;
+    padding: 8px 12px;
+  }
+  .compare-chip-name {
+    max-width: 90px;
+  }
+  .compare-modal-dialog {
+    width: 98vw;
+    max-height: 96vh;
+  }
+  .compare-modal-header {
+    padding: 1rem;
+  }
+  .compare-modal-body {
+    padding: 1rem 0.5rem;
+  }
+}
