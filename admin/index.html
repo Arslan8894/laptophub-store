@@ -996,8 +996,7 @@ async function initAdmin() {
   if (isConfigured && auth) {
     auth.onAuthStateChanged(user => {
       if (!user) {
-        // Strict requirement: redirect unauthenticated visitor to homepage
-        window.location.replace('../laptophub.html');
+        window.location.replace('login.html');
         return;
       }
       currentAdmin = { email: user.email, uid: user.uid };
@@ -1012,11 +1011,26 @@ async function initAdmin() {
     return;
   }
 
+  // Check if session storage or local storage has authenticated admin passkey
+  const isAuth = sessionStorage.getItem('laptophub_admin_auth') === 'true' || localStorage.getItem('laptophub_admin_auth') === 'true';
+  if (isAuth) {
+    const adminEmail = sessionStorage.getItem('laptophub_admin_email') || localStorage.getItem('laptophub_admin_email') || 'admin@laptophub.pk';
+    currentAdmin = { email: adminEmail, role: 'admin' };
+    document.getElementById('adminInfoText').innerHTML = `Logged in as: <strong>${escapeHtml(adminEmail)}</strong> <span style="font-size:0.7rem;color:#10b981;font-weight:700">● Authorized</span>`;
+    loadInventory();
+    loadRamTiers();
+    loadOrders();
+    loadReviews();
+    loadUsers();
+    loadAuditLog();
+    return;
+  }
+
   // Fallback check for local development session or server
   try {
     const res = await fetch('/api/admin/me', { credentials: 'include' });
     if (!res.ok) {
-      window.location.replace('../laptophub.html');
+      window.location.replace('login.html');
       return;
     }
     currentAdmin = await res.json();
@@ -1028,7 +1042,7 @@ async function initAdmin() {
     loadUsers();
     loadAuditLog();
   } catch (e) {
-    window.location.replace('../laptophub.html');
+    window.location.replace('login.html');
   }
 }
 
@@ -2146,6 +2160,8 @@ async function publishLiveToWebsite() {
 
 // SIGNOUT
 async function adminSignOut() {
+  sessionStorage.removeItem('laptophub_admin_auth');
+  sessionStorage.removeItem('laptophub_admin_email');
   try {
     if (window.firebase && firebase.auth) {
       await firebase.auth().signOut();

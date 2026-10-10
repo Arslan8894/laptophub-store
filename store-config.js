@@ -145,6 +145,14 @@ function getStorageDelta(targetStorage, baseStorage) {
  */
 async function loadDynamicRamPricing() {
   if (typeof fetch === 'undefined') return;
+  // If running on static host (GitHub Pages, file://, etc.) where /api endpoints do not exist, use default tiers without 404 network waste
+  if (typeof window !== 'undefined' && window.location) {
+    const host = window.location.hostname || '';
+    const proto = window.location.protocol || '';
+    if (proto === 'file:' || host.endsWith('github.io') || host.endsWith('pages.dev')) {
+      return;
+    }
+  }
   try {
     const res = await fetch('/api/config/ram-pricing');
     if (res.ok) {

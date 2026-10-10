@@ -2796,6 +2796,12 @@
   let pendingBuyAction = null;   // stores { type, lapId? } while login is required
 
   async function checkUserSession() {
+    const isStaticHost = window.location.protocol === 'file:' || (window.location.hostname || '').endsWith('github.io');
+    if (isStaticHost) {
+      currentUser = JSON.parse(localStorage.getItem('lh_user') || 'null');
+      renderUserNav();
+      return;
+    }
     if (!localStorage.getItem('lh_user')) {
       currentUser = null;
       renderUserNav();
